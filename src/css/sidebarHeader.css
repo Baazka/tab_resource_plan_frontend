@@ -1,0 +1,134 @@
+#header {
+  position: absolute;
+  width: 350px;
+}
+#header .pro-sidebar {
+  height: 100vh;
+}
+
+#header .closemenu {
+  position: absolute;
+  right: 40px;
+}
+#header .pro-sidebar {
+  width: 100%;
+  min-width: 100%;
+}
+#header .pro-sidebar.collapsed {
+  width: 100px;
+  min-width: 80px;
+}
+#header .pro-sidebar-inner {
+  background-image: url("../assets/images/sideBar.png");
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -ms-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  /* box-shadow: 0.5px 0.866px 2px 0px rgba(0, 0, 0, 0.15); */
+}
+.pro-sidebar > .pro-sidebar-inner > .pro-sidebar-layout .pro-sidebar-header {
+  border-bottom: 0px;
+  padding-bottom: 150px;
+}
+#header .pro-sidebar-inner .pro-sidebar-layout {
+  overflow-y: hidden;
+}
+
+#header .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item {
+  color: rgb(255, 255, 255);
+  margin: 10px 0px;
+  font-weight: bold;
+}
+.dropdownPlace {
+  border: none;
+  border-color: transparent;
+  background-color: transparent;
+}
+#header
+  .pro-sidebar-inner
+  .pro-sidebar-layout
+  ul
+  .pro-inner-item
+  .pro-icon-wrapper
+  .pro-item-content {
+  color: #000;
+}
+#header .pro-sidebar-inner .pro-sidebar-layout .active {
+  background-image: linear-gradient(0deg, #fffdff 0%, #fffdff 100%);
+  border-top-right-radius: 8% 55%;
+  border-bottom-right-radius: 8% 55%;
+  padding: 0;
+  margin-right: 3px;
+}
+
+#header .pro-sidebar.collapsed .pro-sidebar-inner .pro-sidebar-layout .active {
+  background-image: linear-gradient(0deg, #fffdff 0%, #fffdff 100%);
+  padding: 0;
+  margin-right: 3px;
+}
+.required:after {
+  content: " *";
+  color: red;
+  position: absolute;
+  margin: 0px 0px 0px -90px;
+}
+.textSaaral {
+  color: #808c9c;
+}
+.CustomMenu {
+  display: flex;
+  direction: row;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.MenuText {
+  color: white;
+  font-size: 16px;
+  margin-left: 6px;
+  font-family: "RalewaySemiBold";
+}
+.Dropdown-control {
+  position: relative;
+  overflow: hidden;
+  background-color: transparent;
+  border: transparent;
+  box-sizing: border-box;
+  color: #333;
+  cursor: default;
+  outline: none;
+  padding: 8px 52px 8px 10px;
+  transition: all 200ms ease;
+}
+.AnketList {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.AnketListText {
+  color: #5d5d5d;
+  font-family: "RalewayRegular";
+  font-weight: bold;
+  margin-right: 2rem;
+  font-size: 1.1rem;
+}
+
+@media only screen and (max-width: 720px) {
+  html {
+    overflow: hidden;
+  }
+}
+@font-face {
+  font-family: "RalewaySemiBold";
+  src: local("RalewaySemiBold"),
+    url(../assets/fonts/Raleway-SemiBold.ttf) format("truetype");
+}
+@font-face {
+  font-family: "RalewayRegular";
+  src: local("RalewayRegular"),
+    url(../assets/fonts/Raleway-Regular.ttf) format("truetype");
+}
