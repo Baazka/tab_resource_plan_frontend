@@ -25,6 +25,8 @@ import {
   GroupB,
   BagB,
   DocumentsB,
+  DashboardW,
+  Dashboard,
 } from "../assets/images/zurag";
 
 const SideBar = (props) => {
@@ -32,6 +34,7 @@ const SideBar = (props) => {
   const [menuCollapse, setMenuCollapse] = useState(true);
   const history = useHistory();
   const [menuClick, setMenuClick] = useState({
+    menu0: false,
     menu1: false,
     menu2: false,
     menu3: false,
@@ -44,10 +47,24 @@ const SideBar = (props) => {
     menuCollapse ? setMenuCollapse(false) : setMenuCollapse(true);
   };
   function SelectMenu(value) {
-    let temp = { menu1: false, menu2: false, menu3: false, menu4: false };
+    let temp = {
+      menu0: false,
+      menu1: false,
+      menu2: false,
+      menu3: false,
+      menu4: false,
+    };
     setMenuClick({ ...temp, ...value });
-    if (value?.menu1) {
-      history.push("/workerList");
+    if (value?.menu0) {
+      history.push("/web/dashboard");
+    } else if (value?.menu1) {
+      history.push("/web/workerList");
+    } else if (value?.menu2) {
+      history.push("/web/Baiguullaga");
+    } else if (value?.menu3) {
+      history.push("/web/AlbanTushaal");
+    } else if (value?.menu4) {
+      history.push("/web/TushaalShiidver");
     }
   }
 
@@ -86,6 +103,26 @@ const SideBar = (props) => {
           </SidebarHeader>
           <SidebarContent>
             <Menu iconShape="square">
+              <MenuItem active={menuClick.menu0}>
+                <div
+                  className="CustomMenu"
+                  onClick={() => SelectMenu({ menu0: !menuClick.menu0 })}
+                >
+                  <img
+                    src={menuClick.menu0 ? Dashboard : DashboardW}
+                    width="40"
+                    height="30"
+                  />
+                  <p
+                    className="MenuText"
+                    style={{
+                      color: `${menuClick.menu0 ? "#418ee6" : "white"}`,
+                    }}
+                  >
+                    Дашборд
+                  </p>
+                </div>
+              </MenuItem>
               <MenuItem active={menuClick.menu1}>
                 <div
                   className="CustomMenu"
@@ -102,7 +139,6 @@ const SideBar = (props) => {
                       color: `${menuClick.menu1 ? "#418ee6" : "white"}`,
                     }}
                   >
-                    {" "}
                     Ажилтны бүртгэлийн жагсаалт
                   </p>
                 </div>
@@ -124,7 +160,7 @@ const SideBar = (props) => {
                     }}
                   >
                     {" "}
-                    Байгууллагын бүтцийн бүртэгл
+                    Байгууллагын бүтцийн бүртгэл
                   </p>
                 </div>
               </MenuItem>

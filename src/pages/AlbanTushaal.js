@@ -6,7 +6,7 @@ import Footer from "../components/footer";
 import SideBar from "../components/sidebar";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Search, Filter } from "../assets/images/zurag";
+import { Search, Filter, Add } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 
 var rowNumber = 1;
@@ -85,62 +85,68 @@ const Home = (props) => {
   const columns = [
     {
       name: "№",
-      selector: (row, index) => {
-        return index + 1;
-      },
+      selector: "",
       sortable: true,
     },
     {
-      name: "Газар нэгж",
-      selector: "EMP_DEPARTMENT_NAME",
+      name: "Байгууллагын нэр",
+      selector: "",
       sortable: true,
     },
     {
-      name: "Хэлтэс",
-      selector: "EMP_SUBDEPARTMENT_NAME",
+      name: "Газар, нэгжийн нэр",
+      selector: "",
       sortable: true,
     },
     {
-      name: "Албан тушаал",
-      selector: "EMP_ROLE_NAME",
+      name: "Албан,хэлтсийн нэр",
+      selector: "",
       sortable: true,
     },
     {
-      name: "Ажилтны нэр",
-      selector: "PERSON_FIRSTNAME",
+      name: "Албан тушаалын код",
+      selector: "",
       sortable: true,
     },
     {
-      name: "Ажилтны овог",
-      selector: "PERSON_LASTNAME",
+      name: "Албан тушаалын нэр",
+      selector: "",
       sortable: true,
     },
     {
-      name: "Ажилтны төрөл",
-      selector: "EMP_COMPARTMENT_NAME",
+      name: "Албан тушаалын төрөл",
+      selector: "",
       sortable: true,
     },
     {
-      name: "Утасны дугаар",
-      selector: "PERSON_PHONE",
+      name: "Албан тушаалын ангилал",
+      selector: "",
       sortable: true,
     },
     {
-      name: "Имэйл",
-      selector: "PERSON_EMAIL",
+      name: "Албан тушаалын зэрэглэл",
+      selector: "",
       sortable: true,
     },
     {
-      name: "Анкет А",
-      selector: "4",
+      name: "Батлагдсан орон тоо",
+      selector: "",
       sortable: true,
-      center: true,
     },
     {
-      name: "Анкет Б",
-      selector: "6",
+      name: "Ажилтны тоо",
+      selector: "",
       sortable: true,
-      center: true,
+    },
+    {
+      name: "Эзгүй орон тоо",
+      selector: "",
+      sortable: true,
+    },
+    {
+      name: "Сул орон тоо",
+      selector: "",
+      sortable: true,
     },
   ];
 
@@ -152,7 +158,7 @@ const Home = (props) => {
         maxHeight: "100vh !important",
       }}
     >
-      <Header title="АЖИЛТНЫ БҮРТГЭЛИЙН ЖАГСААЛТ" />
+      <Header title="АЛБАН ТУШААЛЫН БҮРТГЭЛ" />
       <div
         style={{
           backgroundColor: "white",
@@ -172,80 +178,7 @@ const Home = (props) => {
             padding: "0.5rem",
             marginRight: "-10px",
           }}
-        >
-          <button
-            className="button is-focused"
-            style={{
-              backgroundColor: "#418ee6",
-              color: "white",
-              borderColor: "#418ee6",
-              borderStyle: "solid",
-              border: "2px",
-              borderRadius: "5px",
-              width: "12rem",
-              height: "2.1rem",
-              fontFamily: "RalewaySemiBold",
-              fontSize: "1rem",
-            }}
-          >
-            Идэвхтэй
-          </button>
-          <button
-            className="button is-focused"
-            style={{
-              backgroundColor: "transparent",
-              borderColor: "#418ee6",
-              color: "black",
-              borderStyle: "solid",
-              borderRadius: "5px",
-              width: "12rem",
-              height: "2.1rem",
-              fontFamily: "RalewaySemiBold",
-              fontSize: "1rem",
-              marginLeft: "0.5rem",
-            }}
-          >
-            Идэвхгүй
-          </button>
-          <div style={{ position: "absolute", right: "3rem" }}>
-            <button
-              className="button is-focused"
-              style={{
-                backgroundColor: "#418ee6",
-                color: "white",
-                borderColor: "#418ee6",
-                borderStyle: "solid",
-                border: "2px",
-                borderRadius: "5px",
-                width: "12rem",
-                height: "2.1rem",
-                fontFamily: "RalewaySemiBold",
-                fontSize: "1rem",
-              }}
-              onClick={anketA}
-            >
-              АНКЕТ А ХЭСЭГ
-            </button>
-            <button
-              className="button is-focused"
-              style={{
-                backgroundColor: "#418ee6",
-                color: "white",
-                borderColor: "#418ee6",
-                borderStyle: "solid",
-                border: "2px",
-                borderRadius: "5px",
-                width: "12rem",
-                height: "2.1rem",
-                fontFamily: "RalewaySemiBold",
-                fontSize: "1rem",
-                marginLeft: "0.5rem",
-              }}
-            >
-              АНКЕТ Б ХЭСЭГ
-            </button>
-          </div>
-        </div>
+        ></div>
         <div
           style={{
             width: "20rem",
@@ -254,6 +187,24 @@ const Home = (props) => {
         >
           <div style={{ display: "flex" }}>
             <div class="control has-icons-left has-icons-right">
+              <input
+                class="input is-small is-gray"
+                type="email"
+                placeholder="хайлт  хийх утгаа оруулна уу"
+                style={{
+                  borderRadius: "5px",
+                  width: "18rem",
+                }}
+              />
+              <span class="icon is-small is-right">
+                <img src={Add} />
+              </span>
+              <span class="icon is-small is-right"></span>
+            </div>
+            <div
+              class="control has-icons-left has-icons-right"
+              style={{ marginLeft: "10px" }}
+            >
               <input
                 class="input is-small is-gray"
                 type="email"
@@ -278,7 +229,7 @@ const Home = (props) => {
           data={jagsaalt}
           theme="solarized"
           customStyles={customStyles}
-          pagination={true}
+          pagination={false}
           paginationPerPage={10}
           selectableRows // add for checkbox selection
           Clicked

@@ -56,8 +56,8 @@
 }
 #header .pro-sidebar-inner .pro-sidebar-layout .active {
   background-image: linear-gradient(0deg, #fffdff 0%, #fffdff 100%);
-  border-top-right-radius: 8% 55%;
-  border-bottom-right-radius: 8% 55%;
+  /* border-top-right-radius: 8% 55%;
+  border-bottom-right-radius: 8% 55%; */
   padding: 0;
   margin-right: 3px;
 }
@@ -114,7 +114,11 @@
   font-family: "RalewayRegular";
   font-weight: bold;
   margin-right: 2rem;
-  font-size: 1.1rem;
+  font-size: 1rem;
+}
+.myClassname {
+  margin-left: 110px;
+  margin-top: 80px;
 }
 
 @media only screen and (max-width: 720px) {

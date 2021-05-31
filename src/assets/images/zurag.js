@@ -26,6 +26,9 @@ import BlackTav from "../images/icons/blackTav.png";
 import BlackZurgaa from "../images/icons/blackZurgaa.png";
 import BlackDoloo from "../images/icons/blackDoloo.png";
 import BlackNaim from "../images/icons/blackNaim.png";
+import Dashboard from "../images/icons/dashboard.png";
+import DashboardW from "../images/icons/dashboardW.png";
+import Add from "../images/icons/add.png";
 
 export {
   LeftArrow,
@@ -55,4 +58,7 @@ export {
   BlackZurgaa,
   BlackDoloo,
   BlackNaim,
+  DashboardW,
+  Dashboard,
+  Add,
 };

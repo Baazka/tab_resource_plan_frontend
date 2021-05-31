@@ -15,6 +15,13 @@ import { useAlert } from "react-alert";
 import Login from "./pages/Login";
 import AnketA from "./components/anketNeg";
 import Store from "./functions/Store";
+import SideBar from "./components/sidebar";
+import Header from "./components/header";
+import AlbanTushaal from "./pages/AlbanTushaal";
+import Dashboard from "./pages/Dashboard";
+import Baiguullaga from "./pages/Baiguullaga";
+import TushaalShiidver from "./pages/TushaalShiidver";
+
 const axios = require("axios");
 
 function App() {
@@ -30,15 +37,23 @@ function App() {
 
   return (
     <Store>
-      <Switch>
-        <Route path="/" exact>
-          <Login />{" "}
-        </Route>
-        <Route path="/workerList">
-          <Home />
-        </Route>
-        <Route path="/anketA/:id" component={AnketA} exact />
-      </Switch>
+      <Route path="/" exact>
+        <Login />
+      </Route>
+      <Route path="/web">
+        <SideBar />
+      </Route>
+      <Route path="/web/workerList">
+        <Home />
+      </Route>
+      <Route path="/web/alba">
+        <AlbanTushaal />
+      </Route>
+      <Route path="/web/anketA/:id" component={AnketA} exact />
+      <Route path="/web/dashboard/" component={Dashboard} exact />
+      <Route path="/web/Baiguullaga/" component={Baiguullaga} exact />
+      <Route path="/web/AlbanTushaal/" component={AlbanTushaal} exact />
+      <Route path="/web/TushaalShiidver/" component={TushaalShiidver} exact />
     </Store>
   );
 }

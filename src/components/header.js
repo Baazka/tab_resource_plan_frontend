@@ -8,7 +8,7 @@ import { DataRequest } from "../functions/DataApi";
 import { Context } from "../functions/Store";
 
 const Header = (props) => {
-  const [user, setUser] = useState();
+  const [users, setUsers] = useState();
   const history = useHistory();
   const options = ["гарах"];
   const defaultOption = options[0];
@@ -16,19 +16,18 @@ const Header = (props) => {
   const [state, dispatch] = useContext(Context);
 
   useEffect(() => {
-    console.log(state.posts);
-    async function test() {
-      let jagsaalts = await DataRequest({
-        url: "http://10.10.10.46:8000/api/v1/profile/1",
-        method: "GET",
-        data: {},
-      });
-      setUser(jagsaalts?.data.array[0]);
-      console.log(jagsaalts);
-    }
     test();
-    console.log("user", user);
+    console.log("user", users);
   }, [props]);
+
+  async function test() {
+    let jagsaalts = await DataRequest({
+      url: "http://10.10.10.46:8000/api/v1/profile/1",
+      method: "GET",
+      data: {},
+    });
+    setUsers(jagsaalts?.data);
+  }
   function onSelect(option) {
     if (option.label === "гарах") history.push("/");
   }
@@ -37,19 +36,6 @@ const Header = (props) => {
     history.push("/");
   }
   return (
-    // <div >
-    //   <nav class="navbar has-shadow " style={{ backgroundColor: "#f1f1f1" }}>
-    //     <div class="navbar-brand">
-    //       <a class="navbar-item"></a>
-    //     </div>
-    //     <div class="navbar-menu" id="nav-links">
-    //       <div class="navbar-end">
-    //         <a class="navbar-item">Admin</a>
-    //         <a class="navbar-item">logout</a>
-    //       </div>
-    //     </div>
-    //   </nav>
-    // </div>
     <div
       style={{
         position: "absolute",
@@ -82,7 +68,9 @@ const Header = (props) => {
           <Dropdown
             options={options}
             onChange={onSelect}
-            placeholder={user === undefined ? "Admin" : user.USER_NAME}
+            placeholder={
+              users !== undefined ? users.array[0].USER_NAME : "Admin"
+            }
           />
         </div>
       </div>

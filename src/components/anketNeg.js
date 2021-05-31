@@ -28,13 +28,11 @@ function AnketNeg(props) {
   return (
     <div
       style={{
-        height: "100vh",
         display: "flex",
         maxHeight: "100vh !important",
       }}
     >
-      <Header title="АЖИЛТНЫ БҮРТГЭЛИЙН ЖАГСААЛТ" />
-      <SideBar />
+      <Header title="АНКЕТ А"></Header>
       <div
         style={{
           width: "25%",
@@ -59,7 +57,7 @@ function AnketNeg(props) {
         </div>
 
         <div className="AnketList" style={{ marginTop: "4rem" }}>
-          <img src={BlackNeg} width="50px" height="50px" />
+          <img src={BlackNeg} width="45px" height="45px" />
           <span className="AnketListText" onClick={() => menuClick(1)}>
             I-II. ХУВЬ ХҮНИЙ <br />
             ТАЛААРХ МЭДЭЭЛЭЛ
@@ -116,109 +114,293 @@ function AnketNeg(props) {
           </span>
         </div>
       </div>
-      <div
-        className=" box"
-        style={{
-          marginTop: "80px",
-          width: "91%",
-          height: "35%",
-          marginLeft: "10px",
-        }}
-      >
-        <div class="columns ">
-          <div class="column is-11">
-            <th>Ерөнхий мэдээлэл</th>
-          </div>
-          <div class="column is-1">
-            <button className="button is-info is-small is-focused ">
-              Засварлах
-            </button>
+      <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
+        <Yrunkhii />
+        <Kayag />
+      </div>
+    </div>
+  );
+}
+
+function Yrunkhii(props) {
+  return (
+    <div
+      className=" box"
+      style={{
+        marginTop: "80px",
+        width: "98%",
+        height: "auto",
+        marginLeft: "10px",
+      }}
+    >
+      <div class="columns ">
+        <div class="column is-11">
+          <span>Ерөнхий мэдээлэл</span>
+        </div>
+        <div class="column is-1">
+          <button className="button is-info is-small is-focused ">
+            Засварлах
+          </button>
+        </div>
+      </div>
+      <div className="columns" style={{ marginBottom: "0px" }}>
+        <div className="column is-3 has-text-right ">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Эцэг эхийн нэр</span>
+        </div>
+        <div className="column is-3">Буянбадрах </div>
+        <div className="column is-3 has-text-right ">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Хүйс</span>
+        </div>
+        <div className="column is-3">Эрэгтэй</div>
+      </div>
+      <div className="columns" style={{ marginBottom: "0px" }}>
+        <div className="column is-3  has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Өөрийн нэр</span>
+        </div>
+        <div className="column is-3">Баянжаргал</div>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Төрсөн он,сар,өдөр</span>
+        </div>
+        <div className="column is-3">2021.05.31</div>
+      </div>
+      <div className="columns" style={{ marginBottom: "0px" }}>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Регистерийн дугаар</span>
+        </div>
+        <div className="column is-3">ЖИ88945687</div>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Төрсөн аймаг,хот</span>
+        </div>
+        <div className="column is-3">Улаанбаатар</div>
+      </div>
+      <div className="columns " style={{ marginBottom: "0px" }}>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Ирэгншил</span>
+        </div>
+        <div className="column is-3">Монгол</div>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Төрсөн сум,дүүрэг</span>
+        </div>
+        <div className="column is-3">Баянзүрэх дүүрэг</div>
+      </div>
+      <div className="columns" style={{ marginBottom: "0px" }}>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Ургийн овог</span>
+        </div>
+        <div className="column is-3">Боржигон</div>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Төрсөн газар</span>
+        </div>
+        <div className="column is-3">Хэнтий аймаг Бугант сум</div>
+      </div>
+      <div className="columns " style={{ marginBottom: "0px" }}>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Үндэс угсаа</span>
+        </div>
+        <div className="column is-3">Халх </div>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Гэрлэсэн эсэх</span>
+        </div>
+        <div className="column is-3">Тийм </div>
+      </div>
+
+      <div class="columns">
+        <div class="column is-10"></div>
+
+        <div class="column is-3">
+          <button className="button is-info is-small is-focused ml-6">
+            Хэвлэх
+          </button>
+          <button className="button is-info is-small is-focused ml-1">
+            Хадгалах
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Kayag(props) {
+  return (
+    <div
+      className=" box"
+      style={{
+        width: "98%",
+        height: "auto",
+        marginLeft: "10px",
+      }}
+    >
+      <div class="columns">
+        <div class="column is-11">
+          <span>Хаягийн мэдээлэл</span>
+        </div>
+        <div class="column is-1">
+          <button className="button is-info is-small is-focused ">
+            Засварлах
+          </button>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column is-1"></div>
+        <div class="column is-11">
+          <table className="table is-bordered p-3">
+            <thead>
+              <tr>
+                <td>
+                  <span className="textSaaral">№</span>
+                </td>
+                <td style={{ width: "300px" }}>
+                  <span className="textSaaral">Оршин суугаа хаягийн төрөл</span>
+                </td>
+                <td style={{ width: "250px" }}>
+                  <span className="textSaaral">Оршин суугаа,аймаг,хот</span>
+                </td>
+                <td>
+                  <span className="textSaaral">Оршин суугаа, аймаг, хот</span>
+                </td>
+                <td style={{ width: "360px" }}>
+                  <span className="textSaaral">Дэлгэрэнгүй хаяг</span>
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>
+                  <span className="textSaaral">1</span>
+                </th>
+                <td>
+                  <span className="textSaaral">Иргэний үнэмлэхний хаяг</span>
+                </td>
+                <td>
+                  <span className="textSaaral">Хэнтий аймаг</span>
+                </td>
+                <td>
+                  <span className="textSaaral">Хэнтий аймаг Бугант сум</span>
+                </td>
+                <td>
+                  <span className="textSaaral">Хэнтий аймаг Бугант сум</span>
+                </td>
+              </tr>
+              <tr>
+                <th>
+                  <span className="textSaaral">2</span>
+                </th>
+                <td>
+                  <span className="textSaaral">Оршин суулгаа хаяг</span>
+                </td>
+                <td>
+                  <span className="textSaaral">Улаанбаатар</span>
+                </td>
+                <td>
+                  <span className="textSaaral">Баянзүрэх дүүрэг</span>
+                </td>
+                <td>
+                  <span className="textSaaral">
+                    {" "}
+                    Улаанбаатар Баянзүрэх дүүрэг 10 хороо
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="columns">
+            <em className="utas m-3">Утасны дугаар:</em>
+            <input
+              className="utas1 ml-2 m-3"
+              type="text"
+              placeholder="99239568"
+            ></input>
+            <input
+              className="utas1 ml-1 m-3"
+              type="text "
+              placeholder="Утас2"
+            ></input>
+            <em className="mail ml-1 m-3">И-мэйл хаяг</em>
+            <input
+              className="text ml-1 m-3"
+              type="text"
+              placeholder="bayanjargalb@audit.gov.mn"
+            ></input>
+            <input
+              className="text ml-1 m-3"
+              type="text"
+              placeholder="И-мэйл хаяг 2"
+            ></input>
           </div>
         </div>
-        <div className="columns" style={{ marginBottom: "0px" }}>
-          <div className="column is-3 has-text-right ">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Эцэг эхийн нэр</span>
-          </div>
-          <div className="column is-3">Долгор </div>
-          <div className="column is-3 has-text-right ">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Хүйс</span>
-          </div>
-          <div className="column is-3">Эрэгтэй</div>
-        </div>
-        <div className="columns" style={{ marginBottom: "0px" }}>
-          <div className="column is-3  has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Өөрийн нэр</span>
-          </div>
-          <div className="column is-3">Батсүмбэр</div>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Төрсөн он,сар,өдөр</span>
-          </div>
-          <div className="column is-3">2021.05.31</div>
-        </div>
-        <div className="columns" style={{ marginBottom: "0px" }}>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Регистерийн дугаар</span>
-          </div>
-          <div className="column is-3">ЖИ88945687</div>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Төрсөн аймаг,хот</span>
-          </div>
-          <div className="column is-3">Улаанбаатар</div>
-        </div>
-        <div className="columns " style={{ marginBottom: "0px" }}>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Ирэгншил</span>
-          </div>
-          <div className="column is-3">Монгол</div>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Төрсөн сум,дүүрэг</span>
-          </div>
-          <div className="column is-3">Баянзүрэх дүүрэг</div>
-        </div>
-        <div className="columns" style={{ marginBottom: "0px" }}>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Ургийн овог</span>
-          </div>
-          <div className="column is-3">Боржигон</div>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Төрсөн газар</span>
-          </div>
-          <div className="column is-3">Хэнтий аймаг Бугант сум</div>
-        </div>
-        <div className="columns " style={{ marginBottom: "0px" }}>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Үндэс угсаа</span>
-          </div>
-          <div className="column is-3">Халх </div>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Гэрлэсэн эсэх</span>
-          </div>
-          <div className="column is-3">Тийм </div>
+      </div>
+      <div class="columns">
+        <div class="column is-1"></div>
+        <div class="column is-8 ">
+          <table className="table is-bordered textSaaral">
+            <thead>
+              <tr>
+                <td>
+                  <span className="textSaaral">№</span>
+                </td>
+                <td>
+                  <span className="textSaaral">Таны юу болох</span>
+                </td>
+                <td>
+                  <span className="textSaaral">Овог</span>
+                </td>
+                <td>
+                  <span className="textSaaral">Нэр</span>
+                </td>
+                <td>
+                  <span className="textSaaral">Утасны дугаар</span>
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th>
+                  <span className="textSaaral">1</span>
+                </th>
+                <td>
+                  <span className="textSaaral">Аав</span>
+                </td>
+                <td>
+                  <span className="textSaaral">Бат</span>
+                </td>
+                <td>
+                  <span className="textSaaral">Буянбадрах</span>
+                </td>
+                <td>
+                  <span className="textSaaral">99235645</span>
+                </td>
+              </tr>
+              <tr></tr>
+            </tbody>
+          </table>
         </div>
 
-        <div class="columns">
-          <div class="column is-10"></div>
-
-          <div class="column is-3">
-            <button className="button is-info is-small is-focused ml-6">
-              Хэвлэх
-            </button>
-            <button className="button is-info is-small is-focused ml-1">
-              Хадгалах
-            </button>
-          </div>
+        <div class="column is-3"></div>
+      </div>
+      <div className="columns">
+        <div className="column is-9"></div>
+        <div className="column is-3 has-text-right">
+          <button className="button is-info is-small is-focused ml-3">
+            Хэвлэх
+          </button>
+          <button className="button is-info is-small is-focused ml-3">
+            Хадгалах
+          </button>
+          <button className="button is-info is-small is-focused ml-3">
+            Хадгалаад харах
+          </button>
         </div>
       </div>
     </div>

@@ -31,7 +31,7 @@ function Login(props) {
       .then(function (response) {
         if (response?.data?.userid?.[0] != 0) {
           dispatch({ type: "SET_POSTS", user: response?.data?.userid?.[0] });
-          history.push("./workerList");
+          history.push("/web/dashboard");
         } else alert.show("Хэрэглэгчийн нэвтрэх нэр, нууц үг буруу байна!!!");
         //history.push('/sample')
       })
