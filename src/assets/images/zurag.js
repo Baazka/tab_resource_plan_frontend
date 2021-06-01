@@ -20,12 +20,22 @@ import AvatarB from "../images/icons/avatarB.png";
 
 import BlackNeg from "../images/icons/blackNeg.png";
 import BlackKhoyor from "../images/icons/blackKhoyor.png";
-import BlackKGurav from "../images/icons/blackKGurav.png";
+import BlackGurav from "../images/icons/blackKGurav.png";
 import BlackDuruv from "../images/icons/blackDuruv.png";
 import BlackTav from "../images/icons/blackTav.png";
 import BlackZurgaa from "../images/icons/blackZurgaa.png";
 import BlackDoloo from "../images/icons/blackDoloo.png";
 import BlackNaim from "../images/icons/blackNaim.png";
+
+import BlueNeg from "../images/icons/blueNeg.png";
+import BlueKhoyor from "../images/icons/blueKhoyor.png";
+import BlueGurav from "../images/icons/blueGurav.png";
+import BlueDuruv from "../images/icons/blueDuruv.png";
+import BlueTav from "../images/icons/blueTav.png";
+import BlueZurgaa from "../images/icons/blueZurgaa.png";
+import BlueDoloo from "../images/icons/blueDoloo.png";
+import BlueNaim from "../images/icons/blueNaim.png";
+
 import Dashboard from "../images/icons/dashboard.png";
 import DashboardW from "../images/icons/dashboardW.png";
 import Add from "../images/icons/add.png";
@@ -52,12 +62,20 @@ export {
   AvatarB,
   BlackNeg,
   BlackKhoyor,
-  BlackKGurav,
+  BlackGurav,
   BlackDuruv,
   BlackTav,
   BlackZurgaa,
   BlackDoloo,
   BlackNaim,
+  BlueNeg,
+  BlueKhoyor,
+  BlueGurav,
+  BlueDuruv,
+  BlueTav,
+  BlueZurgaa,
+  BlueDoloo,
+  BlueNaim,
   DashboardW,
   Dashboard,
   Add,

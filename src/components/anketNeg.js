@@ -8,40 +8,46 @@ import {
   Warning,
   BlackNeg,
   BlackKhoyor,
-  BlackKGurav,
+  BlackGurav,
   BlackDuruv,
   BlackTav,
   BlackZurgaa,
   BlackDoloo,
   BlackNaim,
+  BlueNeg,
+  BlueKhoyor,
+  BlueKGurav,
+  BlueDuruv,
+  BlueTav,
+  BlueZurgaa,
+  BlueDoloo,
+  BlueNaim,
+  BlueGurav,
 } from "../assets/images/zurag";
 
 function AnketNeg(props) {
   console.log("anketA", props.match.params.id);
-  const [menu, setMenu] = useState({
-    menu1: false,
-    menu2: false,
-    menu3: false,
-  });
-  function menuClick(value) {}
+  const [menu, setMenu] = useState(0);
+  function SelectMenu(value) {}
 
   return (
     <div
       style={{
         display: "flex",
-        maxHeight: "100vh !important",
+        height: "100vh",
       }}
     >
       <Header title="АНКЕТ А"></Header>
       <div
         style={{
-          width: "25%",
+          width: "20%",
           marginLeft: "7.5rem",
           textAlign: "center",
           borderRight: "1px solid #ececec",
+          height: "100hv",
         }}
       >
-        <div style={{ marginTop: "8rem" }}>
+        <div style={{ marginTop: "7rem" }}>
           <img src={AvatarB} width="120px" height="120px" />
         </div>
         <div
@@ -56,67 +62,208 @@ function AnketNeg(props) {
           <img src={Warning} width="40px" height="40px" />
         </div>
 
-        <div className="AnketList" style={{ marginTop: "4rem" }}>
-          <img src={BlackNeg} width="45px" height="45px" />
-          <span className="AnketListText" onClick={() => menuClick(1)}>
+        <div className="AnketList" style={{ marginTop: "3rem" }}>
+          <img
+            src={menu === 1 ? BlueNeg : BlackNeg}
+            width="45px"
+            height="45px"
+          />
+          <button
+            className="button"
+            style={{
+              color: `${menu === 1 ? "#418ee6" : "#5d5d5d"}`,
+              border: "none",
+              width: "17rem",
+              fontFamily: "RalewayRegular",
+              fontWeight: "bold",
+              whiteSpace: "nowrap",
+              marginTop: "3px",
+              fontSize: "1rem",
+            }}
+            onClick={() => setMenu(1)}
+          >
             I-II. ХУВЬ ХҮНИЙ <br />
             ТАЛААРХ МЭДЭЭЛЭЛ
-          </span>
+          </button>
         </div>
         <div className="AnketList">
-          <img src={BlackKhoyor} width="45px" height="45px" />
-          <span className="AnketListText">
+          <img
+            src={menu === 2 ? BlueKhoyor : BlackKhoyor}
+            width="45px"
+            height="45px"
+          />
+          <button
+            className="button"
+            style={{
+              color: `${menu === 2 ? "#418ee6" : "#5d5d5d"}`,
+              border: "none",
+              width: "17rem",
+              fontFamily: "RalewayRegular",
+              fontWeight: "bold",
+              whiteSpace: "nowrap",
+              marginTop: "3px",
+              fontSize: "1rem",
+            }}
+            onClick={() => setMenu(2)}
+          >
             II. УР ЧАДВАРЫН <br />
             ТАЛААРХ МЭДЭЭЛЭЛ
-          </span>
+          </button>
         </div>
         <div className="AnketList">
-          <img src={BlackKGurav} width="45px" height="45px" />
-          <span className="AnketListText">
+          <img
+            src={menu === 3 ? BlueGurav : BlackGurav}
+            width="45px"
+            height="45px"
+          />
+          <button
+            className="button"
+            style={{
+              color: `${menu === 3 ? "#418ee6" : "#5d5d5d"}`,
+              border: "none",
+              width: "17rem",
+              fontFamily: "RalewayRegular",
+              fontWeight: "bold",
+              whiteSpace: "nowrap",
+              marginTop: "3px",
+              fontSize: "1rem",
+            }}
+            onClick={() => setMenu(3)}
+          >
             III. БОЛОВСРОЛЫН <br />
             ТАЛААРХ МЭДЭЭЛЭЛ
-          </span>
+          </button>
         </div>
         <div className="AnketList">
-          <img src={BlackDuruv} width="45px" height="45px" />
-          <span className="AnketListText">
+          <img
+            src={menu === 4 ? BlueDuruv : BlackDuruv}
+            width="45px"
+            height="45px"
+          />
+          <button
+            className="button"
+            style={{
+              color: `${menu === 4 ? "#418ee6" : "#5d5d5d"}`,
+              border: "none",
+              width: "17rem",
+              fontFamily: "RalewayRegular",
+              fontWeight: "bold",
+              whiteSpace: "nowrap",
+              marginTop: "3px",
+              fontSize: "1rem",
+            }}
+            onClick={() => setMenu(4)}
+          >
             IV. МЭРГЭЖЛИЙН <br />
             ТАЛААРХ МЭДЭЭЛЭЛ
-          </span>
+          </button>
         </div>
         <div className="AnketList">
-          <img src={BlackTav} width="45px" height="45px" />
-          <span
-            className="AnketListText"
-            style={{ marginRight: "3rem", marginLeft: "1rem" }}
+          <img
+            src={menu === 5 ? BlueTav : BlackTav}
+            width="45px"
+            height="45px"
+          />
+          <button
+            className="button"
+            style={{
+              color: `${menu === 5 ? "#418ee6" : "#5d5d5d"}`,
+              border: "none",
+              width: "17rem",
+              fontFamily: "RalewayRegular",
+              fontWeight: "bold",
+              whiteSpace: "nowrap",
+              marginTop: "3px",
+              fontSize: "1rem",
+            }}
+            onClick={() => setMenu(5)}
           >
             V. ЦЭРГИЙН АЛБА <br /> ХААСАН ЭСЭХ
-          </span>
+          </button>
         </div>
         <div className="AnketList">
-          <img src={BlackZurgaa} width="45px" height="45px" />
-          <span className="AnketListText">
+          <img
+            src={menu === 6 ? BlueZurgaa : BlackZurgaa}
+            width="45px"
+            height="45px"
+          />
+          <button
+            className="button"
+            style={{
+              color: `${menu === 6 ? "#418ee6" : "#5d5d5d"}`,
+              border: "none",
+              width: "17rem",
+              fontFamily: "RalewayRegular",
+              fontWeight: "bold",
+              whiteSpace: "nowrap",
+              marginTop: "3px",
+              fontSize: "1rem",
+            }}
+            onClick={() => setMenu(6)}
+          >
             VI. ШАГНАЛЫН <br />
             ТАЛААРХ МЭДЭЭЛЭЛ
-          </span>
+          </button>
         </div>
         <div className="AnketList">
-          <img src={BlackDoloo} width="45px" height="45px" />
-          <span className="AnketListText">
+          <img
+            src={menu === 7 ? BlueDoloo : BlackDoloo}
+            width="45px"
+            height="45px"
+          />
+          <button
+            className="button"
+            style={{
+              color: `${menu === 7 ? "#418ee6" : "#5d5d5d"}`,
+              border: "none",
+              width: "17rem",
+              fontFamily: "RalewayRegular",
+              fontWeight: "bold",
+              whiteSpace: "nowrap",
+              marginTop: "3px",
+              fontSize: "1rem",
+            }}
+            onClick={() => setMenu(7)}
+          >
             VII. ТУРШЛАГЫН <br />
             ТАЛААРХ МЭДЭЭЛЭЛ
-          </span>
+          </button>
         </div>
         <div className="AnketList">
-          <img src={BlackNaim} width="45px" height="45px" />
-          <span className="AnketListText" style={{ marginRight: "4rem" }}>
+          <img
+            src={menu === 8 ? BlueNaim : BlackNaim}
+            width="45px"
+            height="45px"
+          />
+          <button
+            className="button"
+            style={{
+              color: `${menu === 8 ? "#418ee6" : "#5d5d5d"}`,
+              border: "none",
+              width: "17rem",
+              fontFamily: "RalewayRegular",
+              fontWeight: "bold",
+              whiteSpace: "nowrap",
+              marginTop: "3px",
+              fontSize: "1rem",
+            }}
+            onClick={() => setMenu(8)}
+          >
             VIII. БҮТЭЭЛИЙН <br /> ЖАГСААЛТ
-          </span>
+          </button>
         </div>
       </div>
-      <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-        <Yrunkhii />
-        <Kayag />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          width: "90%",
+          overflow: "scroll",
+        }}
+      >
+        {menu === 1 ? <Yrunkhii /> : null}
+        {menu === 2 ? <Kayag /> : null}
+        {menu === 3 ? <GerBul /> : null}
       </div>
     </div>
   );
@@ -253,8 +400,7 @@ function Kayag(props) {
         </div>
       </div>
       <div class="columns">
-        <div class="column is-1"></div>
-        <div class="column is-11">
+        <div class="column is-12">
           <table className="table is-bordered p-3">
             <thead>
               <tr>
@@ -342,7 +488,6 @@ function Kayag(props) {
         </div>
       </div>
       <div class="columns">
-        <div class="column is-1"></div>
         <div class="column is-8 ">
           <table className="table is-bordered textSaaral">
             <thead>
@@ -393,6 +538,137 @@ function Kayag(props) {
         <div className="column is-9"></div>
         <div className="column is-3 has-text-right">
           <button className="button is-info is-small is-focused ml-3">
+            Хэвлэх
+          </button>
+          <button className="button is-info is-small is-focused ml-3">
+            Хадгалах
+          </button>
+          <button className="button is-info is-small is-focused ml-3">
+            Хадгалаад харах
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GerBul(props) {
+  return (
+    <div
+      className=" box"
+      style={{
+        width: "98%",
+        height: "auto",
+        marginLeft: "10px",
+      }}
+    >
+      <div class="columns">
+        <div class="column is-12 ">
+          <span>
+            Гэр бүлийн байдал(зөвхөн гэр бүлийн бүртгэлд байгаа хүмүүсийг бичнэ)
+          </span>
+        </div>
+        <div className="column is-1">
+          <button className="button is-info is-small is-focused">
+            Засварлах
+          </button>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column is-12">
+          <table className="table is-bordered ">
+            <thead>
+              <tr>
+                <td>№</td>
+                <td>Таны Юу болох</td>
+                <td>Садан төрлийн хүний эцэг, эхийн нэр</td>
+                <td>Садан төрлийн хүний нэр</td>
+                <td>Төрсөн он, сар, өдөр</td>
+                <td>Төрсөн аймаг, хот</td>
+                <td>төрөл сум, дүүрэг</td>
+
+                <tr>
+                  <td colspan="2">Одоо эрхэлэж буй ажил</td>
+                </tr>
+                <tr>
+                  <td rowspan="2">Байгуулагын Нэр</td>
+                  <td>Албан тушаал</td>
+                </tr>
+              </tr>
+            </thead>
+            <tfoot></tfoot>
+            <tbody>
+              <tr>
+                <th></th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+
+              <tr></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column is-12 ">
+          <em className="utas m-1">
+            Садан төрлийн байдал (таны, эцэг, эх төрөн ах, эгч дүү, өрх
+            тусгаарласан хүүхэд болон таны эхнэр /нөхөр/-ийн эцэг, эхийг
+            орлуулна)
+          </em>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column is-12 ">
+          <table className="table is-bordered ">
+            <thead>
+              <tr>
+                <td>№</td>
+                <td>Таны Юу болох</td>
+                <td>Садан төрлийн хүний эцэг, эхийн нэр</td>
+                <td>Садан төрлийн хүний нэр</td>
+                <td>Төрсөн он, сар, өдөр</td>
+                <td>Төрсөн аймаг, хот</td>
+                <td>төрөл сум, дүүрэг</td>
+
+                <tr>
+                  <td colspan="2">Одоо эрхэлэж буй ажил</td>
+                </tr>
+                <tr>
+                  <td rowspan="2">Байгуулагын Нэр</td>
+                  <td>Албан тушаал</td>
+                </tr>
+              </tr>
+            </thead>
+            <tfoot></tfoot>
+            <tbody>
+              <tr>
+                <th></th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+
+              <tr></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="columns">
+        <div class="column is-9" />
+
+        <div class="column is-3 has-text-right">
+          <button className="button is-info is-small is-focused ml-4">
             Хэвлэх
           </button>
           <button className="button is-info is-small is-focused ml-3">

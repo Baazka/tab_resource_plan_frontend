@@ -104,17 +104,27 @@
   transition: all 200ms ease;
 }
 .AnketList {
-  margin-top: 1.5rem;
+  margin-top: 1rem;
   display: flex;
-  align-items: center;
-  justify-content: space-around;
+  justify-content: center;
 }
-.AnketListText {
+.AnketListButton {
+  width: 15rem;
   color: #5d5d5d;
   font-family: "RalewayRegular";
   font-weight: bold;
-  margin-right: 2rem;
+  white-space: nowrap;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
   font-size: 1rem;
+  background-color: transparent;
+  cursor: pointer;
+  box-sizing: inherit;
+  appearance: auto;
+  -webkit-writing-mode: horizontal-tb !important;
+  text-rendering: auto;
+  outline: 0;
 }
 .myClassname {
   margin-left: 110px;
