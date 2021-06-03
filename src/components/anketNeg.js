@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import SideBar from "../components/sidebar";
+import React, { useState, useEffect } from "react";
 import Header from "../components/header";
+import { DataRequest } from "../functions/DataApi";
 import {
   AvatarB,
   Face,
@@ -24,11 +24,15 @@ import {
   BlueNaim,
   BlueGurav,
 } from "../assets/images/zurag";
+var dateFormat = require("dateformat");
 
 function AnketNeg(props) {
-  console.log("anketA", props.match.params.id);
-  const [menu, setMenu] = useState(0);
-  function SelectMenu(value) {}
+  const [employ, setEmploy] = useState({});
+  const [menu, setMenu] = useState(1);
+
+  useEffect(() => {
+    console.log("anketNeg", props.location.state.employDetail);
+  }, [props]);
 
   return (
     <div
@@ -61,8 +65,28 @@ function AnketNeg(props) {
           <img src={Trush} width="40px" height="40px" />
           <img src={Warning} width="40px" height="40px" />
         </div>
-
-        <div className="AnketList" style={{ marginTop: "3rem" }}>
+        <div style={{ marginTop: "1.5rem" }}>
+          <span
+            style={{
+              color: "#5d5d5d",
+              fontFamily: "RalewaySemiBold",
+              fontSize: "1rem",
+            }}
+          >
+            {props.location.state.employDetail?.Person[0].PERSON_LASTNAME}
+          </span>
+          <span
+            style={{
+              color: "#418ee6",
+              fontFamily: "RalewaySemiBold",
+              fontSize: "1rem",
+            }}
+          >
+            &nbsp;{" "}
+            {props.location.state.employDetail?.Person[0].PERSON_FIRSTNAME}
+          </span>
+        </div>
+        <div className="AnketList" style={{ marginTop: "1.5rem" }}>
           <img
             src={menu === 1 ? BlueNeg : BlackNeg}
             width="45px"
@@ -258,10 +282,16 @@ function AnketNeg(props) {
           display: "flex",
           flexDirection: "column",
           width: "90%",
+          boxSizing: "border-box",
           overflow: "scroll",
         }}
       >
-        {menu === 1 ? <Yrunkhii /> : null}
+        {menu === 1 ? (
+          <div>
+            <Yrunkhii person={props.location.state.employDetail} /> <Kayag />
+            <GerBul />
+          </div>
+        ) : null}
         {menu === 2 ? <Kayag /> : null}
         {menu === 3 ? <GerBul /> : null}
       </div>
@@ -270,6 +300,53 @@ function AnketNeg(props) {
 }
 
 function Yrunkhii(props) {
+  const [edit, setEdit] = useState(true);
+
+  const [bornDate, setBornDate] = useState(
+    props.person?.Person[0].PERSON_BORNDATE !== undefined
+      ? dateFormat(
+          new Date(props.person?.Person[0].PERSON_BORNDATE),
+          "yyyy-mm-dd"
+        )
+      : ""
+  );
+  useEffect(() => {
+    setPerson({
+      ...person,
+      ...{ PERSON_BORNDATE: dateFormat(bornDate, "dd-mmm-yy") },
+    });
+  }, [bornDate]);
+
+  const [person, setPerson] = useState(props.person?.Person[0]);
+  const national =
+    props?.person?.National !== undefined ? props.person?.National : [];
+  const subNational =
+    props?.person?.SubNational !== undefined ? props.person?.SubNational : [];
+  const dynasty =
+    props?.person?.Dynasty !== undefined ? props.person?.Dynasty : [];
+  const office =
+    props?.person?.Office !== undefined ? props.person?.Office : [];
+  const subOffice =
+    props?.person?.SubOffice !== undefined ? props.person?.SubOffice : [];
+
+  function khadgalakhYo() {
+    console.log("PersonKhadgal", person);
+    // DataRequest({
+    //   url: "http://localhost:3002/api/v1/updatePersonDetail/",
+    //   method: "post",
+    //   data: { person },
+    // })
+    //   .then(function (response) {
+    //     console.log("UpdateResponse", response);
+    //     //history.push('/sample')
+    //   })
+    //   .catch(function (error) {
+    //     //alert(error.response.data.error.message);
+    //     console.log(error.response);
+    //   });
+  }
+  async function employDetail(value) {}
+
   return (
     <div
       className=" box"
@@ -280,12 +357,12 @@ function Yrunkhii(props) {
         marginLeft: "10px",
       }}
     >
-      <div class="columns ">
-        <div class="column is-11">
+      <div className="columns ">
+        <div className="column is-11">
           <span>Ерөнхий мэдээлэл</span>
         </div>
-        <div class="column is-1">
-          <button className="button is-info is-small is-focused ">
+        <div className="column is-1">
+          <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
             Засварлах
           </button>
         </div>
@@ -295,85 +372,270 @@ function Yrunkhii(props) {
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Эцэг эхийн нэр</span>
         </div>
-        <div className="column is-3">Буянбадрах </div>
+        <div className="column is-3">
+          <input
+            disabled={edit}
+            className="anketInput"
+            value={person?.PERSON_LASTNAME}
+            onChange={(text) =>
+              setPerson({
+                ...person,
+                ...{ PERSON_LASTNAME: text.target.value },
+              })
+            }
+          />
+        </div>
         <div className="column is-3 has-text-right ">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Хүйс</span>
         </div>
-        <div className="column is-3">Эрэгтэй</div>
+        <div className="column is-3">
+          <select
+            disabled={edit}
+            className="anketInput"
+            value={person?.PERSON_GENDER}
+            onChange={(text) =>
+              setPerson({
+                ...person,
+                ...{ PERSON_GENDER: text.target.value },
+              })
+            }
+          >
+            <option value={2}>Эрэгтэй</option>
+            <option value={1}>Эмэгтэй</option>
+          </select>
+        </div>
       </div>
       <div className="columns" style={{ marginBottom: "0px" }}>
         <div className="column is-3  has-text-right">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Өөрийн нэр</span>
         </div>
-        <div className="column is-3">Баянжаргал</div>
+        <div className="column is-3">
+          <input
+            disabled={edit}
+            className="anketInput"
+            value={person?.PERSON_FIRSTNAME}
+            onChange={(text) =>
+              setPerson({
+                ...person,
+                ...{ PERSON_FIRSTNAME: text.target.value },
+              })
+            }
+          />
+        </div>
         <div className="column is-3 has-text-right">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Төрсөн он,сар,өдөр</span>
         </div>
-        <div className="column is-3">2021.05.31</div>
+        <div className="column is-3">
+          <input
+            className=""
+            type="date"
+            id="start"
+            disabled={edit}
+            className="anketInput"
+            value={bornDate}
+            min="1930-01-01"
+            max="2021-12-31"
+            onChange={(date) => {
+              setBornDate(date.target.value);
+            }}
+          ></input>
+        </div>
       </div>
       <div className="columns" style={{ marginBottom: "0px" }}>
         <div className="column is-3 has-text-right">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Регистерийн дугаар</span>
         </div>
-        <div className="column is-3">ЖИ88945687</div>
+        <div className="column is-3">
+          <input
+            disabled={edit}
+            className="anketInput"
+            value={person?.PERSON_REGISTER_NO}
+            onChange={(text) =>
+              setPerson({
+                ...person,
+                ...{ PERSON_REGISTER_NO: text.target.value },
+              })
+            }
+          />
+        </div>
         <div className="column is-3 has-text-right">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Төрсөн аймаг,хот</span>
         </div>
-        <div className="column is-3">Улаанбаатар</div>
+        <div className="column is-3">
+          <select
+            disabled={edit}
+            className="anketInput"
+            value={person?.PERSON_BIRTH_OFFICE_ID}
+            onChange={(text) =>
+              setPerson({
+                ...person,
+                ...{ PERSON_BIRTH_OFFICE_ID: text.target.value },
+              })
+            }
+          >
+            {office.map((nation, index) => (
+              <option id="index" value={nation.OFFICE_ID}>
+                {nation.OFFICE_NAME}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       <div className="columns " style={{ marginBottom: "0px" }}>
         <div className="column is-3 has-text-right">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Ирэгншил</span>
         </div>
-        <div className="column is-3">Монгол</div>
+        <div className="column is-3">
+          <select
+            disabled={edit}
+            className="anketInput"
+            value={person?.PERSON_NATIONAL_ID}
+            onChange={(text) =>
+              setPerson({
+                ...person,
+                ...{ PERSON_NATIONAL_ID: text.target.value },
+              })
+            }
+          >
+            {national.map((nation, index) => (
+              <option value={nation.NATIONAL_ID}>{nation.NATIONAL_NAME}</option>
+            ))}
+          </select>
+        </div>
         <div className="column is-3 has-text-right">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Төрсөн сум,дүүрэг</span>
         </div>
-        <div className="column is-3">Баянзүрэх дүүрэг</div>
+        <div className="column is-3">
+          <select
+            disabled={edit}
+            className="anketInput"
+            value={person?.PERSON_BIRTH_SUBOFFICE_ID}
+            onChange={(text) =>
+              setPerson({
+                ...person,
+                ...{ PERSON_BIRTH_SUBOFFICE_ID: text.target.value },
+              })
+            }
+          >
+            {subOffice.map((nation) => (
+              <option value={nation.SUB_OFFICE_ID}>
+                {nation.SUB_OFFICE_NAME}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       <div className="columns" style={{ marginBottom: "0px" }}>
         <div className="column is-3 has-text-right">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Ургийн овог</span>
         </div>
-        <div className="column is-3">Боржигон</div>
+        <div className="column is-3">
+          <select
+            disabled={edit}
+            className="anketInput"
+            value={person?.PERSON_SUBNATIONAL_ID}
+            onChange={(text) =>
+              setPerson({
+                ...person,
+                ...{ PERSON_SUBNATIONAL_ID: text.target.value },
+              })
+            }
+          >
+            {subNational.map((nation) => (
+              <option value={nation.EMP_SUBNATIONAL_ID}>
+                {nation.EMP_SUBNATIONAL_NAME}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="column is-3 has-text-right">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Төрсөн газар</span>
         </div>
-        <div className="column is-3">Хэнтий аймаг Бугант сум</div>
+        <div className="column is-3">
+          <input
+            disabled={edit}
+            className="anketInput"
+            value={person?.PERSON_BIRTH_LAND}
+            onChange={(text) =>
+              setPerson({
+                ...person,
+                ...{ PERSON_BIRTH_LAND: text.target.value },
+              })
+            }
+          />
+        </div>
       </div>
       <div className="columns " style={{ marginBottom: "0px" }}>
         <div className="column is-3 has-text-right">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Үндэс угсаа</span>
         </div>
-        <div className="column is-3">Халх </div>
+        <div className="column is-3">
+          <select
+            disabled={edit}
+            className="anketInput"
+            value={person?.PERSON_DYNASTY_ID}
+            onChange={(text) =>
+              setPerson({
+                ...person,
+                ...{ PERSON_DYNASTY_ID: text.target.value },
+              })
+            }
+          >
+            {dynasty.map((value) => (
+              <option value={value.DYNASTY_ID}>{value.DYNASTY_NAME}</option>
+            ))}
+          </select>
+        </div>
         <div className="column is-3 has-text-right">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Гэрлэсэн эсэх</span>
         </div>
-        <div className="column is-3">Тийм </div>
+        <div className="column is-3">
+          <select
+            disabled={edit}
+            className="anketInput"
+            name="cars"
+            id="cars"
+            value={person?.IS_MARRIED === null ? 1 : person?.IS_MARRIED}
+            onChange={(text) =>
+              setPerson({
+                ...person,
+                ...{ IS_MARRIED: text.target.value },
+              })
+            }
+          >
+            <option value={0}>Тийм</option>
+            <option value={1}>Үгүй</option>
+          </select>
+        </div>
       </div>
 
-      <div class="columns">
-        <div class="column is-10"></div>
+      <div className="columns">
+        <div className="column is-8"></div>
 
-        <div class="column is-3">
-          <button className="button is-info is-small is-focused ml-6">
-            Хэвлэх
-          </button>
-          <button className="button is-info is-small is-focused ml-1">
-            Хадгалах
-          </button>
-        </div>
+        {!edit ? (
+          <div className="column is-4 has-text-right">
+            {/* <button
+              className="buttonTsenkher"
+              style={{ marginRight: "0.4rem" }}
+            >
+              Хэвлэх
+            </button> */}
+            <button className="buttonTsenkher" onClick={khadgalakhYo}>
+              Хадгалах
+            </button>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -389,18 +651,16 @@ function Kayag(props) {
         marginLeft: "10px",
       }}
     >
-      <div class="columns">
-        <div class="column is-11">
+      <div className="columns">
+        <div className="column is-11">
           <span>Хаягийн мэдээлэл</span>
         </div>
-        <div class="column is-1">
-          <button className="button is-info is-small is-focused ">
-            Засварлах
-          </button>
+        <div className="column is-1">
+          <button className="buttonTsenkher">Засварлах</button>
         </div>
       </div>
-      <div class="columns">
-        <div class="column is-12">
+      <div className="columns">
+        <div className="column is-12">
           <table className="table is-bordered p-3">
             <thead>
               <tr>
@@ -461,7 +721,7 @@ function Kayag(props) {
               </tr>
             </tbody>
           </table>
-          <div class="columns">
+          <div className="columns">
             <em className="utas m-3">Утасны дугаар:</em>
             <input
               className="utas1 ml-2 m-3"
@@ -487,8 +747,8 @@ function Kayag(props) {
           </div>
         </div>
       </div>
-      <div class="columns">
-        <div class="column is-8 ">
+      <div className="columns">
+        <div className="column is-8 ">
           <table className="table is-bordered textSaaral">
             <thead>
               <tr>
@@ -532,20 +792,18 @@ function Kayag(props) {
           </table>
         </div>
 
-        <div class="column is-3"></div>
+        <div className="column is-3"></div>
       </div>
       <div className="columns">
         <div className="column is-9"></div>
         <div className="column is-3 has-text-right">
-          <button className="button is-info is-small is-focused ml-3">
+          <button className="buttonTsenkher" style={{ marginRight: "0.4rem" }}>
             Хэвлэх
           </button>
-          <button className="button is-info is-small is-focused ml-3">
+          <button className="buttonTsenkher" style={{ marginRight: "0.4rem" }}>
             Хадгалах
           </button>
-          <button className="button is-info is-small is-focused ml-3">
-            Хадгалаад харах
-          </button>
+          <button className="buttonTsenkher">Хадгалаад харах</button>
         </div>
       </div>
     </div>
@@ -562,20 +820,18 @@ function GerBul(props) {
         marginLeft: "10px",
       }}
     >
-      <div class="columns">
-        <div class="column is-12 ">
+      <div className="columns">
+        <div className="column is-11 ">
           <span>
             Гэр бүлийн байдал(зөвхөн гэр бүлийн бүртгэлд байгаа хүмүүсийг бичнэ)
           </span>
         </div>
         <div className="column is-1">
-          <button className="button is-info is-small is-focused">
-            Засварлах
-          </button>
+          <button className="buttonTsenkher">Засварлах</button>
         </div>
       </div>
-      <div class="columns">
-        <div class="column is-12">
+      <div className="columns">
+        <div className="column is-12">
           <table className="table is-bordered ">
             <thead>
               <tr>
@@ -588,10 +844,10 @@ function GerBul(props) {
                 <td>төрөл сум, дүүрэг</td>
 
                 <tr>
-                  <td colspan="2">Одоо эрхэлэж буй ажил</td>
+                  <td colSpan="2">Одоо эрхэлэж буй ажил</td>
                 </tr>
                 <tr>
-                  <td rowspan="2">Байгуулагын Нэр</td>
+                  <td rowSpan="2">Байгуулагын Нэр</td>
                   <td>Албан тушаал</td>
                 </tr>
               </tr>
@@ -614,8 +870,8 @@ function GerBul(props) {
           </table>
         </div>
       </div>
-      <div class="columns">
-        <div class="column is-12 ">
+      <div className="columns">
+        <div className="column is-12 ">
           <em className="utas m-1">
             Садан төрлийн байдал (таны, эцэг, эх төрөн ах, эгч дүү, өрх
             тусгаарласан хүүхэд болон таны эхнэр /нөхөр/-ийн эцэг, эхийг
@@ -624,8 +880,8 @@ function GerBul(props) {
         </div>
       </div>
 
-      <div class="columns">
-        <div class="column is-12 ">
+      <div className="columns">
+        <div className="column is-12 ">
           <table className="table is-bordered ">
             <thead>
               <tr>
@@ -638,10 +894,10 @@ function GerBul(props) {
                 <td>төрөл сум, дүүрэг</td>
 
                 <tr>
-                  <td colspan="2">Одоо эрхэлэж буй ажил</td>
+                  <td colSpan="2">Одоо эрхэлэж буй ажил</td>
                 </tr>
                 <tr>
-                  <td rowspan="2">Байгуулагын Нэр</td>
+                  <td rowSpan="2">Байгуулагын Нэр</td>
                   <td>Албан тушаал</td>
                 </tr>
               </tr>
@@ -664,19 +920,17 @@ function GerBul(props) {
           </table>
         </div>
       </div>
-      <div class="columns">
-        <div class="column is-9" />
+      <div className="columns">
+        <div className="column is-9" />
 
-        <div class="column is-3 has-text-right">
-          <button className="button is-info is-small is-focused ml-4">
+        <div className="column is-3 has-text-right">
+          <button className="buttonTsenkher" style={{ marginRight: "0.4rem" }}>
             Хэвлэх
           </button>
-          <button className="button is-info is-small is-focused ml-3">
+          <button className="buttonTsenkher" style={{ marginRight: "0.4rem" }}>
             Хадгалах
           </button>
-          <button className="button is-info is-small is-focused ml-3">
-            Хадгалаад харах
-          </button>
+          <button className="buttonTsenkher">Хадгалаад харах</button>
         </div>
       </div>
     </div>
