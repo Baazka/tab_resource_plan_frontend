@@ -8,6 +8,11 @@ import SideBar from "./components/sidebar";
 import { BrowserRouter } from "react-router-dom";
 import { transitions, positions, Provider as AlertProvider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import reducer from "./redux/reducer/Reducer";
+
+const store = createStore(reducer);
 
 const options = {
   // you can also just use 'bottom center'
@@ -20,11 +25,13 @@ const options = {
 };
 
 ReactDOM.render(
-  <BrowserRouter>
-    <AlertProvider template={AlertTemplate} {...options}>
-      <App />
-    </AlertProvider>
-  </BrowserRouter>,
+  <Provider store={store}>
+    <BrowserRouter>
+      <AlertProvider template={AlertTemplate} {...options}>
+        <App />
+      </AlertProvider>
+    </BrowserRouter>
+  </Provider>,
   document.getElementById("root")
 );
 

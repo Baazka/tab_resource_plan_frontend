@@ -130,6 +130,42 @@
   margin-left: 110px;
   margin-top: 80px;
 }
+.buttonTsenkher {
+  background-color: #418ee6;
+  color: white;
+  font-family: "RalewayRegular";
+  border: #418ee6;
+  border-radius: 5px;
+  padding: 8px;
+}
+.buttonTsenkher:active {
+  background: #2980b9;
+  top: 2px;
+}
+.buttonTsenkher:after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s;
+}
+.buttonTsenkher:before {
+  font-family: "FontAwesome";
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+.anketInput {
+  background-color: transparent;
+  border: none;
+  width: 10rem;
+}
 
 @media only screen and (max-width: 720px) {
   html {

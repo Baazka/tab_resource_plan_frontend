@@ -14,7 +14,6 @@ import Home from "./pages/Home";
 import { useAlert } from "react-alert";
 import Login from "./pages/Login";
 import AnketA from "./components/anketNeg";
-import Store from "./functions/Store";
 import SideBar from "./components/sidebar";
 import Header from "./components/header";
 import AlbanTushaal from "./pages/AlbanTushaal";
@@ -36,7 +35,7 @@ function App() {
   }
 
   return (
-    <Store>
+    <div>
       <Route path="/" exact>
         <Login />
       </Route>
@@ -54,7 +53,7 @@ function App() {
       <Route path="/web/Baiguullaga/" component={Baiguullaga} exact />
       <Route path="/web/AlbanTushaal/" component={AlbanTushaal} exact />
       <Route path="/web/TushaalShiidver/" component={TushaalShiidver} exact />
-    </Store>
+    </div>
   );
 }
 

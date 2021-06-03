@@ -5,29 +5,26 @@ import { UserB, Noti } from "../assets/images/zurag";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import { DataRequest } from "../functions/DataApi";
-import { Context } from "../functions/Store";
+import { connect } from "react-redux";
+
+const a = (state, action) => {
+  return {
+    userDetail: state.user,
+  };
+};
+const b = (dispatch) => {
+  return {
+    userNem: (user) => dispatch({ type: "ADD_USER", user: user }),
+    userHas: (userID) => dispatch({ type: "remove _USER" }),
+  };
+};
 
 const Header = (props) => {
   const [users, setUsers] = useState();
   const history = useHistory();
   const options = ["гарах"];
-  const defaultOption = options[0];
+  const defaultOption = props?.userDetail?.userDetail?.array;
 
-  const [state, dispatch] = useContext(Context);
-
-  useEffect(() => {
-    test();
-    console.log("user", users);
-  }, [props]);
-
-  async function test() {
-    let jagsaalts = await DataRequest({
-      url: "http://10.10.10.46:8000/api/v1/profile/1",
-      method: "GET",
-      data: {},
-    });
-    setUsers(jagsaalts?.data);
-  }
   function onSelect(option) {
     if (option.label === "гарах") history.push("/");
   }
@@ -38,7 +35,7 @@ const Header = (props) => {
   return (
     <div
       style={{
-        position: "absolute",
+        position: "fixed",
         top: "0px",
         width: "100vw",
         minHeight: "70px",
@@ -69,7 +66,7 @@ const Header = (props) => {
             options={options}
             onChange={onSelect}
             placeholder={
-              users !== undefined ? users.array[0].USER_NAME : "Admin"
+              defaultOption !== undefined ? defaultOption[0].USER_NAME : "Admin"
             }
           />
         </div>
@@ -79,4 +76,4 @@ const Header = (props) => {
 };
 Header.propTypes = {};
 
-export default Header;
+export default connect(a, b)(Header);

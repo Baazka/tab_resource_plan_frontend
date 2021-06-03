@@ -2,9 +2,22 @@ import React, { useState, useEffect, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import Background from "../assets/images/background.png";
 import { LogoBottom, Filter } from "../assets/images/zurag";
-import { Context } from "../functions/Store";
+import { connect } from "react-redux";
 import { useAlert } from "react-alert";
+import { DataRequest } from "../functions/DataApi";
 const axios = require("axios");
+
+const a = (state, action) => {
+  return {
+    userDetail: state.user,
+  };
+};
+const b = (dispatch) => {
+  return {
+    userNem: (user) => dispatch({ type: "ADD_USER", user: user }),
+    userHas: (userID) => dispatch({ type: "remove _USER" }),
+  };
+};
 
 function Login(props) {
   const [ner, setNer] = useState("");
@@ -12,7 +25,6 @@ function Login(props) {
   const [sanuulakh, setSanuulakh] = useState(false);
   const alert = useAlert();
   const history = useHistory();
-  const [state, dispatch] = useContext(Context);
 
   function nevtrekh() {
     axios({
@@ -29,9 +41,27 @@ function Login(props) {
       },
     })
       .then(function (response) {
+        console.log(props);
         if (response?.data?.userid?.[0] != 0) {
-          dispatch({ type: "SET_POSTS", user: response?.data?.userid?.[0] });
-          history.push("/web/dashboard");
+          DataRequest({
+            url:
+              "http://10.10.10.46:8000/api/v1/profile/" +
+              response?.data?.userid?.[0],
+            method: "GET",
+            data: {},
+          })
+            .then(function (response) {
+              console.log("UpdateResponse", response);
+              props.userNem({
+                userID: response?.data?.userid?.[0],
+                userDetail: response?.data,
+              });
+              history.push("/web/dashboard");
+            })
+            .catch(function (error) {
+              //alert(error.response.data.error.message);
+              console.log(error.response);
+            });
         } else alert.show("Хэрэглэгчийн нэвтрэх нэр, нууц үг буруу байна!!!");
         //history.push('/sample')
       })
@@ -161,4 +191,4 @@ function Login(props) {
   );
 }
 
-export default Login;
+export default connect(a, b)(Login);

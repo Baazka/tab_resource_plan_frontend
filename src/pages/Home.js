@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import Header from "../components/header";
-import AnketNeg from "../components/anketNeg";
 import Footer from "../components/footer";
-import SideBar from "../components/sidebar";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
 import { Search, Filter } from "../assets/images/zurag";
@@ -60,6 +57,7 @@ const customStyles = {
 const Home = (props) => {
   const history = useHistory();
   const [jagsaalt, setJagsaalt] = useState();
+  const [empID, setEmpID] = useState();
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
@@ -76,10 +74,20 @@ const Home = (props) => {
 
   const handleChange = (state) => {
     // You can use setState or dispatch with something like Redux so we can use the retrieved data
-    console.log("Selected Rows: ", state.selectedRows);
+    console.log("Selected Rows: ", state.selectedRows[0].EMP_ID);
+    setEmpID(employDetail(state.selectedRows[0].EMP_ID));
   };
-  function anketA() {
-    history.push("/web/anketA/1");
+  async function employDetail(value) {
+    let employDetail = await DataRequest({
+      url: "http://10.10.10.46:3002/api/v1/person_detail/" + value,
+      method: "GET",
+      data: {},
+    });
+    console.log(employDetail);
+    setEmpID(employDetail);
+  }
+  async function anketA() {
+    history.push("/web/anketA/1", { employDetail: empID?.data });
   }
 
   const columns = [
@@ -89,16 +97,19 @@ const Home = (props) => {
         return index + 1;
       },
       sortable: true,
+      width: "40px",
     },
     {
       name: "Газар нэгж",
       selector: "EMP_DEPARTMENT_NAME",
       sortable: true,
+      width: "200px",
     },
     {
       name: "Хэлтэс",
       selector: "EMP_SUBDEPARTMENT_NAME",
       sortable: true,
+      width: "290px",
     },
     {
       name: "Албан тушаал",
