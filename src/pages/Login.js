@@ -5,6 +5,7 @@ import { LogoBottom, Filter } from "../assets/images/zurag";
 import { connect } from "react-redux";
 import { useAlert } from "react-alert";
 import { DataRequest } from "../functions/DataApi";
+
 const axios = require("axios");
 
 const a = (state, action) => {
@@ -29,7 +30,7 @@ function Login(props) {
   function nevtrekh() {
     axios({
       method: "post", //put
-      url: "http://10.10.10.46:8000/api/v1/login",
+      url: "http://10.10.10.46:3001/api/v1/login",
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
@@ -45,17 +46,22 @@ function Login(props) {
         if (response?.data?.userid?.[0] != 0) {
           DataRequest({
             url:
-              "http://10.10.10.46:8000/api/v1/profile/" +
-              response?.data?.userid?.[0],
+              "http://10.10.10.46:3001/api/v1/profile/" +
+              response?.data?.USER_ID,
             method: "GET",
             data: {},
           })
             .then(function (response) {
               console.log("UpdateResponse", response);
               props.userNem({
-                userID: response?.data?.userid?.[0],
+                userID: response?.data?.USER_ID,
                 userDetail: response?.data,
               });
+              localStorage.setItem(
+                "userDetails",
+                JSON.stringify(response?.data)
+              );
+
               history.push("/web/dashboard");
             })
             .catch(function (error) {

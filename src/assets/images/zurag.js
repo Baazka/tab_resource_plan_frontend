@@ -39,7 +39,7 @@ import BlueNaim from "../images/icons/blueNaim.png";
 import Dashboard from "../images/icons/dashboard.png";
 import DashboardW from "../images/icons/dashboardW.png";
 import Add from "../images/icons/add.png";
-
+import Delete from "./icons/delete.png";
 export {
   LeftArrow,
   RigthArrow,
@@ -79,4 +79,5 @@ export {
   DashboardW,
   Dashboard,
   Add,
+  Delete,
 };

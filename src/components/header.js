@@ -1,6 +1,6 @@
-import React, { useState, useMemo, useEffect, useContext } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
-import { BrowserRouter, Route, Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { UserB, Noti } from "../assets/images/zurag";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
@@ -20,14 +20,19 @@ const b = (dispatch) => {
 };
 
 const Header = (props) => {
+  // const [, forceRender] = useReducer((s) => s + 1, 0);
   const [users, setUsers] = useState();
   const history = useHistory();
   const options = ["гарах"];
   const defaultOption = props?.userDetail?.userDetail?.array;
-
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   function onSelect(option) {
     if (option.label === "гарах") history.push("/");
   }
+  useEffect(() => {
+    console.log(props?.userDetail?.userDetail, "header");
+    console.log("myInitObject", userDetils);
+  }, [props]);
 
   function logOut() {
     history.push("/");
@@ -66,7 +71,7 @@ const Header = (props) => {
             options={options}
             onChange={onSelect}
             placeholder={
-              defaultOption !== undefined ? defaultOption[0].USER_NAME : "Admin"
+              userDetils !== undefined ? userDetils?.USER_NAME : "Admin"
             }
           />
         </div>

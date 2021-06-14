@@ -57,13 +57,13 @@ const customStyles = {
   },
 };
 
-const Home = (props) => {
+const AlbanTushaal = (props) => {
   const history = useHistory();
   const [jagsaalt, setJagsaalt] = useState();
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/employees",
+        url: "http://10.10.10.46:3002/api/v1/position",
         method: "GET",
         data: {},
       });
@@ -85,32 +85,43 @@ const Home = (props) => {
   const columns = [
     {
       name: "№",
-      selector: "",
+      selector: (row, index) => {
+        return index + 1;
+      },
       sortable: true,
+      width: "40px",
+    },
+    {
+      name: "Код",
+      selector: "DEPARTMENT_ID",
+      sortable: true,
+      width: "40px",
     },
     {
       name: "Байгууллагын нэр",
-      selector: "",
+      selector: "EMP_DEPARTMENT_NAME",
       sortable: true,
+      width: "180px",
     },
     {
       name: "Газар, нэгжийн нэр",
-      selector: "",
+      selector: "EMP_SUBDEPARTMENT_NAME",
       sortable: true,
+      width: "200px",
     },
     {
-      name: "Албан,хэлтсийн нэр",
-      selector: "",
+      name: "Алба, хэлтсийн нэр",
+      selector: "EMP_DEPARTMENT_NAME",
       sortable: true,
     },
     {
       name: "Албан тушаалын код",
-      selector: "",
+      selector: "EMP_ROLE_NAME",
       sortable: true,
     },
     {
       name: "Албан тушаалын нэр",
-      selector: "",
+      selector: "EMP_SUBDEPARTMENT_NAME",
       sortable: true,
     },
     {
@@ -130,22 +141,22 @@ const Home = (props) => {
     },
     {
       name: "Батлагдсан орон тоо",
-      selector: "",
+      selector: "CONFIRMED_COUNT",
       sortable: true,
     },
     {
       name: "Ажилтны тоо",
-      selector: "",
+      selector: "CONFIRMED_COUNT",
       sortable: true,
     },
     {
       name: "Эзгүй орон тоо",
-      selector: "",
+      selector: "CONFIRMED_COUNT",
       sortable: true,
     },
     {
       name: "Сул орон тоо",
-      selector: "",
+      selector: "CONFIRMED_COUNT",
       sortable: true,
     },
   ];
@@ -245,4 +256,4 @@ const Home = (props) => {
   );
 };
 
-export default Home;
+export default AlbanTushaal;

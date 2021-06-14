@@ -15,7 +15,6 @@ import { useAlert } from "react-alert";
 import Login from "./pages/Login";
 import AnketA from "./components/anketNeg";
 import SideBar from "./components/sidebar";
-import Header from "./components/header";
 import AlbanTushaal from "./pages/AlbanTushaal";
 import Dashboard from "./pages/Dashboard";
 import Baiguullaga from "./pages/Baiguullaga";

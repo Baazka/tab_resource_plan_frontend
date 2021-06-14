@@ -63,7 +63,7 @@ const Baiguullaga = (props) => {
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/employees",
+        url: "http://10.10.10.46:3002/api/v1/organization",
         method: "GET",
         data: {},
       });
@@ -89,49 +89,73 @@ const Baiguullaga = (props) => {
         return index + 1;
       },
       sortable: true,
+      width: "40px",
     },
     {
-      name: "Ажилтны нэр",
-      selector: "PERSON_FIRSTNAME",
+      name: "Код",
+      selector: "DEPARTMENT_ID",
       sortable: true,
+      width: "50px",
     },
     {
-      name: "Ажилтны овог",
-      selector: "PERSON_LASTNAME",
-      sortable: true,
-    },
-    {
-      name: "Газар нэгж",
+      name: "Байгууллагын нэр",
       selector: "EMP_DEPARTMENT_NAME",
       sortable: true,
+      width: "150px",
     },
     {
-      name: "Хэлтэс",
+      name: "Газар, нэгжийн нэр",
+      selector: "EMP_COMPARTMENT_NAME",
+      sortable: true,
+      width: "200px",
+    },
+    {
+      name: "Алба, хэлтсийн нэр",
+      selector: "EMP_COMPARTMENT_NAME",
+      sortable: true,
+    },
+    {
+      name: "Албан тушаалын код",
       selector: "EMP_SUBDEPARTMENT_NAME",
       sortable: true,
     },
     {
-      name: "Албан тушаал",
-      selector: "EMP_ROLE_NAME",
-      sortable: true,
-    },
-    {
-      name: "Тушаалын дугаар",
+      name: "Албан тушаалын нэр",
       selector: "",
       sortable: true,
     },
     {
-      name: "Хэрэгжих огноо",
+      name: "Албан тушаалын төрөл",
+      selector: "EMP_SUBDEPARTMENT_NAME",
+      sortable: true,
+    },
+    {
+      name: "Албан тушаалын ангилал",
       selector: "",
       sortable: true,
     },
     {
-      name: "Бүртгэсэн огноо",
+      name: "Албан тушаалын зэрэглэл",
       selector: "",
       sortable: true,
     },
     {
-      name: "Бүртгэсэн хэрэглэгч",
+      name: "Батлагдсан орон тоо",
+      selector: "CONFIRMED_COUNT",
+      sortable: true,
+    },
+    {
+      name: "Ажилтны тоо",
+      selector: "",
+      sortable: true,
+    },
+    {
+      name: "Эзгүй орон тоо",
+      selector: "",
+      sortable: true,
+    },
+    {
+      name: "Сул орон тоо",
       selector: "",
       sortable: true,
     },

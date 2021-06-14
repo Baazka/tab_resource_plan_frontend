@@ -5,6 +5,7 @@ import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
 import { Search, Filter } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
+import { useAlert } from "react-alert";
 
 var rowNumber = 1;
 createTheme("solarized", {
@@ -57,7 +58,11 @@ const customStyles = {
 const Home = (props) => {
   const history = useHistory();
   const [jagsaalt, setJagsaalt] = useState();
-  const [empID, setEmpID] = useState();
+  const [data, setData] = useState();
+  const [search, setSearch] = useState("");
+  const [found, setFound] = useState();
+  const alert = useAlert();
+
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
@@ -74,20 +79,59 @@ const Home = (props) => {
 
   const handleChange = (state) => {
     // You can use setState or dispatch with something like Redux so we can use the retrieved data
-    console.log("Selected Rows: ", state.selectedRows[0].EMP_ID);
-    setEmpID(employDetail(state.selectedRows[0].EMP_ID));
+    console.log("Selected Rows: ", state);
+
+    if (state?.selectedRows != undefined)
+      employDetail(state?.selectedRows[0]?.EMP_PERSON_ID);
   };
   async function employDetail(value) {
     let employDetail = await DataRequest({
-      url: "http://10.10.10.46:3002/api/v1/person_detail/" + value,
+      url: "http://10.10.10.46:3002/api/v1/person/" + value,
       method: "GET",
       data: {},
     });
-    console.log(employDetail);
-    setEmpID(employDetail);
+
+    let employEmergency = await DataRequest({
+      url: "http://10.10.10.46:3002/api/v1/emergency/" + value,
+      method: "GET",
+      data: {},
+    });
+    let employfamily = await DataRequest({
+      url: "http://10.10.10.46:3002/api/v1/family/" + value,
+      method: "GET",
+      data: {},
+    });
+
+    setData({
+      employDetail: employDetail?.data,
+      employEmergency: employEmergency?.data,
+      employfamily: employfamily?.data,
+    });
   }
+
   async function anketA() {
-    history.push("/web/anketA/1", { employDetail: empID?.data });
+    if (data !== undefined) history.push("/web/anketA/1", { data });
+    else alert.show("Албан тушаалтан сонго");
+  }
+
+  function makeSearch(value) {
+    setSearch(value);
+    let found = jagsaalt?.filter((obj) =>
+      equalStr(obj.PERSON_FIRSTNAME, value)
+    );
+    console.log(found);
+    if (found != undefined && found.length > 0) setFound(found);
+    else setFound([]);
+  }
+  function equalStr(value1, value2) {
+    if (
+      value1 !== undefined &&
+      value1 !== "" &&
+      value2 !== undefined &&
+      value2 !== ""
+    )
+      if (value1.toUpperCase().includes(value2.toUpperCase())) return true;
+    return false;
   }
 
   const columns = [
@@ -265,15 +309,43 @@ const Home = (props) => {
         >
           <div style={{ display: "flex" }}>
             <div class="control has-icons-left has-icons-right">
+              <select
+                value={"EMP_DEPARTMENT_NAME"}
+                // onChange={(text) =>
+                //   setPerson({
+                //     ...person,
+                //     ...{ PERSON_GENDER: text.target.value },
+                //   })
+                // }
+              >
+                <option value={"EMP_DEPARTMENT_NAME"}>Газар нэгж</option>
+                <option value={"EMP_SUBDEPARTMENT_NAME"}>Хэлтэс</option>
+                <option value={"EMP_ROLE_NAME"}>Албан тушаал</option>
+                <option value={"PERSON_FIRSTNAME"}>Ажилтны нэр</option>
+                <option value={"PERSON_LASTNAME"}>Ажилтны овог</option>
+                <option value={"EMP_COMPARTMENT_NAME"}>Ажилтны төрөл</option>
+                <option value={"PERSON_PHONE"}>Утасны дугаар</option>
+                <option value={"PERSON_EMAIL"}>Имэйл</option>
+              </select>
+
+              <span class="icon is-small is-right">
+                <img src={Filter} />
+              </span>
+              <span class="icon is-small is-right"></span>
+            </div>
+            <div class="control has-icons-left has-icons-right">
               <input
                 class="input is-small is-gray"
                 type="email"
-                placeholder="хайлт  хийх утгаа оруулна уу"
+                placeholder="хайлт хийх утгаа оруулна уу"
+                value={search}
+                onChange={(e) => makeSearch(e.target.value)}
                 style={{
                   borderRadius: "5px",
                   width: "18rem",
                 }}
               />
+
               <span class="icon is-small is-right">
                 <img src={Search} />
               </span>
@@ -286,11 +358,12 @@ const Home = (props) => {
         </div>
         <DataTable
           columns={columns}
-          data={jagsaalt}
+          data={search === "" ? jagsaalt : found}
           theme="solarized"
           customStyles={customStyles}
           pagination={true}
           paginationPerPage={10}
+          noDataComponent="мэдээлэл байхгүй байна"
           selectableRows // add for checkbox selection
           Clicked
           onSelectedRowsChange={handleChange}
