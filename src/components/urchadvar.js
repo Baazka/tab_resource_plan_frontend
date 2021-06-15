@@ -142,7 +142,7 @@ function UrChadvar(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/exam/",
+        url: "http://10.10.10.46:3002/api/v1/exam/",
         method: "POST",
         data: { exam: newRow },
       })
@@ -160,7 +160,7 @@ function UrChadvar(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/exam/",
+        url: "http://10.10.10.46:3002/api/v1/exam/",
         method: "PUT",
         data: { exam: oldRow },
       })
@@ -718,7 +718,7 @@ function TangaragBurtgel(props) {
   const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/oath/" + props.person_id
+      "http://10.10.10.46:3002/api/v1/oath/" + props.person_id
     );
     console.log(listItems, "Tangarag");
     loadData(listItems?.data);
@@ -735,7 +735,7 @@ function TangaragBurtgel(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/oath/",
+        url: "http://10.10.10.46:3002/api/v1/oath/",
         method: "POST",
         data: { oath: newRow },
       })
@@ -753,7 +753,7 @@ function TangaragBurtgel(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/oath/",
+        url: "http://10.10.10.46:3002/api/v1/oath/",
         method: "PUT",
         data: { oath: oldRow },
       })
@@ -816,7 +816,7 @@ function TangaragBurtgel(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/oathDelete",
+        url: "http://10.10.10.46:3002/api/v1/oathDelete",
         method: "POST",
         data: {
           oath: {
@@ -1043,7 +1043,7 @@ function GadaadKhel(props) {
   const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/language/" + props.person_id
+      "http://10.10.10.46:3002/api/v1/language/" + props.person_id
     );
     console.log(listItems, "Tangarag");
     loadData(listItems?.data);
@@ -1059,7 +1059,7 @@ function GadaadKhel(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/Language/",
+        url: "http://10.10.10.46:3002/api/v1/Language/",
         method: "POST",
         data: { language: newRow, PERSON_ID: props.person_id },
       })
@@ -1077,7 +1077,7 @@ function GadaadKhel(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/Language/",
+        url: "http://10.10.10.46:3002/api/v1/Language/",
         method: "PUT",
         data: { language: oldRow, PERSON_ID: props.person_id },
       })
@@ -1148,7 +1148,7 @@ function GadaadKhel(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/languageDelete",
+        url: "http://10.10.10.46:3002/api/v1/languageDelete",
         method: "POST",
         data: {
           language: {

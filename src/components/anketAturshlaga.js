@@ -84,14 +84,14 @@ function Turshlgin(props) {
   const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/Experience/" + props.person_id
+      "http://10.10.10.46:3002/api/v1/Experience/" + props.person_id
     );
     console.log(listItems, "Tangarag");
     loadData(listItems?.data);
   }, [props]);
 
   useEffect(() => {
-    if (data?.Experience === undefined || data?.Experience === [])
+    if (data?.Experience === undefined || data?.Experience.length === 0)
       loadData({
         Experience: [
           {
@@ -125,9 +125,9 @@ function Turshlgin(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/Experience/",
+        url: "http://10.10.10.46:3002/api/v1/experience/",
         method: "POST",
-        data: { Experience: newRow },
+        data: { experience: newRow },
       })
         .then(function (response) {
           console.log("UpdateResponse", response);
@@ -143,9 +143,9 @@ function Turshlgin(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/Experience/",
+        url: "http://10.10.10.46:3002/api/v1/experience/",
         method: "PUT",
-        data: { Experience: oldRow },
+        data: { experience: oldRow },
       })
         .then(function (response) {
           console.log("UpdateResponse", response);
@@ -190,10 +190,10 @@ function Turshlgin(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/ExperienceDelete",
+        url: "http://10.10.10.46:3002/api/v1/experienceDelete",
         method: "POST",
         data: {
-          Experience: {
+          experience: {
             ...value,
             ...{
               IS_ACTIVE: 1,
@@ -223,7 +223,7 @@ function Turshlgin(props) {
   }
 
   let listItems;
-  if (data?.Experience !== undefined) {
+  if (data?.Experience !== undefined && data?.Experience.length !== 0) {
     listItems = (
       <div
         className=" box"
@@ -306,7 +306,6 @@ function Turshlgin(props) {
 
                   <td
                     style={{
-                      borderColor: "transparent",
                       border: "none",
                       paddingLeft: "0px",
                       width: "100px",

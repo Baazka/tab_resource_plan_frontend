@@ -15,7 +15,7 @@ function Bolowsrol(props) {
 
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/education/" + props.person_id
+      "http://10.10.10.46:3002/api/v1/education/" + props.person_id
     );
     loadData({
       Education: listItems?.data?.Education.filter(
@@ -30,7 +30,7 @@ function Bolowsrol(props) {
   }, [props]);
 
   useEffect(() => {
-    if (data?.Education === undefined || data?.Education === [])
+    if (data?.Education === undefined || data?.Education.length === 0)
       loadData({
         Education: [
           {
@@ -54,7 +54,10 @@ function Bolowsrol(props) {
           },
         ],
       });
-    if (dataSecond?.Education === undefined || dataSecond?.Education === [])
+    if (
+      dataSecond?.Education === undefined ||
+      dataSecond?.Education.length === 0
+    )
       loadDataSecond({
         Education: [
           {
@@ -81,8 +84,10 @@ function Bolowsrol(props) {
   }, [data, dataSecond]);
 
   function saveToDB() {
-    let newRow = data?.Education?.filter((value) => value.ROWTYPE === "NEW");
-    let oldRow = data?.Education?.filter(
+    console.log("second", dataSecond);
+    let combined = data?.Education.concat(dataSecond?.Education);
+    let newRow = combined?.filter((value) => value.ROWTYPE === "NEW");
+    let oldRow = combined?.filter(
       (value) =>
         value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
     );
@@ -91,7 +96,7 @@ function Bolowsrol(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/education/",
+        url: "http://10.10.10.46:3002/api/v1/education/",
         method: "POST",
         data: { education: newRow, PERSON_ID: props.person_id },
       })
@@ -109,7 +114,7 @@ function Bolowsrol(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/education/",
+        url: "http://10.10.10.46:3002/api/v1/education/",
         method: "PUT",
         data: { education: oldRow, PERSON_ID: props.person_id },
       })
@@ -128,10 +133,11 @@ function Bolowsrol(props) {
   function setEduType(value) {
     let arr = data.Education;
     arr[value.index] = value;
+    console.log("test", value);
     loadData({ Education: arr });
   }
   function setEduTypeSecond(value) {
-    let arr = data.Education;
+    let arr = dataSecond.Education;
     arr[value.index] = value;
     loadDataSecond({ Education: arr });
   }
@@ -188,10 +194,10 @@ function Bolowsrol(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/EducationDelete",
+        url: "http://10.10.10.46:3002/api/v1/educationDelete",
         method: "POST",
         data: {
-          Education: {
+          education: {
             ...value,
             ...{
               IS_ACTIVE: 1,
@@ -299,6 +305,7 @@ function Bolowsrol(props) {
                       borderColor: "transparent",
                       border: "none",
                       paddingLeft: "0px",
+                      width: "90px",
                     }}
                   >
                     <img
@@ -334,8 +341,8 @@ function Bolowsrol(props) {
                         wrap="soft"
                         value={data.Education[index]?.EDUCATION_COUNTRY}
                         onChange={(text) => {
-                          let value = [...data?.EDUCATION_COUNTRY];
-                          value[index].EXAM_NAME = text.target.value;
+                          let value = [...data?.Education];
+                          value[index].EDUCATION_COUNTRY = text.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -355,8 +362,8 @@ function Bolowsrol(props) {
                         wrap="soft"
                         value={data.Education[index]?.SCHOOL_NAME}
                         onChange={(text) => {
-                          let value = [...data?.SCHOOL_NAME];
-                          value[index].EXAM_NAME = text.target.value;
+                          let value = [...data?.Education];
+                          value[index].SCHOOL_NAME = text.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -579,6 +586,7 @@ function Bolowsrol(props) {
                       borderColor: "transparent",
                       border: "none",
                       paddingLeft: "0px",
+                      width: "90px",
                     }}
                   >
                     <img
@@ -614,8 +622,8 @@ function Bolowsrol(props) {
                         wrap="soft"
                         value={dataSecond.Education[index]?.EDUCATION_COUNTRY}
                         onChange={(text) => {
-                          let value = [...dataSecond?.EDUCATION_COUNTRY];
-                          value[index].EXAM_NAME = text.target.value;
+                          let value = [...dataSecond?.Education];
+                          value[index].EDUCATION_COUNTRY = text.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -635,8 +643,8 @@ function Bolowsrol(props) {
                         wrap="soft"
                         value={dataSecond.Education[index]?.SCHOOL_NAME}
                         onChange={(text) => {
-                          let value = [...dataSecond?.SCHOOL_NAME];
-                          value[index].EXAM_NAME = text.target.value;
+                          let value = [...dataSecond?.Education];
+                          value[index].SCHOOL_NAME = text.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -806,373 +814,12 @@ function Bolowsrol(props) {
           </div>
         </div>
         <div class="columns">
-          <div class="column is-9" />
-
-          <div class="column is-3">
-            <button className="button is-info is-small is-focused ml-6">
+          <div class="column is-11" />
+          <div class="column is-1">
+            {/* <button className="button is-info is-small is-focused ml-6">
               Хэвлэх
-            </button>
-            <button className="button is-info is-small is-focused ml-1">
-              Хадгалах
-            </button>
-            <button className="button is-info is-small is-focused ml-1">
-              Хадгалаад харах
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  } else {
-    listItems = <p>ачаалж байна...</p>;
-  }
-
-  return listItems;
-}
-
-function GadaadKhel(props) {
-  const [data, loadData] = useState(null);
-  const [edit, setEdit] = useState(true);
-  const alert = useAlert();
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/Education/" + props.person_id
-    );
-    console.log(listItems, "Tangarag");
-    loadData(listItems?.data);
-  }, [props]);
-  function saveToDB() {
-    let newRow = data?.Education?.filter((value) => value.ROWTYPE === "NEW");
-    let oldRow = data?.Education?.filter(
-      (value) =>
-        value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
-    );
-    let message = 0;
-
-    if (newRow?.length > 0) {
-      console.log("insert", JSON.stringify(newRow));
-      DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/Education/",
-        method: "POST",
-        data: { Education: newRow, PERSON_ID: props.person_id },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 1;
-          if (message !== 2) alert.show("амжилттай хадгаллаа");
-          //history.push('/sample')
-        })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
-    }
-    if (oldRow?.length > 0) {
-      console.log("update", JSON.stringify(oldRow));
-      DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/Education/",
-        method: "PUT",
-        data: { Education: oldRow, PERSON_ID: props.person_id },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 2;
-          //history.push('/sample')
-          if (message !== 1) alert.show("амжилттай хадгаллаа");
-        })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
-    }
-  }
-  function setEducation(value) {
-    let arr = data.Education;
-    arr[value.index] = value;
-    loadData({ Education: arr });
-  }
-  async function addRow() {
-    let value = data.Education;
-    value.push({
-      PERSON_ID: props.person_id,
-      Education_ID: 1,
-      Education_NAME: "",
-      Education_READ: 1,
-      Education_WRITE: 1,
-      Education_LISTEN: 1,
-      Education_SPEAK: 1,
-      EXAM_NAME: "",
-      EXAM_POINT: 0,
-      EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-      CONFIRMATION_NO: "",
-      IS_ACTIVE: "1",
-      CREATED_BY: userDetils?.USER_ID,
-      CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-      ROWTYPE: "NEW",
-    });
-
-    await loadData({ Education: value });
-  }
-  function removeRow(indexParam, value) {
-    console.log(indexParam, "index");
-    if (value?.ROWTYPE !== "NEW") {
-      DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/EducationDelete",
-        method: "POST",
-        data: {
-          Education: {
-            ...value,
-            ...{
-              IS_ACTIVE: 1,
-              UPDATED_BY: userDetils?.USER_ID,
-              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-              PERSON_ID: props.person_id,
-            },
-          },
-        },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          //history.push('/sample')
-          if (response?.data?.message === "success")
-            alert.show("амжилттай устлаа");
-        })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-          alert.show("aldaa");
-        });
-    }
-    loadData({
-      Education: data?.Education.filter(
-        (element, index) => index !== indexParam
-      ),
-    }); //splice(indexParam, 0)
-  }
-
-  let listItems;
-  if (data?.Education !== undefined) {
-    listItems = (
-      <div
-        className=" box"
-        style={{
-          width: "98%",
-          height: "auto",
-          marginLeft: "10px",
-        }}
-      >
-        <div className="columns">
-          <div className="column is-11">
-            <span>3.Гадаад хэлний мэдлэг</span>
-          </div>
-          <div className="column is-1">
-            <button
-              className="buttonTsenkher"
-              onClick={() => {
-                setEdit(!edit);
-              }}
-            >
-              Засварлах
-            </button>
-          </div>
-        </div>
-        <div className="columns">
-          <div className="column is-11">
-            <table className="table is-bordered p-3">
-              <thead>
-                <tr>
-                  <td>
-                    <span className="textSaaral">№</span>
-                  </td>
-                  <td style={{ width: "300px" }}>
-                    <span className="textSaaral">Гадаад хэлний нэр</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Ярих</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Сонсож ойлгох</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Унших</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Бичих</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Шалгалтын Нэр</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Дүнгийн мэдээлэл</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Шалгалт өгсөн огноо</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Батламжийн дугаар</span>
-                  </td>
-                  <td
-                    style={{
-                      borderColor: "transparent",
-                      border: "none",
-                      paddingLeft: "0px",
-                    }}
-                  >
-                    <img
-                      src={Add}
-                      width="30px"
-                      height="30px"
-                      onClick={() => addRow()}
-                    />
-                  </td>
-                </tr>
-              </thead>
-              <tbody>
-                {data?.Education?.map((value, index) => (
-                  <tr>
-                    <td>
-                      <span className="textSaaral">{index + 1}</span>
-                    </td>
-                    <td>
-                      <Edutype
-                        personChild={data.Education[index]}
-                        setPersonChild={setEducation}
-                        index={index}
-                        edit={edit}
-                      />
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
-                      <input
-                        style={{ width: "70px" }}
-                        disabled={edit}
-                        className="Borderless"
-                        rows="1"
-                        cols="10"
-                        wrap="soft"
-                        value={data.Education[index]?.EXAM_NAME}
-                        onChange={(text) => {
-                          let value = [...data?.Education];
-                          value[index].EXAM_NAME = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ Education: value });
-                        }}
-                      />
-                    </td>
-                    <td>
-                      {/* <input
-                        type="date"
-                        id="start"
-                        disabled={edit}
-                        className="Borderless"
-                        value={dateFormat(
-                          new Date(data.Education[index].START_DATE),
-                          "yyyy-mm-dd"
-                        )}
-                        min="1930-01-01"
-                        max="2021-12-31"
-                        onChange={(e) => {
-                          let value = [...data?.Education];
-                          value[index].START_DATE = dateFormat(
-                            e.target.value,
-                            "dd-mmm-yy"
-                          );
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ Education: value });
-                        }}
-                      /> */}
-                    </td>
-                    <td>
-                      {/* <input
-                        type="date"
-                        id="start"
-                        disabled={edit}
-                        className="Borderless"
-                        value={dateFormat(
-                          new Date(data.Education[index].END_DATE),
-                          "yyyy-mm-dd"
-                        )}
-                        min="1930-01-01"
-                        max="2021-12-31"
-                        onChange={(e) => {
-                          let value = [...data?.Education];
-                          value[index].END_DATE = dateFormat(
-                            e.target.value,
-                            "dd-mmm-yy"
-                          );
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ Education: value });
-                        }}
-                      /> */}
-                    </td>
-                    <td>
-                      <input
-                        style={{ width: "70px" }}
-                        disabled={edit}
-                        className="Borderless"
-                        rows="1"
-                        cols="10"
-                        wrap="soft"
-                        value={data.Education[index]?.CONFIRMATION_NO}
-                        onChange={(text) => {
-                          let value = [...data?.Education];
-                          value[index].CONFIRMATION_NO = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ Education: value });
-                        }}
-                      />
-                    </td>
-
-                    <td
-                      style={{
-                        paddingLeft: "0px",
-                        borderColor: "transparent",
-                        width: "80px",
-                      }}
-                    >
-                      <img
-                        src={Delete}
-                        width="30px"
-                        height="30px"
-                        onClick={() => removeRow(index, value)}
-                      />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div className="columns">
-          <div className="column is-9"></div>
-          <div className="column is-3 has-text-right">
-            {/* <button className="buttonTsenkher" style={{ marginRight: "0.4rem" }}>
-            Хэвлэх
-          </button> */}
-            <button
-              className="buttonTsenkher"
-              style={{ marginRight: "0.4rem" }}
-              onClick={saveToDB}
-            >
+            </button> */}
+            <button className="buttonTsenkher" onClick={saveToDB}>
               Хадгалах
             </button>
           </div>
@@ -1182,6 +829,7 @@ function GadaadKhel(props) {
   } else {
     listItems = <p>ачаалж байна...</p>;
   }
+
   return listItems;
 }
 

@@ -195,7 +195,7 @@ function Edutype(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ EDUCATION_TYPE_ID: text.target.value },
+            ...{ EDUCATION_TYPE_ID: text.target.value, index: props.index },
           })
         }
       >

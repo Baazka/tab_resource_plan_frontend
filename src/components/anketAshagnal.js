@@ -90,14 +90,14 @@ function Shagnaliin(props) {
   const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/Award/" + props.person_id
+      "http://10.10.10.46:3002/api/v1/Award/" + props.person_id
     );
     console.log(listItems, "Tangarag");
     loadData(listItems?.data);
   }, [props]);
 
   useEffect(() => {
-    if (data?.Award === undefined || data?.Award === [])
+    if (data?.Award === undefined || data?.Award.length === 0)
       loadData({
         Award: [
           {
@@ -127,7 +127,7 @@ function Shagnaliin(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/Award/",
+        url: "http://10.10.10.46:3002/api/v1/Award/",
         method: "POST",
         data: { award: newRow },
       })
@@ -145,7 +145,7 @@ function Shagnaliin(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/Award/",
+        url: "http://10.10.10.46:3002/api/v1/Award/",
         method: "PUT",
         data: { award: oldRow },
       })
@@ -188,10 +188,10 @@ function Shagnaliin(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/AwardDelete",
+        url: "http://10.10.10.46:3002/api/v1/awardDelete",
         method: "POST",
         data: {
-          Award: {
+          award: {
             ...value,
             ...{
               IS_ACTIVE: 1,
@@ -219,7 +219,7 @@ function Shagnaliin(props) {
   }
 
   let listItems;
-  if (data?.Award !== undefined) {
+  if (data?.Award !== undefined && data?.Award.length !== 0) {
     listItems = (
       <div
         className=" box"
@@ -304,7 +304,6 @@ function Shagnaliin(props) {
                         id="start"
                         disabled={edit}
                         className="Borderless"
-                        style={{ width: "118px" }}
                         value={dateFormat(
                           new Date(data.Award[index].AWARD_DATE),
                           "yyyy-mm-dd"
@@ -330,7 +329,6 @@ function Shagnaliin(props) {
                       <input
                         disabled={edit}
                         className="Borderless"
-                        style={{ width: "100px" }}
                         value={data.Award[index]?.AWARD_NAME}
                         onChange={(text) => {
                           let value = [...data?.Award];
@@ -348,7 +346,6 @@ function Shagnaliin(props) {
                       <input
                         disabled={edit}
                         className="Borderless"
-                        style={{ width: "100px" }}
                         value={data.Award[index]?.DECISION_NO}
                         onChange={(text) => {
                           let value = [...data?.Award];
@@ -369,7 +366,6 @@ function Shagnaliin(props) {
                         id="start"
                         disabled={edit}
                         className="Borderless"
-                        style={{ width: "118px" }}
                         value={dateFormat(
                           new Date(data.Award[index].DECISION_DATE),
                           "yyyy-mm-dd"
@@ -395,7 +391,6 @@ function Shagnaliin(props) {
                       <input
                         disabled={edit}
                         className="Borderless"
-                        style={{ width: "100px" }}
                         value={data.Award[index]?.AWARD_DESC}
                         onChange={(text) => {
                           let value = [...data?.Award];

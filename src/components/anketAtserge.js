@@ -14,21 +14,21 @@ function TsergiinAlba(props) {
   const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/force/" + props.person_id
+      "http://10.10.10.46:3002/api/v1/force/" + props.person_id
     );
-    console.log(listItems, "Tangarag");
+    console.log(listItems, "force");
     loadData(listItems?.data);
   }, [props]);
   useEffect(() => {
-    if (data?.Force === undefined || data.Force === []) {
+    if (data?.Force === undefined || data.Force.length === 0) {
       loadData({
         Force: [
           {
             FORCE_TYPE_ID: 1,
-            FORCE_TYPE_NAME: "Хаасан",
-            FORCE_NO: "dugaar",
-            FORCE_LOCATION: "bairshil",
-            FORCE_DESC: "tailbar",
+            FORCE_TYPE_NAME: "",
+            FORCE_NO: "",
+            FORCE_LOCATION: "",
+            FORCE_DESC: "",
             IS_ACTIVE: "1",
             PERSON_ID: props.person_id,
             CREATED_BY: userDetils?.USER_ID,
@@ -39,27 +39,78 @@ function TsergiinAlba(props) {
       });
     }
   }, [data]);
+  function removeRow(indexParam, value) {
+    console.log(indexParam, "index");
+    if (value?.ROWTYPE !== "NEW") {
+      DataRequest({
+        url: "http://10.10.10.46:3002/api/v1/forceDelete",
+        method: "POST",
+        data: {
+          award: {
+            ...value,
+            ...{
+              IS_ACTIVE: 1,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
+          },
+        },
+      })
+        .then(function (response) {
+          console.log("UpdateResponse", response);
+          //history.push('/sample')
+          if (response?.data?.message === "success")
+            alert.show("амжилттай устлаа");
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+          alert.show("aldaa");
+        });
+    }
+    loadData({
+      Award: data?.Award.filter((element, index) => index !== indexParam),
+    }); //splice(indexParam, 0)
+  }
 
   function saveToDB() {
-    DataRequest({
-      url: "http://172.16.24.103:3002/api/v1/Force/",
-      method: "POST",
-      data: { Force: data.Force },
-    })
-      .then(function (response) {
-        console.log("UpdateResponse", response);
-        if (response?.data?.message === "success");
-        alert.show("амжилттай хадгаллаа");
-        //history.push('/sample')
+    if (data.Force[0].ROWTYPE === "NEW") {
+      DataRequest({
+        url: "http://10.10.10.46:3002/api/v1/force/",
+        method: "POST",
+        data: { force: data.Force[0] },
       })
-      .catch(function (error) {
-        //alert(error.response.data.error.message);
-        console.log(error.response);
-      });
+        .then(function (response) {
+          console.log("UpdateResponse", response);
+          if (response?.data?.message === "success");
+          alert.show("амжилттай хадгаллаа");
+          //history.push('/sample')
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+        });
+    } else {
+      DataRequest({
+        url: "http://10.10.10.46:3002/api/v1/force/",
+        method: "PUT",
+        data: { force: data.Force[0] },
+      })
+        .then(function (response) {
+          console.log("UpdateResponse", response);
+          if (response?.data?.message === "success");
+          alert.show("амжилттай хадгаллаа");
+          //history.push('/sample')
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+        });
+    }
   }
 
   let listItems;
-  if (data?.Force !== undefined) {
+  if (data?.Force !== undefined && data?.Force.length !== 0) {
     listItems = (
       <div
         className=" box"
@@ -128,8 +179,8 @@ function TsergiinAlba(props) {
                 loadData({ Force: value });
               }}
             >
-              <option value={1}>Амжилтай</option>
-              <option value={0}>Амжилтгүй</option>
+              <option value={1}>хаасан</option>
+              <option value={2}>хаагаагүй</option>
             </select>
           </div>
         </div>

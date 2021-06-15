@@ -308,7 +308,7 @@ const Home = (props) => {
           }}
         >
           <div style={{ display: "flex" }}>
-            <div class="control has-icons-left has-icons-right">
+            {/* <div class="control has-icons-left has-icons-right">
               <select
                 value={"EMP_DEPARTMENT_NAME"}
                 // onChange={(text) =>
@@ -332,7 +332,7 @@ const Home = (props) => {
                 <img src={Filter} />
               </span>
               <span class="icon is-small is-right"></span>
-            </div>
+            </div> */}
             <div class="control has-icons-left has-icons-right">
               <input
                 class="input is-small is-gray"

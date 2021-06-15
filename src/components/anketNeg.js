@@ -685,7 +685,7 @@ function Kayag(props) {
   function khadgalakhYo() {
     console.log("PersonKhadgal", person);
     DataRequest({
-      url: "http://172.16.24.103:3002/api/v1/updatePersonAddress/",
+      url: "http://10.10.10.46:3002/api/v1/updatePersonAddress/",
       method: "post",
       data: { person },
     })
@@ -907,7 +907,7 @@ function HolbooBarikhHun(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/emergencyDelete",
+        url: "http://10.10.10.46:3002/api/v1/emergencyDelete",
         method: "POST",
         data: {
           emergency: {
@@ -946,7 +946,7 @@ function HolbooBarikhHun(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/emergency/",
+        url: "http://10.10.10.46:3002/api/v1/emergency/",
         method: "POST",
         data: { emergency: newRow },
       })
@@ -964,7 +964,7 @@ function HolbooBarikhHun(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/emergency/",
+        url: "http://10.10.10.46:3002/api/v1/emergency/",
         method: "PUT",
         data: { emergency: oldRow },
       })
@@ -1240,7 +1240,7 @@ function GerBul(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/familyDelete",
+        url: "http://10.10.10.46:3002/api/v1/familyDelete",
         method: "POST",
         data: {
           family: {
@@ -1272,7 +1272,7 @@ function GerBul(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/familyDelete",
+        url: "http://10.10.10.46:3002/api/v1/familyDelete",
         method: "POST",
         data: {
           family: {
@@ -1312,7 +1312,7 @@ function GerBul(props) {
 
     if (newRow?.length > 0) {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/family/",
+        url: "http://10.10.10.46:3002/api/v1/family/",
         method: "POST",
         data: { family: newRow },
       })
@@ -1330,7 +1330,7 @@ function GerBul(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/family/",
+        url: "http://10.10.10.46:3002/api/v1/family/",
         method: "PUT",
         data: { family: oldRow },
       })
