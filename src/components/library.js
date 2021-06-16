@@ -225,6 +225,7 @@ function FamilyArray(props) {
   if (data !== undefined) {
     listItems = (
       <select
+        style={{ width: "70px" }}
         disabled={props.edit}
         className="anketInput"
         value={props.personChild?.MEMBER_ID}

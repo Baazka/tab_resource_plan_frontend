@@ -97,7 +97,7 @@ function Shagnaliin(props) {
   }, [props]);
 
   useEffect(() => {
-    if (data?.Award === undefined || data?.Award.length === 0)
+    if (data?.Award === undefined || data?.Award === [])
       loadData({
         Award: [
           {
@@ -188,10 +188,10 @@ function Shagnaliin(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/awardDelete",
+        url: "http://10.10.10.46:3002/api/v1/AwardDelete",
         method: "POST",
         data: {
-          award: {
+          Award: {
             ...value,
             ...{
               IS_ACTIVE: 1,
@@ -219,7 +219,7 @@ function Shagnaliin(props) {
   }
 
   let listItems;
-  if (data?.Award !== undefined && data?.Award.length !== 0) {
+  if (data?.Award !== undefined) {
     listItems = (
       <div
         className=" box"
@@ -304,6 +304,7 @@ function Shagnaliin(props) {
                         id="start"
                         disabled={edit}
                         className="Borderless"
+                        style={{ width: "118px" }}
                         value={dateFormat(
                           new Date(data.Award[index].AWARD_DATE),
                           "yyyy-mm-dd"
@@ -329,6 +330,7 @@ function Shagnaliin(props) {
                       <input
                         disabled={edit}
                         className="Borderless"
+                        style={{ width: "100px" }}
                         value={data.Award[index]?.AWARD_NAME}
                         onChange={(text) => {
                           let value = [...data?.Award];
@@ -346,6 +348,7 @@ function Shagnaliin(props) {
                       <input
                         disabled={edit}
                         className="Borderless"
+                        style={{ width: "100px" }}
                         value={data.Award[index]?.DECISION_NO}
                         onChange={(text) => {
                           let value = [...data?.Award];
@@ -366,6 +369,7 @@ function Shagnaliin(props) {
                         id="start"
                         disabled={edit}
                         className="Borderless"
+                        style={{ width: "118px" }}
                         value={dateFormat(
                           new Date(data.Award[index].DECISION_DATE),
                           "yyyy-mm-dd"
@@ -391,6 +395,7 @@ function Shagnaliin(props) {
                       <input
                         disabled={edit}
                         className="Borderless"
+                        style={{ width: "100px" }}
                         value={data.Award[index]?.AWARD_DESC}
                         onChange={(text) => {
                           let value = [...data?.Award];

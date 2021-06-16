@@ -44,6 +44,7 @@ import {
 import { useAlert } from "react-alert";
 var dateFormat = require("dateformat");
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
+const axios = require("axios");
 
 function AnketNeg(props) {
   console.log(
@@ -328,15 +329,17 @@ function AnketNeg(props) {
       >
         {menu === 1 ? (
           <div>
-            <Yrunkhii person={props.location.state?.data?.employDetail} />
-            <Kayag person={props.location.state?.data?.employDetail} />
+            <Yrunkhii person_id={props.location.state?.data?.person_id} />
+            <Kayag person_id={props.location.state?.data?.person_id} />
             <HolbooBarikhHun
               emergency={emergency}
               person={props.location.state?.data?.employDetail}
+              person_id={props.location.state?.data?.person_id}
             />
             <GerBul
               family={props.location.state?.data?.employfamily}
               person={props.location.state?.data?.employDetail}
+              person_id={props.location.state?.data?.person_id}
             />
           </div>
         ) : null}
@@ -397,6 +400,7 @@ function AnketNeg(props) {
 function Yrunkhii(props) {
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
+  const [data, loadData] = useState();
   const [bornDate, setBornDate] = useState(
     props.person?.Person[0].PERSON_BORNDATE !== undefined
       ? dateFormat(
@@ -411,6 +415,21 @@ function Yrunkhii(props) {
       ...{ PERSON_BORNDATE: dateFormat(bornDate, "dd-mmm-yy") },
     });
   }, [bornDate]);
+  useEffect(() => {
+    setPerson({
+      ...person,
+      ...{ PERSON_BORNDATE: dateFormat(bornDate, "dd-mmm-yy") },
+    });
+  }, [data]);
+
+  useEffect(async () => {
+    console.log("PersonKhadgalProps", props);
+    let listItems = await axios(
+      "http://10.10.10.46:3002/api/v1/person/" + props.person_id
+    );
+    console.log(listItems, "Tangarag");
+    loadData(listItems?.data?.Person[0]);
+  }, [props]);
 
   const [person, setPerson] = useState(props.person?.Person[0]);
   const national =
@@ -425,11 +444,11 @@ function Yrunkhii(props) {
     props?.person?.SubOffice !== undefined ? props.person?.SubOffice : [];
 
   function khadgalakhYo() {
-    console.log("PersonKhadgal", person);
+    console.log("PersonKhadgal", data);
     DataRequest({
       url: "http://10.10.10.46:3002/api/v1/updatePerson/",
       method: "post",
-      data: { person },
+      data: { person: data },
     })
       .then(function (response) {
         console.log("UpdateResponse", response);
@@ -442,239 +461,236 @@ function Yrunkhii(props) {
         console.log(error.response);
       });
   }
+  let listItems;
+  if (data !== undefined && data !== "") {
+    listItems = (
+      <div
+        className=" box"
+        style={{
+          marginTop: "80px",
+          width: "98%",
+          height: "auto",
+          marginLeft: "10px",
+        }}
+      >
+        <div className="columns ">
+          <div className="column is-11">
+            <span>Ерөнхий мэдээлэл</span>
+          </div>
+          <div className="column is-1">
+            <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
+              Засварлах
+            </button>
+          </div>
+        </div>
+        <div className="columns" style={{ marginBottom: "0px" }}>
+          <div className="column is-3 has-text-right ">
+            <span style={{ color: "red" }}>*</span>
+            <span className="textSaaral">Эцэг эхийн нэр</span>
+          </div>
+          <div className="column is-3">
+            <input
+              disabled={edit}
+              className="anketInput"
+              value={data?.PERSON_LASTNAME}
+              onChange={(text) =>
+                loadData({
+                  ...data,
+                  ...{ PERSON_LASTNAME: text.target.value },
+                })
+              }
+            />
+          </div>
+          <div className="column is-3 has-text-right ">
+            <span style={{ color: "red" }}>*</span>
+            <span className="textSaaral">Хүйс</span>
+          </div>
+          <div className="column is-3">
+            <select
+              disabled={edit}
+              className="anketInput"
+              value={data?.PERSON_GENDER}
+              onChange={(text) =>
+                loadData({
+                  ...data,
+                  ...{ PERSON_GENDER: text.target.value },
+                })
+              }
+            >
+              <option value={1}>Эрэгтэй</option>
+              <option value={2}>Эмэгтэй</option>
+            </select>
+          </div>
+        </div>
+        <div className="columns" style={{ marginBottom: "0px" }}>
+          <div className="column is-3  has-text-right">
+            <span style={{ color: "red" }}>*</span>
+            <span className="textSaaral">Өөрийн нэр</span>
+          </div>
+          <div className="column is-3">
+            <input
+              disabled={edit}
+              className="anketInput"
+              value={data?.PERSON_FIRSTNAME}
+              onChange={(text) =>
+                loadData({
+                  ...data,
+                  ...{ PERSON_FIRSTNAME: text.target.value },
+                })
+              }
+            />
+          </div>
+          <div className="column is-3 has-text-right">
+            <span style={{ color: "red" }}>*</span>
+            <span className="textSaaral">Төрсөн он,сар,өдөр</span>
+          </div>
+          <div className="column is-3">
+            <input
+              className=""
+              type="date"
+              id="start"
+              disabled={edit}
+              className="anketInput"
+              value={bornDate}
+              min="1930-01-01"
+              max="2021-12-31"
+              onChange={(date) => {
+                setBornDate(date.target.value);
+              }}
+            ></input>
+          </div>
+        </div>
+        <div className="columns" style={{ marginBottom: "0px" }}>
+          <div className="column is-3 has-text-right">
+            <span style={{ color: "red" }}>*</span>
+            <span className="textSaaral">Регистерийн дугаар</span>
+          </div>
+          <div className="column is-3">
+            <input
+              disabled={edit}
+              className="anketInput"
+              value={data?.PERSON_REGISTER_NO}
+              onChange={(text) =>
+                loadData({
+                  ...data,
+                  ...{ PERSON_REGISTER_NO: text.target.value },
+                })
+              }
+            />
+          </div>
+          <div className="column is-3 has-text-right">
+            <span style={{ color: "red" }}>*</span>
+            <span className="textSaaral">Төрсөн аймаг,хот</span>
+          </div>
+          <div className="column is-3">
+            <Office personChild={data} loadDataChild={loadData} edit={edit} />
+          </div>
+        </div>
+        <div className="columns " style={{ marginBottom: "0px" }}>
+          <div className="column is-3 has-text-right">
+            <span style={{ color: "red" }}>*</span>
+            <span className="textSaaral">Ирэгншил</span>
+          </div>
+          <div className="column is-3">
+            <National personChild={data} loadDataChild={loadData} edit={edit} />
+          </div>
+          <div className="column is-3 has-text-right">
+            <span style={{ color: "red" }}>*</span>
+            <span className="textSaaral">Төрсөн сум,дүүрэг</span>
+          </div>
+          <div className="column is-3">
+            <Suboffice
+              personChild={data}
+              loadDataChild={loadData}
+              edit={edit}
+            />
+          </div>
+        </div>
+        <div className="columns" style={{ marginBottom: "0px" }}>
+          <div className="column is-3 has-text-right">
+            <span style={{ color: "red" }}>*</span>
+            <span className="textSaaral">Ургийн овог</span>
+          </div>
+          <div className="column is-3">
+            <Subnational
+              personChild={data}
+              loadDataChild={loadData}
+              edit={edit}
+            />
+          </div>
+          <div className="column is-3 has-text-right">
+            <span style={{ color: "red" }}>*</span>
+            <span className="textSaaral">Төрсөн газар</span>
+          </div>
+          <div className="column is-3">
+            <input
+              disabled={edit}
+              className="anketInput"
+              value={data?.BIRTH_PLACE}
+              onChange={(text) =>
+                loadData({
+                  ...data,
+                  ...{ BIRTH_PLACE: text.target.value },
+                })
+              }
+            />
+          </div>
+        </div>
+        <div className="columns " style={{ marginBottom: "0px" }}>
+          <div className="column is-3 has-text-right">
+            <span style={{ color: "red" }}>*</span>
+            <span className="textSaaral">Үндэс угсаа</span>
+          </div>
+          <div className="column is-3">
+            <Dynasty personChild={data} loadDataChild={loadData} edit={edit} />
+          </div>
+          <div className="column is-3 has-text-right">
+            <span style={{ color: "red" }}>*</span>
+            <span className="textSaaral">Гэрлэсэн эсэх</span>
+          </div>
+          <div className="column is-3">
+            <select
+              disabled={edit}
+              className="anketInput"
+              name="cars"
+              id="cars"
+              value={data?.IS_MARRIED === null ? 1 : data?.IS_MARRIED}
+              onChange={(text) =>
+                loadData({
+                  ...data,
+                  ...{ IS_MARRIED: text.target.value },
+                })
+              }
+            >
+              <option value={1}>Тийм</option>
+              <option value={0}>Үгүй</option>
+            </select>
+          </div>
+        </div>
 
-  return (
-    <div
-      className=" box"
-      style={{
-        marginTop: "80px",
-        width: "98%",
-        height: "auto",
-        marginLeft: "10px",
-      }}
-    >
-      <div className="columns ">
-        <div className="column is-11">
-          <span>Ерөнхий мэдээлэл</span>
-        </div>
-        <div className="column is-1">
-          <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
-            Засварлах
-          </button>
-        </div>
-      </div>
-      <div className="columns" style={{ marginBottom: "0px" }}>
-        <div className="column is-3 has-text-right ">
-          <span style={{ color: "red" }}>*</span>
-          <span className="textSaaral">Эцэг эхийн нэр</span>
-        </div>
-        <div className="column is-3">
-          <input
-            disabled={edit}
-            className="anketInput"
-            value={person?.PERSON_LASTNAME}
-            onChange={(text) =>
-              setPerson({
-                ...person,
-                ...{ PERSON_LASTNAME: text.target.value },
-              })
-            }
-          />
-        </div>
-        <div className="column is-3 has-text-right ">
-          <span style={{ color: "red" }}>*</span>
-          <span className="textSaaral">Хүйс</span>
-        </div>
-        <div className="column is-3">
-          <select
-            disabled={edit}
-            className="anketInput"
-            value={person?.PERSON_GENDER}
-            onChange={(text) =>
-              setPerson({
-                ...person,
-                ...{ PERSON_GENDER: text.target.value },
-              })
-            }
-          >
-            <option value={1}>Эрэгтэй</option>
-            <option value={2}>Эмэгтэй</option>
-          </select>
-        </div>
-      </div>
-      <div className="columns" style={{ marginBottom: "0px" }}>
-        <div className="column is-3  has-text-right">
-          <span style={{ color: "red" }}>*</span>
-          <span className="textSaaral">Өөрийн нэр</span>
-        </div>
-        <div className="column is-3">
-          <input
-            disabled={edit}
-            className="anketInput"
-            value={person?.PERSON_FIRSTNAME}
-            onChange={(text) =>
-              setPerson({
-                ...person,
-                ...{ PERSON_FIRSTNAME: text.target.value },
-              })
-            }
-          />
-        </div>
-        <div className="column is-3 has-text-right">
-          <span style={{ color: "red" }}>*</span>
-          <span className="textSaaral">Төрсөн он,сар,өдөр</span>
-        </div>
-        <div className="column is-3">
-          <input
-            className=""
-            type="date"
-            id="start"
-            disabled={edit}
-            className="anketInput"
-            value={bornDate}
-            min="1930-01-01"
-            max="2021-12-31"
-            onChange={(date) => {
-              setBornDate(date.target.value);
-            }}
-          ></input>
-        </div>
-      </div>
-      <div className="columns" style={{ marginBottom: "0px" }}>
-        <div className="column is-3 has-text-right">
-          <span style={{ color: "red" }}>*</span>
-          <span className="textSaaral">Регистерийн дугаар</span>
-        </div>
-        <div className="column is-3">
-          <input
-            disabled={edit}
-            className="anketInput"
-            value={person?.PERSON_REGISTER_NO}
-            onChange={(text) =>
-              setPerson({
-                ...person,
-                ...{ PERSON_REGISTER_NO: text.target.value },
-              })
-            }
-          />
-        </div>
-        <div className="column is-3 has-text-right">
-          <span style={{ color: "red" }}>*</span>
-          <span className="textSaaral">Төрсөн аймаг,хот</span>
-        </div>
-        <div className="column is-3">
-          <Office personChild={person} setPersonChild={setPerson} edit={edit} />
-        </div>
-      </div>
-      <div className="columns " style={{ marginBottom: "0px" }}>
-        <div className="column is-3 has-text-right">
-          <span style={{ color: "red" }}>*</span>
-          <span className="textSaaral">Ирэгншил</span>
-        </div>
-        <div className="column is-3">
-          <National
-            personChild={person}
-            setPersonChild={setPerson}
-            edit={edit}
-          />
-        </div>
-        <div className="column is-3 has-text-right">
-          <span style={{ color: "red" }}>*</span>
-          <span className="textSaaral">Төрсөн сум,дүүрэг</span>
-        </div>
-        <div className="column is-3">
-          <Suboffice
-            personChild={person}
-            setPersonChild={setPerson}
-            edit={edit}
-          />
-        </div>
-      </div>
-      <div className="columns" style={{ marginBottom: "0px" }}>
-        <div className="column is-3 has-text-right">
-          <span style={{ color: "red" }}>*</span>
-          <span className="textSaaral">Ургийн овог</span>
-        </div>
-        <div className="column is-3">
-          <Subnational
-            personChild={person}
-            setPersonChild={setPerson}
-            edit={edit}
-          />
-        </div>
-        <div className="column is-3 has-text-right">
-          <span style={{ color: "red" }}>*</span>
-          <span className="textSaaral">Төрсөн газар</span>
-        </div>
-        <div className="column is-3">
-          <input
-            disabled={edit}
-            className="anketInput"
-            value={person?.BIRTH_PLACE}
-            onChange={(text) =>
-              setPerson({
-                ...person,
-                ...{ BIRTH_PLACE: text.target.value },
-              })
-            }
-          />
-        </div>
-      </div>
-      <div className="columns " style={{ marginBottom: "0px" }}>
-        <div className="column is-3 has-text-right">
-          <span style={{ color: "red" }}>*</span>
-          <span className="textSaaral">Үндэс угсаа</span>
-        </div>
-        <div className="column is-3">
-          <Dynasty
-            personChild={person}
-            setPersonChild={setPerson}
-            edit={edit}
-          />
-        </div>
-        <div className="column is-3 has-text-right">
-          <span style={{ color: "red" }}>*</span>
-          <span className="textSaaral">Гэрлэсэн эсэх</span>
-        </div>
-        <div className="column is-3">
-          <select
-            disabled={edit}
-            className="anketInput"
-            name="cars"
-            id="cars"
-            value={person?.IS_MARRIED === null ? 1 : person?.IS_MARRIED}
-            onChange={(text) =>
-              setPerson({
-                ...person,
-                ...{ IS_MARRIED: text.target.value },
-              })
-            }
-          >
-            <option value={1}>Тийм</option>
-            <option value={0}>Үгүй</option>
-          </select>
-        </div>
-      </div>
+        <div className="columns">
+          <div className="column is-8"></div>
 
-      <div className="columns">
-        <div className="column is-8"></div>
-
-        {!edit ? (
-          <div className="column is-4 has-text-right">
-            {/* <button
+          {!edit ? (
+            <div className="column is-4 has-text-right">
+              {/* <button
               className="buttonTsenkher"
               style={{ marginRight: "0.4rem" }}
             >
               Хэвлэх
             </button> */}
-            <button className="buttonTsenkher" onClick={khadgalakhYo}>
-              Хадгалах
-            </button>
-          </div>
-        ) : null}
+              <button className="buttonTsenkher" onClick={khadgalakhYo}>
+                Хадгалах
+              </button>
+            </div>
+          ) : null}
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
 }
 
 function Kayag(props) {
@@ -682,12 +698,21 @@ function Kayag(props) {
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
 
+  useEffect(async () => {
+    console.log("PersonKhadgalProps", props);
+    let listItems = await axios(
+      "http://10.10.10.46:3002/api/v1/person/" + props.person_id
+    );
+    console.log(listItems, "Tangarag");
+    setPerson(listItems?.data?.Person[0]);
+  }, [props]);
+
   function khadgalakhYo() {
     console.log("PersonKhadgal", person);
     DataRequest({
       url: "http://10.10.10.46:3002/api/v1/updatePersonAddress/",
       method: "post",
-      data: { person },
+      data: { person: person },
     })
       .then(function (response) {
         console.log("UpdateResponse", response);
@@ -879,12 +904,40 @@ function Kayag(props) {
 }
 
 function HolbooBarikhHun(props) {
+  const [emergency, setEmergency] = useState();
   const [edit, setEdit] = useState(true);
   const [, forceRender] = useReducer((s) => s + 1, 0);
-  const [emergency, setEmergency] = useState(props.emergency);
+
   const alert = useAlert();
 
-  async function addRowKholbooBarikh() {
+  useEffect(async () => {
+    let listItems = await axios(
+      "http://10.10.10.46:3002/api/v1/emergency/" + props.person_id
+    );
+    console.log("emergency", listItems?.data?.Emergency);
+    setEmergency(listItems?.data?.Emergency);
+  }, [props]);
+
+  useEffect(() => {
+    if (emergency === undefined || emergency?.length === 0) {
+      setEmergency([
+        {
+          MEMBER_ID: 1,
+          FAMILY_NAME: "",
+          PERSON_ID: props.person?.Person[0].PERSON_ID,
+          EMERGENCY_LASTNAME: "",
+          EMERGENCY_FIRSTNAME: "",
+          EMERGENCY_PHONE: "",
+          IS_ACTIVE: "1",
+          CREATED_BY: userDetils?.USER_ID,
+          CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+          ROWTYPE: "NEW",
+        },
+      ]);
+    }
+  }, [emergency]);
+
+  function addRowKholbooBarikh() {
     let value = emergency;
     value.push({
       MEMBER_ID: 1,
@@ -899,7 +952,7 @@ function HolbooBarikhHun(props) {
       ROWTYPE: "NEW",
     });
 
-    await setEmergency(value);
+    setEmergency(value);
 
     forceRender();
   }
@@ -981,211 +1034,232 @@ function HolbooBarikhHun(props) {
     }
   }
 
-  return (
-    <div
-      className=" box"
-      style={{
-        width: "98%",
-        height: "auto",
-        marginLeft: "10px",
-      }}
-    >
-      <div className="columns">
-        <div className="column is-11">
-          <span>Хаягийн мэдээлэл</span>
+  let listItems;
+  if (emergency !== undefined && emergency.length !== 0) {
+    listItems = (
+      <div
+        className=" box"
+        style={{
+          width: "98%",
+          height: "auto",
+          marginLeft: "10px",
+        }}
+      >
+        <div className="columns">
+          <div className="column is-11">
+            <span>Зайлшгүй шаардлагатай үед холбоо барих хүн</span>
+          </div>
+          <div className="column is-1">
+            <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
+              Засварлах
+            </button>
+          </div>
         </div>
-        <div className="column is-1">
-          <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
-            Засварлах
-          </button>
-        </div>
-      </div>
 
-      <div className="columns">
-        <div className="column is-10 ">
-          <span>Зайлшгүй шаардлагатай үед холбоо барих хүн</span>
-          <table className="table is-bordered textSaaral">
-            <thead>
-              <tr>
-                <td>
-                  <span className="textSaaral">№</span>
-                </td>
-                <td>
-                  <span className="textSaaral">Таны юу болох</span>
-                </td>
-                <td>
-                  <span className="textSaaral">Овог</span>
-                </td>
-                <td>
-                  <span className="textSaaral">Нэр</span>
-                </td>
-                <td>
-                  <span className="textSaaral">Утасны дугаар</span>
-                </td>
-                <td style={{ paddingLeft: "0px", borderColor: "transparent" }}>
-                  <img
-                    src={Add}
-                    width="30px"
-                    height="30px"
-                    onClick={() => addRowKholbooBarikh()}
-                  />
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              {emergency?.map((value, index) => (
+        <div className="columns">
+          <div className="column is-10 ">
+            <table className="table is-bordered textSaaral">
+              <thead>
                 <tr>
                   <td>
-                    <span className="textSaaral">{index + 1}</span>
+                    <span className="textSaaral">№</span>
                   </td>
                   <td>
-                    <FamilyArray
-                      personChild={value}
-                      setPersonChild={setEmergency}
-                      emergencyArray={emergency}
-                      indexChild={index}
-                      edit={edit}
-                    />
+                    <span className="textSaaral">Таны юу болох</span>
                   </td>
                   <td>
-                    <input
-                      disabled={edit}
-                      className="anketInput"
-                      value={value.EMERGENCY_LASTNAME}
-                      onChange={(e) => {
-                        emergency[index].EMERGENCY_LASTNAME = e.target.value;
-                        emergency[index].UPDATED_BY = userDetils?.USER_ID;
-                        emergency[index].UPDATED_DATE = dateFormat(
-                          new Date(),
-                          "dd-mmm-yy"
-                        );
-                        setEmergency(emergency);
-                        forceRender();
-                      }}
-                    />
+                    <span className="textSaaral">Овог</span>
                   </td>
                   <td>
-                    <input
-                      disabled={edit}
-                      className="anketInput"
-                      value={value.EMERGENCY_FIRSTNAME}
-                      onChange={(e) => {
-                        emergency[index].EMERGENCY_FIRSTNAME = e.target.value;
-                        emergency[index].UPDATED_BY = userDetils?.USER_ID;
-                        emergency[index].UPDATED_DATE = dateFormat(
-                          new Date(),
-                          "dd-mmm-yy"
-                        );
-                        setEmergency(emergency);
-                        forceRender();
-                      }}
-                    />
+                    <span className="textSaaral">Нэр</span>
                   </td>
                   <td>
-                    <input
-                      disabled={edit}
-                      className="anketInput"
-                      value={value.EMERGENCY_PHONE}
-                      onChange={(e) => {
-                        emergency[index].EMERGENCY_PHONE = e.target.value;
-                        emergency[index].UPDATED_BY = userDetils?.USER_ID;
-                        emergency[index].UPDATED_DATE = dateFormat(
-                          new Date(),
-                          "dd-mmm-yy"
-                        );
-                        setEmergency(emergency);
-                        forceRender();
-                      }}
-                    />
+                    <span className="textSaaral">Утасны дугаар</span>
                   </td>
-
                   <td
                     style={{ paddingLeft: "0px", borderColor: "transparent" }}
                   >
                     <img
-                      src={Delete}
+                      src={Add}
                       width="30px"
                       height="30px"
-                      onClick={() => removeEmergency(index, value)}
+                      onClick={() => addRowKholbooBarikh()}
                     />
                   </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {emergency?.map((value, index) => (
+                  <tr>
+                    <td>
+                      <span className="textSaaral">{index + 1}</span>
+                    </td>
+                    <td>
+                      <FamilyArray
+                        personChild={value}
+                        setPersonChild={setEmergency}
+                        emergencyArray={emergency}
+                        indexChild={index}
+                        edit={edit}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        disabled={edit}
+                        className="anketInput"
+                        value={value.EMERGENCY_LASTNAME}
+                        onChange={(e) => {
+                          emergency[index].EMERGENCY_LASTNAME = e.target.value;
+                          emergency[index].UPDATED_BY = userDetils?.USER_ID;
+                          emergency[index].UPDATED_DATE = dateFormat(
+                            new Date(),
+                            "dd-mmm-yy"
+                          );
+                          setEmergency(emergency);
+                          forceRender();
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        disabled={edit}
+                        className="anketInput"
+                        value={value.EMERGENCY_FIRSTNAME}
+                        onChange={(e) => {
+                          emergency[index].EMERGENCY_FIRSTNAME = e.target.value;
+                          emergency[index].UPDATED_BY = userDetils?.USER_ID;
+                          emergency[index].UPDATED_DATE = dateFormat(
+                            new Date(),
+                            "dd-mmm-yy"
+                          );
+                          setEmergency(emergency);
+                          forceRender();
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        disabled={edit}
+                        className="anketInput"
+                        value={value.EMERGENCY_PHONE}
+                        onChange={(e) => {
+                          emergency[index].EMERGENCY_PHONE = e.target.value;
+                          emergency[index].UPDATED_BY = userDetils?.USER_ID;
+                          emergency[index].UPDATED_DATE = dateFormat(
+                            new Date(),
+                            "dd-mmm-yy"
+                          );
+                          setEmergency(emergency);
+                          forceRender();
+                        }}
+                      />
+                    </td>
+
+                    <td
+                      style={{ paddingLeft: "0px", borderColor: "transparent" }}
+                    >
+                      <img
+                        src={Delete}
+                        width="30px"
+                        height="30px"
+                        onClick={() => removeEmergency(index, value)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="column is-2 has-text-left"></div>
         </div>
-        <div className="column is-2 has-text-left"></div>
-      </div>
-      <div className="columns">
-        <div className="column is-9"></div>
-        <div className="column is-3 has-text-right">
-          {/* <button className="buttonTsenkher" style={{ marginRight: "0.4rem" }}>
+        <div className="columns">
+          <div className="column is-9"></div>
+          <div className="column is-3 has-text-right">
+            {/* <button className="buttonTsenkher" style={{ marginRight: "0.4rem" }}>
             Хэвлэх
           </button> */}
-          <button
-            className="buttonTsenkher"
-            style={{ marginRight: "0.4rem" }}
-            onClick={() => khadgalakhYo()}
-          >
-            Хадгалах
-          </button>
+            <button
+              className="buttonTsenkher"
+              style={{ marginRight: "0.4rem" }}
+              onClick={() => khadgalakhYo()}
+            >
+              Хадгалах
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
 }
 
 function GerBul(props) {
   const [edit, setEdit] = useState(true);
   const [, forceRender] = useReducer((s) => s + 1, 0);
+  const [data, loadData] = useState([]);
   const alert = useAlert();
-  const [family, setFamily] = useState(
-    props.family?.Family.length === 0
-      ? [
-          {
-            PERSON_ID: props.person?.Person[0].PERSON_ID,
-            FAMILY_ID: 1,
-            FAMILY_NAME: "",
-            MEMBER_TYPE: 1,
-            MEMBER_ID: 1,
-            MEMBER_LASTNAME: "",
-            MEMBER_FIRSTNAME: "",
-            MEMBER_BIRTHDATE: "09-Jun-21",
-            MEMBER_BIRTH_OFFICE: "",
-            MEMBER_BIRTH_SUBOFFICE: "",
-            MEMBER_ORG: "",
-            MEMBER_POSITION: "",
-            IS_ACTIVE: "1",
-            CREATED_BY: userDetils?.USER_ID,
-            CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-            ROWTYPE: "NEW",
-          },
-        ]
-      : props.family.Family.filter((a) => a.MEMBER_TYPE === 1)
-  );
-  const [family2, setFamily2] = useState(
-    props.family?.Family.length === 0
-      ? [
-          {
-            PERSON_ID: props.person?.Person[0].PERSON_ID,
-            FAMILY_NAME: "",
-            MEMBER_ID: 1,
-            MEMBER_TYPE: 2,
-            MEMBER_LASTNAME: "",
-            MEMBER_FIRSTNAME: "",
-            MEMBER_BIRTHDATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            MEMBER_BIRTH_OFFICE: "",
-            MEMBER_BIRTH_SUBOFFICE: "",
-            MEMBER_ORG: "",
-            MEMBER_POSITION: "",
-            IS_ACTIVE: "1",
-            CREATED_BY: userDetils?.USER_ID,
-            CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-            ROWTYPE: "NEW",
-          },
-        ]
-      : props.family?.Family.filter((a) => a.MEMBER_TYPE === 2)
-  );
+  const [family, setFamily] = useState([]);
+  const [family2, setFamily2] = useState([]);
+
+  useEffect(async () => {
+    let listItems = await axios(
+      "http://10.10.10.46:3002/api/v1/family/" + props.person_id
+    );
+    console.log(listItems, "family");
+    loadData(listItems?.data.Family);
+  }, [props]);
+
+  useEffect(() => {
+    setFamily(
+      data.length === 0
+        ? [
+            {
+              PERSON_ID: props.person?.Person[0].PERSON_ID,
+              FAMILY_ID: 1,
+              FAMILY_NAME: "",
+              MEMBER_TYPE: 1,
+              MEMBER_ID: 1,
+              MEMBER_LASTNAME: "",
+              MEMBER_FIRSTNAME: "",
+              MEMBER_BIRTHDATE: "09-Jun-21",
+              MEMBER_BIRTH_OFFICE: "",
+              MEMBER_BIRTH_SUBOFFICE: "",
+              MEMBER_ORG: "",
+              MEMBER_POSITION: "",
+              IS_ACTIVE: "1",
+              CREATED_BY: userDetils?.USER_ID,
+              CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+              ROWTYPE: "NEW",
+            },
+          ]
+        : data.filter((a) => a.MEMBER_TYPE === 1)
+    );
+    setFamily2(
+      data?.length === 0
+        ? [
+            {
+              PERSON_ID: props.person?.Person[0].PERSON_ID,
+              FAMILY_NAME: "",
+              MEMBER_ID: 1,
+              MEMBER_TYPE: 2,
+              MEMBER_LASTNAME: "",
+              MEMBER_FIRSTNAME: "",
+              MEMBER_BIRTHDATE: dateFormat(new Date(), "yyyy-mm-dd"),
+              MEMBER_BIRTH_OFFICE: "",
+              MEMBER_BIRTH_SUBOFFICE: "",
+              MEMBER_ORG: "",
+              MEMBER_POSITION: "",
+              IS_ACTIVE: "1",
+              CREATED_BY: userDetils?.USER_ID,
+              CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+              ROWTYPE: "NEW",
+            },
+          ]
+        : data.filter((a) => a.MEMBER_TYPE === 2)
+    );
+  }, [data]);
 
   console.log("propsGerbul", props);
   async function addRowFamily() {
@@ -1369,7 +1443,7 @@ function GerBul(props) {
         </div>
       </div>
       <div className="columns">
-        <div className="column is-11">
+        <div className="column is-12">
           <div className="table-container">
             <table className="table is-bordered is-flex-wrap-wrap">
               <tbody>
@@ -1403,12 +1477,11 @@ function GerBul(props) {
                   <td colspan="2">
                     <span className="textSaaral">Одоо эрхэлэж буй ажил</span>
                   </td>
-                  <td rowspan="2" style={{ border: "none" }}>
-                    &emsp; &emsp;&emsp;
+                  <td rowspan="2" style={{ border: "none", width: "60px" }}>
                     <img
                       src={Add}
-                      width="`50px"
-                      height="50px"
+                      width="`40px"
+                      height="40px"
                       onClick={() => addRowFamily()}
                       style={{ marginLeft: "-13px" }}
                     />
@@ -1429,7 +1502,7 @@ function GerBul(props) {
                       {" "}
                       <span className="textSaaral">{index + 1}</span>
                     </td>
-                    <td>
+                    <td style={{ width: "80px" }}>
                       {" "}
                       <FamilyArray
                         personChild={value}
@@ -1442,6 +1515,7 @@ function GerBul(props) {
                     <td>
                       <input
                         disabled={edit}
+                        style={{ width: "100px" }}
                         className="anketInput"
                         value={value.MEMBER_LASTNAME}
                         onChange={(e) => {
@@ -1460,6 +1534,7 @@ function GerBul(props) {
                       <input
                         disabled={edit}
                         className="anketInput"
+                        style={{ width: "110px" }}
                         value={value.MEMBER_FIRSTNAME}
                         onChange={(e) => {
                           family[index].MEMBER_FIRSTNAME = e.target.value;
@@ -1478,6 +1553,7 @@ function GerBul(props) {
                       <input
                         type="date"
                         id="start"
+                        style={{ width: "120px" }}
                         disabled={edit}
                         className="anketInput"
                         value={dateFormat(
@@ -1506,6 +1582,7 @@ function GerBul(props) {
                       <input
                         disabled={edit}
                         className="anketInput"
+                        style={{ width: "100px" }}
                         value={value.MEMBER_BIRTH_OFFICE}
                         onChange={(e) => {
                           family[index].MEMBER_BIRTH_OFFICE = e.target.value;
@@ -1524,6 +1601,7 @@ function GerBul(props) {
                       <input
                         disabled={edit}
                         className="anketInput"
+                        style={{ width: "110px" }}
                         value={value.MEMBER_BIRTH_SUBOFFICE}
                         onChange={(e) => {
                           family[index].MEMBER_BIRTH_SUBOFFICE = e.target.value;
@@ -1603,7 +1681,7 @@ function GerBul(props) {
       </div>
 
       <div className="columns">
-        <div className="column is-11 ">
+        <div className="column is-12 ">
           <div className="table-container" style={{ scrollbarWidth: "5px" }}>
             <table className="table is-bordered is-flex-wrap-wrap">
               <tbody>
@@ -1634,14 +1712,19 @@ function GerBul(props) {
                   <td colspan="2">
                     <span className="textSaaral">Одоо эрхэлэж буй ажил</span>
                   </td>
-                  <td rowspan="2" style={{ border: "none" }}>
-                    &emsp; &emsp;&emsp;
+                  <td
+                    rowspan="2"
+                    style={{
+                      border: "none",
+                      width: "50px",
+                      paddingLeft: "0px",
+                    }}
+                  >
                     <img
                       src={Add}
                       width="`50px"
                       height="50px"
                       onClick={() => addRowFamily2()}
-                      style={{ marginLeft: "-13px" }}
                     />
                   </td>
                 </tr>
@@ -1674,6 +1757,7 @@ function GerBul(props) {
                       <input
                         disabled={edit}
                         className="anketInput"
+                        style={{ width: "100px" }}
                         value={value.MEMBER_LASTNAME}
                         onChange={(e) => {
                           family2[index].MEMBER_LASTNAME = e.target.value;
@@ -1691,6 +1775,7 @@ function GerBul(props) {
                       <input
                         disabled={edit}
                         className="anketInput"
+                        style={{ width: "110px" }}
                         value={value.MEMBER_FIRSTNAME}
                         onChange={(e) => {
                           family2[index].MEMBER_FIRSTNAME = e.target.value;
@@ -1709,6 +1794,7 @@ function GerBul(props) {
                       <input
                         type="date"
                         id="start"
+                        style={{ width: "120px" }}
                         disabled={edit}
                         className="anketInput"
                         value={dateFormat(
@@ -1737,6 +1823,7 @@ function GerBul(props) {
                       <input
                         disabled={edit}
                         className="anketInput"
+                        style={{ width: "140px" }}
                         value={value.MEMBER_BIRTH_OFFICE}
                         onChange={(e) => {
                           family2[index].MEMBER_BIRTH_OFFICE = e.target.value;
@@ -1755,6 +1842,7 @@ function GerBul(props) {
                       <input
                         disabled={edit}
                         className="anketInput"
+                        style={{ width: "140px" }}
                         value={value.MEMBER_BIRTH_SUBOFFICE}
                         onChange={(e) => {
                           family2[index].MEMBER_BIRTH_SUBOFFICE =
@@ -1773,6 +1861,7 @@ function GerBul(props) {
                       {" "}
                       <input
                         disabled={edit}
+                        style={{ width: "110px" }}
                         className="anketInput"
                         value={value.MEMBER_ORG}
                         onChange={(e) => {
@@ -1791,6 +1880,7 @@ function GerBul(props) {
                       <input
                         disabled={edit}
                         className="anketInput"
+                        style={{ width: "110px" }}
                         value={value.MEMBER_POSITION}
                         onChange={(e) => {
                           family2[index].MEMBER_POSITION = e.target.value;
@@ -1844,129 +1934,5 @@ function GerBul(props) {
     </div>
   );
 }
-
-// function Bolowsrol(props) {
-//   return (
-//     <div
-//       className="box"
-//       style={{
-//         marginTop: "80px",
-//         width: "98%",
-//         height: "40%",
-//         marginLeft: "15px",
-//       }}
-//     >
-//       <div class="columns">
-//         <div class="column is-11">
-//           <th>1.Төрийн жинхэн албаны шалгалтын талаарх мэдээлэл</th>
-//         </div>
-//         <button className="button is-info is-small is-focused ml-5">
-//           Засварлах
-//         </button>
-//       </div>
-//       <div class="columns is-12">
-//         <div class="column is-0" />
-
-//         <em className="TABLE m-3 has-text-link	">
-//           3.1.Боловсрол (суурь Боловсрол. дипломын дээд
-//           боловсрол,бакалавр,магистрын зэргийг оролуулан)
-//         </em>
-//       </div>
-//       <div class="columns is-12">
-//         <div class="column is-0 " />
-
-//         <table className="table is-bordered p-3">
-//           <thead>
-//             <tr>
-//               <td>№</td>
-//               <td>Боловсролын зэрэг</td>
-//               <td>Боловсрол эзэтшисэн</td>
-//               <td>*Сургуулийн нэр</td>
-//               <td>Огноо он,сар</td>
-//               <td>Төгссөн он,сар</td>
-//               <td>Эзэмшсэн мэргэжил</td>
-//               <td>Гэрчилгээ дипломин дугаар</td>
-//               <td>Сургуулийн холбоо барих мэдээлэл</td>
-//               <td>Диплом хамгаалсан сэдэв</td>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             <tr>
-//               <th></th>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//             </tr>
-//           </tbody>
-//         </table>
-//       </div>
-//       <div class="columns is-12">
-//         <div class="column is-0" />
-
-//         <em className="TABLE m-3 has-text-link">
-//           3.2. Боловсрол (суурь Боловсрол, дипломын дээд Боловсрол, бакалавр,
-//           магистрын зэргийг оролцуулсан)
-//         </em>
-//       </div>
-
-//       <div class="columns is-12">
-//         <div class="column is-0 " />
-
-//         <table className="table is-bordered ">
-//           <thead>
-//             <tr>
-//               <td>№</td>
-//               <td>Боловсролын зэрэг</td>
-//               <td>Боловсрол эзэтшисэн газар</td>
-//               <td>*Сургуулийн нэр</td>
-//               <td>Орсон он,сар</td>
-//               <td>Төгссөн он,сар</td>
-//               <td>Эзэмшсэн мэргэжил</td>
-//               <td>Гэрчилгээ дипломин дугаар</td>
-//               <td>Сургуулийн холбоо барих мэдээлэл</td>
-//               <td>Диплом хамгаалсан сэдэв</td>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             <tr>
-//               <th></th>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//             </tr>
-//             <tr></tr>
-//           </tbody>
-//         </table>
-//       </div>
-//       <div class="columns is-3">
-//         <div class="column is-9" />
-
-//         <div class="column is-12">
-//           <button className="button is-info is-small is-focused ml-6">
-//             Хэвлэх
-//           </button>
-//           <button className="button is-info is-small is-focused ml-1">
-//             Хадгалах
-//           </button>
-//           <button className="button is-info is-small is-focused ml-1">
-//             Хадгалаад харах
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
 
 export default AnketNeg;

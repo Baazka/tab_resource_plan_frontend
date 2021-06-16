@@ -63,10 +63,27 @@ const Home = (props) => {
   const [found, setFound] = useState();
   const alert = useAlert();
 
+  async function unActive() {
+    let jagsaalts = await DataRequest({
+      url: "http://10.10.10.46:3002/api/v1/employees/0",
+      method: "GET",
+      data: {},
+    });
+    setJagsaalt(jagsaalts?.data);
+  }
+  async function Active() {
+    let jagsaalts = await DataRequest({
+      url: "http://10.10.10.46:3002/api/v1/employees/1",
+      method: "GET",
+      data: {},
+    });
+    setJagsaalt(jagsaalts?.data);
+  }
+
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/employees",
+        url: "http://10.10.10.46:3002/api/v1/employees/1",
         method: "GET",
         data: {},
       });
@@ -106,6 +123,7 @@ const Home = (props) => {
       employDetail: employDetail?.data,
       employEmergency: employEmergency?.data,
       employfamily: employfamily?.data,
+      person_id: value,
     });
   }
 
@@ -242,6 +260,7 @@ const Home = (props) => {
               fontFamily: "RalewaySemiBold",
               fontSize: "1rem",
             }}
+            onClick={() => Active()}
           >
             Идэвхтэй
           </button>
@@ -259,6 +278,7 @@ const Home = (props) => {
               fontSize: "1rem",
               marginLeft: "0.5rem",
             }}
+            onClick={() => unActive()}
           >
             Идэвхгүй
           </button>
@@ -281,7 +301,7 @@ const Home = (props) => {
             >
               АНКЕТ А ХЭСЭГ
             </button>
-            <button
+            {/* <button
               className="button is-focused"
               style={{
                 backgroundColor: "#418ee6",
@@ -298,7 +318,7 @@ const Home = (props) => {
               }}
             >
               АНКЕТ Б ХЭСЭГ
-            </button>
+            </button> */}
           </div>
         </div>
         <div

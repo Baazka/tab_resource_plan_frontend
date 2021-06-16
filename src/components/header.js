@@ -2,8 +2,7 @@ import React, { useState, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
 import { UserB, Noti } from "../assets/images/zurag";
-import Dropdown from "react-dropdown";
-import "react-dropdown/style.css";
+
 import { DataRequest } from "../functions/DataApi";
 import { connect } from "react-redux";
 
@@ -26,8 +25,10 @@ const Header = (props) => {
   const options = ["гарах"];
   const defaultOption = props?.userDetail?.userDetail?.array;
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
+
   function onSelect(option) {
-    if (option.label === "гарах") history.push("/");
+    console.log(option, "option");
+    if (option === "2") history.push("/");
   }
   useEffect(() => {
     console.log(props?.userDetail?.userDetail, "header");
@@ -67,13 +68,20 @@ const Header = (props) => {
             <img src={UserB} width="45" height="45" />
           </div>
 
-          <Dropdown
-            options={options}
-            onChange={onSelect}
-            placeholder={
-              userDetils !== undefined ? userDetils?.USER_NAME : "Admin"
-            }
-          />
+          <select
+            style={{
+              border: "none",
+              backgroundColor: "#f1f1f1",
+              marginBottom: "12px",
+            }}
+            value={1}
+            onChange={(text) => onSelect(text.target.value)}
+          >
+            <option value="1" disabled selected hidden>
+              {userDetils !== undefined ? userDetils?.USER_NAME : "Admin"}
+            </option>
+            <option value={2}>Гарах</option>
+          </select>
         </div>
       </div>
     </div>

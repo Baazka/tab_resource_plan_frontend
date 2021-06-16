@@ -178,7 +178,7 @@ function UrChadvar(props) {
     }
   }
   let listItems;
-  if (data?.Exam !== undefined) {
+  if (data?.Exam !== undefined && data.Exam.length !== 0) {
     listItems = (
       <div>
         <div
@@ -793,7 +793,7 @@ function TangaragBurtgel(props) {
     await loadData({ Oath: value });
   }
   useEffect(() => {
-    if (data?.Oath === undefined || data?.Oath === [])
+    if (data?.Oath === undefined || data?.Oath.length === 0)
       loadData({
         Oath: [
           {
@@ -847,7 +847,7 @@ function TangaragBurtgel(props) {
   }
 
   let listItems;
-  if (data?.Oath !== undefined) {
+  if (data?.Oath !== undefined && data?.Oath.length !== 0) {
     listItems = (
       <div
         className=" box"
@@ -1121,7 +1121,7 @@ function GadaadKhel(props) {
     await loadData({ Language: value });
   }
   useEffect(() => {
-    if (data?.Language === undefined || data?.Language === [])
+    if (data?.Language === undefined || data?.Language.length === 0)
       loadData({
         Language: [
           {
@@ -1180,7 +1180,7 @@ function GadaadKhel(props) {
   }
 
   let listItems;
-  if (data?.Language !== undefined) {
+  if (data?.Language !== undefined && data?.Language.length !== 0) {
     listItems = (
       <div
         className=" box"

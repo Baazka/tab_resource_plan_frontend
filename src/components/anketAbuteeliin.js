@@ -79,7 +79,7 @@ function Buteeliin(props) {
   const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/Literature/" + props.person_id
+      "http://172.16.24.103:3002/api/v1/Literature/" + props.person_id
     );
     console.log(listItems, "Tangarag");
     loadData(listItems?.data);
@@ -116,7 +116,7 @@ function Buteeliin(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/literature/",
+        url: "http://172.16.24.103:3002/api/v1/literature/",
         method: "POST",
         data: { literature: newRow },
       })
@@ -134,7 +134,7 @@ function Buteeliin(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/literature/",
+        url: "http://172.16.24.103:3002/api/v1/literature/",
         method: "PUT",
         data: { literature: oldRow },
       })
@@ -177,7 +177,7 @@ function Buteeliin(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/literatureDelete",
+        url: "http://172.16.24.103:3002/api/v1/literatureDelete",
         method: "POST",
         data: {
           literature: {
@@ -210,7 +210,7 @@ function Buteeliin(props) {
   }
 
   let listItems;
-  if (data?.Literature !== undefined && data?.Literature.length !== 0) {
+  if (data?.Literature !== undefined || data?.Literature.length !== 0) {
     listItems = (
       <div
         className=" box"
