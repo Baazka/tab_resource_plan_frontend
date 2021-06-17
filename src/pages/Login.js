@@ -110,7 +110,7 @@ function Login(props) {
       ></div>
       <div
         style={{
-          height: "50%",
+          height: "auto ",
           width: "25%",
           backgroundColor: "#ececf8",
           display: "flex",
@@ -183,7 +183,7 @@ function Login(props) {
         </div>
 
         <div class="container">
-          <div class="col-md-12  text-center">
+          <div class="col-md-12  text-center" style={{ paddingBottom: "50px" }}>
             <button
               class="button"
               style={{ backgroundColor: "#233772", color: "white" }}
