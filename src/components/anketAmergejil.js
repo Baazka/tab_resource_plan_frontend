@@ -167,7 +167,9 @@ function Mergeshliin(props) {
         >
           <div className="columns">
             <div className="column is-11">
-              <span>4. Мэргэшлийн талаарх мэдээлэл</span>
+              <span className="headerTextBold">
+                4. Мэргэшлийн талаарх мэдээлэл
+              </span>
             </div>
             <div className="column is-1">
               <button
@@ -225,21 +227,23 @@ function Mergeshliin(props) {
                         Үнэмлэх, гэрчилгээний он, сар, өдөр
                       </span>
                     </td>
-                    <td
-                      style={{
-                        borderColor: "transparent",
-                        border: "none",
-                        paddingLeft: "0px",
-                        width: "50px",
-                      }}
-                    >
-                      <img
-                        src={Add}
-                        width="30px"
-                        height="30px"
-                        onClick={() => addRow()}
-                      />
-                    </td>
+                    {!edit ? (
+                      <td
+                        style={{
+                          borderColor: "transparent",
+                          border: "none",
+                          paddingLeft: "0px",
+                          width: "50px",
+                        }}
+                      >
+                        <img
+                          src={Add}
+                          width="30px"
+                          height="30px"
+                          onClick={() => addRow()}
+                        />
+                      </td>
+                    ) : null}
                   </tr>
                 </thead>
                 <tbody>
@@ -440,20 +444,22 @@ function Mergeshliin(props) {
                           }}
                         />
                       </td>
-                      <td
-                        style={{
-                          paddingLeft: "0px",
-                          borderColor: "transparent",
-                          width: "50px",
-                        }}
-                      >
-                        <img
-                          src={Delete}
-                          width="30px"
-                          height="30px"
-                          onClick={() => removeRow(index, value)}
-                        />
-                      </td>
+                      {!edit ? (
+                        <td
+                          style={{
+                            paddingLeft: "0px",
+                            borderColor: "transparent",
+                            width: "50px",
+                          }}
+                        >
+                          <img
+                            src={Delete}
+                            width="30px"
+                            height="30px"
+                            onClick={() => removeRow(index, value)}
+                          />
+                        </td>
+                      ) : null}
                     </tr>
                   ))}
                 </tbody>
@@ -462,19 +468,21 @@ function Mergeshliin(props) {
           </div>
 
           <div className="columns">
-            <div className="column is-9"></div>
-            <div className="column is-3 has-text-right">
-              {/* <button className="buttonTsenkher" style={{ marginRight: "0.4rem" }}>
-            Хэвлэх
-          </button> */}
-              <button
-                className="buttonTsenkher"
-                style={{ marginRight: "0.4rem" }}
-                onClick={saveToDB}
-              >
-                Хадгалах
-              </button>
-            </div>
+            <div className="column is-11"></div>
+
+            {!edit ? (
+              <div className="column is-1 ">
+                {/* <button
+              className="buttonTsenkher"
+              style={{ marginRight: "0.4rem" }}
+            >
+              Хэвлэх
+            </button> */}
+                <button className="buttonTsenkher" onClick={saveToDB}>
+                  Хадгалах
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
         <ZeregTsol person_id={props.person_id} />
@@ -638,7 +646,7 @@ function ZeregTsol(props) {
       >
         <div className="columns">
           <div className="column is-11">
-            <span>
+            <span className="headerTextBold">
               {" "}
               4.2 Эрдмийн цол/дэд профессор, академийн гишүүнийг оролцуулан/
             </span>
@@ -679,22 +687,23 @@ function ZeregTsol(props) {
                       Гэрчилгээ дипломын дугаар
                     </span>
                   </td>
-
-                  <td
-                    style={{
-                      borderColor: "transparent",
-                      border: "none",
-                      paddingLeft: "0px",
-                      width: "50px",
-                    }}
-                  >
-                    <img
-                      src={Add}
-                      width="30px"
-                      height="30px"
-                      onClick={() => addRow()}
-                    />
-                  </td>
+                  {!edit ? (
+                    <td
+                      style={{
+                        borderColor: "transparent",
+                        border: "none",
+                        paddingLeft: "0px",
+                        width: "50px",
+                      }}
+                    >
+                      <img
+                        src={Add}
+                        width="30px"
+                        height="30px"
+                        onClick={() => addRow()}
+                      />
+                    </td>
+                  ) : null}
                 </tr>
               </thead>
               <tbody>
@@ -782,21 +791,22 @@ function ZeregTsol(props) {
                         }}
                       />
                     </td>
-
-                    <td
-                      style={{
-                        paddingLeft: "0px",
-                        borderColor: "transparent",
-                        width: "50px",
-                      }}
-                    >
-                      <img
-                        src={Delete}
-                        width="30px"
-                        height="30px"
-                        onClick={() => removeRow(index, value)}
-                      />
-                    </td>
+                    {!edit ? (
+                      <td
+                        style={{
+                          paddingLeft: "0px",
+                          borderColor: "transparent",
+                          width: "50px",
+                        }}
+                      >
+                        <img
+                          src={Delete}
+                          width="30px"
+                          height="30px"
+                          onClick={() => removeRow(index, value)}
+                        />
+                      </td>
+                    ) : null}
                   </tr>
                 ))}
               </tbody>
@@ -805,19 +815,21 @@ function ZeregTsol(props) {
         </div>
 
         <div className="columns">
-          <div className="column is-9"></div>
-          <div className="column is-3 has-text-right">
-            {/* <button className="buttonTsenkher" style={{ marginRight: "0.4rem" }}>
-            Хэвлэх
-          </button> */}
-            <button
+          <div className="column is-11"></div>
+
+          {!edit ? (
+            <div className="column is-1 ">
+              {/* <button
               className="buttonTsenkher"
               style={{ marginRight: "0.4rem" }}
-              onClick={saveToDB}
             >
-              Хадгалах
-            </button>
-          </div>
+              Хэвлэх
+            </button> */}
+              <button className="buttonTsenkher" onClick={saveToDB}>
+                Хадгалах
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     );

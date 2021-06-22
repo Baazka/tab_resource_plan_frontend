@@ -241,16 +241,20 @@ function Bolowsrol(props) {
       >
         <div class="columns">
           <div class="column is-11">
-            <span>3.Боловсролын талаарх мэдээлэл</span>
+            <span className="headerTextBold">
+              3.Боловсролын талаарх мэдээлэл
+            </span>
           </div>
-          <button
-            className="buttonTsenkher"
-            onClick={() => {
-              setEdit(!edit);
-            }}
-          >
-            Засварлах
-          </button>
+          <div className="column is-1">
+            <button
+              className="buttonTsenkher"
+              onClick={() => {
+                setEdit(!edit);
+              }}
+            >
+              Засварлах
+            </button>
+          </div>
         </div>
         <div class="columns">
           <div class="column is-12">
@@ -300,21 +304,23 @@ function Bolowsrol(props) {
                   <td>
                     <span className="textSaaral">Диплом хамгаалсан сэдэв</span>
                   </td>
-                  <td
-                    style={{
-                      borderColor: "transparent",
-                      border: "none",
-                      paddingLeft: "0px",
-                      width: "90px",
-                    }}
-                  >
-                    <img
-                      src={Add}
-                      width="30px"
-                      height="30px"
-                      onClick={() => addRow()}
-                    />
-                  </td>
+                  {!edit ? (
+                    <td
+                      style={{
+                        borderColor: "transparent",
+                        border: "none",
+                        paddingLeft: "0px",
+                        width: "90px",
+                      }}
+                    >
+                      <img
+                        src={Add}
+                        width="30px"
+                        height="30px"
+                        onClick={() => addRow()}
+                      />
+                    </td>
+                  ) : null}
                 </tr>
               </thead>
               <tbody>
@@ -511,21 +517,22 @@ function Bolowsrol(props) {
                         }}
                       />
                     </td>
-
-                    <td
-                      style={{
-                        paddingLeft: "0px",
-                        borderColor: "transparent",
-                        width: "80px",
-                      }}
-                    >
-                      <img
-                        src={Delete}
-                        width="30px"
-                        height="30px"
-                        onClick={() => removeRow(index, value)}
-                      />
-                    </td>
+                    {!edit ? (
+                      <td
+                        style={{
+                          paddingLeft: "0px",
+                          borderColor: "transparent",
+                          width: "80px",
+                        }}
+                      >
+                        <img
+                          src={Delete}
+                          width="30px"
+                          height="30px"
+                          onClick={() => removeRow(index, value)}
+                        />
+                      </td>
+                    ) : null}
                   </tr>
                 ))}
               </tbody>
@@ -581,21 +588,23 @@ function Bolowsrol(props) {
                   <td>
                     <span className="textSaaral">Диплом хамгаалсан сэдэв</span>
                   </td>
-                  <td
-                    style={{
-                      borderColor: "transparent",
-                      border: "none",
-                      paddingLeft: "0px",
-                      width: "90px",
-                    }}
-                  >
-                    <img
-                      src={Add}
-                      width="30px"
-                      height="30px"
-                      onClick={() => addRowSecond()}
-                    />
-                  </td>
+                  {!edit ? (
+                    <td
+                      style={{
+                        borderColor: "transparent",
+                        border: "none",
+                        paddingLeft: "0px",
+                        width: "90px",
+                      }}
+                    >
+                      <img
+                        src={Add}
+                        width="30px"
+                        height="30px"
+                        onClick={() => addRowSecond()}
+                      />
+                    </td>
+                  ) : null}
                 </tr>
               </thead>
               <tbody>
@@ -792,37 +801,44 @@ function Bolowsrol(props) {
                         }}
                       />
                     </td>
-
-                    <td
-                      style={{
-                        paddingLeft: "0px",
-                        borderColor: "transparent",
-                        width: "80px",
-                      }}
-                    >
-                      <img
-                        src={Delete}
-                        width="30px"
-                        height="30px"
-                        onClick={() => removeRow(index, value)}
-                      />
-                    </td>
+                    {!edit ? (
+                      <td
+                        style={{
+                          paddingLeft: "0px",
+                          borderColor: "transparent",
+                          width: "80px",
+                        }}
+                      >
+                        <img
+                          src={Delete}
+                          width="30px"
+                          height="30px"
+                          onClick={() => removeRow(index, value)}
+                        />
+                      </td>
+                    ) : null}
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         </div>
-        <div class="columns">
-          <div class="column is-11" />
-          <div class="column is-1">
-            {/* <button className="button is-info is-small is-focused ml-6">
+        <div className="columns">
+          <div className="column is-11"></div>
+
+          {!edit ? (
+            <div className="column is-1 ">
+              {/* <button
+              className="buttonTsenkher"
+              style={{ marginRight: "0.4rem" }}
+            >
               Хэвлэх
             </button> */}
-            <button className="buttonTsenkher" onClick={saveToDB}>
-              Хадгалах
-            </button>
-          </div>
+              <button className="buttonTsenkher" onClick={saveToDB}>
+                Хадгалах
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     );

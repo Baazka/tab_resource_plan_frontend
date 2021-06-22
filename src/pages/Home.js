@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Search, Filter } from "../assets/images/zurag";
+import { Search, Filter, AddBlue, Excel } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
+import dateFormat from "dateformat";
+const userDetils = JSON.parse(localStorage.getItem("userDetails"));
+const axios = require("axios");
 
-var rowNumber = 1;
 createTheme("solarized", {
   text: {
     primary: "gray",
@@ -60,6 +63,7 @@ const Home = (props) => {
   const [jagsaalt, setJagsaalt] = useState();
   const [data, setData] = useState();
   const [search, setSearch] = useState("");
+  const [searchType, setSearchType] = useState("PERSON_FIRSTNAME");
   const [found, setFound] = useState();
   const alert = useAlert();
 
@@ -108,21 +112,9 @@ const Home = (props) => {
       data: {},
     });
 
-    let employEmergency = await DataRequest({
-      url: "http://10.10.10.46:3002/api/v1/emergency/" + value,
-      method: "GET",
-      data: {},
-    });
-    let employfamily = await DataRequest({
-      url: "http://10.10.10.46:3002/api/v1/family/" + value,
-      method: "GET",
-      data: {},
-    });
-
+    console.log(value, "value======================================>");
     setData({
       employDetail: employDetail?.data,
-      employEmergency: employEmergency?.data,
-      employfamily: employfamily?.data,
       person_id: value,
     });
   }
@@ -131,12 +123,14 @@ const Home = (props) => {
     if (data !== undefined) history.push("/web/anketA/1", { data });
     else alert.show("Албан тушаалтан сонго");
   }
+  async function anketANew() {
+    history.push("/web/anketA/1", { data: { person_id: 0 } });
+  }
 
   function makeSearch(value) {
     setSearch(value);
-    let found = jagsaalt?.filter((obj) =>
-      equalStr(obj.PERSON_FIRSTNAME, value)
-    );
+
+    let found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
     console.log(found);
     if (found != undefined && found.length > 0) setFound(found);
     else setFound([]);
@@ -146,9 +140,18 @@ const Home = (props) => {
       value1 !== undefined &&
       value1 !== "" &&
       value2 !== undefined &&
-      value2 !== ""
+      value2 !== "" &&
+      value1 !== null &&
+      value2 !== null
     )
-      if (value1.toUpperCase().includes(value2.toUpperCase())) return true;
+      if (searchType !== "PERSON_PHONE") {
+        if (
+          (value1 !== null ? value1.toUpperCase() : "").includes(
+            value2.toUpperCase()
+          )
+        )
+          return true;
+      } else if (value1.includes(value2)) return true;
     return false;
   }
 
@@ -328,15 +331,10 @@ const Home = (props) => {
           }}
         >
           <div style={{ display: "flex" }}>
-            {/* <div class="control has-icons-left has-icons-right">
+            <div className="select is-small" style={{ marginRight: "10px" }}>
               <select
-                value={"EMP_DEPARTMENT_NAME"}
-                // onChange={(text) =>
-                //   setPerson({
-                //     ...person,
-                //     ...{ PERSON_GENDER: text.target.value },
-                //   })
-                // }
+                value={searchType}
+                onChange={(text) => setSearchType(text.target.value)}
               >
                 <option value={"EMP_DEPARTMENT_NAME"}>Газар нэгж</option>
                 <option value={"EMP_SUBDEPARTMENT_NAME"}>Хэлтэс</option>
@@ -347,12 +345,11 @@ const Home = (props) => {
                 <option value={"PERSON_PHONE"}>Утасны дугаар</option>
                 <option value={"PERSON_EMAIL"}>Имэйл</option>
               </select>
-
+              {/* 
               <span class="icon is-small is-right">
                 <img src={Filter} />
-              </span>
-              <span class="icon is-small is-right"></span>
-            </div> */}
+              </span> */}
+            </div>
             <div class="control has-icons-left has-icons-right">
               <input
                 class="input is-small is-gray"
@@ -371,9 +368,24 @@ const Home = (props) => {
               </span>
               <span class="icon is-small is-right"></span>
             </div>
-            <span style={{ width: "40", height: "40" }}>
-              <img src={Filter} width="35" height="40" />
-            </span>
+
+            <img
+              src={AddBlue}
+              width="30px"
+              height="30px"
+              onClick={() => {
+                anketANew();
+              }}
+            />
+            <img
+              src={Excel}
+              height="30px"
+              width="30px"
+              onClick={() =>
+                document.getElementById("test-table-xls-button").click()
+              }
+            />
+            <EmployExcel />
           </div>
         </div>
         <DataTable
@@ -398,4 +410,93 @@ const Home = (props) => {
   );
 };
 
+function EmployExcel(props) {
+  const [data, loadData] = useState(null);
+  const [edit, setEdit] = useState(true);
+  const alert = useAlert();
+  const refExcel = useRef(null);
+
+  useEffect(async () => {
+    let listItems = await axios(
+      "http://172.16.24.103:3002/api/v1/excelPerson/"
+    );
+    console.log(listItems, "tailan");
+    loadData(listItems?.data);
+  }, [props]);
+
+  let listItems;
+  if (data !== undefined || data.length !== 0) {
+    listItems = (
+      <div style={{ width: "30px", height: "30px" }}>
+        <img src={Excel} height="30px" width="30px" />
+        <div style={{ display: "none" }}>
+          <ReactHTMLTableToExcel
+            id="test-table-xls-button"
+            className="download-table-xls-button"
+            table="table-to-xls"
+            filename="tablexls"
+            sheet="tablexls"
+            buttonText="XLS"
+          />
+          <table id="table-to-xls">
+            <tr>
+              <th>Эцэг эхийн нэр</th>
+              <th>Өөрийн нэр</th>
+              <th>Регистерийн дугаар</th>
+              <th>Иргэншил</th>
+              <th>Ургийн овог</th>
+              <th>Үндэс угсаа</th>
+              <th>Хүйс</th>
+              <th>Төрсөн он,сар,өдөр</th>
+              <th>Төрсөн аймаг,хот</th>
+              <th>Төрсөн сум, дүүрэг</th>
+              <th>Төрсөн газар</th>
+              <th>Гэрлэсэн эсэх</th>
+              <th>Утас</th>
+              <th>N-мэйл</th>
+            </tr>
+            {data?.map((value, index) => (
+              <tr>
+                <td>{value.PERSON_LASTNAME}</td>
+                <td>{value.PERSON_FIRSTNAME}</td>
+                <td>{value.PERSON_REGISTER_NO}</td>
+                <td>{value.NATIONAL_NAME}</td>
+                <td>{value.SURNAME}</td>
+                <td>{value.DYNASTY_NAME}</td>
+                <td>
+                  {value.PERSON_GENDER === null
+                    ? ""
+                    : value.PERSON_GENDER === 1
+                    ? "Эмэгтэй"
+                    : "Эрэгтэй"}
+                </td>
+                <td>
+                  {value.PERSON_BORNDATE !== null &&
+                  value.PERSON_BORNDATE !== undefined
+                    ? dateFormat(new Date(value.PERSON_BORNDATE), "yyyy-mm-dd")
+                    : ""}
+                </td>
+                <td>{value.OFFICE_NAME}</td>
+                <td>{value.SUB_OFFICE_NAME}</td>
+                <td>{value.BIRTH_PLACE}</td>
+                <td>
+                  {value.IS_MARRIED === null
+                    ? ""
+                    : value.IS_MARRIED === 0
+                    ? "Гэрлэсэн"
+                    : "Гэрлээгүй"}
+                </td>
+                <td>{value.PERSON_PHONE}</td>
+                <td>{value.PERSON_EMAIL}</td>
+              </tr>
+            ))}
+          </table>
+        </div>
+      </div>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+}
 export default Home;

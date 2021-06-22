@@ -36,6 +36,22 @@
   border: none;
 }
 
+.headerTextBold {
+  color: #808c9c;
+  font-weight: bold;
+}
+
+.searchFilter {
+  border: 1px solid silver;
+  border-radius: 5px;
+
+  margin-right: 10px;
+}
+
+.searchFilter:focus {
+  border-color: silver;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -43,4 +59,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.control:global(.js-focus-visible) :focus:not(.focus-visible) {
+  outline: none;
 }

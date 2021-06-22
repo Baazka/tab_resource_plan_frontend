@@ -119,7 +119,7 @@ const SideBar = (props) => {
                       color: `${menuClick.menu0 ? "#418ee6" : "white"}`,
                     }}
                   >
-                    Дашборд
+                    Дашбоард
                   </p>
                 </div>
               </MenuItem>

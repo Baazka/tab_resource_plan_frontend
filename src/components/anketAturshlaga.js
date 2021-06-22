@@ -7,77 +7,6 @@ const axios = require("axios");
 var dateFormat = require("dateformat");
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
-// function Turshlgin(props) {
-//   return (
-//     <div
-//       className="box"
-//       style={{
-//         marginTop: "80px",
-//         width: "98%",
-//         height: "31%",
-//         marginLeft: "15px",
-//       }}
-//     >
-//       <div class="columns">
-//         <div class="column is-11">
-//           <th>Долоо. Туршлагын талаарх мэдээлэл</th>
-//         </div>
-//         <button className="button is-info is-small is-focused ml-5">
-//           Засварлах
-//         </button>
-//       </div>
-//       <div class="columns is-10">
-//         <em className="TABLE m-3 has-text-link	">
-//           7.1 Ажилласан байдаг/ төрийн улс төрийн алба/
-//         </em>
-//         <div class="column is-2" />
-//         <div class="columns is-9" />
-//         <em className="TABLE m-3 has-text-link	">
-//           (<span style={{ color: "red" }}>*</span>Байгуулагын нэрийг бүтнээр
-//           бичнэ)
-//         </em>
-//         <div class="column is-3" />
-//       </div>
-//       <div class="columns is-12">
-//         <div class="column is-0 " />
-
-//         <table className="table is-bordered p-3">
-//           <thead>
-//             <tr>
-//               <td>№</td>
-//               <td>Ажилласан аймаг, хот</td>
-//               <td>Ажилласан сум, дүүрэг</td>
-//               <td>газар хэлтэс, Алба</td>
-//               <td>Ажилласан Байгуулагын Нэр</td>
-//               <td>Эрхэлсэн албан тушаал</td>
-//               <td>Албан тушаалын төрөл</td>
-//               <td>Ажилд орсон он, сар, өдөр</td>
-//               <td>Ажилд томилогдсон тушаалын дугаар</td>
-//               <td>Ажлаас чөлөөлөгдсөн он, сар</td>
-//               <td>Ажилаас чөлөөлөгдсөн тушаалын дугаар</td>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             <tr>
-//               <td>1</td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//               <td></td>
-//             </tr>
-//           </tbody>
-//         </table>
-//       </div>
-//     </div>
-//   );
-// }
-
 function Turshlgin(props) {
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
@@ -204,10 +133,12 @@ function Turshlgin(props) {
         },
       })
         .then(function (response) {
-          console.log("UpdateResponse", response);
+          console.log("deleteResponse", response);
           //history.push('/sample')
-          if (response?.data?.message === "success")
+          if (response?.data?.message === "success") {
             alert.show("амжилттай устлаа");
+            setEdit(!edit);
+          }
         })
         .catch(function (error) {
           //alert(error.response.data.error.message);
@@ -236,7 +167,9 @@ function Turshlgin(props) {
       >
         <div className="columns">
           <div className="column is-11">
-            <span>7. Туршлагын талаарх мэдээлэл</span>
+            <span className="headerTextBold">
+              7. Туршлагын талаарх мэдээлэл
+            </span>
           </div>
           <div className="column is-1">
             <button
@@ -303,21 +236,22 @@ function Turshlgin(props) {
                       Ажилаас чөлөөлөгдсөн тушаалын дугаар
                     </span>
                   </td>
-
-                  <td
-                    style={{
-                      border: "none",
-                      paddingLeft: "0px",
-                      width: "100px",
-                    }}
-                  >
-                    <img
-                      src={Add}
-                      width="30px"
-                      height="30px"
-                      onClick={() => addRow()}
-                    />
-                  </td>
+                  {!edit ? (
+                    <td
+                      style={{
+                        border: "none",
+                        paddingLeft: "0px",
+                        width: "100px",
+                      }}
+                    >
+                      <img
+                        src={Add}
+                        width="30px"
+                        height="30px"
+                        onClick={() => addRow()}
+                      />
+                    </td>
+                  ) : null}
                 </tr>
               </thead>
               <tbody>
@@ -529,21 +463,22 @@ function Turshlgin(props) {
                         }}
                       />
                     </td>
-
-                    <td
-                      style={{
-                        paddingLeft: "0px",
-                        borderColor: "transparent",
-                        width: "70px",
-                      }}
-                    >
-                      <img
-                        src={Delete}
-                        width="30px"
-                        height="30px"
-                        onClick={() => removeRow(index, value)}
-                      />
-                    </td>
+                    {!edit ? (
+                      <td
+                        style={{
+                          paddingLeft: "0px",
+                          borderColor: "transparent",
+                          width: "70px",
+                        }}
+                      >
+                        <img
+                          src={Delete}
+                          width="30px"
+                          height="30px"
+                          onClick={() => removeRow(index, value)}
+                        />
+                      </td>
+                    ) : null}
                   </tr>
                 ))}
               </tbody>
@@ -552,19 +487,21 @@ function Turshlgin(props) {
         </div>
 
         <div className="columns">
-          <div className="column is-9"></div>
-          <div className="column is-3 has-text-right">
-            {/* <button className="buttonTsenkher" style={{ marginRight: "0.4rem" }}>
-            Хэвлэх
-          </button> */}
-            <button
+          <div className="column is-11"></div>
+
+          {!edit ? (
+            <div className="column is-1 ">
+              {/* <button
               className="buttonTsenkher"
               style={{ marginRight: "0.4rem" }}
-              onClick={saveToDB}
             >
-              Хадгалах
-            </button>
-          </div>
+              Хэвлэх
+            </button> */}
+              <button className="buttonTsenkher" onClick={saveToDB}>
+                Хадгалах
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     );

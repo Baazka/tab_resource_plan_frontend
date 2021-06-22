@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useReducer, prevState } from "react";
+import React, {
+  useState,
+  useEffect,
+  useReducer,
+  prevState,
+  useRef,
+} from "react";
 import UrChadvar from "./urchadvar";
 import Header from "../components/header";
 import { DataRequest } from "../functions/DataApi";
@@ -47,27 +53,28 @@ const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 const axios = require("axios");
 
 function AnketNeg(props) {
-  console.log(
-    props.location.state?.data?.employEmergency?.Emergency,
-    "emergencyFirst"
-  );
-  const [emergency, setEmergency] = useState(
-    props.location.state?.data?.employEmergency?.Emergency.length === 0
-      ? [
-          {
-            MEMBER_ID: 1,
-            FAMILY_NAME: "",
-            EMERGENCY_LASTNAME: "",
-            EMERGENCY_FIRSTNAME: "",
-            EMERGENCY_PHONE: "",
-            IS_ACTIVE: "1",
-            CREATED_BY: userDetils?.USER_ID,
-            CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-          },
-        ]
-      : props.location.state?.data?.employEmergency?.Emergency
-  );
+  const [data, setData] = useState(props.location.state?.data);
   const [menu, setMenu] = useState(1);
+  const refContainer = useRef(null);
+  console.log("dataNeg", data);
+  function saveAvatar(file) {
+    const fd = new FormData();
+    fd.append("image", file.target.files[0], file.target.files[0].name);
+    console.log("zurag===============>", file.target.files[0]);
+    // axios
+    //   .post("", fd, {
+    //     onUploadProgress: (ProgressEvent) => {
+    //       console.log(
+    //         "upload Progress" +
+    //           Math.round((ProgressEvent.loaded / ProgressEvent.total) * 100) +
+    //           "%"
+    //       );
+    //     },
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //   });
+  }
 
   return (
     <div
@@ -89,6 +96,7 @@ function AnketNeg(props) {
         <div style={{ marginTop: "7rem" }}>
           <img src={AvatarB} width="120px" height="120px" />
         </div>
+
         <div
           style={{
             display: "flex",
@@ -96,7 +104,23 @@ function AnketNeg(props) {
             marginTop: "-0.4rem",
           }}
         >
-          <img src={Face} width="40px" height="40px" />
+          <div>
+            <input
+              ref={refContainer}
+              class="file-input"
+              accept="image/*"
+              type="file"
+              onChange={(file) => saveAvatar(file)}
+              style={{ display: "none" }}
+            />
+          </div>
+          <img
+            src={Face}
+            width="40px"
+            height="40px"
+            onClick={() => refContainer.current.click()}
+          />
+
           <img src={Trush} width="40px" height="40px" />
           <img src={Warning} width="40px" height="40px" />
         </div>
@@ -108,10 +132,7 @@ function AnketNeg(props) {
               fontSize: "1rem",
             }}
           >
-            {
-              props.location.state?.data?.employDetail?.Person[0]
-                .PERSON_LASTNAME
-            }
+            {data?.employDetail?.PERSON_LASTNAME}
           </span>
           <span
             style={{
@@ -120,11 +141,7 @@ function AnketNeg(props) {
               fontSize: "1rem",
             }}
           >
-            &nbsp;{" "}
-            {
-              props.location.state?.data?.employDetail?.Person[0]
-                .PERSON_FIRSTNAME
-            }
+            &nbsp; {data?.employDetail?.PERSON_FIRSTNAME}
           </span>
         </div>
         <div className="AnketList" style={{ marginTop: "1.5rem" }}>
@@ -329,67 +346,35 @@ function AnketNeg(props) {
       >
         {menu === 1 ? (
           <div>
-            <Yrunkhii person_id={props.location.state?.data?.person_id} />
-            <Kayag person_id={props.location.state?.data?.person_id} />
-            <HolbooBarikhHun
-              emergency={emergency}
-              person={props.location.state?.data?.employDetail}
-              person_id={props.location.state?.data?.person_id}
-            />
-            <GerBul
-              family={props.location.state?.data?.employfamily}
-              person={props.location.state?.data?.employDetail}
-              person_id={props.location.state?.data?.person_id}
-            />
+            <Yrunkhii person_id={data.person_id} setData={setData} />
+            <Kayag person_id={data.person_id} />
+            <HolbooBarikhHun person={data} person_id={data.person_id} />
+            <GerBul person={data.employDetail} person_id={data.person_id} />
           </div>
         ) : null}
-        {menu === 2 ? (
-          <UrChadvar
-            person_id={
-              props.location.state?.data?.employDetail.Person[0].PERSON_ID
-            }
-          />
-        ) : null}
-        {menu === 3 ? (
-          <Bolowsrol
-            person_id={
-              props.location.state?.data?.employDetail.Person[0].PERSON_ID
-            }
-          />
-        ) : null}
+        {menu === 2 ? <UrChadvar person_id={data.PERSON_ID} /> : null}
+        {menu === 3 ? <Bolowsrol person_id={data.PERSON_ID} /> : null}
         {menu === 4 ? (
-          <Mergeshliin
-            person_id={
-              props.location.state?.data?.employDetail.Person[0].PERSON_ID
-            }
-          />
+          <Mergeshliin person_id={data.employDetail.PERSON_ID} />
         ) : null}
         {menu === 5 ? (
           <TsergiinAlba
-            person_id={
-              props.location.state?.data?.employDetail.Person[0].PERSON_ID
-            }
+            person_id={props.location.state?.data?.employDetail.PERSON_ID}
           />
         ) : null}
         {menu === 6 ? (
           <Shagnaliin
-            person_id={
-              props.location.state?.data?.employDetail.Person[0].PERSON_ID
-            }
+            person_id={props.location.state?.data?.employDetail.PERSON_ID}
           />
         ) : null}
         {menu === 7 ? (
           <Turshlgin
-            person_id={
-              props.location.state?.data?.employDetail.Person[0].PERSON_ID
-            }
+            person_id={props.location.state?.data?.employDetail.PERSON_ID}
           />
         ) : null}
         {menu === 8 ? (
           <Buteeliin
-            person_id={
-              props.location.state?.data?.employDetail.Person[0].PERSON_ID
-            }
+            person_id={props.location.state?.data?.employDetail.PERSON_ID}
           />
         ) : null}
       </div>
@@ -402,12 +387,9 @@ function Yrunkhii(props) {
   const alert = useAlert();
   const [data, loadData] = useState();
   const [bornDate, setBornDate] = useState(
-    props.person?.Person[0].PERSON_BORNDATE !== undefined
-      ? dateFormat(
-          new Date(props.person?.Person[0].PERSON_BORNDATE),
-          "yyyy-mm-dd"
-        )
-      : ""
+    data?.PERSON_BORNDATE !== undefined
+      ? dateFormat(new Date(data?.PERSON_BORNDATE), "yyyy-mm-dd")
+      : dateFormat(new Date(), "yyyy-mm-dd")
   );
   useEffect(() => {
     setPerson({
@@ -423,43 +405,82 @@ function Yrunkhii(props) {
   }, [data]);
 
   useEffect(async () => {
-    console.log("PersonKhadgalProps", props);
-    let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/person/" + props.person_id
-    );
-    console.log(listItems, "Tangarag");
-    loadData(listItems?.data?.Person[0]);
+    if (props.person_id !== 0) {
+      let listItems = await axios(
+        "http://10.10.10.46:3002/api/v1/person/" + props.person_id
+      );
+      console.log(listItems, "Tangarag");
+      loadData(listItems?.data);
+    } else {
+      alert.show("oki");
+      loadData({
+        PERSON_REGISTER_NO: "",
+        PERSON_LASTNAME: "",
+        PERSON_FIRSTNAME: "",
+        PERSON_BORNDATE: dateFormat(new Date(), "yyyy-mm-dd"),
+        PERSON_GENDER: 1,
+        PERSON_PHONE: "",
+        PERSON_NATIONAL_ID: 1,
+        PERSON_EMAIL: "",
+        NATIONAL_ID: 1,
+        DYNASTY_ID: 1,
+        BIRTH_OFFICE_ID: 1,
+        BIRTH_SUBOFFICE_ID: 1,
+        BIRTH_PLACE: "",
+        IS_MARRIED: 0,
+        IS_ACTIVE: 1,
+        CREATED_BY: userDetils?.USER_ID,
+        CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+        PERSON_ID: 0,
+      });
+    }
   }, [props]);
 
-  const [person, setPerson] = useState(props.person?.Person[0]);
-  const national =
-    props?.person?.National !== undefined ? props.person?.National : [];
-  const subNational =
-    props?.person?.SubNational !== undefined ? props.person?.SubNational : [];
-  const dynasty =
-    props?.person?.Dynasty !== undefined ? props.person?.Dynasty : [];
-  const office =
-    props?.person?.Office !== undefined ? props.person?.Office : [];
-  const subOffice =
-    props?.person?.SubOffice !== undefined ? props.person?.SubOffice : [];
+  const [person, setPerson] = useState(props.person);
 
   function khadgalakhYo() {
-    console.log("PersonKhadgal", data);
-    DataRequest({
-      url: "http://10.10.10.46:3002/api/v1/updatePerson/",
-      method: "post",
-      data: { person: data },
-    })
-      .then(function (response) {
-        console.log("UpdateResponse", response);
-        //history.push('/sample')
-        if (response?.data?.message === "success")
-          alert.show("амжилттай хадгаллаа");
+    if (data.PERSON_ID !== 0) {
+      DataRequest({
+        url: "http://10.10.10.46:3002/api/v1/updatePerson/",
+        method: "post",
+        data: { person: data },
       })
-      .catch(function (error) {
-        //alert(error.response.data.error.message);
-        console.log(error.response);
-      });
+        .then(function (response) {
+          console.log("UpdateResponse", response);
+          //history.push('/sample')
+          if (response?.data?.message === "success") {
+            alert.show("амжилттай хадгаллаа");
+            setEdit(!edit);
+          }
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+        });
+    } else {
+      console.log("negggggggg", data);
+      DataRequest({
+        url: "http://172.16.24.103:3002/api/v1/person/",
+        method: "post",
+        data: { person: data },
+      })
+        .then(function (response) {
+          console.log("UpdateResponse", response);
+          //history.push('/sample')
+          if (response?.data === "success") {
+            props.setData({
+              employDetail: (data.person_id = response?.data?.PERSON_ID),
+              person_id: response?.data?.PERSON_ID,
+            });
+
+            setEdit(!edit);
+          }
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+        });
+    }
   }
   let listItems;
   if (data !== undefined && data !== "") {
@@ -475,7 +496,7 @@ function Yrunkhii(props) {
       >
         <div className="columns ">
           <div className="column is-11">
-            <span>Ерөнхий мэдээлэл</span>
+            <span className="headerTextBold">Ерөнхий мэдээлэл</span>
           </div>
           <div className="column is-1">
             <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
@@ -490,6 +511,7 @@ function Yrunkhii(props) {
           </div>
           <div className="column is-3">
             <input
+              placeholder="утгаа оруулна уу"
               disabled={edit}
               className="anketInput"
               value={data?.PERSON_LASTNAME}
@@ -529,6 +551,7 @@ function Yrunkhii(props) {
           </div>
           <div className="column is-3">
             <input
+              placeholder="утгаа оруулна уу"
               disabled={edit}
               className="anketInput"
               value={data?.PERSON_FIRSTNAME}
@@ -546,6 +569,7 @@ function Yrunkhii(props) {
           </div>
           <div className="column is-3">
             <input
+              placeholder="утгаа оруулна уу"
               className=""
               type="date"
               id="start"
@@ -567,6 +591,7 @@ function Yrunkhii(props) {
           </div>
           <div className="column is-3">
             <input
+              placeholder="утгаа оруулна уу"
               disabled={edit}
               className="anketInput"
               value={data?.PERSON_REGISTER_NO}
@@ -583,7 +608,7 @@ function Yrunkhii(props) {
             <span className="textSaaral">Төрсөн аймаг,хот</span>
           </div>
           <div className="column is-3">
-            <Office personChild={data} loadDataChild={loadData} edit={edit} />
+            <Office personChild={data} setPersonChild={loadData} edit={edit} />
           </div>
         </div>
         <div className="columns " style={{ marginBottom: "0px" }}>
@@ -592,7 +617,11 @@ function Yrunkhii(props) {
             <span className="textSaaral">Ирэгншил</span>
           </div>
           <div className="column is-3">
-            <National personChild={data} loadDataChild={loadData} edit={edit} />
+            <National
+              personChild={data}
+              setPersonChild={loadData}
+              edit={edit}
+            />
           </div>
           <div className="column is-3 has-text-right">
             <span style={{ color: "red" }}>*</span>
@@ -601,7 +630,7 @@ function Yrunkhii(props) {
           <div className="column is-3">
             <Suboffice
               personChild={data}
-              loadDataChild={loadData}
+              setPersonChild={loadData}
               edit={edit}
             />
           </div>
@@ -614,7 +643,7 @@ function Yrunkhii(props) {
           <div className="column is-3">
             <Subnational
               personChild={data}
-              loadDataChild={loadData}
+              setPersonChild={loadData}
               edit={edit}
             />
           </div>
@@ -625,6 +654,7 @@ function Yrunkhii(props) {
           <div className="column is-3">
             <input
               disabled={edit}
+              placeholder="утгаа оруулна уу"
               className="anketInput"
               value={data?.BIRTH_PLACE}
               onChange={(text) =>
@@ -642,7 +672,7 @@ function Yrunkhii(props) {
             <span className="textSaaral">Үндэс угсаа</span>
           </div>
           <div className="column is-3">
-            <Dynasty personChild={data} loadDataChild={loadData} edit={edit} />
+            <Dynasty personChild={data} setPersonChild={loadData} edit={edit} />
           </div>
           <div className="column is-3 has-text-right">
             <span style={{ color: "red" }}>*</span>
@@ -669,10 +699,10 @@ function Yrunkhii(props) {
         </div>
 
         <div className="columns">
-          <div className="column is-8"></div>
+          <div className="column is-11"></div>
 
           {!edit ? (
-            <div className="column is-4 has-text-right">
+            <div className="column is-1 ">
               {/* <button
               className="buttonTsenkher"
               style={{ marginRight: "0.4rem" }}
@@ -694,7 +724,7 @@ function Yrunkhii(props) {
 }
 
 function Kayag(props) {
-  const [person, setPerson] = useState(props.person?.Person[0]);
+  const [person, setPerson] = useState(props.person);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
 
@@ -704,7 +734,7 @@ function Kayag(props) {
       "http://10.10.10.46:3002/api/v1/person/" + props.person_id
     );
     console.log(listItems, "Tangarag");
-    setPerson(listItems?.data?.Person[0]);
+    setPerson(listItems?.data);
   }, [props]);
 
   function khadgalakhYo() {
@@ -736,7 +766,7 @@ function Kayag(props) {
     >
       <div className="columns">
         <div className="column is-11">
-          <span>Хаягийн мэдээлэл</span>
+          <span className="headerTextBold">Хаягийн мэдээлэл</span>
         </div>
         <div className="column is-1">
           <button
@@ -788,6 +818,7 @@ function Kayag(props) {
                 <td>
                   <input
                     disabled={edit}
+                    placeholder="утгаа оруулна уу"
                     className="anketInputTable"
                     value={person?.PERSON_CARD_ADDRESS}
                     onChange={(text) =>
@@ -815,6 +846,7 @@ function Kayag(props) {
                 <td>
                   <input
                     className="anketInputTable"
+                    placeholder="утгаа оруулна уу"
                     disabled={edit}
                     value={person?.PERSON_HOME_ADDRESS}
                     onChange={(text) =>
@@ -832,6 +864,7 @@ function Kayag(props) {
             <em className="utas m-3">Утасны дугаар:</em>
             <input
               className="anketInput"
+              placeholder="утгаа оруулна уу"
               disabled={edit}
               value={person?.PERSON_PHONE}
               placeholder="Утас1"
@@ -844,6 +877,7 @@ function Kayag(props) {
             />
             <input
               className="anketInput"
+              placeholder="утгаа оруулна уу"
               disabled={edit}
               value={person?.PERSON_PHONE2}
               placeholder="Утас2"
@@ -857,6 +891,7 @@ function Kayag(props) {
             <em className="mail ml-1 m-3">И-мэйл хаяг</em>
             <input
               className="anketInput"
+              placeholder="утгаа оруулна уу"
               disabled={edit}
               value={person?.PERSON_EMAIL}
               placeholder="И-мэйл хаяг1"
@@ -868,6 +903,7 @@ function Kayag(props) {
               }
             />
             <input
+              placeholder="утгаа оруулна уу"
               className="anketInput"
               disabled={edit}
               style={{ marginLeft: "10px" }}
@@ -885,19 +921,21 @@ function Kayag(props) {
       </div>
 
       <div className="columns">
-        <div className="column is-9"></div>
-        <div className="column is-3 has-text-right">
-          {/* <button className="buttonTsenkher" style={{ marginRight: "0.4rem" }}>
-            Хэвлэх
-          </button> */}
-          <button
-            className="buttonTsenkher"
-            style={{ marginRight: "0.4rem" }}
-            onClick={khadgalakhYo}
-          >
-            Хадгалах
-          </button>
-        </div>
+        <div className="column is-11"></div>
+
+        {!edit ? (
+          <div className="column is-1">
+            {/* <button
+              className="buttonTsenkher"
+              style={{ marginRight: "0.4rem" }}
+            >
+              Хэвлэх
+            </button> */}
+            <button className="buttonTsenkher" onClick={khadgalakhYo}>
+              Хадгалах
+            </button>
+          </div>
+        ) : null}
       </div>
     </div>
   );
@@ -924,7 +962,7 @@ function HolbooBarikhHun(props) {
         {
           MEMBER_ID: 1,
           FAMILY_NAME: "",
-          PERSON_ID: props.person?.Person[0].PERSON_ID,
+          PERSON_ID: props.person?.PERSON_ID,
           EMERGENCY_LASTNAME: "",
           EMERGENCY_FIRSTNAME: "",
           EMERGENCY_PHONE: "",
@@ -942,7 +980,7 @@ function HolbooBarikhHun(props) {
     value.push({
       MEMBER_ID: 1,
       FAMILY_NAME: "",
-      PERSON_ID: props.person?.Person[0].PERSON_ID,
+      PERSON_ID: props.person?.PERSON_ID,
       EMERGENCY_LASTNAME: "",
       EMERGENCY_FIRSTNAME: "",
       EMERGENCY_PHONE: "",
@@ -1047,7 +1085,9 @@ function HolbooBarikhHun(props) {
       >
         <div className="columns">
           <div className="column is-11">
-            <span>Зайлшгүй шаардлагатай үед холбоо барих хүн</span>
+            <span className="headerTextBold">
+              Зайлшгүй шаардлагатай үед холбоо барих хүн
+            </span>
           </div>
           <div className="column is-1">
             <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
@@ -1076,16 +1116,18 @@ function HolbooBarikhHun(props) {
                   <td>
                     <span className="textSaaral">Утасны дугаар</span>
                   </td>
-                  <td
-                    style={{ paddingLeft: "0px", borderColor: "transparent" }}
-                  >
-                    <img
-                      src={Add}
-                      width="30px"
-                      height="30px"
-                      onClick={() => addRowKholbooBarikh()}
-                    />
-                  </td>
+                  {!edit ? (
+                    <td
+                      style={{ paddingLeft: "0px", borderColor: "transparent" }}
+                    >
+                      <img
+                        src={Add}
+                        width="30px"
+                        height="30px"
+                        onClick={() => addRowKholbooBarikh()}
+                      />
+                    </td>
+                  ) : null}
                 </tr>
               </thead>
               <tbody>
@@ -1105,6 +1147,7 @@ function HolbooBarikhHun(props) {
                     </td>
                     <td>
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="anketInput"
                         value={value.EMERGENCY_LASTNAME}
@@ -1122,6 +1165,7 @@ function HolbooBarikhHun(props) {
                     </td>
                     <td>
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="anketInput"
                         value={value.EMERGENCY_FIRSTNAME}
@@ -1139,6 +1183,7 @@ function HolbooBarikhHun(props) {
                     </td>
                     <td>
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="anketInput"
                         value={value.EMERGENCY_PHONE}
@@ -1154,17 +1199,21 @@ function HolbooBarikhHun(props) {
                         }}
                       />
                     </td>
-
-                    <td
-                      style={{ paddingLeft: "0px", borderColor: "transparent" }}
-                    >
-                      <img
-                        src={Delete}
-                        width="30px"
-                        height="30px"
-                        onClick={() => removeEmergency(index, value)}
-                      />
-                    </td>
+                    {!edit ? (
+                      <td
+                        style={{
+                          paddingLeft: "0px",
+                          borderColor: "transparent",
+                        }}
+                      >
+                        <img
+                          src={Delete}
+                          width="30px"
+                          height="30px"
+                          onClick={() => removeEmergency(index, value)}
+                        />
+                      </td>
+                    ) : null}
                   </tr>
                 ))}
               </tbody>
@@ -1173,19 +1222,21 @@ function HolbooBarikhHun(props) {
           <div className="column is-2 has-text-left"></div>
         </div>
         <div className="columns">
-          <div className="column is-9"></div>
-          <div className="column is-3 has-text-right">
-            {/* <button className="buttonTsenkher" style={{ marginRight: "0.4rem" }}>
-            Хэвлэх
-          </button> */}
-            <button
+          <div className="column is-11"></div>
+
+          {!edit ? (
+            <div className="column is-1 ">
+              {/* <button
               className="buttonTsenkher"
               style={{ marginRight: "0.4rem" }}
-              onClick={() => khadgalakhYo()}
             >
-              Хадгалах
-            </button>
-          </div>
+              Хэвлэх
+            </button> */}
+              <button className="buttonTsenkher" onClick={khadgalakhYo}>
+                Хадгалах
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     );
@@ -1216,7 +1267,7 @@ function GerBul(props) {
       data.length === 0
         ? [
             {
-              PERSON_ID: props.person?.Person[0].PERSON_ID,
+              PERSON_ID: props.person?.PERSON_ID,
               FAMILY_ID: 1,
               FAMILY_NAME: "",
               MEMBER_TYPE: 1,
@@ -1240,7 +1291,7 @@ function GerBul(props) {
       data?.length === 0
         ? [
             {
-              PERSON_ID: props.person?.Person[0].PERSON_ID,
+              PERSON_ID: props.person?.PERSON_ID,
               FAMILY_NAME: "",
               MEMBER_ID: 1,
               MEMBER_TYPE: 2,
@@ -1265,7 +1316,7 @@ function GerBul(props) {
   async function addRowFamily() {
     let value = family;
     value.push({
-      PERSON_ID: props.person?.Person[0].PERSON_ID,
+      PERSON_ID: props.person?.PERSON_ID,
       FAMILY_NAME: "",
       MEMBER_TYPE: 1,
       MEMBER_ID: 1,
@@ -1289,7 +1340,7 @@ function GerBul(props) {
   async function addRowFamily2() {
     let value = family2;
     value.push({
-      PERSON_ID: props.person?.Person[0].PERSON_ID,
+      PERSON_ID: props.person?.PERSON_ID,
       FAMILY_NAME: "",
       MEMBER_TYPE: 2,
       MEMBER_ID: 1,
@@ -1432,7 +1483,7 @@ function GerBul(props) {
     >
       <div className="columns">
         <div className="column is-11 ">
-          <span>
+          <span className="headerTextBold">
             Гэр бүлийн байдал(зөвхөн гэр бүлийн бүртгэлд байгаа хүмүүсийг бичнэ)
           </span>
         </div>
@@ -1477,15 +1528,17 @@ function GerBul(props) {
                   <td colspan="2">
                     <span className="textSaaral">Одоо эрхэлэж буй ажил</span>
                   </td>
-                  <td rowspan="2" style={{ border: "none", width: "60px" }}>
-                    <img
-                      src={Add}
-                      width="`40px"
-                      height="40px"
-                      onClick={() => addRowFamily()}
-                      style={{ marginLeft: "-13px" }}
-                    />
-                  </td>
+                  {!edit ? (
+                    <td rowspan="2" style={{ border: "none", width: "60px" }}>
+                      <img
+                        src={Add}
+                        width="`40px"
+                        height="40px"
+                        onClick={() => addRowFamily()}
+                        style={{ marginLeft: "-13px" }}
+                      />
+                    </td>
+                  ) : null}
                 </tr>
                 <tr>
                   <td>
@@ -1514,6 +1567,7 @@ function GerBul(props) {
                     </td>
                     <td>
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         style={{ width: "100px" }}
                         className="anketInput"
@@ -1532,6 +1586,7 @@ function GerBul(props) {
                     </td>
                     <td>
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="anketInput"
                         style={{ width: "110px" }}
@@ -1551,6 +1606,7 @@ function GerBul(props) {
                     <td>
                       {" "}
                       <input
+                        placeholder="утгаа оруулна уу"
                         type="date"
                         id="start"
                         style={{ width: "120px" }}
@@ -1580,6 +1636,7 @@ function GerBul(props) {
                     <td>
                       {" "}
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="anketInput"
                         style={{ width: "100px" }}
@@ -1599,6 +1656,7 @@ function GerBul(props) {
                     <td>
                       {" "}
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="anketInput"
                         style={{ width: "110px" }}
@@ -1618,6 +1676,7 @@ function GerBul(props) {
                     <td>
                       {" "}
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="anketInput"
                         value={value.MEMBER_ORG}
@@ -1635,6 +1694,7 @@ function GerBul(props) {
                     </td>
                     <td>
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="anketInput"
                         value={value.MEMBER_POSITION}
@@ -1650,19 +1710,21 @@ function GerBul(props) {
                         }}
                       />
                     </td>
-                    <td
-                      style={{
-                        paddingLeft: "0px",
-                        borderColor: "transparent",
-                      }}
-                    >
-                      <img
-                        src={Delete}
-                        width="30px"
-                        height="30px"
-                        onClick={() => removeFamily(index, value)}
-                      />
-                    </td>
+                    {!edit ? (
+                      <td
+                        style={{
+                          paddingLeft: "0px",
+                          borderColor: "transparent",
+                        }}
+                      >
+                        <img
+                          src={Delete}
+                          width="30px"
+                          height="30px"
+                          onClick={() => removeFamily(index, value)}
+                        />
+                      </td>
+                    ) : null}
                   </tr>
                 ))}
               </tbody>
@@ -1712,21 +1774,23 @@ function GerBul(props) {
                   <td colspan="2">
                     <span className="textSaaral">Одоо эрхэлэж буй ажил</span>
                   </td>
-                  <td
-                    rowspan="2"
-                    style={{
-                      border: "none",
-                      width: "50px",
-                      paddingLeft: "0px",
-                    }}
-                  >
-                    <img
-                      src={Add}
-                      width="`50px"
-                      height="50px"
-                      onClick={() => addRowFamily2()}
-                    />
-                  </td>
+                  {!edit ? (
+                    <td
+                      rowspan="2"
+                      style={{
+                        border: "none",
+                        width: "50px",
+                        paddingLeft: "0px",
+                      }}
+                    >
+                      <img
+                        src={Add}
+                        width="`50px"
+                        height="50px"
+                        onClick={() => addRowFamily2()}
+                      />
+                    </td>
+                  ) : null}
                 </tr>
                 <tr>
                   <td>
@@ -1755,6 +1819,7 @@ function GerBul(props) {
                     </td>
                     <td>
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="anketInput"
                         style={{ width: "100px" }}
@@ -1773,6 +1838,7 @@ function GerBul(props) {
                     </td>
                     <td>
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="anketInput"
                         style={{ width: "110px" }}
@@ -1821,6 +1887,7 @@ function GerBul(props) {
                     <td>
                       {" "}
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="anketInput"
                         style={{ width: "140px" }}
@@ -1840,6 +1907,7 @@ function GerBul(props) {
                     <td>
                       {" "}
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="anketInput"
                         style={{ width: "140px" }}
@@ -1860,6 +1928,7 @@ function GerBul(props) {
                     <td>
                       {" "}
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         style={{ width: "110px" }}
                         className="anketInput"
@@ -1878,6 +1947,7 @@ function GerBul(props) {
                     </td>
                     <td>
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="anketInput"
                         style={{ width: "110px" }}
@@ -1894,19 +1964,21 @@ function GerBul(props) {
                         }}
                       />
                     </td>
-                    <td
-                      style={{
-                        paddingLeft: "0px",
-                        borderColor: "transparent",
-                      }}
-                    >
-                      <img
-                        src={Delete}
-                        width="30px"
-                        height="30px"
-                        onClick={() => removeFamily2(index, value)}
-                      />
-                    </td>
+                    {!edit ? (
+                      <td
+                        style={{
+                          paddingLeft: "0px",
+                          borderColor: "transparent",
+                        }}
+                      >
+                        <img
+                          src={Delete}
+                          width="30px"
+                          height="30px"
+                          onClick={() => removeFamily2(index, value)}
+                        />
+                      </td>
+                    ) : null}
                   </tr>
                 ))}
               </tbody>
@@ -1915,21 +1987,21 @@ function GerBul(props) {
         </div>
       </div>
       <div className="columns">
-        <div className="column is-9" />
+        <div className="column is-11"></div>
 
-        <div className="column is-3 has-text-right">
-          {/* <button className="buttonTsenkher" style={{ marginRight: "0.4rem" }}>
-            Хэвлэх
-          </button> */}
-          <button
-            className="buttonTsenkher"
-            style={{ marginRight: "0.4rem" }}
-            onClick={khadgalakhYo}
-          >
-            Хадгалах
-          </button>
-          {/* <button className="buttonTsenkher">Хадгалаад харах</button> */}
-        </div>
+        {!edit ? (
+          <div className="column is-1">
+            {/* <button
+              className="buttonTsenkher"
+              style={{ marginRight: "0.4rem" }}
+            >
+              Хэвлэх
+            </button> */}
+            <button className="buttonTsenkher" onClick={khadgalakhYo}>
+              Хадгалах
+            </button>
+          </div>
+        ) : null}
       </div>
     </div>
   );

@@ -6,72 +6,6 @@ import { Add, Delete } from "../assets/images/zurag";
 const axios = require("axios");
 var dateFormat = require("dateformat");
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
-function ButeeliinOLD(props) {
-  return (
-    <div
-      className="box"
-      style={{
-        marginTop: "80px",
-        width: "98%",
-        height: "31%",
-        marginLeft: "15px",
-      }}
-    >
-      <div class="columns">
-        <div class="column is-11">
-          <th>Найм. Бүтээлийн жагсаалт</th>
-        </div>
-        <button className="button is-info is-small is-focused ml-5">
-          Засварлах
-        </button>
-      </div>
-      <div class="columns is-12">
-        <em className="TABLE m-3 has-text-link">
-          "Тайлбар"хэсэгт гадаад хэлнээс орчуулсан болон хамтран зохиогчийн
-          тухай тэмдэглэнэ.
-        </em>
-        <div class="column is-0" />
-      </div>
-      <div class="columns is-11 is-gapless">
-        <table className="table  is-bordered" style={{ width: "100%" }}>
-          <thead>
-            <tr>
-              <td>№</td>
-              <td>Бүтээлийн нэр</td>
-              <td>Бүтээлийн төрөл</td>
-              <td>Бүтээл гаргасан огноо</td>
-              <td>Тайлбар</td>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="column is-2 is-gapless" style={{ marginTop: "50px" }}>
-          <img src={Add} width="30px" height="30px" />
-        </div>
-      </div>
-      <div class="columns">
-        <div class="column is-9" />
-        <button className="button is-info is-small is-focused ml-6">
-          Хэвлэх
-        </button>
-        <button className="button is-info is-small is-focused ml-1">
-          Хадгалах
-        </button>
-        <button className="button is-info is-small is-focused ml-1">
-          Хадгалаад харах
-        </button>
-      </div>
-    </div>
-  );
-}
 
 function Buteeliin(props) {
   const [data, loadData] = useState(null);
@@ -79,7 +13,7 @@ function Buteeliin(props) {
   const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/Literature/" + props.person_id
+      "http://10.10.10.46:3002/api/v1/Literature/" + props.person_id
     );
     console.log(listItems, "Tangarag");
     loadData(listItems?.data);
@@ -116,7 +50,7 @@ function Buteeliin(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/literature/",
+        url: "http://10.10.10.46:3002/api/v1/literature/",
         method: "POST",
         data: { literature: newRow },
       })
@@ -134,7 +68,7 @@ function Buteeliin(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/literature/",
+        url: "http://10.10.10.46:3002/api/v1/literature/",
         method: "PUT",
         data: { literature: oldRow },
       })
@@ -177,7 +111,7 @@ function Buteeliin(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/literatureDelete",
+        url: "http://10.10.10.46:3002/api/v1/literatureDelete",
         method: "POST",
         data: {
           literature: {
@@ -193,8 +127,10 @@ function Buteeliin(props) {
         .then(function (response) {
           console.log("UpdateResponse", response);
           //history.push('/sample')
-          if (response?.data?.message === "success")
+          if (response?.data?.message === "success") {
             alert.show("амжилттай устлаа");
+            setEdit(!edit);
+          }
         })
         .catch(function (error) {
           //alert(error.response.data.error.message);
@@ -223,7 +159,7 @@ function Buteeliin(props) {
       >
         <div className="columns">
           <div className="column is-11">
-            <span>8. Бүтээлийн жагсаалт</span>
+            <span className="headerTextBold">8. Бүтээлийн жагсаалт</span>
           </div>
           <div className="column is-1">
             <button
@@ -262,22 +198,23 @@ function Buteeliin(props) {
                   <td>
                     <span className="textSaaral">Тайлбар</span>
                   </td>
-
-                  <td
-                    style={{
-                      borderColor: "transparent",
-                      border: "none",
-                      paddingLeft: "0px",
-                      width: "50px",
-                    }}
-                  >
-                    <img
-                      src={Add}
-                      width="30px"
-                      height="30px"
-                      onClick={() => addRow()}
-                    />
-                  </td>
+                  {!edit ? (
+                    <td
+                      style={{
+                        borderColor: "transparent",
+                        border: "none",
+                        paddingLeft: "0px",
+                        width: "50px",
+                      }}
+                    >
+                      <img
+                        src={Add}
+                        width="30px"
+                        height="30px"
+                        onClick={() => addRow()}
+                      />
+                    </td>
+                  ) : null}
                 </tr>
               </thead>
               <tbody>
@@ -360,21 +297,22 @@ function Buteeliin(props) {
                         }}
                       />
                     </td>
-
-                    <td
-                      style={{
-                        paddingLeft: "0px",
-                        borderColor: "transparent",
-                        width: "50px",
-                      }}
-                    >
-                      <img
-                        src={Delete}
-                        width="30px"
-                        height="30px"
-                        onClick={() => removeRow(index, value)}
-                      />
-                    </td>
+                    {!edit ? (
+                      <td
+                        style={{
+                          paddingLeft: "0px",
+                          borderColor: "transparent",
+                          width: "50px",
+                        }}
+                      >
+                        <img
+                          src={Delete}
+                          width="30px"
+                          height="30px"
+                          onClick={() => removeRow(index, value)}
+                        />
+                      </td>
+                    ) : null}
                   </tr>
                 ))}
               </tbody>
@@ -383,19 +321,21 @@ function Buteeliin(props) {
         </div>
 
         <div className="columns">
-          <div className="column is-9"></div>
-          <div className="column is-3 has-text-right">
-            {/* <button className="buttonTsenkher" style={{ marginRight: "0.4rem" }}>
-            Хэвлэх
-          </button> */}
-            <button
+          <div className="column is-11"></div>
+
+          {!edit ? (
+            <div className="column is-1 ">
+              {/* <button
               className="buttonTsenkher"
               style={{ marginRight: "0.4rem" }}
-              onClick={saveToDB}
             >
-              Хадгалах
-            </button>
-          </div>
+              Хэвлэх
+            </button> */}
+              <button className="buttonTsenkher" onClick={saveToDB}>
+                Хадгалах
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     );

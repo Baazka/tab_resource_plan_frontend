@@ -16,7 +16,7 @@ const Dashboard = (props) => {
 
   return (
     <div>
-      <Header title="Дашборд" />
+      <Header title="Дашбоард" />
       <div
         style={{
           backgroundColor: "white",
@@ -27,7 +27,7 @@ const Dashboard = (props) => {
         <Iframe
           url="https://app.powerbi.com/view?r=eyJrIjoiOTVmMzU1ZmUtZjQzMi00MzAyLWI2YTEtN2EyMWI5OTMxYjFhIiwidCI6ImI0MDYwNDEyLTEwM2MtNDBlNy05YzExLTBhNjBkY2NhZjVhZCIsImMiOjEwfQ%3D%3D"
           width="93%"
-          height="850px"
+          height="900px"
           id="myId"
           className="myClassname"
           position="relative"

@@ -123,117 +123,123 @@ function TsergiinAlba(props) {
       >
         <div className="columns">
           <div className="column is-11">
-            <span>
+            <span className="headerTextBold">
               5. Цэргийн Алба хаасан хэсэх{" "}
-              <label className="checkbox">
-                {" "}
-                <input type="checkbox"></input>
-              </label>
+              <input
+                type="checkbox"
+                value={edit}
+                onChange={() => setEdit(!edit)}
+              />
             </span>
           </div>
           <div className="column is-1">
-            <button
+            {/* <button
               className="buttonTsenkher"
               onClick={() => {
                 setEdit(!edit);
               }}
             >
               Засварлах
-            </button>
+            </button> */}
           </div>
         </div>
+        {!edit ? (
+          <div>
+            <div className="columns">
+              <div className="column is-6  has-text-right">
+                Цэргийн үүрэгтний үнэмлэхийн дугаар
+              </div>
+              <div className="column ml-1">
+                {" "}
+                <input
+                  disabled={edit}
+                  className="Borderless"
+                  value={data.Force[0]?.FORCE_NO}
+                  onChange={(text) => {
+                    let value = [...data?.Force];
+                    value[0].FORCE_NO = text.target.value;
+                    value[0].UPDATED_BY = userDetils?.USER_ID;
+                    value[0].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
+                    loadData({ Force: value });
+                  }}
+                />
+              </div>
+            </div>
+            <div className="columns">
+              <div className="column is-6  has-text-right">
+                Цэргийн алба хаасан байдал
+              </div>
+              <div className="column ml-1">
+                <select
+                  disabled={edit}
+                  className="Borderless"
+                  value={data?.Force[0].FORCE_TYPE_ID}
+                  onChange={(text) => {
+                    let value = [...data?.Force];
+                    value[0].FORCE_TYPE_ID = text.target.value;
+                    value[0].UPDATED_BY = userDetils?.USER_ID;
+                    value[0].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
+                    loadData({ Force: value });
+                  }}
+                >
+                  <option value={1}>хаасан</option>
+                  <option value={2}>хаагаагүй</option>
+                </select>
+              </div>
+            </div>
+            <div className="columns">
+              <div className="column is-6 has-text-right">Хаана</div>
+              <div className="column ml-1">
+                {" "}
+                <input
+                  disabled={edit}
+                  className="Borderless"
+                  value={data.Force[0]?.FORCE_LOCATION}
+                  onChange={(text) => {
+                    let value = [...data?.Force];
+                    value[0].FORCE_LOCATION = text.target.value;
+                    value[0].UPDATED_BY = userDetils?.USER_ID;
+                    value[0].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
+                    loadData({ Force: value });
+                  }}
+                />
+              </div>
+            </div>
+            <div className="columns">
+              <div className="column is-6 has-text-right">Тайлбар</div>
+              <div className="column ml-1">
+                <input
+                  disabled={edit}
+                  className="Borderless"
+                  value={data.Force[0]?.FORCE_DESC}
+                  onChange={(text) => {
+                    let value = [...data?.Force];
+                    value[0].FORCE_DESC = text.target.value;
+                    value[0].UPDATED_BY = userDetils?.USER_ID;
+                    value[0].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
+                    loadData({ Force: value });
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+        ) : null}
         <div className="columns">
-          <div className="column is-6  has-text-right">
-            Цэргийн үүрэгтний үнэмлэхийн дугаар
-          </div>
-          <div className="column ml-1">
-            {" "}
-            <input
-              disabled={edit}
-              className="Borderless"
-              value={data.Force[0]?.FORCE_NO}
-              onChange={(text) => {
-                let value = [...data?.Force];
-                value[0].FORCE_NO = text.target.value;
-                value[0].UPDATED_BY = userDetils?.USER_ID;
-                value[0].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
-                loadData({ Force: value });
-              }}
-            />
-          </div>
-        </div>
-        <div className="columns">
-          <div className="column is-6  has-text-right">
-            Цэргийн алба хаасан байдал
-          </div>
-          <div className="column ml-1">
-            <select
-              disabled={edit}
-              className="Borderless"
-              value={data?.Force[0].FORCE_TYPE_ID}
-              onChange={(text) => {
-                let value = [...data?.Force];
-                value[0].FORCE_TYPE_ID = text.target.value;
-                value[0].UPDATED_BY = userDetils?.USER_ID;
-                value[0].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
-                loadData({ Force: value });
-              }}
-            >
-              <option value={1}>хаасан</option>
-              <option value={2}>хаагаагүй</option>
-            </select>
-          </div>
-        </div>
-        <div className="columns">
-          <div className="column is-6 has-text-right">Хаана</div>
-          <div className="column ml-1">
-            {" "}
-            <input
-              disabled={edit}
-              className="Borderless"
-              value={data.Force[0]?.FORCE_LOCATION}
-              onChange={(text) => {
-                let value = [...data?.Force];
-                value[0].FORCE_LOCATION = text.target.value;
-                value[0].UPDATED_BY = userDetils?.USER_ID;
-                value[0].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
-                loadData({ Force: value });
-              }}
-            />
-          </div>
-        </div>
-        <div className="columns">
-          <div className="column is-6 has-text-right">Тайлбар</div>
-          <div className="column ml-1">
-            <input
-              disabled={edit}
-              className="Borderless"
-              value={data.Force[0]?.FORCE_DESC}
-              onChange={(text) => {
-                let value = [...data?.Force];
-                value[0].FORCE_DESC = text.target.value;
-                value[0].UPDATED_BY = userDetils?.USER_ID;
-                value[0].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
-                loadData({ Force: value });
-              }}
-            />
-          </div>
-        </div>
+          <div className="column is-11"></div>
 
-        <div className="columns">
-          <div className="column is-9"></div>
-          <div className="column is-3 has-text-right">
-            {/* <button className="buttonTsenkher" style={{ marginRight: "0.4rem" }}>
-            Хэвлэх
-          </button> */}
-            <button
+          {!edit ? (
+            <div className="column is-1 ">
+              {/* <button
               className="buttonTsenkher"
               style={{ marginRight: "0.4rem" }}
-              onClick={saveToDB}
             >
-              Хадгалах
-            </button>
-          </div>
+              Хэвлэх
+            </button> */}
+              <button className="buttonTsenkher" onClick={saveToDB}>
+                Хадгалах
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     );

@@ -40,6 +40,8 @@ import Dashboard from "../images/icons/dashboard.png";
 import DashboardW from "../images/icons/dashboardW.png";
 import Add from "../images/icons/add.png";
 import Delete from "./icons/delete.png";
+import AddBlue from "./icons/addBlue.png";
+import Excel from "./icons/EXCEL.png";
 export {
   LeftArrow,
   RigthArrow,
@@ -80,4 +82,6 @@ export {
   Dashboard,
   Add,
   Delete,
+  AddBlue,
+  Excel,
 };

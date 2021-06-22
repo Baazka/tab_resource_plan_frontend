@@ -192,7 +192,9 @@ function UrChadvar(props) {
         >
           <div className="columns">
             <div className="column is-11">
-              <span>1.Төрийн жинхэн албаны шалгалтын талаарх мэдээлэл</span>
+              <span className="headerTextBold">
+                1.Төрийн жинхэн албаны шалгалтын талаарх мэдээлэл
+              </span>
             </div>
             <div className="column is -1">
               <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
@@ -207,7 +209,7 @@ function UrChadvar(props) {
                   <td>№</td>
                   <td>Мэдээллийн агуулга</td>
                   <td>Шалгалт өгсөн эсэх</td>
-                  <td>шалгалт өгсөн байршил /Аймаг,хот/</td>
+                  <td>Шалгалт өгсөн байршил /Аймаг,хот/</td>
                   <td>Огноо</td>
                   <td>Шалгалтын оноо</td>
                   <td>Шийдэрийн дугаар</td>
@@ -689,17 +691,22 @@ function UrChadvar(props) {
               </tbody>
             </table>
           </div>
-          <div class="columns">
-            <div class="column is-11" />
+          <div className="columns">
+            <div className="column is-11"></div>
 
-            <div class="column is-1 ">
-              {/* <button className="button is-info is-small is-focused ml-1">
-                Хэвлэх
-              </button> */}
-              <button className="buttonTsenkher" onClick={saveToDB}>
-                Хадгалах
-              </button>
-            </div>
+            {!edit ? (
+              <div className="column is-1 ">
+                {/* <button
+              className="buttonTsenkher"
+              style={{ marginRight: "0.4rem" }}
+            >
+              Хэвлэх
+            </button> */}
+                <button className="buttonTsenkher" onClick={saveToDB}>
+                  Хадгалах
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
         <TangaragBurtgel person_id={props.person_id} />
@@ -859,7 +866,7 @@ function TangaragBurtgel(props) {
       >
         <div className="columns">
           <div className="column is-11">
-            <span>2.Тангарагын бүртгэл</span>
+            <span className="headerTextBold">2.Тангарагын бүртгэл</span>
           </div>
           <div className="column is-1">
             <button
@@ -896,20 +903,22 @@ function TangaragBurtgel(props) {
                       Тангарагын шийдвэрийн огноо
                     </span>
                   </td>
-                  <td
-                    style={{
-                      borderColor: "transparent",
-                      border: "none",
-                      paddingLeft: "0px",
-                    }}
-                  >
-                    <img
-                      src={Add}
-                      width="30px"
-                      height="30px"
-                      onClick={() => addRow()}
-                    />
-                  </td>
+                  {!edit ? (
+                    <td
+                      style={{
+                        borderColor: "transparent",
+                        border: "none",
+                        paddingLeft: "0px",
+                      }}
+                    >
+                      <img
+                        src={Add}
+                        width="30px"
+                        height="30px"
+                        onClick={() => addRow()}
+                      />
+                    </td>
+                  ) : null}
                 </tr>
               </thead>
               <tbody>
@@ -997,16 +1006,21 @@ function TangaragBurtgel(props) {
                         }}
                       />
                     </td>
-                    <td
-                      style={{ paddingLeft: "0px", borderColor: "transparent" }}
-                    >
-                      <img
-                        src={Delete}
-                        width="30px"
-                        height="30px"
-                        onClick={() => removeRow(index, value)}
-                      />
-                    </td>
+                    {!edit ? (
+                      <td
+                        style={{
+                          paddingLeft: "0px",
+                          borderColor: "transparent",
+                        }}
+                      >
+                        <img
+                          src={Delete}
+                          width="30px"
+                          height="30px"
+                          onClick={() => removeRow(index, value)}
+                        />
+                      </td>
+                    ) : null}
                   </tr>
                 ))}
               </tbody>
@@ -1015,19 +1029,21 @@ function TangaragBurtgel(props) {
         </div>
 
         <div className="columns">
-          <div className="column is-9"></div>
-          <div className="column is-3 has-text-right">
-            {/* <button className="buttonTsenkher" style={{ marginRight: "0.4rem" }}>
-            Хэвлэх
-          </button> */}
-            <button
+          <div className="column is-11"></div>
+
+          {!edit ? (
+            <div className="column is-1 ">
+              {/* <button
               className="buttonTsenkher"
               style={{ marginRight: "0.4rem" }}
-              onClick={saveToDB}
             >
-              Хадгалах
-            </button>
-          </div>
+              Хэвлэх
+            </button> */}
+              <button className="buttonTsenkher" onClick={saveToDB}>
+                Хадгалах
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     );
@@ -1192,7 +1208,7 @@ function GadaadKhel(props) {
       >
         <div className="columns">
           <div className="column is-11">
-            <span>3.Гадаад хэлний мэдлэг</span>
+            <span className="headerTextBold">3.Гадаад хэлний мэдлэг</span>
           </div>
           <div className="column is-1">
             <button
@@ -1240,20 +1256,22 @@ function GadaadKhel(props) {
                   <td>
                     <span className="textSaaral">Батламжийн дугаар</span>
                   </td>
-                  <td
-                    style={{
-                      borderColor: "transparent",
-                      border: "none",
-                      paddingLeft: "0px",
-                    }}
-                  >
-                    <img
-                      src={Add}
-                      width="30px"
-                      height="30px"
-                      onClick={() => addRow()}
-                    />
-                  </td>
+                  {!edit ? (
+                    <td
+                      style={{
+                        borderColor: "transparent",
+                        border: "none",
+                        paddingLeft: "0px",
+                      }}
+                    >
+                      <img
+                        src={Add}
+                        width="30px"
+                        height="30px"
+                        onClick={() => addRow()}
+                      />
+                    </td>
+                  ) : null}
                 </tr>
               </thead>
               <tbody>
@@ -1396,21 +1414,22 @@ function GadaadKhel(props) {
                         }}
                       />
                     </td>
-
-                    <td
-                      style={{
-                        paddingLeft: "0px",
-                        borderColor: "transparent",
-                        width: "80px",
-                      }}
-                    >
-                      <img
-                        src={Delete}
-                        width="30px"
-                        height="30px"
-                        onClick={() => removeRow(index, value)}
-                      />
-                    </td>
+                    {!edit ? (
+                      <td
+                        style={{
+                          paddingLeft: "0px",
+                          borderColor: "transparent",
+                          width: "80px",
+                        }}
+                      >
+                        <img
+                          src={Delete}
+                          width="30px"
+                          height="30px"
+                          onClick={() => removeRow(index, value)}
+                        />
+                      </td>
+                    ) : null}
                   </tr>
                 ))}
               </tbody>
@@ -1419,19 +1438,21 @@ function GadaadKhel(props) {
         </div>
 
         <div className="columns">
-          <div className="column is-9"></div>
-          <div className="column is-3 has-text-right">
-            {/* <button className="buttonTsenkher" style={{ marginRight: "0.4rem" }}>
-            Хэвлэх
-          </button> */}
-            <button
+          <div className="column is-11"></div>
+
+          {!edit ? (
+            <div className="column is-1 ">
+              {/* <button
               className="buttonTsenkher"
               style={{ marginRight: "0.4rem" }}
-              onClick={saveToDB}
             >
-              Хадгалах
-            </button>
-          </div>
+              Хэвлэх
+            </button> */}
+              <button className="buttonTsenkher" onClick={saveToDB}>
+                Хадгалах
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
     );
