@@ -43,7 +43,7 @@ function Login(props) {
     if (ner !== undefined && nuutsUg !== undefined) {
       axios({
         method: "post", //put
-        url: "http://localhost:3001/api/v1/login",
+        url: "http://10.10.10.46:3001/api/v1/login",
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json",
@@ -59,7 +59,7 @@ function Login(props) {
           if (response?.data?.USER_ID !== 0) {
             DataRequest({
               url:
-                "http://localhost:3001/api/v1/profile/" +
+                "http://10.10.10.46:3001/api/v1/profile/" +
                 response?.data?.USER_ID,
               method: "GET",
               data: {},

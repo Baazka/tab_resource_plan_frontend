@@ -107,7 +107,7 @@ const Home = (props) => {
   };
   async function employDetail(value) {
     let employDetail = await DataRequest({
-      url: "http://10.10.10.46:3002/api/v1/person/" + value,
+      url: "http://10.10.10.46:3002/api/v1/person/0/" + value,
       method: "GET",
       data: {},
     });

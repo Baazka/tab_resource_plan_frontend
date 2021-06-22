@@ -55,27 +55,18 @@ const axios = require("axios");
 function AnketNeg(props) {
   const [data, setData] = useState(props.location.state?.data);
   const [menu, setMenu] = useState(1);
+  const [, forceRender] = useReducer((s) => s + 1, 0);
   const refContainer = useRef(null);
   console.log("dataNeg", data);
   function saveAvatar(file) {
     const fd = new FormData();
     fd.append("image", file.target.files[0], file.target.files[0].name);
     console.log("zurag===============>", file.target.files[0]);
-    // axios
-    //   .post("", fd, {
-    //     onUploadProgress: (ProgressEvent) => {
-    //       console.log(
-    //         "upload Progress" +
-    //           Math.round((ProgressEvent.loaded / ProgressEvent.total) * 100) +
-    //           "%"
-    //       );
-    //     },
-    //   })
-    //   .then((res) => {
-    //     console.log(res);
-    //   });
   }
-
+  useEffect(() => {
+    console.log("success", data);
+    forceRender();
+  }, [data]);
   return (
     <div
       style={{
@@ -346,16 +337,16 @@ function AnketNeg(props) {
       >
         {menu === 1 ? (
           <div>
-            <Yrunkhii person_id={data.person_id} setData={setData} />
-            <Kayag person_id={data.person_id} />
-            <HolbooBarikhHun person={data} person_id={data.person_id} />
-            <GerBul person={data.employDetail} person_id={data.person_id} />
+            <Yrunkhii person_id={data?.person_id} setDataChild={setData} />
+            <Kayag person_id={data?.person_id} />
+            <HolbooBarikhHun person={data} person_id={data?.person_id} />
+            <GerBul person={data?.employDetail} person_id={data?.person_id} />
           </div>
         ) : null}
-        {menu === 2 ? <UrChadvar person_id={data.PERSON_ID} /> : null}
-        {menu === 3 ? <Bolowsrol person_id={data.PERSON_ID} /> : null}
+        {menu === 2 ? <UrChadvar person_id={data?.person_id} /> : null}
+        {menu === 3 ? <Bolowsrol person_id={data?.person_id} /> : null}
         {menu === 4 ? (
-          <Mergeshliin person_id={data.employDetail.PERSON_ID} />
+          <Mergeshliin person_id={data?.employDetail?.PERSON_ID} />
         ) : null}
         {menu === 5 ? (
           <TsergiinAlba
@@ -385,6 +376,7 @@ function AnketNeg(props) {
 function Yrunkhii(props) {
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
+  const [, forceRender] = useReducer((s) => s + 1, 0);
   const [data, loadData] = useState();
   const [bornDate, setBornDate] = useState(
     data?.PERSON_BORNDATE !== undefined
@@ -407,7 +399,7 @@ function Yrunkhii(props) {
   useEffect(async () => {
     if (props.person_id !== 0) {
       let listItems = await axios(
-        "http://10.10.10.46:3002/api/v1/person/" + props.person_id
+        "http://10.10.10.46:3002/api/v1/person/0/" + props.person_id
       );
       console.log(listItems, "Tangarag");
       loadData(listItems?.data);
@@ -458,7 +450,7 @@ function Yrunkhii(props) {
           console.log(error.response);
         });
     } else {
-      console.log("negggggggg", data);
+      console.log("negggggggg", props);
       DataRequest({
         url: "http://172.16.24.103:3002/api/v1/person/",
         method: "post",
@@ -468,11 +460,11 @@ function Yrunkhii(props) {
           console.log("UpdateResponse", response);
           //history.push('/sample')
           if (response?.data === "success") {
-            props.setData({
-              employDetail: (data.person_id = response?.data?.PERSON_ID),
-              person_id: response?.data?.PERSON_ID,
+            props.setDataChild({
+              employDetail: (data.person_id = response?.data?.person_id),
+              person_id: response?.data?.person_id,
             });
-
+            forceRender();
             setEdit(!edit);
           }
         })
