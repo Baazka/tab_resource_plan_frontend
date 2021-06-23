@@ -29,7 +29,7 @@ function Login(props) {
   const history = useHistory();
 
   useEffect(() => {
-    if (localStorage.getItem("rememberedUser").includes("userName")) {
+    if (localStorage.getItem("rememberedUser")?.includes("userName")) {
       setNer(JSON.parse(localStorage.getItem("rememberedUser")).userName);
       setNuutsUg(JSON.parse(localStorage.getItem("rememberedUser")).password);
     }
@@ -50,7 +50,7 @@ function Login(props) {
         "application/x-www-form-urlencoded;charset=UTF-8";
       axios({
         method: "post", //put
-        url: "http://10.10.10.46:3001/api/v1/login",
+        url: "http://hr.audit.mn/reg/api/v1/login",
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json",
@@ -77,7 +77,7 @@ function Login(props) {
             }
             DataRequest({
               url:
-                "http://10.10.10.46:3001/api/v1/profile/" +
+                "http://hr.audit.mn/reg/api/v1/profile/" +
                 response?.data?.USER_ID,
               method: "GET",
               data: {},
