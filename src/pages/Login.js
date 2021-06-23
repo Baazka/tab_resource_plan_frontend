@@ -29,7 +29,12 @@ function Login(props) {
   const history = useHistory();
 
   useEffect(() => {
-    window.addEventListener("keydown", downHandler);
+    if (localStorage.getItem("rememberedUser").includes("userName")) {
+      setNer(JSON.parse(localStorage.getItem("rememberedUser")).userName);
+      setNuutsUg(JSON.parse(localStorage.getItem("rememberedUser")).password);
+    }
+    // setNer(JSON.parse(localStorage.getItem("rememberedUser"))?.userName);
+    // setNuutsUg(JSON.parse(localStorage.getItem("rememberedUser"))?.password);
   }, [props]);
 
   function downHandler(e) {
@@ -41,6 +46,8 @@ function Login(props) {
   function nevtrekh() {
     console.log("ner nuuts ug", { username: ner, password: nuutsUg });
     if (ner !== undefined && nuutsUg !== undefined) {
+      axios.defaults.headers["Content-Type"] =
+        "application/x-www-form-urlencoded;charset=UTF-8";
       axios({
         method: "post", //put
         url: "http://10.10.10.46:3001/api/v1/login",
@@ -57,6 +64,17 @@ function Login(props) {
         .then(function (response) {
           console.log(response, "loginFirst");
           if (response?.data?.USER_ID !== 0) {
+            if (sanuulakh) {
+              console.log("orson");
+              localStorage.removeItem("rememberedUser");
+              localStorage.setItem(
+                "rememberedUser",
+                JSON.stringify({
+                  userName: ner,
+                  password: nuutsUg,
+                })
+              );
+            }
             DataRequest({
               url:
                 "http://10.10.10.46:3001/api/v1/profile/" +
@@ -152,6 +170,7 @@ function Login(props) {
             name="Password"
             placeholder="Нууц үг"
             type="password"
+            onKeyDown={downHandler}
             style={{ width: "300px" }}
             value={nuutsUg}
             placeholder="Нууц үг"
@@ -170,7 +189,12 @@ function Login(props) {
           >
             <div>
               {/* appearance-none bg-white rounded-sm outline-none */}
-              <input type="checkbox" tabIndex="3" />
+              <input
+                type="checkbox"
+                tabIndex="3"
+                onChange={() => setSanuulakh(!sanuulakh)}
+                value={sanuulakh}
+              />
               {/* <img src="/icon/checked.png" classNameName={"w-3 h-2 " + (sanuulakh ? "hidden z-20" : "block ")}/> */}
               <label style={{ color: "gray" }}>
                 <span>&nbsp;</span>Сануулах
@@ -183,7 +207,10 @@ function Login(props) {
         </div>
 
         <div class="container">
-          <div class="col-md-12  text-center" style={{ paddingBottom: "50px" }}>
+          <div
+            class="col-md-12  text-center"
+            style={{ paddingBottom: "50px", textAlign: "center" }}
+          >
             <button
               class="button"
               style={{ backgroundColor: "#233772", color: "white" }}

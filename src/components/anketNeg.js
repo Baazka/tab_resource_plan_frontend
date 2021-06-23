@@ -53,7 +53,7 @@ const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 const axios = require("axios");
 
 function AnketNeg(props) {
-  const [data, setData] = useState(props.location.state?.data);
+  const [data, loadData] = useState();
   const [menu, setMenu] = useState(1);
   const [, forceRender] = useReducer((s) => s + 1, 0);
   const refContainer = useRef(null);
@@ -63,348 +63,17 @@ function AnketNeg(props) {
     fd.append("image", file.target.files[0], file.target.files[0].name);
     console.log("zurag===============>", file.target.files[0]);
   }
-  useEffect(() => {
-    console.log("success", data);
-    forceRender();
-  }, [data]);
-  return (
-    <div
-      style={{
-        display: "flex",
-        height: "100vh",
-      }}
-    >
-      <Header title="АНКЕТ А"></Header>
-      <div
-        style={{
-          width: "20%",
-          marginLeft: "7.5rem",
-          textAlign: "center",
-          borderRight: "1px solid #ececec",
-          height: "100hv",
-        }}
-      >
-        <div style={{ marginTop: "7rem" }}>
-          <img src={AvatarB} width="120px" height="120px" />
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "-0.4rem",
-          }}
-        >
-          <div>
-            <input
-              ref={refContainer}
-              class="file-input"
-              accept="image/*"
-              type="file"
-              onChange={(file) => saveAvatar(file)}
-              style={{ display: "none" }}
-            />
-          </div>
-          <img
-            src={Face}
-            width="40px"
-            height="40px"
-            onClick={() => refContainer.current.click()}
-          />
-
-          <img src={Trush} width="40px" height="40px" />
-          <img src={Warning} width="40px" height="40px" />
-        </div>
-        <div style={{ marginTop: "1.5rem" }}>
-          <span
-            style={{
-              color: "#5d5d5d",
-              fontFamily: "RalewaySemiBold",
-              fontSize: "1rem",
-            }}
-          >
-            {data?.employDetail?.PERSON_LASTNAME}
-          </span>
-          <span
-            style={{
-              color: "#418ee6",
-              fontFamily: "RalewaySemiBold",
-              fontSize: "1rem",
-            }}
-          >
-            &nbsp; {data?.employDetail?.PERSON_FIRSTNAME}
-          </span>
-        </div>
-        <div className="AnketList" style={{ marginTop: "1.5rem" }}>
-          <img
-            src={menu === 1 ? BlueNeg : BlackNeg}
-            width="45px"
-            height="45px"
-          />
-          <button
-            className="button"
-            style={{
-              color: `${menu === 1 ? "#418ee6" : "#5d5d5d"}`,
-              border: "none",
-              width: "17rem",
-              fontFamily: "RalewayRegular",
-              fontWeight: "bold",
-              whiteSpace: "nowrap",
-              marginTop: "3px",
-              fontSize: "1rem",
-            }}
-            onClick={() => setMenu(1)}
-          >
-            I-II. ХУВЬ ХҮНИЙ <br />
-            ТАЛААРХ МЭДЭЭЛЭЛ
-          </button>
-        </div>
-        <div className="AnketList">
-          <img
-            src={menu === 2 ? BlueKhoyor : BlackKhoyor}
-            width="45px"
-            height="45px"
-          />
-          <button
-            className="button"
-            style={{
-              color: `${menu === 2 ? "#418ee6" : "#5d5d5d"}`,
-              border: "none",
-              width: "17rem",
-              fontFamily: "RalewayRegular",
-              fontWeight: "bold",
-              whiteSpace: "nowrap",
-              marginTop: "3px",
-              fontSize: "1rem",
-            }}
-            onClick={() => setMenu(2)}
-          >
-            II. УР ЧАДВАРЫН <br />
-            ТАЛААРХ МЭДЭЭЛЭЛ
-          </button>
-        </div>
-        <div className="AnketList">
-          <img
-            src={menu === 3 ? BlueGurav : BlackGurav}
-            width="45px"
-            height="45px"
-          />
-          <button
-            className="button"
-            style={{
-              color: `${menu === 3 ? "#418ee6" : "#5d5d5d"}`,
-              border: "none",
-              width: "17rem",
-              fontFamily: "RalewayRegular",
-              fontWeight: "bold",
-              whiteSpace: "nowrap",
-              marginTop: "3px",
-              fontSize: "1rem",
-            }}
-            onClick={() => setMenu(3)}
-          >
-            III. БОЛОВСРОЛЫН <br />
-            ТАЛААРХ МЭДЭЭЛЭЛ
-          </button>
-        </div>
-        <div className="AnketList">
-          <img
-            src={menu === 4 ? BlueDuruv : BlackDuruv}
-            width="45px"
-            height="45px"
-          />
-          <button
-            className="button"
-            style={{
-              color: `${menu === 4 ? "#418ee6" : "#5d5d5d"}`,
-              border: "none",
-              width: "17rem",
-              fontFamily: "RalewayRegular",
-              fontWeight: "bold",
-              whiteSpace: "nowrap",
-              marginTop: "3px",
-              fontSize: "1rem",
-            }}
-            onClick={() => setMenu(4)}
-          >
-            IV. МЭРГЭЖЛИЙН <br />
-            ТАЛААРХ МЭДЭЭЛЭЛ
-          </button>
-        </div>
-        <div className="AnketList">
-          <img
-            src={menu === 5 ? BlueTav : BlackTav}
-            width="45px"
-            height="45px"
-          />
-          <button
-            className="button"
-            style={{
-              color: `${menu === 5 ? "#418ee6" : "#5d5d5d"}`,
-              border: "none",
-              width: "17rem",
-              fontFamily: "RalewayRegular",
-              fontWeight: "bold",
-              whiteSpace: "nowrap",
-              marginTop: "3px",
-              fontSize: "1rem",
-            }}
-            onClick={() => setMenu(5)}
-          >
-            V. ЦЭРГИЙН АЛБА <br /> ХААСАН ЭСЭХ
-          </button>
-        </div>
-        <div className="AnketList">
-          <img
-            src={menu === 6 ? BlueZurgaa : BlackZurgaa}
-            width="45px"
-            height="45px"
-          />
-          <button
-            className="button"
-            style={{
-              color: `${menu === 6 ? "#418ee6" : "#5d5d5d"}`,
-              border: "none",
-              width: "17rem",
-              fontFamily: "RalewayRegular",
-              fontWeight: "bold",
-              whiteSpace: "nowrap",
-              marginTop: "3px",
-              fontSize: "1rem",
-            }}
-            onClick={() => setMenu(6)}
-          >
-            VI. ШАГНАЛЫН <br />
-            ТАЛААРХ МЭДЭЭЛЭЛ
-          </button>
-        </div>
-        <div className="AnketList">
-          <img
-            src={menu === 7 ? BlueDoloo : BlackDoloo}
-            width="45px"
-            height="45px"
-          />
-          <button
-            className="button"
-            style={{
-              color: `${menu === 7 ? "#418ee6" : "#5d5d5d"}`,
-              border: "none",
-              width: "17rem",
-              fontFamily: "RalewayRegular",
-              fontWeight: "bold",
-              whiteSpace: "nowrap",
-              marginTop: "3px",
-              fontSize: "1rem",
-            }}
-            onClick={() => setMenu(7)}
-          >
-            VII. ТУРШЛАГЫН <br />
-            ТАЛААРХ МЭДЭЭЛЭЛ
-          </button>
-        </div>
-        <div className="AnketList">
-          <img
-            src={menu === 8 ? BlueNaim : BlackNaim}
-            width="45px"
-            height="45px"
-          />
-          <button
-            className="button"
-            style={{
-              color: `${menu === 8 ? "#418ee6" : "#5d5d5d"}`,
-              border: "none",
-              width: "17rem",
-              fontFamily: "RalewayRegular",
-              fontWeight: "bold",
-              whiteSpace: "nowrap",
-              marginTop: "3px",
-              fontSize: "1rem",
-            }}
-            onClick={() => setMenu(8)}
-          >
-            VIII. БҮТЭЭЛИЙН <br /> ЖАГСААЛТ
-          </button>
-        </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          width: "90%",
-          boxSizing: "border-box",
-          overflow: "scroll",
-        }}
-      >
-        {menu === 1 ? (
-          <div>
-            <Yrunkhii person_id={data?.person_id} setDataChild={setData} />
-            <Kayag person_id={data?.person_id} />
-            <HolbooBarikhHun person={data} person_id={data?.person_id} />
-            <GerBul person={data?.employDetail} person_id={data?.person_id} />
-          </div>
-        ) : null}
-        {menu === 2 ? <UrChadvar person_id={data?.person_id} /> : null}
-        {menu === 3 ? <Bolowsrol person_id={data?.person_id} /> : null}
-        {menu === 4 ? (
-          <Mergeshliin person_id={data?.employDetail?.PERSON_ID} />
-        ) : null}
-        {menu === 5 ? (
-          <TsergiinAlba
-            person_id={props.location.state?.data?.employDetail.PERSON_ID}
-          />
-        ) : null}
-        {menu === 6 ? (
-          <Shagnaliin
-            person_id={props.location.state?.data?.employDetail.PERSON_ID}
-          />
-        ) : null}
-        {menu === 7 ? (
-          <Turshlgin
-            person_id={props.location.state?.data?.employDetail.PERSON_ID}
-          />
-        ) : null}
-        {menu === 8 ? (
-          <Buteeliin
-            person_id={props.location.state?.data?.employDetail.PERSON_ID}
-          />
-        ) : null}
-      </div>
-    </div>
-  );
-}
-
-function Yrunkhii(props) {
-  const [edit, setEdit] = useState(true);
-  const alert = useAlert();
-  const [, forceRender] = useReducer((s) => s + 1, 0);
-  const [data, loadData] = useState();
-  const [bornDate, setBornDate] = useState(
-    data?.PERSON_BORNDATE !== undefined
-      ? dateFormat(new Date(data?.PERSON_BORNDATE), "yyyy-mm-dd")
-      : dateFormat(new Date(), "yyyy-mm-dd")
-  );
-  useEffect(() => {
-    setPerson({
-      ...person,
-      ...{ PERSON_BORNDATE: dateFormat(bornDate, "dd-mmm-yy") },
-    });
-  }, [bornDate]);
-  useEffect(() => {
-    setPerson({
-      ...person,
-      ...{ PERSON_BORNDATE: dateFormat(bornDate, "dd-mmm-yy") },
-    });
-  }, [data]);
 
   useEffect(async () => {
-    if (props.person_id !== 0) {
+    console.log("[rp[", props);
+    if (props.location.state.data.person_id !== 0) {
       let listItems = await axios(
         "http://10.10.10.46:3002/api/v1/person/0/" + props.person_id
       );
       console.log(listItems, "Tangarag");
       loadData(listItems?.data);
     } else {
-      alert.show("oki");
+      console.log("test", data);
       loadData({
         PERSON_REGISTER_NO: "",
         PERSON_LASTNAME: "",
@@ -428,8 +97,6 @@ function Yrunkhii(props) {
     }
   }, [props]);
 
-  const [person, setPerson] = useState(props.person);
-
   function khadgalakhYo() {
     if (data.PERSON_ID !== 0) {
       DataRequest({
@@ -442,7 +109,6 @@ function Yrunkhii(props) {
           //history.push('/sample')
           if (response?.data?.message === "success") {
             alert.show("амжилттай хадгаллаа");
-            setEdit(!edit);
           }
         })
         .catch(function (error) {
@@ -460,12 +126,8 @@ function Yrunkhii(props) {
           console.log("UpdateResponse", response);
           //history.push('/sample')
           if (response?.data === "success") {
-            props.setDataChild({
-              employDetail: (data.person_id = response?.data?.person_id),
-              person_id: response?.data?.person_id,
-            });
+            props.setDataChild((data.person_id = response?.data?.person_id));
             forceRender();
-            setEdit(!edit);
           }
         })
         .catch(function (error) {
@@ -474,6 +136,329 @@ function Yrunkhii(props) {
         });
     }
   }
+
+  let listItems;
+  if (data !== undefined && data !== null) {
+    listItems = (
+      <div
+        style={{
+          display: "flex",
+          height: "100vh",
+        }}
+      >
+        <Header title="АНКЕТ А"></Header>
+        <div
+          style={{
+            width: "20%",
+            marginLeft: "7.5rem",
+            textAlign: "center",
+            borderRight: "1px solid #ececec",
+            height: "100hv",
+          }}
+        >
+          <div style={{ marginTop: "7rem" }}>
+            <img src={AvatarB} width="120px" height="120px" />
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "-0.4rem",
+            }}
+          >
+            <div>
+              <input
+                ref={refContainer}
+                class="file-input"
+                accept="image/*"
+                type="file"
+                onChange={(file) => saveAvatar(file)}
+                style={{ display: "none" }}
+              />
+            </div>
+            <img
+              src={Face}
+              width="40px"
+              height="40px"
+              onClick={() => refContainer.current.click()}
+            />
+
+            <img src={Trush} width="40px" height="40px" />
+            <img src={Warning} width="40px" height="40px" />
+          </div>
+          <div style={{ marginTop: "1.5rem" }}>
+            <span
+              style={{
+                color: "#5d5d5d",
+                fontFamily: "RalewaySemiBold",
+                fontSize: "1rem",
+              }}
+            >
+              {data?.employDetail?.PERSON_LASTNAME}
+            </span>
+            <span
+              style={{
+                color: "#418ee6",
+                fontFamily: "RalewaySemiBold",
+                fontSize: "1rem",
+              }}
+            >
+              &nbsp; {data?.employDetail?.PERSON_FIRSTNAME}
+            </span>
+          </div>
+          <div className="AnketList" style={{ marginTop: "1.5rem" }}>
+            <img
+              src={menu === 1 ? BlueNeg : BlackNeg}
+              width="45px"
+              height="45px"
+            />
+            <button
+              className="button"
+              style={{
+                color: `${menu === 1 ? "#418ee6" : "#5d5d5d"}`,
+                border: "none",
+                width: "17rem",
+                fontFamily: "RalewayRegular",
+                fontWeight: "bold",
+                whiteSpace: "nowrap",
+                marginTop: "3px",
+                fontSize: "1rem",
+              }}
+              onClick={() => setMenu(1)}
+            >
+              I-II. ХУВЬ ХҮНИЙ <br />
+              ТАЛААРХ МЭДЭЭЛЭЛ
+            </button>
+          </div>
+          <div className="AnketList">
+            <img
+              src={menu === 2 ? BlueKhoyor : BlackKhoyor}
+              width="45px"
+              height="45px"
+            />
+            <button
+              className="button"
+              style={{
+                color: `${menu === 2 ? "#418ee6" : "#5d5d5d"}`,
+                border: "none",
+                width: "17rem",
+                fontFamily: "RalewayRegular",
+                fontWeight: "bold",
+                whiteSpace: "nowrap",
+                marginTop: "3px",
+                fontSize: "1rem",
+              }}
+              onClick={() => setMenu(2)}
+            >
+              II. УР ЧАДВАРЫН <br />
+              ТАЛААРХ МЭДЭЭЛЭЛ
+            </button>
+          </div>
+          <div className="AnketList">
+            <img
+              src={menu === 3 ? BlueGurav : BlackGurav}
+              width="45px"
+              height="45px"
+            />
+            <button
+              className="button"
+              style={{
+                color: `${menu === 3 ? "#418ee6" : "#5d5d5d"}`,
+                border: "none",
+                width: "17rem",
+                fontFamily: "RalewayRegular",
+                fontWeight: "bold",
+                whiteSpace: "nowrap",
+                marginTop: "3px",
+                fontSize: "1rem",
+              }}
+              onClick={() => setMenu(3)}
+            >
+              III. БОЛОВСРОЛЫН <br />
+              ТАЛААРХ МЭДЭЭЛЭЛ
+            </button>
+          </div>
+          <div className="AnketList">
+            <img
+              src={menu === 4 ? BlueDuruv : BlackDuruv}
+              width="45px"
+              height="45px"
+            />
+            <button
+              className="button"
+              style={{
+                color: `${menu === 4 ? "#418ee6" : "#5d5d5d"}`,
+                border: "none",
+                width: "17rem",
+                fontFamily: "RalewayRegular",
+                fontWeight: "bold",
+                whiteSpace: "nowrap",
+                marginTop: "3px",
+                fontSize: "1rem",
+              }}
+              onClick={() => setMenu(4)}
+            >
+              IV. МЭРГЭЖЛИЙН <br />
+              ТАЛААРХ МЭДЭЭЛЭЛ
+            </button>
+          </div>
+          <div className="AnketList">
+            <img
+              src={menu === 5 ? BlueTav : BlackTav}
+              width="45px"
+              height="45px"
+            />
+            <button
+              className="button"
+              style={{
+                color: `${menu === 5 ? "#418ee6" : "#5d5d5d"}`,
+                border: "none",
+                width: "17rem",
+                fontFamily: "RalewayRegular",
+                fontWeight: "bold",
+                whiteSpace: "nowrap",
+                marginTop: "3px",
+                fontSize: "1rem",
+              }}
+              onClick={() => setMenu(5)}
+            >
+              V. ЦЭРГИЙН АЛБА <br /> ХААСАН ЭСЭХ
+            </button>
+          </div>
+          <div className="AnketList">
+            <img
+              src={menu === 6 ? BlueZurgaa : BlackZurgaa}
+              width="45px"
+              height="45px"
+            />
+            <button
+              className="button"
+              style={{
+                color: `${menu === 6 ? "#418ee6" : "#5d5d5d"}`,
+                border: "none",
+                width: "17rem",
+                fontFamily: "RalewayRegular",
+                fontWeight: "bold",
+                whiteSpace: "nowrap",
+                marginTop: "3px",
+                fontSize: "1rem",
+              }}
+              onClick={() => setMenu(6)}
+            >
+              VI. ШАГНАЛЫН <br />
+              ТАЛААРХ МЭДЭЭЛЭЛ
+            </button>
+          </div>
+          <div className="AnketList">
+            <img
+              src={menu === 7 ? BlueDoloo : BlackDoloo}
+              width="45px"
+              height="45px"
+            />
+            <button
+              className="button"
+              style={{
+                color: `${menu === 7 ? "#418ee6" : "#5d5d5d"}`,
+                border: "none",
+                width: "17rem",
+                fontFamily: "RalewayRegular",
+                fontWeight: "bold",
+                whiteSpace: "nowrap",
+                marginTop: "3px",
+                fontSize: "1rem",
+              }}
+              onClick={() => setMenu(7)}
+            >
+              VII. ТУРШЛАГЫН <br />
+              ТАЛААРХ МЭДЭЭЛЭЛ
+            </button>
+          </div>
+          <div className="AnketList">
+            <img
+              src={menu === 8 ? BlueNaim : BlackNaim}
+              width="45px"
+              height="45px"
+            />
+            <button
+              className="button"
+              style={{
+                color: `${menu === 8 ? "#418ee6" : "#5d5d5d"}`,
+                border: "none",
+                width: "17rem",
+                fontFamily: "RalewayRegular",
+                fontWeight: "bold",
+                whiteSpace: "nowrap",
+                marginTop: "3px",
+                fontSize: "1rem",
+              }}
+              onClick={() => setMenu(8)}
+            >
+              VIII. БҮТЭЭЛИЙН <br /> ЖАГСААЛТ
+            </button>
+          </div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "90%",
+            boxSizing: "border-box",
+            overflow: "scroll",
+          }}
+        >
+          {menu === 1 ? (
+            <div>
+              <Yrunkhii
+                data={data}
+                setDataChild={loadData}
+                khadgalakhYo={khadgalakhYo}
+              />
+              <Kayag person_id={data?.person_id} />
+              <HolbooBarikhHun person={data} person_id={data?.person_id} />
+              <GerBul person={data?.employDetail} person_id={data?.person_id} />
+            </div>
+          ) : null}
+          {menu === 2 ? <UrChadvar person_id={data?.person_id} /> : null}
+          {menu === 3 ? <Bolowsrol person_id={data?.person_id} /> : null}
+          {menu === 4 ? (
+            <Mergeshliin person_id={data?.employDetail?.PERSON_ID} />
+          ) : null}
+          {menu === 5 ? (
+            <TsergiinAlba
+              person_id={props.location.state?.data?.employDetail.PERSON_ID}
+            />
+          ) : null}
+          {menu === 6 ? (
+            <Shagnaliin
+              person_id={props.location.state?.data?.employDetail.PERSON_ID}
+            />
+          ) : null}
+          {menu === 7 ? (
+            <Turshlgin
+              person_id={props.location.state?.data?.employDetail.PERSON_ID}
+            />
+          ) : null}
+          {menu === 8 ? (
+            <Buteeliin
+              person_id={props.location.state?.data?.employDetail.PERSON_ID}
+            />
+          ) : null}
+        </div>
+      </div>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+}
+
+function Yrunkhii(props) {
+  const [edit, setEdit] = useState(true);
+  const alert = useAlert();
+  const [, forceRender] = useReducer((s) => s + 1, 0);
+  const [data, loadData] = useState();
+
   let listItems;
   if (data !== undefined && data !== "") {
     listItems = (
@@ -506,10 +491,10 @@ function Yrunkhii(props) {
               placeholder="утгаа оруулна уу"
               disabled={edit}
               className="anketInput"
-              value={data?.PERSON_LASTNAME}
+              value={props.data?.PERSON_LASTNAME}
               onChange={(text) =>
-                loadData({
-                  ...data,
+                props.loadData({
+                  ...props.data,
                   ...{ PERSON_LASTNAME: text.target.value },
                 })
               }
@@ -523,10 +508,10 @@ function Yrunkhii(props) {
             <select
               disabled={edit}
               className="anketInput"
-              value={data?.PERSON_GENDER}
+              value={props.data?.PERSON_GENDER}
               onChange={(text) =>
-                loadData({
-                  ...data,
+                props.loadData({
+                  ...props.data,
                   ...{ PERSON_GENDER: text.target.value },
                 })
               }
@@ -546,10 +531,10 @@ function Yrunkhii(props) {
               placeholder="утгаа оруулна уу"
               disabled={edit}
               className="anketInput"
-              value={data?.PERSON_FIRSTNAME}
+              value={props.data?.PERSON_FIRSTNAME}
               onChange={(text) =>
-                loadData({
-                  ...data,
+                props.loadData({
+                  ...props.data,
                   ...{ PERSON_FIRSTNAME: text.target.value },
                 })
               }
@@ -567,11 +552,19 @@ function Yrunkhii(props) {
               id="start"
               disabled={edit}
               className="anketInput"
-              value={bornDate}
+              value={dateFormat(
+                new Date(props.data?.PERSON_BORNDATE),
+                "yyyy-mm-dd"
+              )}
               min="1930-01-01"
               max="2021-12-31"
-              onChange={(date) => {
-                setBornDate(date.target.value);
+              onChange={(e) => {
+                props.loadData({
+                  ...props.data,
+                  ...{
+                    PERSON_BORNDATE: dateFormat(e.target.value, "dd-mmm-yy"),
+                  },
+                });
               }}
             ></input>
           </div>
@@ -586,10 +579,10 @@ function Yrunkhii(props) {
               placeholder="утгаа оруулна уу"
               disabled={edit}
               className="anketInput"
-              value={data?.PERSON_REGISTER_NO}
+              value={props.data?.PERSON_REGISTER_NO}
               onChange={(text) =>
-                loadData({
-                  ...data,
+                props.loadData({
+                  ...props.data,
                   ...{ PERSON_REGISTER_NO: text.target.value },
                 })
               }
@@ -600,7 +593,11 @@ function Yrunkhii(props) {
             <span className="textSaaral">Төрсөн аймаг,хот</span>
           </div>
           <div className="column is-3">
-            <Office personChild={data} setPersonChild={loadData} edit={edit} />
+            <Office
+              personChild={props.data}
+              setPersonChild={props.loadData}
+              edit={edit}
+            />
           </div>
         </div>
         <div className="columns " style={{ marginBottom: "0px" }}>
@@ -610,8 +607,8 @@ function Yrunkhii(props) {
           </div>
           <div className="column is-3">
             <National
-              personChild={data}
-              setPersonChild={loadData}
+              personChild={props.data}
+              setPersonChild={props.loadData}
               edit={edit}
             />
           </div>
@@ -621,8 +618,8 @@ function Yrunkhii(props) {
           </div>
           <div className="column is-3">
             <Suboffice
-              personChild={data}
-              setPersonChild={loadData}
+              personChild={props.data}
+              setPersonChild={props.loadData}
               edit={edit}
             />
           </div>
@@ -634,8 +631,8 @@ function Yrunkhii(props) {
           </div>
           <div className="column is-3">
             <Subnational
-              personChild={data}
-              setPersonChild={loadData}
+              personChild={props.data}
+              setPersonChild={props.loadData}
               edit={edit}
             />
           </div>
@@ -648,10 +645,13 @@ function Yrunkhii(props) {
               disabled={edit}
               placeholder="утгаа оруулна уу"
               className="anketInput"
-              value={data?.BIRTH_PLACE}
+              value={dateFormat(
+                new Date(props.data?.BIRTH_PLACE),
+                "yyyy-mm-dd"
+              )}
               onChange={(text) =>
-                loadData({
-                  ...data,
+                props.loadData({
+                  ...props.data,
                   ...{ BIRTH_PLACE: text.target.value },
                 })
               }
@@ -664,7 +664,11 @@ function Yrunkhii(props) {
             <span className="textSaaral">Үндэс угсаа</span>
           </div>
           <div className="column is-3">
-            <Dynasty personChild={data} setPersonChild={loadData} edit={edit} />
+            <Dynasty
+              personChild={props.data}
+              setPersonChild={props.loadData}
+              edit={edit}
+            />
           </div>
           <div className="column is-3 has-text-right">
             <span style={{ color: "red" }}>*</span>
@@ -676,10 +680,12 @@ function Yrunkhii(props) {
               className="anketInput"
               name="cars"
               id="cars"
-              value={data?.IS_MARRIED === null ? 1 : data?.IS_MARRIED}
+              value={
+                props.data?.IS_MARRIED === null ? 1 : props.data?.IS_MARRIED
+              }
               onChange={(text) =>
                 loadData({
-                  ...data,
+                  ...props.data,
                   ...{ IS_MARRIED: text.target.value },
                 })
               }
@@ -701,7 +707,7 @@ function Yrunkhii(props) {
             >
               Хэвлэх
             </button> */}
-              <button className="buttonTsenkher" onClick={khadgalakhYo}>
+              <button className="buttonTsenkher" onClick={props.khadgalakhYo}>
                 Хадгалах
               </button>
             </div>
