@@ -111,7 +111,6 @@ const Home = (props) => {
       method: "GET",
       data: {},
     });
-
     console.log(value, "value======================================>");
     setData({
       employDetail: employDetail?.data,
