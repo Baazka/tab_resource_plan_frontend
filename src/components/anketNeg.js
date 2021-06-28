@@ -95,7 +95,7 @@ function AnketNeg(props) {
           JSON.parse(localStorage.getItem("personDetail")).type === "employ"
         ) {
           let listItems = await axios(
-            "http://172.16.24.103:3002/api/v1/person/0/" +
+            "http://hr.audit.mn/hr/api/v1/person/0/" +
               JSON.parse(localStorage.getItem("personDetail")).person_id
           );
           console.log("amjilttai", listItems.data);
@@ -104,7 +104,7 @@ function AnketNeg(props) {
           JSON.parse(localStorage.getItem("personDetail")).type === "newPerson"
         ) {
           let listItems = await axios(
-            "http://172.16.24.103:3002/api/v1/person/1/" +
+            "http://hr.audit.mn/hr/api/v1/person/1/" +
               JSON.parse(localStorage.getItem("personDetail")).person_id
           );
           console.log("amjilttai", listItems.data);
@@ -118,7 +118,7 @@ function AnketNeg(props) {
     if (localStorage.getItem("personDetail")?.includes("person_id")) {
       if (JSON.parse(localStorage.getItem("personDetail")).person_id === "0") {
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/person/",
+          url: "http://hr.audit.mn/hr/api/v1/person/",
           method: "post",
           data: { person: data },
         })
@@ -156,7 +156,7 @@ function AnketNeg(props) {
           });
       } else {
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/updatePerson/",
+          url: "http://hr.audit.mn/hr/api/v1/updatePerson/",
           method: "post",
           data: { person: data },
         })
@@ -769,7 +769,7 @@ function Kayag(props) {
     if (localStorage.getItem("personDetail")?.includes("person_id")) {
       if (JSON.parse(localStorage.getItem("personDetail")).type === "employ") {
         let listItems = await axios(
-          "http://172.16.24.103:3002/api/v1/person/0/" +
+          "http://hr.audit.mn/hr/api/v1/person/0/" +
             JSON.parse(localStorage.getItem("personDetail")).person_id
         );
         console.log("amjilttai", listItems.data);
@@ -778,7 +778,7 @@ function Kayag(props) {
         JSON.parse(localStorage.getItem("personDetail")).type === "newPerson"
       ) {
         let listItems = await axios(
-          "http://172.16.24.103:3002/api/v1/person/1/" +
+          "http://hr.audit.mn/hr/api/v1/person/1/" +
             JSON.parse(localStorage.getItem("personDetail")).person_id
         );
         console.log("amjilttai", listItems.data);
@@ -790,7 +790,7 @@ function Kayag(props) {
   function khadgalakhYo() {
     console.log("PersonKhadgal", person);
     DataRequest({
-      url: "http://172.16.24.103:3002/api/v1/updatePersonAddress/",
+      url: "http://hr.audit.mn/hr/api/v1/updatePersonAddress/",
       method: "post",
       data: { person: person },
     })
@@ -1000,7 +1000,7 @@ function HolbooBarikhHun(props) {
 
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/emergency/" + props.person_id
+      "http://hr.audit.mn/hr/api/v1/emergency/" + props.person_id
     );
     console.log("emergency", listItems?.data?.Emergency);
     setEmergency(listItems?.data?.Emergency);
@@ -1048,7 +1048,7 @@ function HolbooBarikhHun(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/emergencyDelete",
+        url: "http://hr.audit.mn/hr/api/v1/emergencyDelete",
         method: "POST",
         data: {
           emergency: {
@@ -1087,7 +1087,7 @@ function HolbooBarikhHun(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/emergency/",
+        url: "http://hr.audit.mn/hr/api/v1/emergency/",
         method: "POST",
         data: { emergency: newRow },
       })
@@ -1105,7 +1105,7 @@ function HolbooBarikhHun(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/emergency/",
+        url: "http://hr.audit.mn/hr/api/v1/emergency/",
         method: "PUT",
         data: { emergency: oldRow },
       })
@@ -1307,7 +1307,7 @@ function GerBul(props) {
   useEffect(async () => {
     console.log("testewwwwwwwwwwwwwwwwew", props);
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/family/" + props.person_id
+      "http://hr.audit.mn/hr/api/v1/family/" + props.person_id
     );
     console.log(listItems, "family");
     loadData(listItems?.data.Family);
@@ -1416,7 +1416,7 @@ function GerBul(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/familyDelete",
+        url: "http://hr.audit.mn/hr/api/v1/familyDelete",
         method: "POST",
         data: {
           family: {
@@ -1448,7 +1448,7 @@ function GerBul(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/familyDelete",
+        url: "http://hr.audit.mn/hr/api/v1/familyDelete",
         method: "POST",
         data: {
           family: {
@@ -1488,7 +1488,7 @@ function GerBul(props) {
 
     if (newRow?.length > 0) {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/family/",
+        url: "http://hr.audit.mn/hr/api/v1/family/",
         method: "POST",
         data: { family: newRow },
       })
@@ -1506,7 +1506,7 @@ function GerBul(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/family/",
+        url: "http://hr.audit.mn/hr/api/v1/family/",
         method: "PUT",
         data: { family: oldRow },
       })

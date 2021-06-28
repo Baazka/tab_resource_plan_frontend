@@ -63,7 +63,7 @@ const Home = (props) => {
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/employees",
+        url: "http://hr.audit.mn/hr/api/v1/employees",
         method: "GET",
         data: {},
       });

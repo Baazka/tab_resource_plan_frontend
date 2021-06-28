@@ -15,7 +15,7 @@ function Bolowsrol(props) {
 
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/education/" + props.person_id
+      "http://hr.audit.mn/hr/api/v1/education/" + props.person_id
     );
     loadData({
       Education: listItems?.data?.Education.filter(
@@ -96,7 +96,7 @@ function Bolowsrol(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/education/",
+        url: "http://hr.audit.mn/hr/api/v1/education/",
         method: "POST",
         data: { education: newRow, PERSON_ID: props.person_id },
       })
@@ -114,7 +114,7 @@ function Bolowsrol(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/education/",
+        url: "http://hr.audit.mn/hr/api/v1/education/",
         method: "PUT",
         data: { education: oldRow, PERSON_ID: props.person_id },
       })
@@ -194,7 +194,7 @@ function Bolowsrol(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/educationDelete",
+        url: "http://hr.audit.mn/hr/api/v1/educationDelete",
         method: "POST",
         data: {
           education: {

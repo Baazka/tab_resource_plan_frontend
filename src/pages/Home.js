@@ -83,7 +83,7 @@ function Home(props) {
   async function unActive() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://172.16.24.103:3002/api/v1/employees/0",
+      url: "http://hr.audit.mn/hr/api/v1/employees/0",
       method: "GET",
       data: {},
     });
@@ -93,7 +93,7 @@ function Home(props) {
   async function Active() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://172.16.24.103:3002/api/v1/employees/1",
+      url: "http://hr.audit.mn/hr/api/v1/employees/1",
       method: "GET",
       data: {},
     });
@@ -103,7 +103,7 @@ function Home(props) {
   async function newPeople() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://172.16.24.103:3002/api/v1/person/1/",
+      url: "http://hr.audit.mn/hr/api/v1/person/1/",
       method: "GET",
       data: {},
     });
@@ -114,7 +114,7 @@ function Home(props) {
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/employees/1",
+        url: "http://hr.audit.mn/hr/api/v1/employees/1",
         method: "GET",
         data: {},
       });
@@ -483,9 +483,7 @@ function EmployExcel(props) {
   const refExcel = useRef(null);
 
   useEffect(async () => {
-    let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/excelPerson/"
-    );
+    let listItems = await axios("http://hr.audit.mn/hr/api/v1/excelPerson/");
     console.log(listItems, "tailan");
     loadData(listItems?.data);
   }, [props]);

@@ -8,7 +8,7 @@ function National(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/library/national"
+      "http://hr.audit.mn/hr/api/v1/library/national"
     );
     loadData(listItems.data);
   }, []);
@@ -42,9 +42,7 @@ function National(props) {
 function Subnational(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
-    let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/library/surname"
-    );
+    let listItems = await axios("http://hr.audit.mn/hr/api/v1/library/surname");
     loadData(listItems.data);
   }, []);
   let listItems;
@@ -77,9 +75,7 @@ function Subnational(props) {
 function Dynasty(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
-    let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/library/dynasty"
-    );
+    let listItems = await axios("http://hr.audit.mn/hr/api/v1/library/dynasty");
     loadData(listItems.data);
   }, []);
   let listItems;
@@ -111,9 +107,7 @@ function Dynasty(props) {
 function Office(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
-    let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/library/office"
-    );
+    let listItems = await axios("http://hr.audit.mn/hr/api/v1/library/office");
     loadData(listItems.data);
   }, []);
   let listItems;
@@ -145,15 +139,10 @@ function Office(props) {
 }
 
 function Suboffice(props) {
-  console.log(
-    "ttttttttttttttttttttttttttttttttttttttteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeessssssssssssssssssssssssssssttttttttttttttttt",
-    props
-  );
   const [data, loadData] = useState(null);
   useEffect(async () => {
-    console.log("subofficeProps", props);
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/library/suboffice"
+      "http://hr.audit.mn/hr/api/v1/library/suboffice"
     );
 
     loadData(
@@ -161,8 +150,6 @@ function Suboffice(props) {
         (a) => parseInt(a.OFFICE_ID) === parseInt(props.personChild.OFFICE_ID)
       )
     );
-
-    console.log("personChildOFFICEID", props.personChild?.OFFICE_ID);
   }, [props]);
   let listItems;
   if (data !== undefined) {
@@ -193,9 +180,7 @@ function Suboffice(props) {
 function Edutype(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
-    let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/library/edutype"
-    );
+    let listItems = await axios("http://hr.audit.mn/hr/api/v1/library/edutype");
     loadData(listItems.data);
   }, []);
   let listItems;
@@ -228,9 +213,7 @@ function FamilyArray(props) {
   const [, forceRender] = useReducer((s) => s + 1, 0);
   const [data, loadData] = useState();
   useEffect(async () => {
-    let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/library/family"
-    );
+    let listItems = await axios("http://hr.audit.mn/hr/api/v1/library/family");
     loadData(listItems.data);
   }, []);
   let listItems;
@@ -270,7 +253,7 @@ function Examtype(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/library/examtype"
+      "http://hr.audit.mn/hr/api/v1/library/examtype"
     );
     loadData(listItems.data);
   }, []);
@@ -305,7 +288,7 @@ function Fametype(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/library/fametype"
+      "http://hr.audit.mn/hr/api/v1/library/fametype"
     );
     loadData(listItems.data);
   }, []);
@@ -339,7 +322,7 @@ function Subfametype(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/library/subfametype"
+      "http://hr.audit.mn/hr/api/v1/library/subfametype"
     );
     loadData(listItems.data);
   }, []);
@@ -374,7 +357,7 @@ function Forcetype(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/library/forcetype"
+      "http://hr.audit.mn/hr/api/v1/library/forcetype"
     );
     loadData(listItems.data);
   }, []);
@@ -409,7 +392,7 @@ function Language(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/library/language"
+      "http://hr.audit.mn/hr/api/v1/library/language"
     );
     loadData(listItems.data);
   }, []);
@@ -447,7 +430,7 @@ function Languagetype(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/library/languagetype"
+      "http://hr.audit.mn/hr/api/v1/library/languagetype"
     );
     loadData(listItems.data);
   }, [props]);
@@ -486,7 +469,7 @@ function Literaturetype(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/library/literaturetype"
+      "http://hr.audit.mn/hr/api/v1/library/literaturetype"
     );
     loadData(listItems.data);
   }, []);
@@ -521,7 +504,7 @@ function Oathtype(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/library/oathtype"
+      "http://hr.audit.mn/hr/api/v1/library/oathtype"
     );
     loadData(listItems.data);
   }, []);
