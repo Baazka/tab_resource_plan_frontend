@@ -8,7 +8,7 @@ function National(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/library/national"
+      "http://172.16.24.103:3002/api/v1/library/national"
     );
     loadData(listItems.data);
   }, []);
@@ -43,7 +43,7 @@ function Subnational(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/library/surname"
+      "http://172.16.24.103:3002/api/v1/library/surname"
     );
     loadData(listItems.data);
   }, []);
@@ -78,7 +78,7 @@ function Dynasty(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/library/dynasty"
+      "http://172.16.24.103:3002/api/v1/library/dynasty"
     );
     loadData(listItems.data);
   }, []);
@@ -112,7 +112,7 @@ function Office(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/library/office"
+      "http://172.16.24.103:3002/api/v1/library/office"
     );
     loadData(listItems.data);
   }, []);
@@ -123,12 +123,13 @@ function Office(props) {
         disabled={props.edit}
         className="anketInput"
         value={props.personChild?.OFFICE_ID}
-        onChange={(text) =>
+        onChange={(text) => {
           props.setPersonChild({
             ...props.personChild,
             ...{ OFFICE_ID: text.target.value },
-          })
-        }
+          });
+          props.forceUpdate();
+        }}
       >
         {data?.map((nation, index) => (
           <option key={index} value={nation.OFFICE_ID}>
@@ -144,13 +145,25 @@ function Office(props) {
 }
 
 function Suboffice(props) {
+  console.log(
+    "ttttttttttttttttttttttttttttttttttttttteeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeessssssssssssssssssssssssssssttttttttttttttttt",
+    props
+  );
   const [data, loadData] = useState(null);
   useEffect(async () => {
+    console.log("subofficeProps", props);
     let listItems = await axios(
       "http://10.10.10.46:3002/api/v1/library/suboffice"
     );
-    loadData(listItems.data);
-  }, []);
+
+    loadData(
+      listItems.data?.filter(
+        (a) => parseInt(a.OFFICE_ID) === parseInt(props.personChild.OFFICE_ID)
+      )
+    );
+
+    console.log("personChildOFFICEID", props.personChild?.OFFICE_ID);
+  }, [props]);
   let listItems;
   if (data !== undefined) {
     listItems = (
@@ -181,7 +194,7 @@ function Edutype(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/library/edutype"
+      "http://172.16.24.103:3002/api/v1/library/edutype"
     );
     loadData(listItems.data);
   }, []);
@@ -216,7 +229,7 @@ function FamilyArray(props) {
   const [data, loadData] = useState();
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/library/family"
+      "http://172.16.24.103:3002/api/v1/library/family"
     );
     loadData(listItems.data);
   }, []);
@@ -257,7 +270,7 @@ function Examtype(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/library/examtype"
+      "http://172.16.24.103:3002/api/v1/library/examtype"
     );
     loadData(listItems.data);
   }, []);
@@ -292,7 +305,7 @@ function Fametype(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/library/fametype"
+      "http://172.16.24.103:3002/api/v1/library/fametype"
     );
     loadData(listItems.data);
   }, []);
@@ -326,7 +339,7 @@ function Subfametype(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/library/subfametype"
+      "http://172.16.24.103:3002/api/v1/library/subfametype"
     );
     loadData(listItems.data);
   }, []);
@@ -361,7 +374,7 @@ function Forcetype(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/library/forcetype"
+      "http://172.16.24.103:3002/api/v1/library/forcetype"
     );
     loadData(listItems.data);
   }, []);
@@ -396,7 +409,7 @@ function Language(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/library/language"
+      "http://172.16.24.103:3002/api/v1/library/language"
     );
     loadData(listItems.data);
   }, []);
@@ -434,10 +447,10 @@ function Languagetype(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/library/languagetype"
+      "http://172.16.24.103:3002/api/v1/library/languagetype"
     );
     loadData(listItems.data);
-  }, []);
+  }, [props]);
   let listItems;
   if (data !== undefined) {
     listItems = (
@@ -473,7 +486,7 @@ function Literaturetype(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/library/literaturetype"
+      "http://172.16.24.103:3002/api/v1/library/literaturetype"
     );
     loadData(listItems.data);
   }, []);
@@ -508,7 +521,7 @@ function Oathtype(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/library/oathtype"
+      "http://172.16.24.103:3002/api/v1/library/oathtype"
     );
     loadData(listItems.data);
   }, []);
