@@ -13,7 +13,7 @@ function Turshlgin(props) {
   const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/Experience/" + props.person_id
+      "http://172.16.24.103:3002/api/v1/Experience/" + props.person_id
     );
     console.log(listItems, "Tangarag");
     loadData(listItems?.data);
@@ -24,16 +24,16 @@ function Turshlgin(props) {
       loadData({
         Experience: [
           {
-            EXPERIENCE_OFFICE: "aimag hot",
-            EXPERIENCE_SUBOFFICE: "sun duureg",
-            EXPERIENCE_DEPARTMENT: "gazar ",
-            EXPERIENCE_ORG: "baiguullaga ner",
-            EXPERIENCE_POSITION: "alban tushaal",
+            EXPERIENCE_OFFICE: "",
+            EXPERIENCE_SUBOFFICE: "",
+            EXPERIENCE_DEPARTMENT: "",
+            EXPERIENCE_ORG: "",
+            EXPERIENCE_POSITION: "",
             EXPERIENCE_POSITION_TYPE: null,
             ENTERED_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            ENTERED_NO: "tushaal dugaar",
+            ENTERED_NO: "",
             EXPIRED_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            EXPIRED_NO: "tushaal dugaar",
+            EXPIRED_NO: "",
             PERSON_ID: props.person_id,
             IS_ACTIVE: "1",
             CREATED_BY: userDetils?.USER_ID,
@@ -54,7 +54,7 @@ function Turshlgin(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/experience/",
+        url: "http://172.16.24.103:3002/api/v1/experience/",
         method: "POST",
         data: { experience: newRow },
       })
@@ -72,7 +72,7 @@ function Turshlgin(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/experience/",
+        url: "http://172.16.24.103:3002/api/v1/experience/",
         method: "PUT",
         data: { experience: oldRow },
       })
@@ -96,16 +96,16 @@ function Turshlgin(props) {
   async function addRow() {
     let value = data.Experience;
     value.push({
-      EXPERIENCE_OFFICE: "aimag hot",
-      EXPERIENCE_SUBOFFICE: "sun duureg",
-      EXPERIENCE_DEPARTMENT: "gazar ",
-      EXPERIENCE_ORG: "baiguullaga ner",
-      EXPERIENCE_POSITION: "alban tushaal",
+      EXPERIENCE_OFFICE: "",
+      EXPERIENCE_SUBOFFICE: "",
+      EXPERIENCE_DEPARTMENT: "",
+      EXPERIENCE_ORG: "",
+      EXPERIENCE_POSITION: "",
       EXPERIENCE_POSITION_TYPE: null,
       ENTERED_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-      ENTERED_NO: "tushaal dugaar",
+      ENTERED_NO: "",
       EXPIRED_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-      EXPIRED_NO: "tushaal dugaar",
+      EXPIRED_NO: "",
       PERSON_ID: props.person_id,
       IS_ACTIVE: "1",
       CREATED_BY: userDetils?.USER_ID,
@@ -119,7 +119,7 @@ function Turshlgin(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/experienceDelete",
+        url: "http://172.16.24.103:3002/api/v1/experienceDelete",
         method: "POST",
         data: {
           experience: {

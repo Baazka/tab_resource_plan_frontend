@@ -63,7 +63,7 @@ const AlbanTushaal = (props) => {
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/position",
+        url: "http://172.16.24.103:3002/api/v1/position",
         method: "GET",
         data: {},
       });

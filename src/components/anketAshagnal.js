@@ -90,7 +90,7 @@ function Shagnaliin(props) {
   const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/Award/" + props.person_id
+      "http://172.16.24.103:3002/api/v1/Award/" + props.person_id
     );
     console.log(listItems, "Tangarag");
     loadData(listItems?.data);
@@ -127,7 +127,7 @@ function Shagnaliin(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/Award/",
+        url: "http://172.16.24.103:3002/api/v1/Award/",
         method: "POST",
         data: { award: newRow },
       })
@@ -145,7 +145,7 @@ function Shagnaliin(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/Award/",
+        url: "http://172.16.24.103:3002/api/v1/Award/",
         method: "PUT",
         data: { award: oldRow },
       })
@@ -188,7 +188,7 @@ function Shagnaliin(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/awardDelete",
+        url: "http://172.16.24.103:3002/api/v1/awardDelete",
         method: "POST",
         data: {
           award: {

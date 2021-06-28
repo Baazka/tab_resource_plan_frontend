@@ -14,7 +14,7 @@ function TsergiinAlba(props) {
   const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/force/" + props.person_id
+      "http://172.16.24.103:3002/api/v1/force/" + props.person_id
     );
     console.log(listItems, "force");
     loadData(listItems?.data);
@@ -43,7 +43,7 @@ function TsergiinAlba(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/forceDelete",
+        url: "http://172.16.24.103:3002/api/v1/forceDelete",
         method: "POST",
         data: {
           award: {
@@ -76,7 +76,7 @@ function TsergiinAlba(props) {
   function saveToDB() {
     if (data.Force[0].ROWTYPE === "NEW") {
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/force/",
+        url: "http://172.16.24.103:3002/api/v1/force/",
         method: "POST",
         data: { force: data.Force[0] },
       })
@@ -92,7 +92,7 @@ function TsergiinAlba(props) {
         });
     } else {
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/force/",
+        url: "http://172.16.24.103:3002/api/v1/force/",
         method: "PUT",
         data: { force: data.Force[0] },
       })

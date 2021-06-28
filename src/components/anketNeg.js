@@ -48,16 +48,19 @@ import {
   FamilyArray,
 } from "./library";
 import { useAlert } from "react-alert";
+import { useHistory } from "react-router-dom";
 var dateFormat = require("dateformat");
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 const axios = require("axios");
 
 function AnketNeg(props) {
+  const [, forceRender] = useReducer((s) => s + 1, 0);
   const [data, loadData] = useState();
   const [menu, setMenu] = useState(1);
-  const [, forceRender] = useReducer((s) => s + 1, 0);
+
   const refContainer = useRef(null);
-  console.log("dataNeg", data);
+  const history = useHistory();
+
   function saveAvatar(file) {
     const fd = new FormData();
     fd.append("image", file.target.files[0], file.target.files[0].name);
@@ -65,75 +68,110 @@ function AnketNeg(props) {
   }
 
   useEffect(async () => {
-    console.log("[rp[", props);
-    if (props.location.state.data.person_id !== 0) {
-      let listItems = await axios(
-        "http://10.10.10.46:3002/api/v1/person/0/" + props.person_id
-      );
-      console.log(listItems, "Tangarag");
-      loadData(listItems?.data);
-    } else {
-      console.log("test", data);
-      loadData({
-        PERSON_REGISTER_NO: "",
-        PERSON_LASTNAME: "",
-        PERSON_FIRSTNAME: "",
-        PERSON_BORNDATE: dateFormat(new Date(), "yyyy-mm-dd"),
-        PERSON_GENDER: 1,
-        PERSON_PHONE: "",
-        PERSON_NATIONAL_ID: 1,
-        PERSON_EMAIL: "",
-        NATIONAL_ID: 1,
-        DYNASTY_ID: 1,
-        BIRTH_OFFICE_ID: 1,
-        BIRTH_SUBOFFICE_ID: 1,
-        BIRTH_PLACE: "",
-        IS_MARRIED: 0,
-        IS_ACTIVE: 1,
-        CREATED_BY: userDetils?.USER_ID,
-        CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-        PERSON_ID: 0,
-      });
+    if (localStorage.getItem("personDetail")?.includes("person_id")) {
+      if (JSON.parse(localStorage.getItem("personDetail")).person_id === "0") {
+        loadData({
+          PERSON_REGISTER_NO: "",
+          PERSON_LASTNAME: "",
+          PERSON_FIRSTNAME: "",
+          PERSON_BORNDATE: dateFormat(new Date(), "yyyy-mm-dd"),
+          PERSON_GENDER: 1,
+          PERSON_PHONE: "",
+          PERSON_NATIONAL_ID: 1,
+          PERSON_EMAIL: "",
+          NATIONAL_ID: 1,
+          DYNASTY_ID: 1,
+          BIRTH_OFFICE_ID: 1,
+          BIRTH_SUBOFFICE_ID: 1,
+          BIRTH_PLACE: "",
+          IS_MARRIED: 0,
+          IS_ACTIVE: 1,
+          CREATED_BY: userDetils?.USER_ID,
+          CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+          PERSON_ID: 0,
+        });
+      } else {
+        if (
+          JSON.parse(localStorage.getItem("personDetail")).type === "employ"
+        ) {
+          let listItems = await axios(
+            "http://172.16.24.103:3002/api/v1/person/0/" +
+              JSON.parse(localStorage.getItem("personDetail")).person_id
+          );
+          console.log("amjilttai", listItems.data);
+          loadData(listItems?.data);
+        } else if (
+          JSON.parse(localStorage.getItem("personDetail")).type === "newPerson"
+        ) {
+          let listItems = await axios(
+            "http://172.16.24.103:3002/api/v1/person/1/" +
+              JSON.parse(localStorage.getItem("personDetail")).person_id
+          );
+          console.log("amjilttai", listItems.data);
+          loadData(listItems?.data);
+        }
+      }
     }
   }, [props]);
 
   function khadgalakhYo() {
-    if (data.PERSON_ID !== 0) {
-      DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/updatePerson/",
-        method: "post",
-        data: { person: data },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          //history.push('/sample')
-          if (response?.data?.message === "success") {
-            alert.show("амжилттай хадгаллаа");
-          }
+    if (localStorage.getItem("personDetail")?.includes("person_id")) {
+      if (JSON.parse(localStorage.getItem("personDetail")).person_id === "0") {
+        DataRequest({
+          url: "http://172.16.24.103:3002/api/v1/person/",
+          method: "post",
+          data: { person: data },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
-    } else {
-      console.log("negggggggg", props);
-      DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/person/",
-        method: "post",
-        data: { person: data },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          //history.push('/sample')
-          if (response?.data === "success") {
-            props.setDataChild((data.person_id = response?.data?.person_id));
-            forceRender();
-          }
+          .then(function (response) {
+            console.log(
+              "UpdateResponseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              response.data
+            );
+            //history.push('/sample')
+            if (response?.data.message === "success") {
+              loadData({
+                ...data,
+                PERSON_ID: response?.data?.person_id,
+              });
+
+              localStorage.removeItem("personDetail");
+              localStorage.setItem(
+                "personDetail",
+                JSON.stringify({
+                  person_id: response?.data?.person_id,
+                  type: "newPerson",
+                })
+              );
+              console.log(
+                "rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
+                localStorage.getItem("personDetail")
+              );
+              alert.show("амжилттай хадгаллаа");
+              forceRender();
+            }
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+          });
+      } else {
+        DataRequest({
+          url: "http://172.16.24.103:3002/api/v1/updatePerson/",
+          method: "post",
+          data: { person: data },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            //history.push('/sample')
+            if (response?.data?.message === "success") {
+              alert.show("амжилттай хадгаллаа");
+            }
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+          });
+      }
     }
   }
 
@@ -156,7 +194,31 @@ function AnketNeg(props) {
             height: "100hv",
           }}
         >
-          <div style={{ marginTop: "7rem" }}>
+          <div
+            style={{
+              padding: 0,
+              marginTop: "4.5rem",
+              textAlign: "left",
+              pointerEvents: "initial",
+            }}
+          >
+            <button
+              className="button is-small"
+              style={{
+                border: "none",
+                backgroundColor: "transparent",
+                padding: "0px",
+                color: "#2980b9",
+                borderRadius: "0px",
+                pointerEvents: "initial",
+                textDecoration: "underline",
+              }}
+              onClick={() => history.push("/web/workerlist", { back: true })}
+            >
+              {"<  Буцах"}
+            </button>
+          </div>
+          <div style={{ marginTop: "1rem" }}>
             <img src={AvatarB} width="120px" height="120px" />
           </div>
 
@@ -195,7 +257,7 @@ function AnketNeg(props) {
                 fontSize: "1rem",
               }}
             >
-              {data?.employDetail?.PERSON_LASTNAME}
+              {data?.PERSON_LASTNAME}
             </span>
             <span
               style={{
@@ -204,7 +266,7 @@ function AnketNeg(props) {
                 fontSize: "1rem",
               }}
             >
-              &nbsp; {data?.employDetail?.PERSON_FIRSTNAME}
+              &nbsp; {data?.PERSON_FIRSTNAME}
             </span>
           </div>
           <div className="AnketList" style={{ marginTop: "1.5rem" }}>
@@ -411,39 +473,22 @@ function AnketNeg(props) {
             <div>
               <Yrunkhii
                 data={data}
-                setDataChild={loadData}
+                loadData={loadData}
                 khadgalakhYo={khadgalakhYo}
+                forceUpdate={forceRender}
               />
-              <Kayag person_id={data?.person_id} />
-              <HolbooBarikhHun person={data} person_id={data?.person_id} />
-              <GerBul person={data?.employDetail} person_id={data?.person_id} />
+              <Kayag person_id={data?.PERSON_ID} />
+              <HolbooBarikhHun person={data} person_id={data?.PERSON_ID} />
+              <GerBul person={data} person_id={data?.PERSON_ID} />
             </div>
           ) : null}
-          {menu === 2 ? <UrChadvar person_id={data?.person_id} /> : null}
-          {menu === 3 ? <Bolowsrol person_id={data?.person_id} /> : null}
-          {menu === 4 ? (
-            <Mergeshliin person_id={data?.employDetail?.PERSON_ID} />
-          ) : null}
-          {menu === 5 ? (
-            <TsergiinAlba
-              person_id={props.location.state?.data?.employDetail.PERSON_ID}
-            />
-          ) : null}
-          {menu === 6 ? (
-            <Shagnaliin
-              person_id={props.location.state?.data?.employDetail.PERSON_ID}
-            />
-          ) : null}
-          {menu === 7 ? (
-            <Turshlgin
-              person_id={props.location.state?.data?.employDetail.PERSON_ID}
-            />
-          ) : null}
-          {menu === 8 ? (
-            <Buteeliin
-              person_id={props.location.state?.data?.employDetail.PERSON_ID}
-            />
-          ) : null}
+          {menu === 2 ? <UrChadvar person_id={data?.PERSON_ID} /> : null}
+          {menu === 3 ? <Bolowsrol person_id={data?.PERSON_ID} /> : null}
+          {menu === 4 ? <Mergeshliin person_id={data?.PERSON_ID} /> : null}
+          {menu === 5 ? <TsergiinAlba person_id={data?.PERSON_ID} /> : null}
+          {menu === 6 ? <Shagnaliin person_id={data?.PERSON_ID} /> : null}
+          {menu === 7 ? <Turshlgin person_id={data?.PERSON_ID} /> : null}
+          {menu === 8 ? <Buteeliin person_id={data?.PERSON_ID} /> : null}
         </div>
       </div>
     );
@@ -458,287 +503,294 @@ function Yrunkhii(props) {
   const alert = useAlert();
   const [, forceRender] = useReducer((s) => s + 1, 0);
   const [data, loadData] = useState();
+  console.log("get0", props);
+  return (
+    <div
+      className=" box"
+      style={{
+        marginTop: "80px",
+        width: "98%",
+        height: "auto",
+        marginLeft: "10px",
+      }}
+    >
+      <div className="columns ">
+        <div className="column is-11">
+          <span className="headerTextBold">Ерөнхий мэдээлэл</span>
+        </div>
+        <div className="column is-1">
+          <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
+            Засварлах
+          </button>
+        </div>
+      </div>
+      <div className="columns" style={{ marginBottom: "0px" }}>
+        <div className="column is-3 has-text-right ">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Эцэг эхийн нэр</span>
+        </div>
+        <div className="column is-3">
+          <input
+            placeholder="утгаа оруулна уу"
+            disabled={edit}
+            className="anketInput"
+            value={props.data?.PERSON_LASTNAME}
+            onChange={(text) =>
+              props.loadData({
+                ...props.data,
+                ...{ PERSON_LASTNAME: text.target.value },
+              })
+            }
+          />
+        </div>
+        <div className="column is-3 has-text-right ">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Хүйс</span>
+        </div>
+        <div className="column is-3">
+          <select
+            disabled={edit}
+            className="anketInput"
+            value={props.data?.PERSON_GENDER}
+            onChange={(text) =>
+              props.loadData({
+                ...props.data,
+                ...{ PERSON_GENDER: text.target.value },
+              })
+            }
+          >
+            <option value={1}>Эрэгтэй</option>
+            <option value={2}>Эмэгтэй</option>
+          </select>
+        </div>
+      </div>
+      <div className="columns" style={{ marginBottom: "0px" }}>
+        <div className="column is-3  has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Өөрийн нэр</span>
+        </div>
+        <div className="column is-3">
+          <input
+            placeholder="утгаа оруулна уу"
+            disabled={edit}
+            className="anketInput"
+            value={props.data?.PERSON_FIRSTNAME}
+            onChange={(text) =>
+              props.loadData({
+                ...props.data,
+                ...{ PERSON_FIRSTNAME: text.target.value },
+              })
+            }
+          />
+        </div>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Төрсөн он,сар,өдөр</span>
+        </div>
+        <div className="column is-3">
+          <input
+            placeholder="утгаа оруулна уу"
+            className=""
+            type="date"
+            id="start"
+            disabled={edit}
+            className="anketInput"
+            value={dateFormat(
+              new Date(props.data?.PERSON_BORNDATE),
+              "yyyy-mm-dd"
+            )}
+            min="1930-01-01"
+            max="2021-12-31"
+            onChange={(e) => {
+              props.loadData({
+                ...props.data,
+                ...{
+                  PERSON_BORNDATE: dateFormat(
+                    e.target.value === undefined ? new Date() : e.target.value,
+                    "dd-mmm-yy"
+                  ),
+                },
+              });
+            }}
+          ></input>
+        </div>
+      </div>
+      <div className="columns" style={{ marginBottom: "0px" }}>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Регистерийн дугаар</span>
+        </div>
+        <div className="column is-3">
+          <input
+            placeholder="утгаа оруулна уу"
+            disabled={edit}
+            className="anketInput"
+            value={props.data?.PERSON_REGISTER_NO}
+            onChange={(text) =>
+              props.loadData({
+                ...props.data,
+                ...{ PERSON_REGISTER_NO: text.target.value },
+              })
+            }
+          />
+        </div>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Төрсөн аймаг,хот</span>
+        </div>
+        <div className="column is-3">
+          <Office
+            personChild={props.data}
+            setPersonChild={props.loadData}
+            forceUpdat
+            te={props.forceUpdate}
+            edit={edit}
+          />
+        </div>
+      </div>
+      <div className="columns " style={{ marginBottom: "0px" }}>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Ирэгншил</span>
+        </div>
+        <div className="column is-3">
+          <National
+            personChild={props.data}
+            setPersonChild={props.loadData}
+            edit={edit}
+          />
+        </div>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Төрсөн сум,дүүрэг</span>
+        </div>
+        <div className="column is-3">
+          <Suboffice
+            personChild={props.data}
+            setPersonChild={props.loadData}
+            edit={edit}
+          />
+        </div>
+      </div>
+      <div className="columns" style={{ marginBottom: "0px" }}>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Ургийн овог</span>
+        </div>
+        <div className="column is-3">
+          <Subnational
+            personChild={props.data}
+            setPersonChild={props.loadData}
+            edit={edit}
+          />
+        </div>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Төрсөн газар</span>
+        </div>
+        <div className="column is-3">
+          <input
+            disabled={edit}
+            placeholder="утгаа оруулна уу"
+            className="anketInput"
+            value={props.data?.BIRTH_PLACE}
+            onChange={(text) =>
+              props.loadData({
+                ...props.data,
+                ...{ BIRTH_PLACE: text.target.value },
+              })
+            }
+          />
+        </div>
+      </div>
+      <div className="columns " style={{ marginBottom: "0px" }}>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Үндэс угсаа</span>
+        </div>
+        <div className="column is-3">
+          <Dynasty
+            personChild={props.data}
+            setPersonChild={props.loadData}
+            edit={edit}
+          />
+        </div>
+        <div className="column is-3 has-text-right">
+          <span style={{ color: "red" }}>*</span>
+          <span className="textSaaral">Гэрлэсэн эсэх</span>
+        </div>
+        <div className="column is-3">
+          <select
+            disabled={edit}
+            className="anketInput"
+            name="cars"
+            id="cars"
+            value={props.data?.IS_MARRIED === null ? 1 : props.data?.IS_MARRIED}
+            onChange={(text) =>
+              loadData({
+                ...props.data,
+                ...{ IS_MARRIED: text.target.value },
+              })
+            }
+          >
+            <option value={1}>Тийм</option>
+            <option value={0}>Үгүй</option>
+          </select>
+        </div>
+      </div>
 
-  let listItems;
-  if (data !== undefined && data !== "") {
-    listItems = (
-      <div
-        className=" box"
-        style={{
-          marginTop: "80px",
-          width: "98%",
-          height: "auto",
-          marginLeft: "10px",
-        }}
-      >
-        <div className="columns ">
-          <div className="column is-11">
-            <span className="headerTextBold">Ерөнхий мэдээлэл</span>
-          </div>
-          <div className="column is-1">
-            <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
-              Засварлах
-            </button>
-          </div>
-        </div>
-        <div className="columns" style={{ marginBottom: "0px" }}>
-          <div className="column is-3 has-text-right ">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Эцэг эхийн нэр</span>
-          </div>
-          <div className="column is-3">
-            <input
-              placeholder="утгаа оруулна уу"
-              disabled={edit}
-              className="anketInput"
-              value={props.data?.PERSON_LASTNAME}
-              onChange={(text) =>
-                props.loadData({
-                  ...props.data,
-                  ...{ PERSON_LASTNAME: text.target.value },
-                })
-              }
-            />
-          </div>
-          <div className="column is-3 has-text-right ">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Хүйс</span>
-          </div>
-          <div className="column is-3">
-            <select
-              disabled={edit}
-              className="anketInput"
-              value={props.data?.PERSON_GENDER}
-              onChange={(text) =>
-                props.loadData({
-                  ...props.data,
-                  ...{ PERSON_GENDER: text.target.value },
-                })
-              }
-            >
-              <option value={1}>Эрэгтэй</option>
-              <option value={2}>Эмэгтэй</option>
-            </select>
-          </div>
-        </div>
-        <div className="columns" style={{ marginBottom: "0px" }}>
-          <div className="column is-3  has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Өөрийн нэр</span>
-          </div>
-          <div className="column is-3">
-            <input
-              placeholder="утгаа оруулна уу"
-              disabled={edit}
-              className="anketInput"
-              value={props.data?.PERSON_FIRSTNAME}
-              onChange={(text) =>
-                props.loadData({
-                  ...props.data,
-                  ...{ PERSON_FIRSTNAME: text.target.value },
-                })
-              }
-            />
-          </div>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Төрсөн он,сар,өдөр</span>
-          </div>
-          <div className="column is-3">
-            <input
-              placeholder="утгаа оруулна уу"
-              className=""
-              type="date"
-              id="start"
-              disabled={edit}
-              className="anketInput"
-              value={dateFormat(
-                new Date(props.data?.PERSON_BORNDATE),
-                "yyyy-mm-dd"
-              )}
-              min="1930-01-01"
-              max="2021-12-31"
-              onChange={(e) => {
-                props.loadData({
-                  ...props.data,
-                  ...{
-                    PERSON_BORNDATE: dateFormat(e.target.value, "dd-mmm-yy"),
-                  },
-                });
-              }}
-            ></input>
-          </div>
-        </div>
-        <div className="columns" style={{ marginBottom: "0px" }}>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Регистерийн дугаар</span>
-          </div>
-          <div className="column is-3">
-            <input
-              placeholder="утгаа оруулна уу"
-              disabled={edit}
-              className="anketInput"
-              value={props.data?.PERSON_REGISTER_NO}
-              onChange={(text) =>
-                props.loadData({
-                  ...props.data,
-                  ...{ PERSON_REGISTER_NO: text.target.value },
-                })
-              }
-            />
-          </div>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Төрсөн аймаг,хот</span>
-          </div>
-          <div className="column is-3">
-            <Office
-              personChild={props.data}
-              setPersonChild={props.loadData}
-              edit={edit}
-            />
-          </div>
-        </div>
-        <div className="columns " style={{ marginBottom: "0px" }}>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Ирэгншил</span>
-          </div>
-          <div className="column is-3">
-            <National
-              personChild={props.data}
-              setPersonChild={props.loadData}
-              edit={edit}
-            />
-          </div>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Төрсөн сум,дүүрэг</span>
-          </div>
-          <div className="column is-3">
-            <Suboffice
-              personChild={props.data}
-              setPersonChild={props.loadData}
-              edit={edit}
-            />
-          </div>
-        </div>
-        <div className="columns" style={{ marginBottom: "0px" }}>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Ургийн овог</span>
-          </div>
-          <div className="column is-3">
-            <Subnational
-              personChild={props.data}
-              setPersonChild={props.loadData}
-              edit={edit}
-            />
-          </div>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Төрсөн газар</span>
-          </div>
-          <div className="column is-3">
-            <input
-              disabled={edit}
-              placeholder="утгаа оруулна уу"
-              className="anketInput"
-              value={dateFormat(
-                new Date(props.data?.BIRTH_PLACE),
-                "yyyy-mm-dd"
-              )}
-              onChange={(text) =>
-                props.loadData({
-                  ...props.data,
-                  ...{ BIRTH_PLACE: text.target.value },
-                })
-              }
-            />
-          </div>
-        </div>
-        <div className="columns " style={{ marginBottom: "0px" }}>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Үндэс угсаа</span>
-          </div>
-          <div className="column is-3">
-            <Dynasty
-              personChild={props.data}
-              setPersonChild={props.loadData}
-              edit={edit}
-            />
-          </div>
-          <div className="column is-3 has-text-right">
-            <span style={{ color: "red" }}>*</span>
-            <span className="textSaaral">Гэрлэсэн эсэх</span>
-          </div>
-          <div className="column is-3">
-            <select
-              disabled={edit}
-              className="anketInput"
-              name="cars"
-              id="cars"
-              value={
-                props.data?.IS_MARRIED === null ? 1 : props.data?.IS_MARRIED
-              }
-              onChange={(text) =>
-                loadData({
-                  ...props.data,
-                  ...{ IS_MARRIED: text.target.value },
-                })
-              }
-            >
-              <option value={1}>Тийм</option>
-              <option value={0}>Үгүй</option>
-            </select>
-          </div>
-        </div>
+      <div className="columns">
+        <div className="column is-11"></div>
 
-        <div className="columns">
-          <div className="column is-11"></div>
-
-          {!edit ? (
-            <div className="column is-1 ">
-              {/* <button
+        {!edit ? (
+          <div className="column is-1 ">
+            {/* <button
               className="buttonTsenkher"
               style={{ marginRight: "0.4rem" }}
             >
               Хэвлэх
             </button> */}
-              <button className="buttonTsenkher" onClick={props.khadgalakhYo}>
-                Хадгалах
-              </button>
-            </div>
-          ) : null}
-        </div>
+            <button className="buttonTsenkher" onClick={props.khadgalakhYo}>
+              Хадгалах
+            </button>
+          </div>
+        ) : null}
       </div>
-    );
-  } else {
-    listItems = <p>ачаалж байна...</p>;
-  }
-  return listItems;
+    </div>
+  );
 }
 
 function Kayag(props) {
-  const [person, setPerson] = useState(props.person);
+  const [person, setPerson] = useState();
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
 
   useEffect(async () => {
-    console.log("PersonKhadgalProps", props);
-    let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/person/" + props.person_id
-    );
-    console.log(listItems, "Tangarag");
-    setPerson(listItems?.data);
+    if (localStorage.getItem("personDetail")?.includes("person_id")) {
+      if (JSON.parse(localStorage.getItem("personDetail")).type === "employ") {
+        let listItems = await axios(
+          "http://172.16.24.103:3002/api/v1/person/0/" +
+            JSON.parse(localStorage.getItem("personDetail")).person_id
+        );
+        console.log("amjilttai", listItems.data);
+        setPerson(listItems?.data);
+      } else if (
+        JSON.parse(localStorage.getItem("personDetail")).type === "newPerson"
+      ) {
+        let listItems = await axios(
+          "http://172.16.24.103:3002/api/v1/person/1/" +
+            JSON.parse(localStorage.getItem("personDetail")).person_id
+        );
+        console.log("amjilttai", listItems.data);
+        setPerson(listItems?.data);
+      }
+    }
   }, [props]);
 
   function khadgalakhYo() {
     console.log("PersonKhadgal", person);
     DataRequest({
-      url: "http://10.10.10.46:3002/api/v1/updatePersonAddress/",
+      url: "http://172.16.24.103:3002/api/v1/updatePersonAddress/",
       method: "post",
       data: { person: person },
     })
@@ -948,7 +1000,7 @@ function HolbooBarikhHun(props) {
 
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/emergency/" + props.person_id
+      "http://172.16.24.103:3002/api/v1/emergency/" + props.person_id
     );
     console.log("emergency", listItems?.data?.Emergency);
     setEmergency(listItems?.data?.Emergency);
@@ -960,7 +1012,7 @@ function HolbooBarikhHun(props) {
         {
           MEMBER_ID: 1,
           FAMILY_NAME: "",
-          PERSON_ID: props.person?.PERSON_ID,
+          PERSON_ID: props.person_id,
           EMERGENCY_LASTNAME: "",
           EMERGENCY_FIRSTNAME: "",
           EMERGENCY_PHONE: "",
@@ -978,7 +1030,7 @@ function HolbooBarikhHun(props) {
     value.push({
       MEMBER_ID: 1,
       FAMILY_NAME: "",
-      PERSON_ID: props.person?.PERSON_ID,
+      PERSON_ID: props.person_id,
       EMERGENCY_LASTNAME: "",
       EMERGENCY_FIRSTNAME: "",
       EMERGENCY_PHONE: "",
@@ -996,7 +1048,7 @@ function HolbooBarikhHun(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/emergencyDelete",
+        url: "http://172.16.24.103:3002/api/v1/emergencyDelete",
         method: "POST",
         data: {
           emergency: {
@@ -1035,7 +1087,7 @@ function HolbooBarikhHun(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/emergency/",
+        url: "http://172.16.24.103:3002/api/v1/emergency/",
         method: "POST",
         data: { emergency: newRow },
       })
@@ -1053,7 +1105,7 @@ function HolbooBarikhHun(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/emergency/",
+        url: "http://172.16.24.103:3002/api/v1/emergency/",
         method: "PUT",
         data: { emergency: oldRow },
       })
@@ -1253,8 +1305,9 @@ function GerBul(props) {
   const [family2, setFamily2] = useState([]);
 
   useEffect(async () => {
+    console.log("testewwwwwwwwwwwwwwwwew", props);
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/family/" + props.person_id
+      "http://172.16.24.103:3002/api/v1/family/" + props.person_id
     );
     console.log(listItems, "family");
     loadData(listItems?.data.Family);
@@ -1265,7 +1318,7 @@ function GerBul(props) {
       data.length === 0
         ? [
             {
-              PERSON_ID: props.person?.PERSON_ID,
+              PERSON_ID: props.person_id,
               FAMILY_ID: 1,
               FAMILY_NAME: "",
               MEMBER_TYPE: 1,
@@ -1273,8 +1326,8 @@ function GerBul(props) {
               MEMBER_LASTNAME: "",
               MEMBER_FIRSTNAME: "",
               MEMBER_BIRTHDATE: "09-Jun-21",
-              MEMBER_BIRTH_OFFICE: "",
-              MEMBER_BIRTH_SUBOFFICE: "",
+              OFFICE_ID: "1",
+              SUB_OFFICE_ID: "1",
               MEMBER_ORG: "",
               MEMBER_POSITION: "",
               IS_ACTIVE: "1",
@@ -1289,15 +1342,15 @@ function GerBul(props) {
       data?.length === 0
         ? [
             {
-              PERSON_ID: props.person?.PERSON_ID,
+              PERSON_ID: props.person_id,
               FAMILY_NAME: "",
               MEMBER_ID: 1,
               MEMBER_TYPE: 2,
               MEMBER_LASTNAME: "",
               MEMBER_FIRSTNAME: "",
               MEMBER_BIRTHDATE: dateFormat(new Date(), "yyyy-mm-dd"),
-              MEMBER_BIRTH_OFFICE: "",
-              MEMBER_BIRTH_SUBOFFICE: "",
+              OFFICE_ID: "1",
+              SUB_OFFICE_ID: "1",
               MEMBER_ORG: "",
               MEMBER_POSITION: "",
               IS_ACTIVE: "1",
@@ -1314,15 +1367,15 @@ function GerBul(props) {
   async function addRowFamily() {
     let value = family;
     value.push({
-      PERSON_ID: props.person?.PERSON_ID,
+      PERSON_ID: props.person_id,
       FAMILY_NAME: "",
       MEMBER_TYPE: 1,
       MEMBER_ID: 1,
       MEMBER_LASTNAME: "",
       MEMBER_FIRSTNAME: "",
       MEMBER_BIRTHDATE: dateFormat(new Date(), "yyyy-mm-dd"),
-      MEMBER_BIRTH_OFFICE: "",
-      MEMBER_BIRTH_SUBOFFICE: "",
+      OFFICE_ID: "1",
+      SUB_OFFICE_ID: "1",
       MEMBER_ORG: "",
       MEMBER_POSITION: "",
       IS_ACTIVE: "1",
@@ -1338,15 +1391,15 @@ function GerBul(props) {
   async function addRowFamily2() {
     let value = family2;
     value.push({
-      PERSON_ID: props.person?.PERSON_ID,
+      PERSON_ID: props.person_id,
       FAMILY_NAME: "",
       MEMBER_TYPE: 2,
       MEMBER_ID: 1,
       MEMBER_LASTNAME: "",
       MEMBER_FIRSTNAME: "",
       MEMBER_BIRTHDATE: dateFormat(new Date(), "yyyy-mm-dd"),
-      MEMBER_BIRTH_OFFICE: "",
-      MEMBER_BIRTH_SUBOFFICE: "",
+      OFFICE_ID: "1",
+      SUB_OFFICE_ID: "1",
       MEMBER_ORG: "",
       MEMBER_POSITION: "",
       IS_ACTIVE: "1",
@@ -1363,7 +1416,7 @@ function GerBul(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/familyDelete",
+        url: "http://172.16.24.103:3002/api/v1/familyDelete",
         method: "POST",
         data: {
           family: {
@@ -1395,7 +1448,7 @@ function GerBul(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/familyDelete",
+        url: "http://172.16.24.103:3002/api/v1/familyDelete",
         method: "POST",
         data: {
           family: {
@@ -1435,7 +1488,7 @@ function GerBul(props) {
 
     if (newRow?.length > 0) {
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/family/",
+        url: "http://172.16.24.103:3002/api/v1/family/",
         method: "POST",
         data: { family: newRow },
       })
@@ -1453,7 +1506,7 @@ function GerBul(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/family/",
+        url: "http://172.16.24.103:3002/api/v1/family/",
         method: "PUT",
         data: { family: oldRow },
       })
@@ -1632,43 +1685,20 @@ function GerBul(props) {
                       />
                     </td>
                     <td>
-                      {" "}
-                      <input
-                        placeholder="утгаа оруулна уу"
-                        disabled={edit}
-                        className="anketInput"
-                        style={{ width: "100px" }}
-                        value={value.MEMBER_BIRTH_OFFICE}
-                        onChange={(e) => {
-                          family[index].MEMBER_BIRTH_OFFICE = e.target.value;
-                          family[index].UPDATED_BY = userDetils?.USER_ID;
-                          family[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          setFamily(family);
-                          forceRender();
-                        }}
+                      <Office
+                        personChild={value}
+                        setPersonChild={setFamily}
+                        forceUpdate={forceRender}
+                        edit={edit}
                       />
                     </td>
                     <td>
                       {" "}
-                      <input
-                        placeholder="утгаа оруулна уу"
-                        disabled={edit}
-                        className="anketInput"
-                        style={{ width: "110px" }}
-                        value={value.MEMBER_BIRTH_SUBOFFICE}
-                        onChange={(e) => {
-                          family[index].MEMBER_BIRTH_SUBOFFICE = e.target.value;
-                          family[index].UPDATED_BY = userDetils?.USER_ID;
-                          family[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          setFamily(family);
-                          forceRender();
-                        }}
+                      <Suboffice
+                        personChild={value}
+                        setPersonChild={setFamily}
+                        forceUpdate={forceRender}
+                        edit={edit}
                       />
                     </td>
                     <td>
@@ -1884,43 +1914,19 @@ function GerBul(props) {
                     </td>
                     <td>
                       {" "}
-                      <input
-                        placeholder="утгаа оруулна уу"
-                        disabled={edit}
-                        className="anketInput"
-                        style={{ width: "140px" }}
-                        value={value.MEMBER_BIRTH_OFFICE}
-                        onChange={(e) => {
-                          family2[index].MEMBER_BIRTH_OFFICE = e.target.value;
-                          family2[index].UPDATED_BY = userDetils?.USER_ID;
-                          family2[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          setFamily2(family2);
-                          forceRender();
-                        }}
+                      <Office
+                        personChild={value}
+                        setPersonChild={setFamily2}
+                        forceUpdate={forceRender}
+                        edit={edit}
                       />
                     </td>
                     <td>
-                      {" "}
-                      <input
-                        placeholder="утгаа оруулна уу"
-                        disabled={edit}
-                        className="anketInput"
-                        style={{ width: "140px" }}
-                        value={value.MEMBER_BIRTH_SUBOFFICE}
-                        onChange={(e) => {
-                          family2[index].MEMBER_BIRTH_SUBOFFICE =
-                            e.target.value;
-                          family2[index].UPDATED_BY = userDetils?.USER_ID;
-                          family2[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          setFamily2(family2);
-                          forceRender();
-                        }}
+                      <Office
+                        personChild={value}
+                        setPersonChild={setFamily2}
+                        forceUpdate={forceRender}
+                        edit={edit}
                       />
                     </td>
                     <td>

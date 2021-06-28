@@ -65,7 +65,6 @@ function Login(props) {
           console.log(response, "loginFirst");
           if (response?.data?.USER_ID !== 0) {
             if (sanuulakh) {
-              console.log("orson");
               localStorage.removeItem("rememberedUser");
               localStorage.setItem(
                 "rememberedUser",

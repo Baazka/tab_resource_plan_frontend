@@ -13,7 +13,7 @@ function Mergeshliin(props) {
   const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/profession/" + props.person_id
+      "http://172.16.24.103:3002/api/v1/profession/" + props.person_id
     );
     console.log(listItems, "Tangarag");
     loadData(listItems?.data);
@@ -30,7 +30,7 @@ function Mergeshliin(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/Profession/",
+        url: "http://172.16.24.103:3002/api/v1/Profession/",
         method: "POST",
         data: { profession: newRow },
       })
@@ -48,7 +48,7 @@ function Mergeshliin(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/Profession/",
+        url: "http://172.16.24.103:3002/api/v1/Profession/",
         method: "PUT",
         data: { profession: oldRow },
       })
@@ -73,14 +73,14 @@ function Mergeshliin(props) {
     let value = data.Profession;
     value.push({
       PERSON_ID: props.person_id,
-      PROFESSION_COUNTRY: "mongol",
-      PROFESSION_ORG: "baiguullaga",
-      PROFESSION_NAME: "surgalt ner",
+      PROFESSION_COUNTRY: "",
+      PROFESSION_ORG: "",
+      PROFESSION_NAME: "",
       START_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
       END_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-      DURATION_DAY: 5,
-      PROFESSION_DIRECTION: "chiglel",
-      DIPLOM_NO: "1",
+      DURATION_DAY: "",
+      PROFESSION_DIRECTION: "",
+      DIPLOM_NO: "",
       DIPLOM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
 
       IS_ACTIVE: "1",
@@ -97,14 +97,14 @@ function Mergeshliin(props) {
         Profession: [
           {
             PERSON_ID: props.person_id,
-            PROFESSION_COUNTRY: "mongol",
-            PROFESSION_ORG: "baiguullaga",
-            PROFESSION_NAME: "surgalt ner",
+            PROFESSION_COUNTRY: "",
+            PROFESSION_ORG: "",
+            PROFESSION_NAME: "",
             START_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
             END_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
             DURATION_DAY: 5,
-            PROFESSION_DIRECTION: "chiglel",
-            DIPLOM_NO: "1",
+            PROFESSION_DIRECTION: "",
+            DIPLOM_NO: "",
             DIPLOM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
 
             IS_ACTIVE: "1",
@@ -120,7 +120,7 @@ function Mergeshliin(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/ProfessionDelete",
+        url: "http://172.16.24.103:3002/api/v1/ProfessionDelete",
         method: "POST",
         data: {
           profession: {
@@ -500,7 +500,7 @@ function ZeregTsol(props) {
   const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/Fame/" + props.person_id
+      "http://172.16.24.103:3002/api/v1/Fame/" + props.person_id
     );
     console.log(listItems, "Tangarag");
     loadData(listItems?.data);
@@ -539,7 +539,7 @@ function ZeregTsol(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/fame/",
+        url: "http://172.16.24.103:3002/api/v1/fame/",
         method: "POST",
         data: { fame: newRow },
       })
@@ -557,7 +557,7 @@ function ZeregTsol(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/fame/",
+        url: "http://172.16.24.103:3002/api/v1/fame/",
         method: "PUT",
         data: { fame: oldRow },
       })
@@ -602,7 +602,7 @@ function ZeregTsol(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/FameDelete",
+        url: "http://172.16.24.103:3002/api/v1/FameDelete",
         method: "POST",
         data: {
           fame: {

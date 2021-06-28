@@ -8,6 +8,9 @@ import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import dateFormat from "dateformat";
+import { css } from "@emotion/react";
+import ScaleLoader from "react-spinners/ScaleLoader";
+
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 const axios = require("axios");
 
@@ -58,7 +61,7 @@ const customStyles = {
   },
 };
 
-const Home = (props) => {
+function Home(props) {
   const history = useHistory();
   const [jagsaalt, setJagsaalt] = useState();
   const [data, setData] = useState();
@@ -66,33 +69,57 @@ const Home = (props) => {
   const [searchType, setSearchType] = useState("PERSON_FIRSTNAME");
   const [found, setFound] = useState();
   const alert = useAlert();
+  const [loading, setLoading] = useState(true);
+
+  const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: #2980b9;
+    position: absolute;
+    top: 35%;
+    left: 50%;
+  `;
 
   async function unActive() {
+    setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://10.10.10.46:3002/api/v1/employees/0",
+      url: "http://172.16.24.103:3002/api/v1/employees/0",
       method: "GET",
       data: {},
     });
     setJagsaalt(jagsaalts?.data);
+    setLoading(false);
   }
   async function Active() {
+    setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://10.10.10.46:3002/api/v1/employees/1",
+      url: "http://172.16.24.103:3002/api/v1/employees/1",
       method: "GET",
       data: {},
     });
     setJagsaalt(jagsaalts?.data);
+    setLoading(false);
+  }
+  async function newPeople() {
+    setLoading(true);
+    let jagsaalts = await DataRequest({
+      url: "http://172.16.24.103:3002/api/v1/person/1/",
+      method: "GET",
+      data: {},
+    });
+    setJagsaalt(jagsaalts?.data);
+    setLoading(false);
   }
 
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/employees/1",
+        url: "http://172.16.24.103:3002/api/v1/employees/1",
         method: "GET",
         data: {},
       });
       setJagsaalt(jagsaalts?.data);
-      console.log(jagsaalts);
+      setLoading(false);
     }
     test();
     console.log("jagsaalt", jagsaalt);
@@ -101,29 +128,35 @@ const Home = (props) => {
   const handleChange = (state) => {
     // You can use setState or dispatch with something like Redux so we can use the retrieved data
     console.log("Selected Rows: ", state);
-
-    if (state?.selectedRows != undefined)
-      employDetail(state?.selectedRows[0]?.EMP_PERSON_ID);
+    if (state?.selectedRows != undefined) {
+      localStorage.removeItem("personDetail");
+      localStorage.setItem(
+        "personDetail",
+        JSON.stringify({
+          person_id:
+            state?.selectedRows[0]?.PERSON_ID === undefined
+              ? state?.selectedRows[0]?.EMP_PERSON_ID
+              : state?.selectedRows[0].PERSON_ID,
+          type: "employ",
+        })
+      );
+      setData({ checked: true });
+    } else {
+      setData({ checked: false });
+    }
   };
-  async function employDetail(value) {
-    let employDetail = await DataRequest({
-      url: "http://10.10.10.46:3002/api/v1/person/0/" + value,
-      method: "GET",
-      data: {},
-    });
-    console.log(value, "value======================================>");
-    setData({
-      employDetail: employDetail?.data,
-      person_id: value,
-    });
-  }
 
   async function anketA() {
-    if (data !== undefined) history.push("/web/anketA/1", { data });
+    if (data.checked === true) history.push("/web/anketA/1");
     else alert.show("Албан тушаалтан сонго");
   }
   async function anketANew() {
-    history.push("/web/anketA/1", { data: { person_id: 0 } });
+    localStorage.removeItem("person_id");
+    localStorage.setItem(
+      "personDetail",
+      JSON.stringify({ person_id: "0", type: "newPerson" })
+    );
+    history.push("/web/anketA/1");
   }
 
   function makeSearch(value) {
@@ -228,6 +261,7 @@ const Home = (props) => {
       }}
     >
       <Header title="АЖИЛТНЫ БҮРТГЭЛИЙН ЖАГСААЛТ" />
+
       <div
         style={{
           backgroundColor: "white",
@@ -283,6 +317,24 @@ const Home = (props) => {
             onClick={() => unActive()}
           >
             Идэвхгүй
+          </button>
+          <button
+            className="button is-focused"
+            style={{
+              backgroundColor: "transparent",
+              borderColor: "#418ee6",
+              color: "black",
+              borderStyle: "solid",
+              borderRadius: "5px",
+              width: "12rem",
+              height: "2.1rem",
+              fontFamily: "RalewaySemiBold",
+              fontSize: "1rem",
+              marginLeft: "0.5rem",
+            }}
+            onClick={() => newPeople()}
+          >
+            Шинэ хүн
           </button>
           <div style={{ position: "absolute", right: "3rem" }}>
             <button
@@ -402,12 +454,27 @@ const Home = (props) => {
           fixedHeader={true}
           overflowY={true}
           overflowYOffset={"390px"}
+          paginationComponentOptions={{
+            rowsPerPageText: "Хуудас:",
+            rangeSeparatorText: "of",
+            noRowsPerPage: false,
+            selectAllRowsItem: false,
+            selectAllRowsItemText: "All",
+          }}
+        />
+      </div>
+      <div className="sweet-loading">
+        <ScaleLoader
+          loading={loading}
+          size={30}
+          css={override}
+          color={"#2980b9"}
         />
       </div>
       <Footer />
     </div>
   );
-};
+}
 
 function EmployExcel(props) {
   const [data, loadData] = useState(null);

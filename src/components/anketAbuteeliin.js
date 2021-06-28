@@ -13,7 +13,7 @@ function Buteeliin(props) {
   const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios(
-      "http://10.10.10.46:3002/api/v1/Literature/" + props.person_id
+      "http://172.16.24.103:3002/api/v1/Literature/" + props.person_id
     );
     console.log(listItems, "Tangarag");
     loadData(listItems?.data);
@@ -25,11 +25,11 @@ function Buteeliin(props) {
         Literature: [
           {
             LITERATURE_ID: 1,
-            LITERATURE_NAME: "buteelin ner",
+            LITERATURE_NAME: "",
             LITERATURE_TYPE_ID: 1,
-            LITERATURE_TYPE_NAME: "butelin turul",
+            LITERATURE_TYPE_NAME: "",
             LITERATURE_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            LITERATURE_DESC: "tailbar",
+            LITERATURE_DESC: "",
             PERSON_ID: props.person_id,
             IS_ACTIVE: "1",
             CREATED_BY: userDetils?.USER_ID,
@@ -50,7 +50,7 @@ function Buteeliin(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/literature/",
+        url: "http://172.16.24.103:3002/api/v1/literature/",
         method: "POST",
         data: { literature: newRow },
       })
@@ -68,7 +68,7 @@ function Buteeliin(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/literature/",
+        url: "http://172.16.24.103:3002/api/v1/literature/",
         method: "PUT",
         data: { literature: oldRow },
       })
@@ -93,11 +93,11 @@ function Buteeliin(props) {
     let value = data.Literature;
     value.push({
       LITERATURE_ID: 1,
-      LITERATURE_NAME: "buteelin ner",
+      LITERATURE_NAME: "",
       LITERATURE_TYPE_ID: 1,
-      LITERATURE_TYPE_NAME: "butelin turul",
+      LITERATURE_TYPE_NAME: "",
       LITERATURE_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-      LITERATURE_DESC: "tailbar",
+      LITERATURE_DESC: "",
       PERSON_ID: props.person_id,
       IS_ACTIVE: "1",
       CREATED_BY: userDetils?.USER_ID,
@@ -111,7 +111,7 @@ function Buteeliin(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/literatureDelete",
+        url: "http://172.16.24.103:3002/api/v1/literatureDelete",
         method: "POST",
         data: {
           literature: {
