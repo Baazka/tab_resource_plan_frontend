@@ -21,7 +21,7 @@ import Baiguullaga from "./pages/Baiguullaga";
 import TushaalShiidver from "./pages/TushaalShiidver";
 import Tailan from "./pages/Tailan";
 import AnketAtailan from "./pages/AnketAtailan";
-
+import { HashRouter } from "react-router-dom";
 const axios = require("axios");
 
 function App() {
@@ -37,25 +37,33 @@ function App() {
 
   return (
     <div>
-      <Route path="/" exact>
-        <Login />
-      </Route>
-      <Route path="/web">
-        <SideBar />
-      </Route>
-      <Route path="/web/workerList">
-        <Home />
-      </Route>
-      <Route path="/web/alba">
-        <AlbanTushaal />
-      </Route>
-      <Route path="/web/anketA/:id" component={AnketA} exact />
-      <Route path="/web/dashboard/" component={Dashboard} exact />
-      <Route path="/web/Baiguullaga/" component={Baiguullaga} exact />
-      <Route path="/web/AlbanTushaal/" component={AlbanTushaal} exact />
-      <Route path="/web/TushaalShiidver/" component={TushaalShiidver} exact />
-      <Route path="/web/Tailan/" component={Tailan} exact />
-      <Route path="/web/Tailan/AnketA" component={AnketAtailan} exact />
+      <HashRouter
+        getUserConfirmation={(message, callback) => {
+          // this is the default behavior
+          const allowTransition = window.confirm(message);
+          callback(allowTransition);
+        }}
+      >
+        <Route path="/" exact>
+          <Login />
+        </Route>
+        <Route path="/web">
+          <SideBar />
+        </Route>
+        <Route path="/web/workerList">
+          <Home />
+        </Route>
+        <Route path="/web/alba">
+          <AlbanTushaal />
+        </Route>
+        <Route path="/web/anketA/:id" component={AnketA} exact />
+        <Route path="/web/dashboard/" component={Dashboard} exact />
+        <Route path="/web/Baiguullaga/" component={Baiguullaga} exact />
+        <Route path="/web/AlbanTushaal/" component={AlbanTushaal} exact />
+        <Route path="/web/TushaalShiidver/" component={TushaalShiidver} exact />
+        <Route path="/web/Tailan/" component={Tailan} exact />
+        <Route path="/web/Tailan/AnketA" component={AnketAtailan} exact />
+      </HashRouter>
     </div>
   );
 }
