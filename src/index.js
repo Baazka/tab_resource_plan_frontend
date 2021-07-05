@@ -6,7 +6,12 @@ import reportWebVitals from "./reportWebVitals";
 import "bulma/css/bulma.min.css";
 import SideBar from "./components/sidebar";
 import { BrowserRouter } from "react-router-dom";
-import { transitions, positions, Provider as AlertProvider } from "react-alert";
+import {
+  transitions,
+  positions,
+  Provider as AlertProvider,
+  useLocation,
+} from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
@@ -30,13 +35,18 @@ const options = {
 
 ReactDOM.render(
   <Provider store={store}>
-    <HashRouter>
-      <BrowserRouter>
-        <AlertProvider template={AlertTemplate} {...options}>
-          <App />
-        </AlertProvider>
-      </BrowserRouter>
-    </HashRouter>
+    <BrowserRouter
+      forceRefresh={true}
+      getUserConfirmation={(message, callback) => {
+        // this is the default behavior
+        const allowTransition = window.confirm(message);
+        callback(allowTransition);
+      }}
+    >
+      <AlertProvider template={AlertTemplate} {...options}>
+        <App />
+      </AlertProvider>
+    </BrowserRouter>
   </Provider>,
   document.getElementById("root")
 );
