@@ -194,6 +194,9 @@ module.exports = function (webpackEnv) {
             // changing JS code would still trigger a refresh.
           ]
         : paths.appIndexJs,
+    devServer: {
+      historyApiFallback: true,
+    },
     output: {
       // The build folder.
       path: isEnvProduction ? paths.appBuild : undefined,
@@ -230,11 +233,7 @@ module.exports = function (webpackEnv) {
       // module chunks which are built will work in web workers as well.
       globalObject: "this",
     },
-    devServer: {
-      historyApiFallback: true,
-      contentBase: "./",
-      hot: true,
-    },
+
     optimization: {
       minimize: isEnvProduction,
       minimizer: [
