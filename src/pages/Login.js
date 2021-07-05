@@ -123,12 +123,17 @@ function Login(props) {
       }}
     >
       <div
-        style={{ height: "6%", width: "25%", backgroundColor: "#233772" }}
+        style={{
+          height: "6%",
+          width: "400px",
+          backgroundColor: "#233772",
+          mobile: "",
+        }}
       ></div>
       <div
         style={{
           height: "auto ",
-          width: "25%",
+          width: "400px",
           backgroundColor: "#ececf8",
           display: "flex",
           flexDirection: "column",
@@ -152,7 +157,9 @@ function Login(props) {
             id="UserName"
             placeholder="Нэвтрэх нэр"
             type="text"
-            style={{ width: "300px" }}
+            style={{
+              width: "300px",
+            }}
             value={ner}
             placeholder="Нэвтрэх нэр"
             onChange={(text) => setNer(text.target.value)}
@@ -187,20 +194,20 @@ function Login(props) {
             }}
           >
             <div>
-              {/* appearance-none bg-white rounded-sm outline-none */}
               <input
                 type="checkbox"
                 tabIndex="3"
                 onChange={() => setSanuulakh(!sanuulakh)}
                 value={sanuulakh}
               />
-              {/* <img src="/icon/checked.png" classNameName={"w-3 h-2 " + (sanuulakh ? "hidden z-20" : "block ")}/> */}
               <label style={{ color: "gray" }}>
                 <span>&nbsp;</span>Сануулах
               </label>
             </div>
             <div style={{ paddingLeft: 80, marginBottom: "40px" }}>
-              <a href="">Нууц үг мартсан?</a>
+              <a href="" style={{ color: "gray" }}>
+                Нууц үг мартсан?
+              </a>
             </div>
           </div>
         </div>

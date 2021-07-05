@@ -5,11 +5,11 @@ import React, {
   prevState,
   useRef,
 } from "react";
-import UrChadvar from "./urchadvar";
+import { UrChadvar, TangaragBurtgel, GadaadKhel } from "./urchadvar";
 import Header from "../components/header";
 import { DataRequest } from "../functions/DataApi";
 import Bolowsrol from "../components/anketABolovsrol";
-import Mergeshliin from "./anketAmergejil";
+import { Mergeshliin, ZeregTsol } from "./anketAmergejil";
 import TsergiinAlba from "./anketAtserge";
 import Shagnaliin from "./anketAshagnal";
 import Turshlgin from "./anketAturshlaga";
@@ -49,6 +49,9 @@ import {
 } from "./library";
 import { useAlert } from "react-alert";
 import { useHistory } from "react-router-dom";
+import ScaleLoader from "react-spinners/ScaleLoader";
+import override from "../css/override";
+
 var dateFormat = require("dateformat");
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 const axios = require("axios");
@@ -57,14 +60,59 @@ function AnketNeg(props) {
   const [, forceRender] = useReducer((s) => s + 1, 0);
   const [data, loadData] = useState();
   const [menu, setMenu] = useState(1);
-
+  const [edit, setEdit] = useState(true);
   const refContainer = useRef(null);
   const history = useHistory();
+  const alert = useAlert();
+  const [loading, setLoading] = useState(true);
 
   function saveAvatar(file) {
     const fd = new FormData();
     fd.append("image", file.target.files[0], file.target.files[0].name);
     console.log("zurag===============>", file.target.files[0]);
+  }
+
+  function requiredField(param) {
+    let returnValue = false;
+    if (
+      param?.PERSON_LASTNAME === undefined ||
+      (param?.PERSON_LASTNAME === "" && param?.PERSON_LASTNAME === null)
+    ) {
+      alert.show("овог нэрээ оруулна уу");
+    } else if (
+      (param?.PERSON_FIRSTNAME === undefined,
+      param?.PERSON_FIRSTNAME === "" || param?.PERSON_FIRSTNAME === null)
+    ) {
+      alert.show("нэрээ оруулна уу");
+    } else if (
+      param?.PERSON_REGISTER_NO === undefined ||
+      param?.PERSON_REGISTER_NO === "" ||
+      param?.PERSON_REGISTER_NO === null
+    ) {
+      alert.show("регистерийн дугаар оруулна уу");
+      return false;
+    } else if (
+      param?.PERSON_BORNDATE === undefined ||
+      param?.PERSON_BORNDATE === "" ||
+      param?.PERSON_BORNDATE === null
+    ) {
+      alert.show("төрсөн он сар өдөрөө оруулна уу");
+    } else if (
+      param?.BIRTH_PLACE === undefined ||
+      param?.BIRTH_PLACE === "" ||
+      param?.BIRTH_PLACE === null
+    ) {
+      alert.show("төрсөн газарын мэдээлэл оруулна уу");
+    } else if (
+      param?.BIRTH_PLACE === undefined ||
+      param?.BIRTH_PLACE === "" ||
+      param?.BIRTH_PLACE === null
+    ) {
+      alert.show("төрсөн газарын мэдээлэл оруулна уу");
+    } else {
+      returnValue = true;
+    }
+    return returnValue;
   }
 
   useEffect(async () => {
@@ -83,6 +131,7 @@ function AnketNeg(props) {
           DYNASTY_ID: 1,
           BIRTH_OFFICE_ID: 1,
           BIRTH_SUBOFFICE_ID: 1,
+          SURNAME: "",
           BIRTH_PLACE: "",
           IS_MARRIED: 0,
           IS_ACTIVE: 1,
@@ -90,6 +139,7 @@ function AnketNeg(props) {
           CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
           PERSON_ID: 0,
         });
+        setLoading(false);
       } else {
         if (
           JSON.parse(localStorage.getItem("personDetail")).type === "employ"
@@ -100,6 +150,7 @@ function AnketNeg(props) {
           );
           console.log("amjilttai", listItems.data);
           loadData(listItems?.data);
+          setLoading(false);
         } else if (
           JSON.parse(localStorage.getItem("personDetail")).type === "newPerson"
         ) {
@@ -109,68 +160,74 @@ function AnketNeg(props) {
           );
           console.log("amjilttai", listItems.data);
           loadData(listItems?.data);
+          setLoading(false);
         }
       }
     }
   }, [props]);
 
   function khadgalakhYo() {
-    if (localStorage.getItem("personDetail")?.includes("person_id")) {
-      if (JSON.parse(localStorage.getItem("personDetail")).person_id === "0") {
-        DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/person/",
-          method: "post",
-          data: { person: data },
-        })
-          .then(function (response) {
-            console.log(
-              "UpdateResponseeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-              response.data
-            );
-            //history.push('/sample')
-            if (response?.data.message === "success") {
-              loadData({
-                ...data,
-                PERSON_ID: response?.data?.person_id,
-              });
+    if (requiredField(data) === true) {
+      setLoading(true);
+      if (localStorage.getItem("personDetail")?.includes("person_id")) {
+        if (
+          JSON.parse(localStorage.getItem("personDetail")).person_id === "0"
+        ) {
+          DataRequest({
+            url: "http://hr.audit.mn/hr/api/v1/person/",
+            method: "post",
+            data: { person: data },
+          })
+            .then(function (response) {
+              console.log(response.data);
+              //history.push('/sample')
+              if (response?.data.message === "success") {
+                loadData({
+                  ...data,
+                  PERSON_ID: response?.data?.person_id,
+                });
 
-              localStorage.removeItem("personDetail");
-              localStorage.setItem(
-                "personDetail",
-                JSON.stringify({
-                  person_id: response?.data?.person_id,
-                  type: "newPerson",
-                })
-              );
-              console.log(
-                "rrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr",
-                localStorage.getItem("personDetail")
-              );
-              alert.show("амжилттай хадгаллаа");
-              forceRender();
-            }
+                localStorage.removeItem("personDetail");
+                localStorage.setItem(
+                  "personDetail",
+                  JSON.stringify({
+                    person_id: response?.data?.person_id,
+                    type: "newPerson",
+                  })
+                );
+                alert.show("амжилттай хадгаллаа");
+                setEdit(!edit);
+                setLoading(false);
+                forceRender();
+              } else {
+                setLoading(false);
+                alert.show("амжилтгүй");
+              }
+            })
+            .catch(function (error) {
+              //alert(error.response.data.error.message);
+              console.log(error.response);
+            });
+        } else {
+          DataRequest({
+            url: "http://hr.audit.mn/hr/api/v1/updatePerson/",
+            method: "post",
+            data: { person: data },
           })
-          .catch(function (error) {
-            //alert(error.response.data.error.message);
-            console.log(error.response);
-          });
-      } else {
-        DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/updatePerson/",
-          method: "post",
-          data: { person: data },
-        })
-          .then(function (response) {
-            console.log("UpdateResponse", response);
-            //history.push('/sample')
-            if (response?.data?.message === "success") {
-              alert.show("амжилттай хадгаллаа");
-            }
-          })
-          .catch(function (error) {
-            //alert(error.response.data.error.message);
-            console.log(error.response);
-          });
+            .then(function (response) {
+              console.log("UpdateResponse", response);
+              //history.push('/sample')
+              if (response?.data?.message === "success") {
+                alert.show("амжилттай хадгаллаа");
+                setEdit(!edit);
+                setLoading(false);
+              }
+            })
+            .catch(function (error) {
+              //alert(error.response.data.error.message);
+              console.log(error.response);
+            });
+        }
       }
     }
   }
@@ -469,26 +526,124 @@ function AnketNeg(props) {
             overflow: "scroll",
           }}
         >
-          {menu === 1 ? (
-            <div>
-              <Yrunkhii
-                data={data}
-                loadData={loadData}
-                khadgalakhYo={khadgalakhYo}
-                forceUpdate={forceRender}
-              />
-              <Kayag person_id={data?.PERSON_ID} />
-              <HolbooBarikhHun person={data} person_id={data?.PERSON_ID} />
-              <GerBul person={data} person_id={data?.PERSON_ID} />
-            </div>
-          ) : null}
-          {menu === 2 ? <UrChadvar person_id={data?.PERSON_ID} /> : null}
-          {menu === 3 ? <Bolowsrol person_id={data?.PERSON_ID} /> : null}
-          {menu === 4 ? <Mergeshliin person_id={data?.PERSON_ID} /> : null}
-          {menu === 5 ? <TsergiinAlba person_id={data?.PERSON_ID} /> : null}
-          {menu === 6 ? <Shagnaliin person_id={data?.PERSON_ID} /> : null}
-          {menu === 7 ? <Turshlgin person_id={data?.PERSON_ID} /> : null}
-          {menu === 8 ? <Buteeliin person_id={data?.PERSON_ID} /> : null}
+          <div
+            style={{
+              display: "flex",
+              position: "relative",
+              top: "45%",
+              zIndex: "1",
+            }}
+          >
+            <ScaleLoader
+              loading={loading}
+              size={30}
+              css={override}
+              color={"#2980b9"}
+            />
+          </div>
+          <div
+            style={{
+              filter: `${loading === true ? "blur(8px)" : "blur(0px)"}`,
+              webkitFilter: `${loading === true ? "blur(8px)" : "blur(0px)"}`,
+            }}
+          >
+            {menu === 1 ? (
+              <div>
+                <Yrunkhii
+                  data={data}
+                  loadData={loadData}
+                  khadgalakhYo={khadgalakhYo}
+                  forceUpdate={forceRender}
+                  edit={edit}
+                  setEdit={setEdit}
+                />
+                {localStorage.getItem("personDetail")?.includes("person_id") ? (
+                  JSON.parse(localStorage.getItem("personDetail")).person_id ===
+                  "0" ? null : (
+                    <div>
+                      <Kayag person_id={data?.PERSON_ID} loading={setLoading} />
+                      <HolbooBarikhHun
+                        person={data}
+                        loading={setLoading}
+                        person_id={data?.PERSON_ID}
+                      />
+                      <GerBul
+                        person={data}
+                        person_id={data?.PERSON_ID}
+                        loading={setLoading}
+                      />
+                    </div>
+                  )
+                ) : null}
+              </div>
+            ) : null}
+            {localStorage.getItem("personDetail")?.includes("person_id") ? (
+              JSON.parse(localStorage.getItem("personDetail")).person_id ===
+              "0" ? null : (
+                <div>
+                  {menu === 2 ? (
+                    <div>
+                      <UrChadvar
+                        person_id={data?.PERSON_ID}
+                        loading={setLoading}
+                      />
+                      <TangaragBurtgel
+                        person_id={data?.PERSON_ID}
+                        loading={setLoading}
+                      />
+                      <GadaadKhel
+                        person_id={data?.PERSON_ID}
+                        loading={setLoading}
+                      />
+                    </div>
+                  ) : null}
+                  {menu === 3 ? (
+                    <Bolowsrol
+                      person_id={data?.PERSON_ID}
+                      loading={setLoading}
+                    />
+                  ) : null}
+                  {menu === 4 ? (
+                    <div>
+                      <Mergeshliin
+                        person_id={data?.PERSON_ID}
+                        loading={setLoading}
+                      />
+                      <ZeregTsol
+                        person_id={data?.PERSON_ID}
+                        loading={setLoading}
+                      />
+                    </div>
+                  ) : null}
+                  {menu === 5 ? (
+                    <TsergiinAlba
+                      person_id={data?.PERSON_ID}
+                      loading={setLoading}
+                    />
+                  ) : null}
+                  {menu === 6 ? (
+                    <Shagnaliin
+                      person_id={data?.PERSON_ID}
+                      loading={setLoading}
+                    />
+                  ) : null}
+                  {menu === 7 ? (
+                    <Turshlgin
+                      person_id={data?.PERSON_ID}
+                      loading={setLoading}
+                    />
+                  ) : null}
+                  {menu === 8 ? (
+                    <Buteeliin
+                      person_id={data?.PERSON_ID}
+                      loading={setLoading}
+                    />
+                  ) : null}
+                  )
+                </div>
+              )
+            ) : null}
+          </div>
         </div>
       </div>
     );
@@ -499,11 +654,9 @@ function AnketNeg(props) {
 }
 
 function Yrunkhii(props) {
-  const [edit, setEdit] = useState(true);
   const alert = useAlert();
-  const [, forceRender] = useReducer((s) => s + 1, 0);
   const [data, loadData] = useState();
-  console.log("get0", props);
+
   return (
     <div
       className=" box"
@@ -512,6 +665,7 @@ function Yrunkhii(props) {
         width: "98%",
         height: "auto",
         marginLeft: "10px",
+        zIndex: "-1",
       }}
     >
       <div className="columns ">
@@ -519,7 +673,10 @@ function Yrunkhii(props) {
           <span className="headerTextBold">Ерөнхий мэдээлэл</span>
         </div>
         <div className="column is-1">
-          <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
+          <button
+            className="buttonTsenkher"
+            onClick={() => props.setEdit(!props.edit)}
+          >
             Засварлах
           </button>
         </div>
@@ -532,9 +689,10 @@ function Yrunkhii(props) {
         <div className="column is-3">
           <input
             placeholder="утгаа оруулна уу"
-            disabled={edit}
+            disabled={props.edit}
             className="anketInput"
             value={props.data?.PERSON_LASTNAME}
+            required={true}
             onChange={(text) =>
               props.loadData({
                 ...props.data,
@@ -549,7 +707,7 @@ function Yrunkhii(props) {
         </div>
         <div className="column is-3">
           <select
-            disabled={edit}
+            disabled={props.edit}
             className="anketInput"
             value={props.data?.PERSON_GENDER}
             onChange={(text) =>
@@ -572,7 +730,7 @@ function Yrunkhii(props) {
         <div className="column is-3">
           <input
             placeholder="утгаа оруулна уу"
-            disabled={edit}
+            disabled={props.edit}
             className="anketInput"
             value={props.data?.PERSON_FIRSTNAME}
             onChange={(text) =>
@@ -589,26 +747,18 @@ function Yrunkhii(props) {
         </div>
         <div className="column is-3">
           <input
-            placeholder="утгаа оруулна уу"
-            className=""
             type="date"
-            id="start"
-            disabled={edit}
+            disabled={props.edit}
             className="anketInput"
             value={dateFormat(
               new Date(props.data?.PERSON_BORNDATE),
               "yyyy-mm-dd"
             )}
-            min="1930-01-01"
-            max="2021-12-31"
             onChange={(e) => {
               props.loadData({
                 ...props.data,
                 ...{
-                  PERSON_BORNDATE: dateFormat(
-                    e.target.value === undefined ? new Date() : e.target.value,
-                    "dd-mmm-yy"
-                  ),
+                  PERSON_BORNDATE: e.target.value,
                 },
               });
             }}
@@ -623,7 +773,7 @@ function Yrunkhii(props) {
         <div className="column is-3">
           <input
             placeholder="утгаа оруулна уу"
-            disabled={edit}
+            disabled={props.edit}
             className="anketInput"
             value={props.data?.PERSON_REGISTER_NO}
             onChange={(text) =>
@@ -642,22 +792,21 @@ function Yrunkhii(props) {
           <Office
             personChild={props.data}
             setPersonChild={props.loadData}
-            forceUpdat
-            te={props.forceUpdate}
-            edit={edit}
+            forceUpdate={props.forceUpdate}
+            edit={props.edit}
           />
         </div>
       </div>
       <div className="columns " style={{ marginBottom: "0px" }}>
         <div className="column is-3 has-text-right">
           <span style={{ color: "red" }}>*</span>
-          <span className="textSaaral">Ирэгншил</span>
+          <span className="textSaaral">Иргэншил</span>
         </div>
         <div className="column is-3">
           <National
             personChild={props.data}
             setPersonChild={props.loadData}
-            edit={edit}
+            edit={props.edit}
           />
         </div>
         <div className="column is-3 has-text-right">
@@ -668,7 +817,8 @@ function Yrunkhii(props) {
           <Suboffice
             personChild={props.data}
             setPersonChild={props.loadData}
-            edit={edit}
+            forceUpdate={props.forceUpdate}
+            edit={props.edit}
           />
         </div>
       </div>
@@ -681,7 +831,7 @@ function Yrunkhii(props) {
           <Subnational
             personChild={props.data}
             setPersonChild={props.loadData}
-            edit={edit}
+            edit={props.edit}
           />
         </div>
         <div className="column is-3 has-text-right">
@@ -690,7 +840,7 @@ function Yrunkhii(props) {
         </div>
         <div className="column is-3">
           <input
-            disabled={edit}
+            disabled={props.edit}
             placeholder="утгаа оруулна уу"
             className="anketInput"
             value={props.data?.BIRTH_PLACE}
@@ -712,7 +862,7 @@ function Yrunkhii(props) {
           <Dynasty
             personChild={props.data}
             setPersonChild={props.loadData}
-            edit={edit}
+            edit={props.edit}
           />
         </div>
         <div className="column is-3 has-text-right">
@@ -721,13 +871,13 @@ function Yrunkhii(props) {
         </div>
         <div className="column is-3">
           <select
-            disabled={edit}
+            disabled={props.edit}
             className="anketInput"
             name="cars"
             id="cars"
-            value={props.data?.IS_MARRIED === null ? 1 : props.data?.IS_MARRIED}
+            value={props.data?.IS_MARRIED}
             onChange={(text) =>
-              loadData({
+              props.loadData({
                 ...props.data,
                 ...{ IS_MARRIED: text.target.value },
               })
@@ -742,7 +892,7 @@ function Yrunkhii(props) {
       <div className="columns">
         <div className="column is-11"></div>
 
-        {!edit ? (
+        {!props.edit ? (
           <div className="column is-1 ">
             {/* <button
               className="buttonTsenkher"
@@ -786,24 +936,71 @@ function Kayag(props) {
       }
     }
   }, [props]);
-
+  function setOfficeID(value) {
+    setPerson({
+      ...person,
+      ...{ CARD_OFFICE_ID: value?.OFFICE_ID },
+    });
+  }
+  function setSubOfficeID(value) {
+    setPerson({
+      ...person,
+      ...{ CARD_SUB_OFFICE_ID: value?.SUB_OFFICE_ID },
+    });
+  }
+  function setOfficeIDHome(value) {
+    setPerson({
+      ...person,
+      ...{ HOME_OFFICE_ID: value?.OFFICE_ID },
+    });
+  }
+  function setSubOfficeIDHome(value) {
+    setPerson({
+      ...person,
+      ...{ HOME_SUB_OFFICE_ID: value?.SUB_OFFICE_ID },
+    });
+  }
+  function requiredField() {
+    let returnValue = false;
+    if (person.PERSON_PHONE === null || person.PERSON_PHONE === "") {
+      alert.show("утасны дугаараа оруулан уу");
+    } else if (person.PERSON_EMAIL === null || person.PERSON_EMAIL === "") {
+      alert.show("имэйлээ оруулан уу");
+    } else {
+      returnValue = true;
+    }
+    return returnValue;
+  }
   function khadgalakhYo() {
-    console.log("PersonKhadgal", person);
-    DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/updatePersonAddress/",
-      method: "post",
-      data: { person: person },
-    })
-      .then(function (response) {
-        console.log("UpdateResponse", response);
-        //history.push('/sample')
-        if (response?.data?.message === "success")
-          alert.show("амжилттай хадгаллаа");
+    props.loading(true);
+    if (requiredField() === true) {
+      console.log("test", person);
+      DataRequest({
+        url: "http://hr.audit.mn/hr/api/v1/updatePersonAddress/",
+        method: "post",
+        data: { person: person },
       })
-      .catch(function (error) {
-        //alert(error.response.data.error.message);
-        console.log(error.response);
-      });
+        .then(function (response) {
+          console.log("UpdateResponse", response);
+          //history.push('/sample')
+          if (response?.data?.message === "success") {
+            alert.show("амжилттай хадгаллаа");
+            setEdit(!edit);
+            props.loading(false);
+          } else {
+            props.loading(false);
+            setEdit(!edit);
+          }
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+          props.loading(false);
+          setEdit(!edit);
+        });
+    } else {
+      props.loading(false);
+    }
   }
   return (
     <div
@@ -841,10 +1038,10 @@ function Kayag(props) {
                   <span className="textSaaral">Оршин суугаа хаягийн төрөл</span>
                 </td>
                 <td style={{ width: "250px" }}>
-                  <span className="textSaaral">Оршин суугаа,аймаг,хот</span>
+                  <span className="textSaaral">Оршин суугаа аймаг,хот</span>
                 </td>
                 <td>
-                  <span className="textSaaral">Оршин суугаа, аймаг, хот</span>
+                  <span className="textSaaral">Оршин суугаа сум ,дүүрэг</span>
                 </td>
                 <td style={{ width: "360px" }}>
                   <span className="textSaaral">Дэлгэрэнгүй хаяг</span>
@@ -860,10 +1057,23 @@ function Kayag(props) {
                   <span className="textSaaral">Иргэний үнэмлэхний хаяг</span>
                 </td>
                 <td>
-                  <span className="textSaaral"></span>
+                  <Office
+                    personChild={{ OFFICE_ID: person?.CARD_OFFICE_ID }}
+                    setPersonChild={setOfficeID}
+                    fullWidth={true}
+                    edit={edit}
+                  />
                 </td>
                 <td>
-                  <span className="textSaaral"></span>
+                  <Suboffice
+                    personChild={{
+                      SUB_OFFICE_ID: person?.CARD_SUB_OFFICE_ID,
+                      OFFICE_ID: person?.CARD_OFFICE_ID,
+                    }}
+                    setPersonChild={setSubOfficeID}
+                    fullWidth={true}
+                    edit={edit}
+                  />
                 </td>
                 <td>
                   <input
@@ -888,10 +1098,26 @@ function Kayag(props) {
                   <span className="textSaaral">Оршин суулгаа хаяг</span>
                 </td>
                 <td>
-                  <span className="textSaaral"></span>
+                  <span className="textSaaral">
+                    {" "}
+                    <Office
+                      personChild={{ OFFICE_ID: person?.HOME_OFFICE_ID }}
+                      setPersonChild={setOfficeIDHome}
+                      fullWidth={true}
+                      edit={edit}
+                    />
+                  </span>
                 </td>
                 <td>
-                  <span className="textSaaral"></span>
+                  <Suboffice
+                    personChild={{
+                      SUB_OFFICE_ID: person?.HOME_SUB_OFFICE_ID,
+                      OFFICE_ID: person?.HOME_OFFICE_ID,
+                    }}
+                    setPersonChild={setSubOfficeIDHome}
+                    fullWidth={true}
+                    edit={edit}
+                  />
                 </td>
                 <td>
                   <input
@@ -938,7 +1164,7 @@ function Kayag(props) {
                 })
               }
             />
-            <em className="mail ml-1 m-3">И-мэйл хаяг</em>
+            <em className="mail ml-1 m-3">И-мэйл хаяг:</em>
             <input
               className="anketInput"
               placeholder="утгаа оруулна уу"
@@ -1064,8 +1290,10 @@ function HolbooBarikhHun(props) {
         .then(function (response) {
           console.log("UpdateResponse", response);
           //history.push('/sample')
-          if (response?.data?.message === "success")
+          if (response?.data?.message === "success") {
             alert.show("амжилттай устлаа");
+            setEdit(!edit);
+          }
         })
         .catch(function (error) {
           //alert(error.response.data.error.message);
@@ -1076,49 +1304,103 @@ function HolbooBarikhHun(props) {
     setEmergency(emergency.filter((element, index) => index !== indexParam)); //splice(indexParam, 0)
     forceRender();
   }
-  function khadgalakhYo() {
-    let newRow = emergency.filter((value) => value.ROWTYPE === "NEW");
-    let oldRow = emergency.filter(
-      (value) =>
-        value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
-    );
-    let message = 0;
-
-    if (newRow?.length > 0) {
-      console.log("insert", JSON.stringify(newRow));
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/emergency/",
-        method: "POST",
-        data: { emergency: newRow },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 1;
-          if (message !== 2) alert.show("амжилттай хадгаллаа");
-          //history.push('/sample')
-        })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
+  function requiredField() {
+    // emergency.forEach((a, index) => {
+    for (let i = 0; i < emergency.length; i++) {
+      if (
+        emergency[i].EMERGENCY_LASTNAME === null ||
+        emergency[i].EMERGENCY_LASTNAME === ""
+      ) {
+        alert.show("Овогоо оруулан уу");
+        return false;
+      } else if (
+        emergency[i].EMERGENCY_FIRSTNAME === null ||
+        emergency[i].EMERGENCY_FIRSTNAME === ""
+      ) {
+        alert.show("нэрээ оруулан уу");
+        return false;
+      } else if (
+        emergency[i].EMERGENCY_PHONE === null ||
+        emergency[i].EMERGENCY_PHONE === ""
+      ) {
+        alert.show("утасны дугаар оруулан уу");
+        return false;
+      } else if (i === emergency.length - 1) {
+        return true;
+      }
     }
-    if (oldRow?.length > 0) {
-      console.log("update", JSON.stringify(oldRow));
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/emergency/",
-        method: "PUT",
-        data: { emergency: oldRow },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 2;
-          //history.push('/sample')
-          if (message !== 1) alert.show("амжилттай хадгаллаа");
+  }
+
+  async function khadgalakhYo() {
+    props.loading(true);
+
+    if (requiredField() === true) {
+      let newRow = emergency.filter((value) => value.ROWTYPE === "NEW");
+      let oldRow = emergency.filter(
+        (value) =>
+          value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
+      );
+      let message = 0;
+
+      if (newRow?.length > 0) {
+        console.log("insert", JSON.stringify(newRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/emergency/",
+          method: "POST",
+          data: { emergency: newRow },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 1;
+              if (message !== 2) alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+            //history.push('/sample')
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      }
+      if (oldRow?.length > 0) {
+        console.log("update", JSON.stringify(oldRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/emergency/",
+          method: "PUT",
+          data: { emergency: oldRow },
+        })
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") message = 2;
+            //history.push('/sample')
+            if (message !== 1) {
+              alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      }
+    } else {
+      props.loading(false);
     }
   }
 
@@ -1305,7 +1587,6 @@ function GerBul(props) {
   const [family2, setFamily2] = useState([]);
 
   useEffect(async () => {
-    console.log("testewwwwwwwwwwwwwwwwew", props);
     let listItems = await axios(
       "http://hr.audit.mn/hr/api/v1/family/" + props.person_id
     );
@@ -1313,6 +1594,34 @@ function GerBul(props) {
     loadData(listItems?.data.Family);
   }, [props]);
 
+  function requiredField(value) {
+    for (let i = 0; i < value.length; i++) {
+      if (
+        value[i].MEMBER_LASTNAME === null ||
+        value[i].MEMBER_LASTNAME === ""
+      ) {
+        alert.show("Овогоо оруулан уу");
+        return false;
+      } else if (
+        value[i].MEMBER_FIRSTNAME === null ||
+        value[i].MEMBER_FIRSTNAME === ""
+      ) {
+        alert.show("Нэр оруулан уу");
+        return false;
+      } else if (value[i].MEMBER_ORG === null || value[i].MEMBER_ORG === "") {
+        alert.show("Байгуулагын Нэр оруулан уу");
+        return false;
+      } else if (
+        value[i].MEMBER_POSITION === null ||
+        value[i].MEMBER_POSITION === ""
+      ) {
+        alert.show("Албан тушаал оруулан уу");
+        return false;
+      } else if (i === value.length - 1) {
+        return true;
+      }
+    }
+  }
   useEffect(() => {
     setFamily(
       data.length === 0
@@ -1432,8 +1741,10 @@ function GerBul(props) {
         .then(function (response) {
           console.log("UpdateResponse", response);
           //history.push('/sample')
-          if (response?.data?.message === "success")
+          if (response?.data?.message === "success") {
             alert.show("амжилттай устлаа");
+            setEdit(!edit);
+          }
         })
         .catch(function (error) {
           //alert(error.response.data.error.message);
@@ -1464,8 +1775,10 @@ function GerBul(props) {
         .then(function (response) {
           console.log("UpdateResponse", response);
           //history.push('/sample')
-          if (response?.data?.message === "success")
+          if (response?.data?.message === "success") {
             alert.show("амжилттай устлаа");
+            setEdit(!edit);
+          }
         })
         .catch(function (error) {
           //alert(error.response.data.error.message);
@@ -1478,49 +1791,108 @@ function GerBul(props) {
   }
   function khadgalakhYo() {
     let combine = family.concat(family2);
-    console.log("combine", combine);
-    let newRow = combine.filter((value) => value.ROWTYPE === "NEW");
-    let oldRow = combine.filter(
-      (value) =>
-        value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
-    );
-    let message = 0;
+    props.loading(true);
+    if (requiredField(combine) === true) {
+      console.log("combine", combine);
+      let newRow = combine.filter((value) => value.ROWTYPE === "NEW");
+      let oldRow = combine.filter(
+        (value) =>
+          value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
+      );
+      let message = 0;
 
-    if (newRow?.length > 0) {
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/family/",
-        method: "POST",
-        data: { family: newRow },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 1;
-          if (message !== 2) alert.show("амжилттай хадгаллаа");
-          //history.push('/sample')
+      if (newRow?.length > 0) {
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/family/",
+          method: "POST",
+          data: { family: newRow },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
-    }
-    if (oldRow?.length > 0) {
-      console.log("update", JSON.stringify(oldRow));
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/family/",
-        method: "PUT",
-        data: { family: oldRow },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 2;
-          //history.push('/sample')
-          if (message !== 1) alert.show("амжилттай хадгаллаа");
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 1;
+              if (message !== 2) alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+            //history.push('/sample')
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      }
+      if (oldRow?.length > 0) {
+        console.log("update", JSON.stringify(oldRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/family/",
+          method: "PUT",
+          data: { family: oldRow },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 2;
+              //history.push('/sample')
+              if (message !== 1) alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      }
+    } else {
+      props.loading(false);
     }
+  }
+  function setOffice(value) {
+    console.log("officeID", value);
+    family[value.index].OFFICE_ID = value.OFFICE_ID;
+    family[value.index].UPDATED_BY = userDetils?.USER_ID;
+    family[value.index].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
+    setFamily(family);
+    forceRender();
+  }
+  function setSubOffice(value) {
+    console.log("officeID", value);
+    family[value.index].SUB_OFFICE_ID = value.SUB_OFFICE_ID;
+    family[value.index].UPDATED_BY = userDetils?.USER_ID;
+    family[value.index].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
+    setFamily(family);
+    forceRender();
+  }
+
+  function setOffice2(value) {
+    console.log("family2", value);
+    family2[value.index].OFFICE_ID = value.OFFICE_ID;
+    family2[value.index].UPDATED_BY = userDetils?.USER_ID;
+    family2[value.index].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
+    setFamily2(family2);
+    forceRender();
+  }
+  function setSubOffice2(value) {
+    family2[value.index].SUB_OFFICE_ID = value.SUB_OFFICE_ID;
+    family2[value.index].UPDATED_BY = userDetils?.USER_ID;
+    family2[value.index].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
+    setFamily2(family2);
+    forceRender();
   }
 
   return (
@@ -1659,7 +2031,6 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         type="date"
-                        id="start"
                         style={{ width: "120px" }}
                         disabled={edit}
                         className="anketInput"
@@ -1667,13 +2038,8 @@ function GerBul(props) {
                           new Date(value.MEMBER_BIRTHDATE),
                           "yyyy-mm-dd"
                         )}
-                        min="1930-01-01"
-                        max="2021-12-31"
                         onChange={(e) => {
-                          family[index].MEMBER_BIRTHDATE = dateFormat(
-                            e.target.value,
-                            "dd-mmm-yy"
-                          );
+                          family[index].MEMBER_BIRTHDATE = e.target.value;
                           family[index].UPDATED_BY = userDetils?.USER_ID;
                           family[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -1687,7 +2053,8 @@ function GerBul(props) {
                     <td>
                       <Office
                         personChild={value}
-                        setPersonChild={setFamily}
+                        setPersonChild={setOffice}
+                        index={index}
                         forceUpdate={forceRender}
                         edit={edit}
                       />
@@ -1696,7 +2063,8 @@ function GerBul(props) {
                       {" "}
                       <Suboffice
                         personChild={value}
-                        setPersonChild={setFamily}
+                        setPersonChild={setSubOffice}
+                        index={index}
                         forceUpdate={forceRender}
                         edit={edit}
                       />
@@ -1850,7 +2218,6 @@ function GerBul(props) {
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="anketInput"
-                        style={{ width: "100px" }}
                         value={value.MEMBER_LASTNAME}
                         onChange={(e) => {
                           family2[index].MEMBER_LASTNAME = e.target.value;
@@ -1887,7 +2254,6 @@ function GerBul(props) {
                       {" "}
                       <input
                         type="date"
-                        id="start"
                         style={{ width: "120px" }}
                         disabled={edit}
                         className="anketInput"
@@ -1895,13 +2261,8 @@ function GerBul(props) {
                           new Date(value.MEMBER_BIRTHDATE),
                           "yyyy-mm-dd"
                         )}
-                        min="1930-01-01"
-                        max="2021-12-31"
                         onChange={(e) => {
-                          family2[index].MEMBER_BIRTHDATE = dateFormat(
-                            e.target.value,
-                            "dd-mmm-yy"
-                          );
+                          family2[index].MEMBER_BIRTHDATE = e.target.value;
                           family2[index].UPDATED_BY = userDetils?.USER_ID;
                           family2[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -1916,15 +2277,17 @@ function GerBul(props) {
                       {" "}
                       <Office
                         personChild={value}
-                        setPersonChild={setFamily2}
+                        setPersonChild={setOffice2}
+                        index={index}
                         forceUpdate={forceRender}
                         edit={edit}
                       />
                     </td>
                     <td>
-                      <Office
+                      <Suboffice
                         personChild={value}
-                        setPersonChild={setFamily2}
+                        setPersonChild={setSubOffice2}
+                        index={index}
                         forceUpdate={forceRender}
                         edit={edit}
                       />
@@ -1934,7 +2297,6 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
-                        style={{ width: "110px" }}
                         className="anketInput"
                         value={value.MEMBER_ORG}
                         onChange={(e) => {

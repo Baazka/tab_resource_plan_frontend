@@ -3,6 +3,8 @@ import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 import { Edutype } from "./library";
 import { Add, Delete } from "../assets/images/zurag";
+import { Office, Suboffice } from "./library";
+
 const axios = require("axios");
 var dateFormat = require("dateformat");
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
@@ -24,8 +26,8 @@ function Turshlgin(props) {
       loadData({
         Experience: [
           {
-            EXPERIENCE_OFFICE: "",
-            EXPERIENCE_SUBOFFICE: "",
+            OFFICE_ID: "",
+            SUB_OFFICE_ID: "",
             EXPERIENCE_DEPARTMENT: "",
             EXPERIENCE_ORG: "",
             EXPERIENCE_POSITION: "",
@@ -44,48 +46,75 @@ function Turshlgin(props) {
       });
   }, [data]);
   function saveToDB() {
-    let newRow = data?.Experience?.filter((value) => value.ROWTYPE === "NEW");
-    let oldRow = data?.Experience?.filter(
-      (value) =>
-        value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
-    );
-    let message = 0;
+    props.loading(true);
+    if (requiredField(data) === true) {
+      let newRow = data?.Experience?.filter((value) => value.ROWTYPE === "NEW");
+      let oldRow = data?.Experience?.filter(
+        (value) =>
+          value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
+      );
+      let message = 0;
 
-    if (newRow?.length > 0) {
-      console.log("insert", JSON.stringify(newRow));
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/experience/",
-        method: "POST",
-        data: { experience: newRow },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 1;
-          if (message !== 2) alert.show("амжилттай хадгаллаа");
-          //history.push('/sample')
+      if (newRow?.length > 0) {
+        console.log("insert", JSON.stringify(newRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/experience/",
+          method: "POST",
+          data: { experience: newRow },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
-    }
-    if (oldRow?.length > 0) {
-      console.log("update", JSON.stringify(oldRow));
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/experience/",
-        method: "PUT",
-        data: { experience: oldRow },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 2;
-          //history.push('/sample')
-          if (message !== 1) alert.show("амжилттай хадгаллаа");
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 1;
+              if (message !== 2) alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+            //history.push('/sample')
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      }
+      if (oldRow?.length > 0) {
+        console.log("update", JSON.stringify(oldRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/experience/",
+          method: "PUT",
+          data: { experience: oldRow },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 2;
+              //history.push('/sample')
+              if (message !== 1) alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      }
+    } else {
+      props.loading(false);
     }
   }
   function setExperience(value) {
@@ -93,11 +122,42 @@ function Turshlgin(props) {
     arr[value.index] = value;
     loadData({ Experience: arr });
   }
+  function requiredField() {
+    for (let i = 0; i < data.Experience.length; i++) {
+      if (
+        data.Experience[i].EXPERIENCE_DEPARTMENT === null ||
+        data.Experience[i].EXPERIENCE_DEPARTMENT === ""
+      ) {
+        alert.show("Газар хэлтэс, алба оруулан уу");
+        return false;
+      } else if (
+        data.Experience[i].EXPERIENCE_ORG === null ||
+        data.Experience[i].EXPERIENCE_ORG === ""
+      ) {
+        alert.show("Ажилласан Байгуулагын Нэр оруулан уу");
+        return false;
+      } else if (
+        data.Experience[i].EXPERIENCE_POSITION === null ||
+        data.Experience[i].EXPERIENCE_POSITION === ""
+      ) {
+        alert.show("Эрхэлсэн албан тушаал оруулан уу");
+        return false;
+      } else if (
+        data.Experience[i].EXPERIENCE_POSITION_TYPE === null ||
+        data.Experience[i].EXPERIENCE_POSITION_TYPE === ""
+      ) {
+        alert.show("Албан тушаалын төрөл оруулан уу");
+        return false;
+      } else if (i === data.Experience.length - 1) {
+        return true;
+      }
+    }
+  }
   async function addRow() {
     let value = data.Experience;
     value.push({
-      EXPERIENCE_OFFICE: "",
-      EXPERIENCE_SUBOFFICE: "",
+      OFFICE_ID: "",
+      SUB_OFFICE_ID: "",
       EXPERIENCE_DEPARTMENT: "",
       EXPERIENCE_ORG: "",
       EXPERIENCE_POSITION: "",
@@ -151,6 +211,20 @@ function Turshlgin(props) {
         (element, index) => index !== indexParam
       ),
     }); //splice(indexParam, 0)
+  }
+  function setOfficeId(value) {
+    let temp = [...data?.Experience];
+    temp[value.index].OFFICE_ID = value.OFFICE_ID;
+    temp[value.index].UPDATED_BY = userDetils?.USER_ID;
+    temp[value.index].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
+    loadData({ Experience: temp });
+  }
+  function setSubOfficeId(value) {
+    let temp = [...data?.Experience];
+    temp[value.index].SUB_OFFICE_ID = value.SUB_OFFICE_ID;
+    temp[value.index].UPDATED_BY = userDetils?.USER_ID;
+    temp[value.index].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
+    loadData({ Experience: temp });
   }
 
   let listItems;
@@ -241,9 +315,9 @@ function Turshlgin(props) {
                       style={{
                         border: "none",
                         paddingLeft: "0px",
-                        width: "100px",
                       }}
                     >
+                      <span style={{ visibility: "hidden" }}>testeee</span>
                       <img
                         src={Add}
                         width="30px"
@@ -261,43 +335,26 @@ function Turshlgin(props) {
                       <span className="textSaaral">{index + 1}</span>
                     </td>
                     <td>
-                      <input
-                        disabled={edit}
-                        className="Borderless"
-                        style={{ width: "100px" }}
-                        value={data.Experience[index]?.EXPERIENCE_OFFICE}
-                        onChange={(text) => {
-                          let value = [...data?.Experience];
-                          value[index].EXPERIENCE_OFFICE = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ Experience: value });
-                        }}
+                      <Office
+                        personChild={data.Experience[index]}
+                        setPersonChild={setOfficeId}
+                        fullWidth={true}
+                        index={index}
+                        edit={edit}
+                      />
+                    </td>
+                    <td>
+                      <Suboffice
+                        personChild={data.Experience[index]}
+                        setPersonChild={setSubOfficeId}
+                        fullWidth={true}
+                        index={index}
+                        edit={edit}
                       />
                     </td>
                     <td>
                       <input
-                        disabled={edit}
-                        className="Borderless"
-                        style={{ width: "100px" }}
-                        value={data.Experience[index]?.EXPERIENCE_SUBOFFICE}
-                        onChange={(text) => {
-                          let value = [...data?.Experience];
-                          value[index].EXPERIENCE_SUBOFFICE = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ Experience: value });
-                        }}
-                      />
-                    </td>
-                    <td>
-                      <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="Borderless"
                         style={{ width: "100px" }}
@@ -317,6 +374,7 @@ function Turshlgin(props) {
                     </td>
                     <td>
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="Borderless"
                         style={{ width: "100px" }}
@@ -335,6 +393,7 @@ function Turshlgin(props) {
                     </td>
                     <td>
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="Borderless"
                         style={{ width: "100px" }}
@@ -354,6 +413,7 @@ function Turshlgin(props) {
 
                     <td>
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="Borderless"
                         style={{ width: "100px" }}
@@ -374,7 +434,6 @@ function Turshlgin(props) {
                     <td>
                       <input
                         type="date"
-                        id="start"
                         disabled={edit}
                         className="Borderless"
                         style={{ width: "118px" }}
@@ -382,14 +441,9 @@ function Turshlgin(props) {
                           new Date(data.Experience[index].ENTERED_DATE),
                           "yyyy-mm-dd"
                         )}
-                        min="1930-01-01"
-                        max="2021-12-31"
                         onChange={(e) => {
                           let value = [...data?.Experience];
-                          value[index].ENTERED_DATE = dateFormat(
-                            e.target.value,
-                            "dd-mmm-yy"
-                          );
+                          value[index].ENTERED_DATE = e.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -401,6 +455,7 @@ function Turshlgin(props) {
                     </td>
                     <td>
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="Borderless"
                         style={{ width: "100px" }}
@@ -420,7 +475,6 @@ function Turshlgin(props) {
                     <td>
                       <input
                         type="date"
-                        id="start"
                         disabled={edit}
                         className="Borderless"
                         style={{ width: "118px" }}
@@ -428,14 +482,9 @@ function Turshlgin(props) {
                           new Date(data.Experience[index].EXPIRED_DATE),
                           "yyyy-mm-dd"
                         )}
-                        min="1930-01-01"
-                        max="2021-12-31"
                         onChange={(e) => {
                           let value = [...data?.Experience];
-                          value[index].EXPIRED_DATE = dateFormat(
-                            e.target.value,
-                            "dd-mmm-yy"
-                          );
+                          value[index].EXPIRED_DATE = e.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -447,6 +496,7 @@ function Turshlgin(props) {
                     </td>
                     <td>
                       <input
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="Borderless"
                         style={{ width: "100px" }}
@@ -468,7 +518,6 @@ function Turshlgin(props) {
                         style={{
                           paddingLeft: "0px",
                           borderColor: "transparent",
-                          width: "70px",
                         }}
                       >
                         <img

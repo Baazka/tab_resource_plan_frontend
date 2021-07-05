@@ -16,9 +16,16 @@ function TsergiinAlba(props) {
     let listItems = await axios(
       "http://hr.audit.mn/hr/api/v1/force/" + props.person_id
     );
-    console.log(listItems, "force");
-    loadData(listItems?.data);
+
+    if (
+      listItems?.data?.Force !== undefined &&
+      listItems?.data.Force.length > 0
+    ) {
+      loadData(listItems?.data);
+      setEdit(!edit);
+    }
   }, [props]);
+
   useEffect(() => {
     if (data?.Force === undefined || data.Force.length === 0) {
       loadData({
@@ -39,73 +46,80 @@ function TsergiinAlba(props) {
       });
     }
   }, [data]);
-  function removeRow(indexParam, value) {
-    console.log(indexParam, "index");
-    if (value?.ROWTYPE !== "NEW") {
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/forceDelete",
-        method: "POST",
-        data: {
-          award: {
-            ...value,
-            ...{
-              IS_ACTIVE: 1,
-              UPDATED_BY: userDetils?.USER_ID,
-              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-            },
-          },
-        },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          //history.push('/sample')
-          if (response?.data?.message === "success")
-            alert.show("амжилттай устлаа");
-        })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-          alert.show("aldaa");
-        });
+
+  function requiredField() {
+    let returnValue = false;
+    if (data?.Force[0].FORCE_NO === null || data?.Force[0].FORCE_NO === "") {
+      alert.show("Цэргийн үүрэгтний үнэмлэхийн дугаар");
+    } else if (
+      data?.Force[0].FORCE_LOCATION === null ||
+      data?.Force[0].FORCE_LOCATION === ""
+    ) {
+      alert.show("Хаана талбарыг оруулан уу");
+    } else {
+      returnValue = true;
     }
-    loadData({
-      Award: data?.Award.filter((element, index) => index !== indexParam),
-    }); //splice(indexParam, 0)
+    return returnValue;
   }
 
   function saveToDB() {
-    if (data.Force[0].ROWTYPE === "NEW") {
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/force/",
-        method: "POST",
-        data: { force: data.Force[0] },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success");
-          alert.show("амжилттай хадгаллаа");
-          //history.push('/sample')
+    props.loading(true);
+    if (requiredField(data) === true) {
+      if (data.Force[0].ROWTYPE === "NEW") {
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/force/",
+          method: "POST",
+          data: { force: data.Force[0] },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+            //history.push('/sample')
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      } else {
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/force/",
+          method: "PUT",
+          data: { force: data.Force[0] },
+        })
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+            //history.push('/sample')
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      }
     } else {
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/force/",
-        method: "PUT",
-        data: { force: data.Force[0] },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success");
-          alert.show("амжилттай хадгаллаа");
-          //history.push('/sample')
-        })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
+      props.loading(false);
     }
   }
 
@@ -152,6 +166,7 @@ function TsergiinAlba(props) {
               <div className="column ml-1">
                 {" "}
                 <input
+                  placeholder="утгаа оруулна уу"
                   disabled={edit}
                   className="Borderless"
                   value={data.Force[0]?.FORCE_NO}
@@ -173,6 +188,7 @@ function TsergiinAlba(props) {
                 <select
                   disabled={edit}
                   className="Borderless"
+                  style={{ width: "100px" }}
                   value={data?.Force[0].FORCE_TYPE_ID}
                   onChange={(text) => {
                     let value = [...data?.Force];
@@ -192,6 +208,7 @@ function TsergiinAlba(props) {
               <div className="column ml-1">
                 {" "}
                 <input
+                  placeholder="утгаа оруулна уу"
                   disabled={edit}
                   className="Borderless"
                   value={data.Force[0]?.FORCE_LOCATION}
@@ -209,6 +226,7 @@ function TsergiinAlba(props) {
               <div className="column is-6 has-text-right">Тайлбар</div>
               <div className="column ml-1">
                 <input
+                  placeholder="утгаа оруулна уу"
                   disabled={edit}
                   className="Borderless"
                   value={data.Force[0]?.FORCE_DESC}

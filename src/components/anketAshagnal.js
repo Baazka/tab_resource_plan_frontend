@@ -97,7 +97,7 @@ function Shagnaliin(props) {
   }, [props]);
 
   useEffect(() => {
-    if (data?.Award === undefined || data?.Award === [])
+    if (data?.Award === undefined || data?.Award.length === 0)
       loadData({
         Award: [
           {
@@ -117,48 +117,75 @@ function Shagnaliin(props) {
       });
   }, [data]);
   function saveToDB() {
-    let newRow = data?.Award?.filter((value) => value.ROWTYPE === "NEW");
-    let oldRow = data?.Award?.filter(
-      (value) =>
-        value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
-    );
-    let message = 0;
+    props.loading(true);
+    if (requiredField(data) === true) {
+      let newRow = data?.Award?.filter((value) => value.ROWTYPE === "NEW");
+      let oldRow = data?.Award?.filter(
+        (value) =>
+          value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
+      );
+      let message = 0;
 
-    if (newRow?.length > 0) {
-      console.log("insert", JSON.stringify(newRow));
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/Award/",
-        method: "POST",
-        data: { award: newRow },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 1;
-          if (message !== 2) alert.show("амжилттай хадгаллаа");
-          //history.push('/sample')
+      if (newRow?.length > 0) {
+        console.log("insert", JSON.stringify(newRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/Award/",
+          method: "POST",
+          data: { award: newRow },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
-    }
-    if (oldRow?.length > 0) {
-      console.log("update", JSON.stringify(oldRow));
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/Award/",
-        method: "PUT",
-        data: { award: oldRow },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 2;
-          //history.push('/sample')
-          if (message !== 1) alert.show("амжилттай хадгаллаа");
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 1;
+              if (message !== 2) alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+            //history.push('/sample')
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      }
+      if (oldRow?.length > 0) {
+        console.log("update", JSON.stringify(oldRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/Award/",
+          method: "PUT",
+          data: { award: oldRow },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 2;
+              //history.push('/sample')
+              if (message !== 1) alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      }
+    } else {
+      props.loading(false);
     }
   }
   function setAward(value) {
@@ -166,6 +193,21 @@ function Shagnaliin(props) {
     arr[value.index] = value;
     loadData({ Award: arr });
   }
+  function requiredField() {
+    // emergency.forEach((a, index) => {
+    for (let i = 0; i < data.Award.length; i++) {
+      if (
+        data.Award[i].AWARD_NAME === null ||
+        data.Award[i].AWARD_NAME === ""
+      ) {
+        alert.show("Шагналын нэр оруулан уу");
+        return false;
+      } else if (i === data.Award.length - 1) {
+        return true;
+      }
+    }
+  }
+
   async function addRow() {
     let value = data.Award;
     value.push({
@@ -304,22 +346,15 @@ function Shagnaliin(props) {
                     <td>
                       <input
                         type="date"
-                        id="start"
                         disabled={edit}
                         className="Borderless"
-                        style={{ width: "118px" }}
                         value={dateFormat(
                           new Date(data.Award[index].AWARD_DATE),
                           "yyyy-mm-dd"
                         )}
-                        min="1930-01-01"
-                        max="2021-12-31"
                         onChange={(e) => {
                           let value = [...data?.Award];
-                          value[index].AWARD_DATE = dateFormat(
-                            e.target.value,
-                            "dd-mmm-yy"
-                          );
+                          value[index].AWARD_DATE = e.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -332,8 +367,8 @@ function Shagnaliin(props) {
                     <td>
                       <input
                         disabled={edit}
+                        placeholder="утгаа оруулна уу"
                         className="Borderless"
-                        style={{ width: "100px" }}
                         value={data.Award[index]?.AWARD_NAME}
                         onChange={(text) => {
                           let value = [...data?.Award];
@@ -350,8 +385,8 @@ function Shagnaliin(props) {
                     <td>
                       <input
                         disabled={edit}
+                        placeholder="утгаа оруулна уу"
                         className="Borderless"
-                        style={{ width: "100px" }}
                         value={data.Award[index]?.DECISION_NO}
                         onChange={(text) => {
                           let value = [...data?.Award];
@@ -369,22 +404,15 @@ function Shagnaliin(props) {
                     <td>
                       <input
                         type="date"
-                        id="start"
                         disabled={edit}
                         className="Borderless"
-                        style={{ width: "118px" }}
                         value={dateFormat(
                           new Date(data.Award[index].DECISION_DATE),
                           "yyyy-mm-dd"
                         )}
-                        min="1930-01-01"
-                        max="2021-12-31"
                         onChange={(e) => {
                           let value = [...data?.Award];
-                          value[index].DECISION_DATE = dateFormat(
-                            e.target.value,
-                            "dd-mmm-yy"
-                          );
+                          value[index].DECISION_DATE = e.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -397,8 +425,8 @@ function Shagnaliin(props) {
                     <td>
                       <input
                         disabled={edit}
+                        placeholder="утгаа оруулна уу"
                         className="Borderless"
-                        style={{ width: "100px" }}
                         value={data.Award[index]?.AWARD_DESC}
                         onChange={(text) => {
                           let value = [...data?.Award];

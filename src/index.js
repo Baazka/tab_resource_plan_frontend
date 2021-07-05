@@ -6,12 +6,17 @@ import reportWebVitals from "./reportWebVitals";
 import "bulma/css/bulma.min.css";
 import SideBar from "./components/sidebar";
 import { BrowserRouter } from "react-router-dom";
-import { transitions, positions, Provider as AlertProvider } from "react-alert";
+import {
+  transitions,
+  positions,
+  Provider as AlertProvider,
+  useLocation,
+} from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 import reducer from "./redux/reducer/Reducer";
-
+import { HashRouter } from "react-router-dom";
 const store = createStore(reducer);
 
 const options = {
@@ -23,6 +28,9 @@ const options = {
 
   // you can also just use 'scale'
   transition: transitions.SCALE,
+  containerStyle: {
+    zIndex: 100,
+  },
 };
 
 ReactDOM.render(

@@ -48,23 +48,43 @@ function Subnational(props) {
   let listItems;
   if (data !== undefined) {
     listItems = (
-      <select
-        disabled={props.edit}
-        className="anketInput"
-        value={props.personChild?.SURNAME_NAME}
-        onChange={(text) =>
-          props.setPersonChild({
-            ...props.personChild,
-            ...{ SURNAME_NAME: text.target.value },
-          })
-        }
-      >
-        {data?.map((nation, index) => (
-          <option key={index} value={nation.SURNAME_NAME}>
-            {nation.SURNAME_NAME}
-          </option>
-        ))}
-      </select>
+      // <select
+      //   disabled={props.edit}
+      //   className="anketInput"
+      //   value={props.personChild?.SURNAME_NAME}
+      //   onChange={(text) =>
+      //     props.setPersonChild({
+      //       ...props.personChild,
+      //       ...{ SURNAME_NAME: text.target.value },
+      //     })
+      //   }
+      // >
+      // {data?.map((nation, index) => (
+      //   <option key={index} value={nation.SURNAME_NAME}>
+      //     {nation.SURNAME_NAME}
+      //   </option>
+      // ))}
+      <div>
+        <input
+          list="browsers"
+          name="browser"
+          id="browser"
+          disabled={props.edit}
+          className="anketInput"
+          value={props.personChild?.SURNAME}
+          onChange={(text) =>
+            props.setPersonChild({
+              ...props.personChild,
+              ...{ SURNAME: text.target.value },
+            })
+          }
+        />
+        <datalist id="browsers">
+          {data?.map((nation, index) => (
+            <option key={index} value={nation.SURNAME} />
+          ))}
+        </datalist>
+      </div>
     );
   } else {
     listItems = <p>ачаалж байна...</p>;
@@ -115,14 +135,14 @@ function Office(props) {
     listItems = (
       <select
         disabled={props.edit}
-        className="anketInput"
+        className={props.fullWidth === true ? "anketInputWidth" : "anketInput"}
         value={props.personChild?.OFFICE_ID}
         onChange={(text) => {
           props.setPersonChild({
             ...props.personChild,
-            ...{ OFFICE_ID: text.target.value },
+            ...{ OFFICE_ID: text.target.value, index: props.index },
           });
-          props.forceUpdate();
+          // props.forceUpdate();
         }}
       >
         {data?.map((nation, index) => (
@@ -156,12 +176,12 @@ function Suboffice(props) {
     listItems = (
       <select
         disabled={props.edit}
-        className="anketInput"
+        className={props.fullWidth === true ? "anketInputWidth" : "anketInput"}
         value={props.personChild?.SUB_OFFICE_ID}
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ SUB_OFFICE_ID: text.target.value },
+            ...{ SUB_OFFICE_ID: text.target.value, index: props.index },
           })
         }
       >
@@ -500,41 +520,6 @@ function Literaturetype(props) {
   return listItems;
 }
 
-function Oathtype(props) {
-  const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/oathtype"
-    );
-    loadData(listItems.data);
-  }, []);
-  let listItems;
-  if (data !== undefined) {
-    listItems = (
-      <select
-        disabled={props.edit}
-        className="anketInput"
-        value={props.personChild?.OATH_TYPE_ID}
-        onChange={(text) =>
-          props.setPersonChild({
-            ...props.personChild,
-            ...{ OATH_TYPE_ID: text.target.value, index: props.index },
-          })
-        }
-      >
-        {data?.map((nation, index) => (
-          <option key={index} value={nation.OATH_TYPE_ID}>
-            {nation.OATH_TYPE_NAME}
-          </option>
-        ))}
-      </select>
-    );
-  } else {
-    listItems = <p>ачаалж байна...</p>;
-  }
-  return listItems;
-}
-
 function DateInput(props) {
   const [dateShow, setDateShow] = useState(
     props.data?.dateValue !== undefined
@@ -552,14 +537,10 @@ function DateInput(props) {
   if (dateShow !== undefined) {
     listItems = (
       <input
-        className=""
         type="date"
-        id="start"
         disabled={props.edit}
         className="anketInput"
         value={dateShow}
-        min="1930-01-01"
-        max="2021-12-31"
         onChange={(date) => {
           setDateShow(date.target.value);
         }}
@@ -621,7 +602,6 @@ export {
   Language,
   Languagetype,
   Literaturetype,
-  Oathtype,
   DateInput,
   DateInputArray,
 };

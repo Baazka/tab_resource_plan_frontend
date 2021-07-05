@@ -59,16 +59,21 @@ const SideBar = (props) => {
     setMenuClick({ ...temp, ...value });
     if (value?.menu0) {
       history.push("/web/dashboard");
+      setMenuCollapse(true);
     } else if (value?.menu1) {
       history.push("/web/workerList");
+      setMenuCollapse(true);
     } else if (value?.menu2) {
       history.push("/web/Baiguullaga");
+      setMenuCollapse(true);
     } else if (value?.menu3) {
       history.push("/web/AlbanTushaal");
+      setMenuCollapse(true);
     } else if (value?.menu4) {
       history.push("/web/TushaalShiidver");
     }else if (value?.menu5) {
       history.push("/web/Tailan");
+      setMenuCollapse(true);
     }
   }
 

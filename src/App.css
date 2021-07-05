@@ -30,7 +30,8 @@
 .Borderless {
   background-color: transparent;
   border: none;
-  width: "100%";
+
+  width: -webkit-fill-available;
 }
 .Borderless:focus-visible {
   border: none;

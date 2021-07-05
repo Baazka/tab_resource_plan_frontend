@@ -91,12 +91,12 @@ const AlbanTushaal = (props) => {
       sortable: true,
       width: "40px",
     },
-    {
-      name: "Код",
-      selector: "DEPARTMENT_ID",
-      sortable: true,
-      width: "40px",
-    },
+    // {
+    //   name: "Код",
+    //   selector: "DEPARTMENT_ID",
+    //   sortable: true,
+    //   width: "40px",
+    // },
     {
       name: "Байгууллагын нэр",
       selector: "EMP_DEPARTMENT_NAME",
@@ -111,17 +111,17 @@ const AlbanTushaal = (props) => {
     },
     {
       name: "Алба, хэлтсийн нэр",
-      selector: "EMP_DEPARTMENT_NAME",
+      selector: "EMP_COMPARTMENT_NAME",
       sortable: true,
     },
     {
       name: "Албан тушаалын код",
-      selector: "EMP_ROLE_NAME",
+      selector: "",
       sortable: true,
     },
     {
       name: "Албан тушаалын нэр",
-      selector: "EMP_SUBDEPARTMENT_NAME",
+      selector: "",
       sortable: true,
     },
     {
@@ -146,17 +146,17 @@ const AlbanTushaal = (props) => {
     },
     {
       name: "Ажилтны тоо",
-      selector: "CONFIRMED_COUNT",
+      selector: "",
       sortable: true,
     },
     {
       name: "Эзгүй орон тоо",
-      selector: "CONFIRMED_COUNT",
+      selector: "",
       sortable: true,
     },
     {
       name: "Сул орон тоо",
-      selector: "CONFIRMED_COUNT",
+      selector: "",
       sortable: true,
     },
   ];
@@ -240,6 +240,7 @@ const AlbanTushaal = (props) => {
           data={jagsaalt}
           theme="solarized"
           customStyles={customStyles}
+          noDataComponent="мэдээлэл байхгүй байна"
           pagination={false}
           paginationPerPage={10}
           selectableRows // add for checkbox selection

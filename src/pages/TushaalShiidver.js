@@ -239,6 +239,7 @@ const Home = (props) => {
           selectableRows // add for checkbox selection
           Clicked
           onSelectedRowsChange={handleChange}
+          noDataComponent="Өгөгдөл байхгүй байна"
           noHeader={true}
           fixedHeader={true}
           overflowY={true}
