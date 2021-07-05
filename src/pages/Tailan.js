@@ -8,6 +8,7 @@ import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
 import { Search, Filter, Add } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
+import { useParams } from "react-router";
 
 var rowNumber = 1;
 createTheme("solarized", {
@@ -59,6 +60,7 @@ const customStyles = {
 
 const Home = (props) => {
   const history = useHistory();
+  const { turul } = useParams();
   const [jagsaalt, setJagsaalt] = useState();
   const [Button1, setButtons1] = useState(1);
   useEffect(() => {
@@ -125,10 +127,7 @@ const Home = (props) => {
               <div className="column is-12">
                 <div
                   onClick={() => {
-                    history.push("/web/Tailan/AnketA", {
-                      TailanNer: "ТАЙЛАН",
-                      turul: "emergency",
-                    });
+                    history.push("/web/Tailan/AnketA/emergency");
                   }}
                   className="button"
                   style={{
@@ -149,10 +148,7 @@ const Home = (props) => {
           <div>
             <div
               onClick={() => {
-                history.push("/web/Tailan/AnketA", {
-                  TailanNer: "ТАЙЛАН",
-                  turul: "gerBvl",
-                });
+                history.push("/web/Tailan/AnketA/gerBvl");
               }}
               className="button"
               style={{
@@ -171,10 +167,7 @@ const Home = (props) => {
           <div>
             <div
               onClick={() => {
-                history.push("/web/Tailan/AnketA", {
-                  TailanNer: "ТАЙЛАН",
-                  turul: "sadan",
-                });
+                history.push("/web/Tailan/AnketA/sadan");
               }}
               className="button"
               style={{
@@ -192,10 +185,7 @@ const Home = (props) => {
           <div>
             <div
               onClick={() => {
-                history.push("/web/Tailan/AnketA", {
-                  TailanNer: "ТАЙЛАН",
-                  turul: "ShalgaltiinTalaarkhMedeelel",
-                });
+                history.push("/web/Tailan/AnketA/ShalgaltiinTalaarkhMedeelel");
               }}
               className="button"
               style={{
@@ -213,10 +203,7 @@ const Home = (props) => {
           <div>
             <div
               onClick={() => {
-                history.push("/web/Tailan/AnketA", {
-                  TailanNer: "ТАЙЛАН",
-                  turul: "TangaragiinBvrtgel",
-                });
+                history.push("/web/Tailan/AnketA/TangaragiinBvrtgel");
               }}
               className="button"
               style={{
@@ -234,10 +221,7 @@ const Home = (props) => {
           <div>
             <div
               onClick={() => {
-                history.push("/web/Tailan/AnketA", {
-                  TailanNer: "ТАЙЛАН",
-                  turul: "GadaadHelniiMedleg",
-                });
+                history.push("/web/Tailan/AnketA/GadaadHelniiMedleg");
               }}
               className="button"
               style={{
@@ -256,10 +240,7 @@ const Home = (props) => {
           <div>
             <div
               onClick={() => {
-                history.push("/web/Tailan/AnketA", {
-                  TailanNer: "ТАЙЛАН",
-                  turul: "Bolowsrol",
-                });
+                history.push("/web/Tailan/AnketA/Bolowsrol");
               }}
               className="button"
               style={{
@@ -277,10 +258,7 @@ const Home = (props) => {
           <div>
             <div
               onClick={() => {
-                history.push("/web/Tailan/AnketA", {
-                  TailanNer: "ТАЙЛАН",
-                  turul: "BolowsrolDoktor",
-                });
+                history.push("/web/Tailan/AnketA/BolowsrolDoktor");
               }}
               className="button"
               style={{
@@ -298,10 +276,7 @@ const Home = (props) => {
           <div>
             <div
               onClick={() => {
-                history.push("/web/Tailan/AnketA", {
-                  TailanNer: "ТАЙЛАН",
-                  turul: "MergeshliinBeltgel",
-                });
+                history.push("/web/Tailan/AnketA/MergeshliinBeltgel");
               }}
               className="button"
               style={{
@@ -319,10 +294,7 @@ const Home = (props) => {
           <div>
             <div
               onClick={() => {
-                history.push("/web/Tailan/AnketA", {
-                  TailanNer: "ТАЙЛАН",
-                  turul: "ErdmiinTsol",
-                });
+                history.push("/web/Tailan/AnketA/ErdmiinTsol");
               }}
               className="button"
               style={{
@@ -336,14 +308,11 @@ const Home = (props) => {
             </div>
           </div>
         ) : null}
-        {Button1 ? (
+        {/* {Button1 ? (
           <div>
             <div
               onClick={() => {
-                history.push("/web/Tailan/AnketA", {
-                  TailanNer: "Цэргийн алба",
-                  turul: "TsergiinAlba",
-                });
+                history.push("/web/Tailan/AnketA/TsergiinAlba");
               }}
               className="button"
               style={{
@@ -356,15 +325,12 @@ const Home = (props) => {
               Цэргийн алба
             </div>
           </div>
-        ) : null}
+        ) : null} */}
         {Button1 ? (
           <div>
             <div
               onClick={() => {
-                history.push("/web/Tailan/AnketA", {
-                  TailanNer: "ТАЙЛАН",
-                  turul: "ShagnaliinTalaarhMedeelel",
-                });
+                history.push("/web/Tailan/AnketA/ShagnaliinTalaarhMedeelel");
               }}
               className="button"
               style={{
@@ -382,10 +348,7 @@ const Home = (props) => {
           <div>
             <div
               onClick={() => {
-                history.push("/web/Tailan/AnketA", {
-                  TailanNer: "ТАЙЛАН",
-                  turul: "TurshlagiinTalaarhMedeelel",
-                });
+                history.push("/web/Tailan/AnketA/TurshlagiinTalaarhMedeelel");
               }}
               className="button"
               style={{
@@ -403,10 +366,7 @@ const Home = (props) => {
           <div>
             <div
               onClick={() => {
-                history.push("/web/Tailan/AnketA", {
-                  TailanNer: "Бүтээлийн жагсаалт",
-                  turul: "BvteeliinJagsaalt",
-                });
+                history.push("/web/Tailan/AnketA/BvteeliinJagsaalt");
               }}
               className="button"
               style={{

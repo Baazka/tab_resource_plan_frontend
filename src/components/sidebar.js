@@ -71,7 +71,7 @@ const SideBar = (props) => {
       setMenuCollapse(true);
     } else if (value?.menu4) {
       history.push("/web/TushaalShiidver");
-    }else if (value?.menu5) {
+    } else if (value?.menu5) {
       history.push("/web/Tailan");
       setMenuCollapse(true);
     }
