@@ -661,10 +661,12 @@ function Yrunkhii(props) {
     <div
       className=" box"
       style={{
+        position: "relative",
         marginTop: "80px",
         width: "98%",
         height: "auto",
         marginLeft: "10px",
+        zIndex: "-1",
       }}
     >
       <div className="columns ">

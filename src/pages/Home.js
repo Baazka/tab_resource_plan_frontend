@@ -334,7 +334,7 @@ function Home(props) {
             }}
             onClick={() => newPeople()}
           >
-            Шинэ хүн
+            Шинэ
           </button>
           <div style={{ position: "absolute", right: "3rem" }}>
             <button
