@@ -661,7 +661,6 @@ function Yrunkhii(props) {
     <div
       className=" box"
       style={{
-        position: "relative",
         marginTop: "80px",
         width: "98%",
         height: "auto",

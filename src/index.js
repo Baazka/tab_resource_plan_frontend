@@ -11,7 +11,7 @@ import AlertTemplate from "react-alert-template-basic";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 import reducer from "./redux/reducer/Reducer";
-
+import { HashRouter } from "react-router-dom";
 const store = createStore(reducer);
 
 const options = {
@@ -27,11 +27,13 @@ const options = {
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
-      <AlertProvider template={AlertTemplate} {...options}>
-        <App />
-      </AlertProvider>
-    </BrowserRouter>
+    <HashRouter>
+      <BrowserRouter>
+        <AlertProvider template={AlertTemplate} {...options}>
+          <App />
+        </AlertProvider>
+      </BrowserRouter>
+    </HashRouter>
   </Provider>,
   document.getElementById("root")
 );

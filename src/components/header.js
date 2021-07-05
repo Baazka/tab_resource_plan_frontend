@@ -48,7 +48,6 @@ const Header = (props) => {
         backgroundColor: "#f1f1f1",
         width: "100%",
         display: "flex",
-        zIndex: "1",
       }}
     >
       <div style={{ marginLeft: "7%", marginTop: "20px" }}>
