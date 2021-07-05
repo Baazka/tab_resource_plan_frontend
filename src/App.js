@@ -19,6 +19,8 @@ import AlbanTushaal from "./pages/AlbanTushaal";
 import Dashboard from "./pages/Dashboard";
 import Baiguullaga from "./pages/Baiguullaga";
 import TushaalShiidver from "./pages/TushaalShiidver";
+import Tailan from "./pages/Tailan";
+import AnketAtailan from "./pages/AnketAtailan";
 
 const axios = require("axios");
 
@@ -52,6 +54,8 @@ function App() {
       <Route path="/web/Baiguullaga/" component={Baiguullaga} exact />
       <Route path="/web/AlbanTushaal/" component={AlbanTushaal} exact />
       <Route path="/web/TushaalShiidver/" component={TushaalShiidver} exact />
+      <Route path="/web/Tailan/" component={Tailan} exact />
+      <Route path="/web/Tailan/AnketA" component={AnketAtailan} exact />
     </div>
   );
 }

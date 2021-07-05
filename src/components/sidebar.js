@@ -39,6 +39,7 @@ const SideBar = (props) => {
     menu2: false,
     menu3: false,
     menu4: false,
+    menu5: false,
   });
 
   //create a custom function that will change menucollapse state from false to true and true to false
@@ -53,6 +54,7 @@ const SideBar = (props) => {
       menu2: false,
       menu3: false,
       menu4: false,
+      menu5: false,
     };
     setMenuClick({ ...temp, ...value });
     if (value?.menu0) {
@@ -69,6 +71,8 @@ const SideBar = (props) => {
       setMenuCollapse(true);
     } else if (value?.menu4) {
       history.push("/web/TushaalShiidver");
+    }else if (value?.menu5) {
+      history.push("/web/Tailan");
       setMenuCollapse(true);
     }
   }
@@ -208,6 +212,27 @@ const SideBar = (props) => {
                   >
                     {" "}
                     Тушаал шийдвэрийн бүртгэл
+                  </p>
+                </div>
+              </MenuItem>
+              <MenuItem active={menuClick.menu5}>
+                <div
+                  className="CustomMenu"
+                  onClick={() => SelectMenu({ menu5: !menuClick.menu5 })}
+                >
+                  <img
+                    src={menuClick.menu5 ? DocumentsB : Documents}
+                    width="40"
+                    height="30"
+                  />
+                  <p
+                    className="MenuText"
+                    style={{
+                      color: `${menuClick.menu5 ? "#418ee6" : "white"}`,
+                    }}
+                  >
+                    {" "}
+                    Тайлан
                   </p>
                 </div>
               </MenuItem>
