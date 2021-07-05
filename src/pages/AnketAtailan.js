@@ -63,9 +63,10 @@ function Emergency(props) {
       >
         <div className="box" style={{marginLeft:"7%", padding: '20px 2px 19% 10px'}}>
         <div className = "columns">
-        <div className = "column is-3 ml-6 " style={{fontSize: "20px"}}>
+        <div className = "column is-4 ml-6   " style={{fontSize: "20px"}}>
         Зайлшгүй шаардлагатай үед холбоо барих хүн
               </div>
+              <div className = "column is-3 ml-6"></div>
             <div className = "column is-1 ">
             <div style={{ display: "none" }}>
             <ReactHTMLTableToExcel
@@ -77,33 +78,33 @@ function Emergency(props) {
             buttonText="XLS"
           />
            </div>
-            <button  class="text" style={{marginLeft:"1%" ,borderRadius: "5px", backgroundColor:"#1cc88a" ,color:"#fff",border: 
+            <button  class="text" style={{marginLeft:"7%" ,borderRadius: "5px", backgroundColor:"#1cc88a" ,color:"#fff",border: 
             "double"}} onClick = {()=>document.getElementById("emergencyXLS").click()}><span style={{display: "flex"}}><img  src={Excel} width="20px"
             height="20px "></img>Excel</span></button>
         </div>
         </div>
             <div class="columns ">
-              <div class="column is-11 ml-6" >
+              <div class="column is-8 ml-6" style={{display: "grid",textAlignLast:"center"}}>
               
-              <table id={"emergencyXls"} className="table is-bordered">
-                <thead>
+              <table id={"emergencyXls"} className="table is-bordered" >
+                <thead style={{backgroundColor:'#f1f1f1'}}>
                   <tr>
                     <td>№</td>
                     <td>Таны юу болох</td>
                     <td>Овог</td>
                     <td>Нэр</td>
-                    <td>Утасны дугаар</td>
+                    <td>Утасны дугаар</td> 
                   </tr>
                 </thead>
                 <tbody>
                   
                   {data?.map((value, index) => (
                       <tr>
-                      <td>{index+1}</td>
-                      <td>{value.FAMILY_NAME}</td>
-                      <td>{value.EMERGENCY_LASTNAME}</td>
-                      <td>{value.EMERGENCY_FIRSTNAME}</td>
-                      <td>{value.EMERGENCY_PHONE}</td>
+                      <td style={{ width: "2rem" }} >{index+1}</td>
+                      <td style={{ width: "10rem" }} >{value.FAMILY_NAME}</td>
+                      <td style={{ width: "10rem" }} >{value.EMERGENCY_LASTNAME}</td>
+                      <td style={{ width: "10rem" }} >{value.EMERGENCY_FIRSTNAME}</td>
+                      <td style={{ width: "20rem" }} >{value.EMERGENCY_PHONE}</td>
                       </tr>
                   ))}
                   
@@ -176,33 +177,33 @@ function GerBvl(props) {
             <table id = {"GerBvlXls"} className="table is-bordered is-flex-wrap-wrap" >
               <tbody>
                 <tr>
-                  <td rowspan="2">
+                  <td rowspan="2"style={{backgroundColor:'#f1f1f1'}}>
                     <span >№</span>
                   </td>
-                  <td rowspan="2">
+                  <td rowspan="2"style={{backgroundColor:'#f1f1f1'}}>
                    
                     <span>Таны юу болох</span>
                   </td>
-                  <td rowspan="2">
+                  <td rowspan="2"style={{backgroundColor:'#f1f1f1'}}>
                     {" "}
                     
                     <span>
                       Гэр бүлийн гишүүний эцэг,эхийн нэр
                     </span>
                   </td>
-                  <td rowspan="2">
+                  <td rowspan="2"style={{backgroundColor:'#f1f1f1'}}>
                     <span>Гэр бүлийн гишүүний нэр</span>
                   </td>
-                  <td rowspan="2">
+                  <td rowspan="2"style={{backgroundColor:'#f1f1f1'}}>
                     <span>Төрсөн он, сар, өдөр</span>
                   </td>
-                  <td rowspan="2">
+                  <td rowspan="2"style={{backgroundColor:'#f1f1f1'}}>
                     <span>Төрсөн аймаг, хот</span>
                   </td>
-                  <td rowspan="2">
+                  <td rowspan="2"style={{backgroundColor:'#f1f1f1'}}>
                     <span>Төрсөн сум, дүүрэг</span>
                   </td>
-                  <td colspan="2">
+                  <td colspan="2"style={{backgroundColor:'#f1f1f1'}}>
                     <span>Одоо эрхэлэж буй ажил</span>
                   </td>
                     <td rowspan="2" style={{ border: "none", width: "60px" }}>
@@ -210,10 +211,11 @@ function GerBvl(props) {
                 </tr>
                
                 <tr>
-                  <td>
+                  <td style={{backgroundColor:'#f1f1f1'}}>
                     <span >Байгуулагын Нэр</span>
                   </td>
-                  <td>
+                  <td style={{backgroundColor:'#f1f1f1'}}>
+                  
                     <span >Албан тушаал</span>
                   </td>
                 </tr>
@@ -315,34 +317,34 @@ function Sadan(props) {
          
             <table id = {"sadanXls"}className="table is-bordered is-flex-wrap-wrap" >
               <tbody>
-                <tr>
-                  <td rowspan="2">
+                <tr >
+                  <td rowspan="2"style={{backgroundColor:'#f1f1f1'}}>
                     <span>№</span>
                   </td>
-                  <td rowspan="2">
+                  <td rowspan="2"style={{backgroundColor:'#f1f1f1'}}>
                     
-                   <span> Ажилтны нэр</span></td>
+                   <span > Ажилтны нэр</span></td>
                  
-                  <td rowspan="2">
+                  <td rowspan="2"style={{backgroundColor:'#f1f1f1'}}>
                     {" "}
                     
                     <span>
                       Гэр бүлийн гишүүний эцэг,эхийн нэр
                     </span>
                   </td>
-                  <td rowspan="2">
+                  <td rowspan="2"style={{backgroundColor:'#f1f1f1'}}>
                     <span>Гэр бүлийн гишүүний нэр</span>
                   </td>
-                  <td rowspan="2">
+                  <td rowspan="2"style={{backgroundColor:'#f1f1f1'}}>
                     <span>Төрсөн он, сар, өдөр</span>
                   </td>
-                  <td rowspan="2">
+                  <td rowspan="2"style={{backgroundColor:'#f1f1f1'}}>
                     <span>Төрсөн аймаг, хот</span>
                   </td>
-                  <td rowspan="2">
+                  <td rowspan="2"style={{backgroundColor:'#f1f1f1'}}>
                     <span >Төрсөн сум, дүүрэг</span>
                   </td>
-                  <td colspan="2">
+                  <td colspan="2"style={{backgroundColor:'#f1f1f1'}}>
                     <span >Одоо эрхэлэж буй ажил</span>
                   </td>
                     <td rowspan="2" style={{ border: "none", width: "60px" }}>
@@ -350,10 +352,10 @@ function Sadan(props) {
                 </tr>
                
                 <tr>
-                  <td>
+                  <td style={{backgroundColor:'#f1f1f1'}}>
                     <span >Байгуулагын Нэр</span>
                   </td>
-                  <td>
+                  <td style={{backgroundColor:'#f1f1f1'}}>
                     <span >Албан тушаал</span>
                   </td>
                 </tr>
