@@ -166,6 +166,12 @@
   border: none;
   width: 10rem;
 }
+
+.anketInputWidth {
+  background-color: transparent;
+  border: none;
+  width: -webkit-fill-available;
+}
 .anketInputTable {
   background-color: transparent;
   border: none;

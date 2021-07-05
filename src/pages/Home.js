@@ -147,7 +147,7 @@ function Home(props) {
   };
 
   async function anketA() {
-    if (data.checked === true) history.push("/web/anketA/1");
+    if (data?.checked === true) history.push("/web/anketA/1");
     else alert.show("Албан тушаалтан сонго");
   }
   async function anketANew() {
@@ -478,9 +478,6 @@ function Home(props) {
 
 function EmployExcel(props) {
   const [data, loadData] = useState(null);
-  const [edit, setEdit] = useState(true);
-  const alert = useAlert();
-  const refExcel = useRef(null);
 
   useEffect(async () => {
     let listItems = await axios("http://hr.audit.mn/hr/api/v1/excelPerson/");

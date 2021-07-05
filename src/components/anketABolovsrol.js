@@ -84,52 +84,80 @@ function Bolowsrol(props) {
   }, [data, dataSecond]);
 
   function saveToDB() {
-    console.log("second", dataSecond);
+    props.loading(true);
     let combined = data?.Education.concat(dataSecond?.Education);
-    let newRow = combined?.filter((value) => value.ROWTYPE === "NEW");
-    let oldRow = combined?.filter(
-      (value) =>
-        value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
-    );
-    let message = 0;
 
-    if (newRow?.length > 0) {
-      console.log("insert", JSON.stringify(newRow));
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/education/",
-        method: "POST",
-        data: { education: newRow, PERSON_ID: props.person_id },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 1;
-          if (message !== 2) alert.show("амжилттай хадгаллаа");
-          //history.push('/sample')
+    if (requiredField(combined) === true) {
+      let newRow = combined?.filter((value) => value.ROWTYPE === "NEW");
+      let oldRow = combined?.filter(
+        (value) =>
+          value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
+      );
+      let message = 0;
+
+      if (newRow?.length > 0) {
+        console.log("insert", JSON.stringify(newRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/education/",
+          method: "POST",
+          data: { education: newRow, PERSON_ID: props.person_id },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
-    }
-    if (oldRow?.length > 0) {
-      console.log("update", JSON.stringify(oldRow));
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/education/",
-        method: "PUT",
-        data: { education: oldRow, PERSON_ID: props.person_id },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 2;
-          //history.push('/sample')
-          if (message !== 1) alert.show("амжилттай хадгаллаа");
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 1;
+              if (message !== 2) alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+            //history.push('/sample')
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      }
+      if (oldRow?.length > 0) {
+        console.log("update", JSON.stringify(oldRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/education/",
+          method: "PUT",
+          data: { education: oldRow, PERSON_ID: props.person_id },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 2;
+              //history.push('/sample')
+              if (message !== 1) alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      }
+    } else {
+      props.loading(false);
     }
   }
+
   function setEduType(value) {
     let arr = data.Education;
     arr[value.index] = value;
@@ -140,6 +168,31 @@ function Bolowsrol(props) {
     let arr = dataSecond.Education;
     arr[value.index] = value;
     loadDataSecond({ Education: arr });
+  }
+  function requiredField(value) {
+    for (let i = 0; i < value.length; i++) {
+      if (value[i].SCHOOL_NAME === null || value[i].SCHOOL_NAME === "") {
+        alert.show("Сургуулийн нэр оруулан уу");
+        return false;
+      } else if (
+        value[i].PROFESSION_NAME === null ||
+        value[i].PROFESSION_NAME === ""
+      ) {
+        alert.show("Эзэмшсэн мэргэжил оруулан уу");
+        return false;
+      } else if (value[i].DIPLOM_NO === null || value[i].DIPLOM_NO === "") {
+        alert.show("Гэрчилгээ дипломын дугаар оруулан уу");
+        return false;
+      } else if (
+        value[i].DIPLOM_SUBJECT === null ||
+        value[i].DIPLOM_SUBJECT === ""
+      ) {
+        alert.show("Гэрчилгээ дипломын дугаар оруулан уу");
+        return false;
+      } else if (i === value.length - 1) {
+        return true;
+      }
+    }
   }
   async function addRow() {
     let value = data.Education;
@@ -211,8 +264,10 @@ function Bolowsrol(props) {
         .then(function (response) {
           console.log("UpdateResponse", response);
           //history.push('/sample')
-          if (response?.data?.message === "success")
+          if (response?.data?.message === "success") {
             alert.show("амжилттай устлаа");
+            setEdit(!edit);
+          }
         })
         .catch(function (error) {
           //alert(error.response.data.error.message);
@@ -272,7 +327,7 @@ function Bolowsrol(props) {
                   <td>
                     <span className="textSaaral">№</span>
                   </td>
-                  <td style={{ width: "300px" }}>
+                  <td style={{ width: " 180px" }}>
                     <span className="textSaaral">Боловсролын зэрэг</span>
                   </td>
                   <td>
@@ -339,12 +394,10 @@ function Bolowsrol(props) {
                     </td>
                     <td>
                       <input
-                        style={{ width: "70px" }}
+                        style={{ width: "110px" }}
                         disabled={edit}
                         className="Borderless"
-                        rows="1"
-                        cols="10"
-                        wrap="soft"
+                        placeholder="утгаа оруулна уу"
                         value={data.Education[index]?.EDUCATION_COUNTRY}
                         onChange={(text) => {
                           let value = [...data?.Education];
@@ -360,12 +413,10 @@ function Bolowsrol(props) {
                     </td>
                     <td>
                       <input
-                        style={{ width: "70px" }}
+                        style={{ width: "110px" }}
                         disabled={edit}
                         className="Borderless"
-                        rows="1"
-                        cols="10"
-                        wrap="soft"
+                        placeholder="утгаа оруулна уу"
                         value={data.Education[index]?.SCHOOL_NAME}
                         onChange={(text) => {
                           let value = [...data?.Education];
@@ -382,21 +433,15 @@ function Bolowsrol(props) {
                     <td>
                       <input
                         type="date"
-                        id="start"
                         disabled={edit}
                         className="Borderless"
                         value={dateFormat(
                           new Date(data.Education[index].START_DATE),
                           "yyyy-mm-dd"
                         )}
-                        min="1930-01-01"
-                        max="2021-12-31"
                         onChange={(e) => {
                           let value = [...data?.Education];
-                          value[index].START_DATE = dateFormat(
-                            e.target.value,
-                            "dd-mmm-yy"
-                          );
+                          value[index].START_DATE = e.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -409,21 +454,15 @@ function Bolowsrol(props) {
                     <td>
                       <input
                         type="date"
-                        id="start"
                         disabled={edit}
                         className="Borderless"
                         value={dateFormat(
                           new Date(data.Education[index].END_DATE),
                           "yyyy-mm-dd"
                         )}
-                        min="1930-01-01"
-                        max="2021-12-31"
                         onChange={(e) => {
                           let value = [...data?.Education];
-                          value[index].END_DATE = dateFormat(
-                            e.target.value,
-                            "dd-mmm-yy"
-                          );
+                          value[index].END_DATE = e.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -435,12 +474,10 @@ function Bolowsrol(props) {
                     </td>
                     <td>
                       <input
-                        style={{ width: "70px" }}
+                        style={{ width: "100px" }}
                         disabled={edit}
                         className="Borderless"
-                        rows="1"
-                        cols="10"
-                        wrap="soft"
+                        placeholder="утгаа оруулна уу"
                         value={data.Education[index]?.PROFESSION_NAME}
                         onChange={(text) => {
                           let value = [...data?.Education];
@@ -459,9 +496,7 @@ function Bolowsrol(props) {
                         style={{ width: "70px" }}
                         disabled={edit}
                         className="Borderless"
-                        rows="1"
-                        cols="10"
-                        wrap="soft"
+                        placeholder="утгаа оруулна уу"
                         value={data.Education[index]?.DIPLOM_NO}
                         onChange={(text) => {
                           let value = [...data?.Education];
@@ -477,12 +512,10 @@ function Bolowsrol(props) {
                     </td>
                     <td>
                       <input
-                        style={{ width: "70px" }}
+                        style={{ width: "100px" }}
                         disabled={edit}
                         className="Borderless"
-                        rows="1"
-                        cols="10"
-                        wrap="soft"
+                        placeholder="утгаа оруулна уу"
                         value={data.Education[index]?.SCHOOL_CONTACT}
                         onChange={(text) => {
                           let value = [...data?.Education];
@@ -498,12 +531,10 @@ function Bolowsrol(props) {
                     </td>
                     <td>
                       <input
-                        style={{ width: "70px" }}
+                        style={{ width: "80px" }}
                         disabled={edit}
                         className="Borderless"
-                        rows="1"
-                        cols="10"
-                        wrap="soft"
+                        placeholder="утгаа оруулна уу"
                         value={data.Education[index]?.DIPLOM_SUBJECT}
                         onChange={(text) => {
                           let value = [...data?.Education];
@@ -542,8 +573,7 @@ function Bolowsrol(props) {
         <div class="columns ">
           <div class="column is-12">
             <em className="TABLE m-3 has-text-link">
-              3.2. Боловсрол (суурь Боловсрол, дипломын дээд Боловсрол,
-              бакалавр, магистрын зэргийг оролцуулсан)
+              3.2. Боловсролын болон шинжлэх ухааны докторын зэрэг
             </em>
           </div>
         </div>
@@ -556,7 +586,7 @@ function Bolowsrol(props) {
                   <td>
                     <span className="textSaaral">№</span>
                   </td>
-                  <td style={{ width: "300px" }}>
+                  <td style={{ width: "180px" }}>
                     <span className="textSaaral">Боловсролын зэрэг</span>
                   </td>
                   <td>
@@ -623,12 +653,10 @@ function Bolowsrol(props) {
                     </td>
                     <td>
                       <input
-                        style={{ width: "70px" }}
+                        style={{ width: "100px" }}
                         disabled={edit}
                         className="Borderless"
-                        rows="1"
-                        cols="10"
-                        wrap="soft"
+                        placeholder="утгаа оруулна уу"
                         value={dataSecond.Education[index]?.EDUCATION_COUNTRY}
                         onChange={(text) => {
                           let value = [...dataSecond?.Education];
@@ -644,12 +672,10 @@ function Bolowsrol(props) {
                     </td>
                     <td>
                       <input
-                        style={{ width: "70px" }}
+                        style={{ width: "100px" }}
                         disabled={edit}
                         className="Borderless"
-                        rows="1"
-                        cols="10"
-                        wrap="soft"
+                        placeholder="утгаа оруулна уу"
                         value={dataSecond.Education[index]?.SCHOOL_NAME}
                         onChange={(text) => {
                           let value = [...dataSecond?.Education];
@@ -666,21 +692,15 @@ function Bolowsrol(props) {
                     <td>
                       <input
                         type="date"
-                        id="start"
                         disabled={edit}
                         className="Borderless"
                         value={dateFormat(
                           new Date(dataSecond.Education[index].START_DATE),
                           "yyyy-mm-dd"
                         )}
-                        min="1930-01-01"
-                        max="2021-12-31"
                         onChange={(e) => {
                           let value = [...dataSecond?.Education];
-                          value[index].START_DATE = dateFormat(
-                            e.target.value,
-                            "dd-mmm-yy"
-                          );
+                          value[index].START_DATE = e.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -693,21 +713,15 @@ function Bolowsrol(props) {
                     <td>
                       <input
                         type="date"
-                        id="start"
                         disabled={edit}
                         className="Borderless"
                         value={dateFormat(
                           new Date(dataSecond.Education[index].END_DATE),
                           "yyyy-mm-dd"
                         )}
-                        min="1930-01-01"
-                        max="2021-12-31"
                         onChange={(e) => {
                           let value = [...dataSecond?.Education];
-                          value[index].END_DATE = dateFormat(
-                            e.target.value,
-                            "dd-mmm-yy"
-                          );
+                          value[index].END_DATE = e.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -719,12 +733,10 @@ function Bolowsrol(props) {
                     </td>
                     <td>
                       <input
-                        style={{ width: "70px" }}
+                        style={{ width: "100px" }}
                         disabled={edit}
                         className="Borderless"
-                        rows="1"
-                        cols="10"
-                        wrap="soft"
+                        placeholder="утгаа оруулна уу"
                         value={dataSecond.Education[index]?.PROFESSION_NAME}
                         onChange={(text) => {
                           let value = [...dataSecond?.Education];
@@ -740,12 +752,10 @@ function Bolowsrol(props) {
                     </td>
                     <td>
                       <input
-                        style={{ width: "70px" }}
+                        style={{ width: "80px" }}
                         disabled={edit}
                         className="Borderless"
-                        rows="1"
-                        cols="10"
-                        wrap="soft"
+                        placeholder="утгаа оруулна уу"
                         value={dataSecond.Education[index]?.DIPLOM_NO}
                         onChange={(text) => {
                           let value = [...dataSecond?.Education];
@@ -761,12 +771,10 @@ function Bolowsrol(props) {
                     </td>
                     <td>
                       <input
-                        style={{ width: "70px" }}
+                        style={{ width: "80px" }}
                         disabled={edit}
                         className="Borderless"
-                        rows="1"
-                        cols="10"
-                        wrap="soft"
+                        placeholder="утгаа оруулна уу"
                         value={dataSecond.Education[index]?.SCHOOL_CONTACT}
                         onChange={(text) => {
                           let value = [...dataSecond?.Education];
@@ -782,12 +790,10 @@ function Bolowsrol(props) {
                     </td>
                     <td>
                       <input
-                        style={{ width: "70px" }}
+                        style={{ width: "90px" }}
                         disabled={edit}
                         className="Borderless"
-                        rows="1"
-                        cols="10"
-                        wrap="soft"
+                        placeholder="утгаа оруулна уу"
                         value={dataSecond.Education[index]?.DIPLOM_SUBJECT}
                         onChange={(text) => {
                           let value = [...dataSecond?.Education];

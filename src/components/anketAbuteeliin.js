@@ -26,8 +26,7 @@ function Buteeliin(props) {
           {
             LITERATURE_ID: 1,
             LITERATURE_NAME: "",
-            LITERATURE_TYPE_ID: 1,
-            LITERATURE_TYPE_NAME: "",
+            LITERATURE_TYPE: "",
             LITERATURE_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
             LITERATURE_DESC: "",
             PERSON_ID: props.person_id,
@@ -40,48 +39,75 @@ function Buteeliin(props) {
       });
   }, [data]);
   function saveToDB() {
-    let newRow = data?.Literature?.filter((value) => value.ROWTYPE === "NEW");
-    let oldRow = data?.Literature?.filter(
-      (value) =>
-        value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
-    );
-    let message = 0;
+    props.loading(true);
+    if (requiredField(data) === true) {
+      let newRow = data?.Literature?.filter((value) => value.ROWTYPE === "NEW");
+      let oldRow = data?.Literature?.filter(
+        (value) =>
+          value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
+      );
+      let message = 0;
 
-    if (newRow?.length > 0) {
-      console.log("insert", JSON.stringify(newRow));
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/literature/",
-        method: "POST",
-        data: { literature: newRow },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 1;
-          if (message !== 2) alert.show("амжилттай хадгаллаа");
-          //history.push('/sample')
+      if (newRow?.length > 0) {
+        console.log("insert", JSON.stringify(newRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/literature/",
+          method: "POST",
+          data: { literature: newRow },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
-    }
-    if (oldRow?.length > 0) {
-      console.log("update", JSON.stringify(oldRow));
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/literature/",
-        method: "PUT",
-        data: { literature: oldRow },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 2;
-          //history.push('/sample')
-          if (message !== 1) alert.show("амжилттай хадгаллаа");
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 1;
+              if (message !== 2) alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+            //history.push('/sample')
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      }
+      if (oldRow?.length > 0) {
+        console.log("update", JSON.stringify(oldRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/literature/",
+          method: "PUT",
+          data: { literature: oldRow },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 2;
+              //history.push('/sample')
+              if (message !== 1) alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      }
+    } else {
+      props.loading(false);
     }
   }
   function setLiterature(value) {
@@ -89,13 +115,32 @@ function Buteeliin(props) {
     arr[value.index] = value;
     loadData({ Literature: arr });
   }
+  function requiredField() {
+    for (let i = 0; i < data.Literature.length; i++) {
+      if (
+        data.Literature[i].LITERATURE_NAME === null ||
+        data.Literature[i].LITERATURE_NAME === ""
+      ) {
+        alert.show("Бүтээлийн нэр оруулан уу");
+        return false;
+      } else if (
+        data.Literature[i].LITERATURE_TYPE === null ||
+        data.Literature[i].LITERATURE_TYPE === ""
+      ) {
+        alert.show("Бүтээлийн төрөл оруулан уу");
+        return false;
+      } else if (i === data.Literature.length - 1) {
+        return true;
+      }
+    }
+  }
+
   async function addRow() {
     let value = data.Literature;
     value.push({
       LITERATURE_ID: 1,
       LITERATURE_NAME: "",
-      LITERATURE_TYPE_ID: 1,
-      LITERATURE_TYPE_NAME: "",
+      LITERATURE_TYPE: "",
       LITERATURE_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
       LITERATURE_DESC: "",
       PERSON_ID: props.person_id,
@@ -227,7 +272,7 @@ function Buteeliin(props) {
                       <input
                         disabled={edit}
                         className="Borderless"
-                        style={{ width: "100px" }}
+                        placeholder="утгаа оруулна уу"
                         value={data.Literature[index]?.LITERATURE_NAME}
                         onChange={(text) => {
                           let value = [...data?.Literature];
@@ -243,33 +288,36 @@ function Buteeliin(props) {
                     </td>
 
                     <td>
-                      <Literaturetype
-                        personChild={data.Literature[index]}
-                        setPersonChild={setLiterature}
-                        index={index}
-                        edit={edit}
+                      <input
+                        disabled={edit}
+                        className="Borderless"
+                        placeholder="утгаа оруулна уу"
+                        value={data.Literature[index]?.LITERATURE_TYPE}
+                        onChange={(text) => {
+                          let value = [...data?.Literature];
+                          value[index].LITERATURE_TYPE = text.target.value;
+                          value[index].UPDATED_BY = userDetils?.USER_ID;
+                          value[index].UPDATED_DATE = dateFormat(
+                            new Date(),
+                            "dd-mmm-yy"
+                          );
+                          loadData({ Literature: value });
+                        }}
                       />
                     </td>
 
                     <td>
                       <input
                         type="date"
-                        id="start"
                         disabled={edit}
                         className="Borderless"
-                        style={{ width: "118px" }}
                         value={dateFormat(
                           new Date(data.Literature[index].LITERATURE_DATE),
                           "yyyy-mm-dd"
                         )}
-                        min="1930-01-01"
-                        max="2021-12-31"
                         onChange={(e) => {
                           let value = [...data?.Literature];
-                          value[index].LITERATURE_DATE = dateFormat(
-                            e.target.value,
-                            "dd-mmm-yy"
-                          );
+                          value[index].LITERATURE_DATE = e.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -281,9 +329,9 @@ function Buteeliin(props) {
                     </td>
                     <td>
                       <textarea
+                        placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="Borderless"
-                        style={{ width: "100px" }}
                         value={data.Literature[index]?.LITERATURE_DESC}
                         onChange={(text) => {
                           let value = [...data?.Literature];

@@ -91,23 +91,20 @@ const Baiguullaga = (props) => {
       sortable: true,
       width: "40px",
     },
-    {
-      name: "Код",
-      selector: "DEPARTMENT_ID",
-      sortable: true,
-      width: "50px",
-    },
+    // {
+    //   name: "Код",
+    //   selector: "DEPARTMENT_ID",
+
+    //   width: "50px",
+    // },
     {
       name: "Байгууллагын нэр",
       selector: "EMP_DEPARTMENT_NAME",
-      sortable: true,
-      width: "150px",
     },
     {
       name: "Газар, нэгжийн нэр",
-      selector: "EMP_COMPARTMENT_NAME",
-      sortable: true,
-      width: "200px",
+      selector: "EMP_SUBDEPARTMENT_NAME",
+      width: "300px",
     },
     {
       name: "Алба, хэлтсийн нэр",
@@ -116,7 +113,7 @@ const Baiguullaga = (props) => {
     },
     {
       name: "Албан тушаалын код",
-      selector: "EMP_SUBDEPARTMENT_NAME",
+      selector: "",
       sortable: true,
     },
     {
@@ -126,7 +123,7 @@ const Baiguullaga = (props) => {
     },
     {
       name: "Албан тушаалын төрөл",
-      selector: "EMP_SUBDEPARTMENT_NAME",
+      selector: "",
       sortable: true,
     },
     {
@@ -139,26 +136,26 @@ const Baiguullaga = (props) => {
       selector: "",
       sortable: true,
     },
-    {
-      name: "Батлагдсан орон тоо",
-      selector: "CONFIRMED_COUNT",
-      sortable: true,
-    },
-    {
-      name: "Ажилтны тоо",
-      selector: "",
-      sortable: true,
-    },
-    {
-      name: "Эзгүй орон тоо",
-      selector: "",
-      sortable: true,
-    },
-    {
-      name: "Сул орон тоо",
-      selector: "",
-      sortable: true,
-    },
+    // {
+    //   name: "Батлагдсан орон тоо",
+    //   selector: "CONFIRMED_COUNT",
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Ажилтны тоо",
+    //   selector: "",
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Эзгүй орон тоо",
+    //   selector: "",
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Сул орон тоо",
+    //   selector: "",
+    //   sortable: true,
+    // },
   ];
 
   return (

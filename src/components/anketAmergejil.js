@@ -20,54 +20,119 @@ function Mergeshliin(props) {
   }, [props]);
 
   function saveToDB() {
-    let newRow = data?.Profession?.filter((value) => value.ROWTYPE === "NEW");
-    let oldRow = data?.Profession?.filter(
-      (value) =>
-        value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
-    );
-    let message = 0;
+    props.loading(true);
+    if (requiredField(data) === true) {
+      let newRow = data?.Profession?.filter((value) => value.ROWTYPE === "NEW");
+      let oldRow = data?.Profession?.filter(
+        (value) =>
+          value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
+      );
+      let message = 0;
 
-    if (newRow?.length > 0) {
-      console.log("insert", JSON.stringify(newRow));
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/Profession/",
-        method: "POST",
-        data: { profession: newRow },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 1;
-          if (message !== 2) alert.show("амжилттай хадгаллаа");
-          //history.push('/sample')
+      if (newRow?.length > 0) {
+        console.log("insert", JSON.stringify(newRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/Profession/",
+          method: "POST",
+          data: { profession: newRow },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
-    }
-    if (oldRow?.length > 0) {
-      console.log("update", JSON.stringify(oldRow));
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/Profession/",
-        method: "PUT",
-        data: { profession: oldRow },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 2;
-          //history.push('/sample')
-          if (message !== 1) alert.show("амжилттай хадгаллаа");
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 1;
+              if (message !== 2) alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+            //history.push('/sample')
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      }
+      if (oldRow?.length > 0) {
+        console.log("update", JSON.stringify(oldRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/Profession/",
+          method: "PUT",
+          data: { profession: oldRow },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 2;
+              //history.push('/sample')
+              if (message !== 1) alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      }
+    } else {
+      props.loading(false);
     }
   }
   function setProfession(value) {
     let arr = data.Profession;
     arr[value.index] = value;
     loadData({ Profession: arr });
+  }
+  function requiredField() {
+    // emergency.forEach((a, index) => {
+    for (let i = 0; i < data.Profession.length; i++) {
+      if (
+        data.Profession[i].PROFESSION_ORG === null ||
+        data.Profession[i].PROFESSION_ORG === ""
+      ) {
+        alert.show("Мэргэшүүлэх сургалтанд хамрагдсан газар оруулан уу");
+        return false;
+      } else if (
+        data.Profession[i].PROFESSION_COUNTRY === null ||
+        data.Profession[i].PROFESSION_COUNTRY === ""
+      ) {
+        alert.show("Хаана. дотоод. гадаадын ямар байгууллагад оруулан уу");
+        return false;
+      } else if (
+        data.Profession[i].PROFESSION_NAME === null ||
+        data.Profession[i].PROFESSION_NAME === ""
+      ) {
+        alert.show("Мэргэшүүлэх Сургуулын нэр оруулан уу");
+        return false;
+      } else if (
+        data.Profession[i].PROFESSION_DIRECTION === null ||
+        data.Profession[i].PROFESSION_DIRECTION === ""
+      ) {
+        alert.show("Ямар чиглэлээр оруулан уу");
+        return false;
+      } else if (
+        data.Profession[i].DIPLOM_NO === null ||
+        data.Profession[i].DIPLOM_NO === ""
+      ) {
+        alert.show("Үнэмлэх, гэрчилгээний дугаар оруулан уу");
+        return false;
+      } else if (i === data.Profession.length - 1) {
+        return true;
+      }
+    }
   }
   async function addRow() {
     let value = data.Profession;
@@ -92,7 +157,7 @@ function Mergeshliin(props) {
     await loadData({ Profession: value });
   }
   useEffect(() => {
-    if (data?.Profession === undefined || data?.Profession === [])
+    if (data?.Profession === undefined || data?.Profession.length === 0) {
       loadData({
         Profession: [
           {
@@ -106,7 +171,6 @@ function Mergeshliin(props) {
             PROFESSION_DIRECTION: "",
             DIPLOM_NO: "",
             DIPLOM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-
             IS_ACTIVE: "1",
             CREATED_BY: userDetils?.USER_ID,
             CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
@@ -114,6 +178,7 @@ function Mergeshliin(props) {
           },
         ],
       });
+    }
   }, [data]);
 
   function removeRow(indexParam, value) {
@@ -135,12 +200,12 @@ function Mergeshliin(props) {
       })
         .then(function (response) {
           console.log("UpdateResponse", response);
-          //history.push('/sample')
-          if (response?.data?.message === "success")
+          if (response?.data?.message === "success") {
             alert.show("амжилттай устлаа");
+            setEdit(!edit);
+          }
         })
         .catch(function (error) {
-          //alert(error.response.data.error.message);
           console.log(error.response);
           alert.show("aldaa");
         });
@@ -153,7 +218,7 @@ function Mergeshliin(props) {
   }
 
   let listItems;
-  if (data?.Profession !== undefined) {
+  if (data?.Profession !== undefined && data?.Profession.length > 0) {
     listItems = (
       <div>
         <div
@@ -192,7 +257,7 @@ function Mergeshliin(props) {
                     </td>
                     <td>
                       <span className="textSaaral">
-                        Мэргэшүүлэх сургалтанд хамгаалсан газар
+                        Мэргэшүүлэх сургалтанд хамрагдсан газар
                       </span>
                     </td>
                     <td>
@@ -257,6 +322,7 @@ function Mergeshliin(props) {
                           disabled={edit}
                           className="Borderless"
                           style={{ width: "100px" }}
+                          placeholder="утгаа оруулна уу"
                           value={data.Profession[index]?.PROFESSION_COUNTRY}
                           onChange={(text) => {
                             let value = [...data?.Profession];
@@ -273,6 +339,7 @@ function Mergeshliin(props) {
                       <td>
                         <input
                           disabled={edit}
+                          placeholder="утгаа оруулна уу"
                           className="Borderless"
                           style={{ width: "100px" }}
                           value={data.Profession[index]?.PROFESSION_ORG}
@@ -291,6 +358,7 @@ function Mergeshliin(props) {
                       <td>
                         <input
                           disabled={edit}
+                          placeholder="утгаа оруулна уу"
                           className="Borderless"
                           style={{ width: "100px" }}
                           value={data.Profession[index]?.PROFESSION_NAME}
@@ -309,7 +377,6 @@ function Mergeshliin(props) {
                       <td>
                         <input
                           type="date"
-                          id="start"
                           disabled={edit}
                           className="Borderless"
                           style={{ width: "118px" }}
@@ -317,14 +384,9 @@ function Mergeshliin(props) {
                             new Date(data.Profession[index].START_DATE),
                             "yyyy-mm-dd"
                           )}
-                          min="1930-01-01"
-                          max="2021-12-31"
                           onChange={(e) => {
                             let value = [...data?.Profession];
-                            value[index].START_DATE = dateFormat(
-                              e.target.value,
-                              "dd-mmm-yy"
-                            );
+                            value[index].START_DATE = e.target.value;
                             value[index].UPDATED_BY = userDetils?.USER_ID;
                             value[index].UPDATED_DATE = dateFormat(
                               new Date(),
@@ -337,7 +399,6 @@ function Mergeshliin(props) {
                       <td>
                         <input
                           type="date"
-                          id="start"
                           disabled={edit}
                           className="Borderless"
                           style={{ width: "118px" }}
@@ -345,14 +406,9 @@ function Mergeshliin(props) {
                             new Date(data.Profession[index].END_DATE),
                             "yyyy-mm-dd"
                           )}
-                          min="1930-01-01"
-                          max="2021-12-31"
                           onChange={(e) => {
                             let value = [...data?.Profession];
-                            value[index].END_DATE = dateFormat(
-                              e.target.value,
-                              "dd-mmm-yy"
-                            );
+                            value[index].END_DATE = e.target.value;
                             value[index].UPDATED_BY = userDetils?.USER_ID;
                             value[index].UPDATED_DATE = dateFormat(
                               new Date(),
@@ -365,6 +421,7 @@ function Mergeshliin(props) {
                       <td>
                         <input
                           disabled={edit}
+                          placeholder="утгаа оруулна уу"
                           className="Borderless"
                           style={{ width: "40px" }}
                           value={data.Profession[index]?.DURATION_DAY}
@@ -383,6 +440,7 @@ function Mergeshliin(props) {
                       <td>
                         <input
                           disabled={edit}
+                          placeholder="утгаа оруулна уу"
                           className="Borderless"
                           value={data.Profession[index]?.PROFESSION_DIRECTION}
                           onChange={(text) => {
@@ -401,6 +459,7 @@ function Mergeshliin(props) {
                       <td>
                         <input
                           disabled={edit}
+                          placeholder="утгаа оруулна уу"
                           className="Borderless"
                           style={{ width: "70px" }}
                           value={data.Profession[index]?.DIPLOM_NO}
@@ -427,14 +486,9 @@ function Mergeshliin(props) {
                             new Date(data.Profession[index].DIPLOM_DATE),
                             "yyyy-mm-dd"
                           )}
-                          min="1930-01-01"
-                          max="2021-12-31"
                           onChange={(e) => {
                             let value = [...data?.Profession];
-                            value[index].DIPLOM_DATE = dateFormat(
-                              e.target.value,
-                              "dd-mmm-yy"
-                            );
+                            value[index].DIPLOM_DATE = e.target.value;
                             value[index].UPDATED_BY = userDetils?.USER_ID;
                             value[index].UPDATED_DATE = dateFormat(
                               new Date(),
@@ -485,7 +539,6 @@ function Mergeshliin(props) {
             ) : null}
           </div>
         </div>
-        <ZeregTsol person_id={props.person_id} />
       </div>
     );
   } else {
@@ -511,14 +564,13 @@ function ZeregTsol(props) {
       loadData({
         Fame: [
           {
-            FAME_TYPE_NAME: "Шинжлэн ухааны цол",
+            FAME_TYPE_NAME: "",
             FAME_TYPE_ID: 1,
             SUBFAME_TYPE_ID: 1,
-            SUBFAME_TYPE_NAME: "Судлаач доктор",
-            FAME_ORG: "baiguullaga",
+            SUBFAME_TYPE_NAME: "",
+            FAME_ORG: "",
             FAME_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            FAME_NO: "ognoo",
-
+            FAME_NO: "",
             PERSON_ID: props.person_id,
             IS_ACTIVE: "1",
             CREATED_BY: userDetils?.USER_ID,
@@ -528,49 +580,77 @@ function ZeregTsol(props) {
         ],
       });
   }, [data]);
-  function saveToDB() {
-    let newRow = data?.Fame?.filter((value) => value.ROWTYPE === "NEW");
-    let oldRow = data?.Fame?.filter(
-      (value) =>
-        value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
-    );
-    let message = 0;
 
-    if (newRow?.length > 0) {
-      console.log("insert", JSON.stringify(newRow));
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/fame/",
-        method: "POST",
-        data: { fame: newRow },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 1;
-          if (message !== 2) alert.show("амжилттай хадгаллаа");
-          //history.push('/sample')
+  function saveToDB() {
+    props.loading(true);
+    if (requiredField(data) === true) {
+      let newRow = data?.Fame?.filter((value) => value.ROWTYPE === "NEW");
+      let oldRow = data?.Fame?.filter(
+        (value) =>
+          value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
+      );
+      let message = 0;
+
+      if (newRow?.length > 0) {
+        console.log("insert", JSON.stringify(newRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/fame/",
+          method: "POST",
+          data: { fame: newRow },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
-    }
-    if (oldRow?.length > 0) {
-      console.log("update", JSON.stringify(oldRow));
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/fame/",
-        method: "PUT",
-        data: { fame: oldRow },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") message = 2;
-          //history.push('/sample')
-          if (message !== 1) alert.show("амжилттай хадгаллаа");
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 1;
+              if (message !== 2) alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+            //history.push('/sample')
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      }
+      if (oldRow?.length > 0) {
+        console.log("update", JSON.stringify(oldRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/fame/",
+          method: "PUT",
+          data: { fame: oldRow },
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 2;
+              //history.push('/sample')
+              if (message !== 1) alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+              props.loading(false);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            }
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
+          });
+      }
+    } else {
+      props.loading(false);
     }
   }
   function setFame(value) {
@@ -578,16 +658,30 @@ function ZeregTsol(props) {
     arr[value.index] = value;
     loadData({ Fame: arr });
   }
+  function requiredField() {
+    for (let i = 0; i < data.Fame.length; i++) {
+      if (data.Fame[i].FAME_ORG === null || data.Fame[i].FAME_ORG === "") {
+        alert.show("Цол олгосон байгуулага оруулан уу");
+        return false;
+      } else if (data.Fame[i].FAME_NO === null || data.Fame[i].FAME_NO === "") {
+        alert.show("Гэрчилгээ дипломын дугаар оруулан уу");
+        return false;
+      } else if (i === data.Fame.length - 1) {
+        return true;
+      }
+    }
+  }
+
   async function addRow() {
     let value = data.Fame;
     value.push({
-      FAME_TYPE_NAME: "Шинжлэн ухааны цол",
+      FAME_TYPE_NAME: "",
       FAME_TYPE_ID: 1,
       SUBFAME_TYPE_ID: 1,
-      SUBFAME_TYPE_NAME: "Судлаач доктор",
-      FAME_ORG: "baiguullaga",
+      SUBFAME_TYPE_NAME: "",
+      FAME_ORG: "",
       FAME_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-      FAME_NO: "ognoo",
+      FAME_NO: "",
 
       PERSON_ID: props.person_id,
       IS_ACTIVE: "1",
@@ -598,6 +692,7 @@ function ZeregTsol(props) {
 
     await loadData({ Fame: value });
   }
+
   function removeRow(indexParam, value) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
@@ -618,8 +713,10 @@ function ZeregTsol(props) {
         .then(function (response) {
           console.log("UpdateResponse", response);
           //history.push('/sample')
-          if (response?.data?.message === "success")
+          if (response?.data?.message === "success") {
             alert.show("амжилттай устлаа");
+            setEdit(!edit);
+          }
         })
         .catch(function (error) {
           //alert(error.response.data.error.message);
@@ -638,7 +735,7 @@ function ZeregTsol(props) {
       <div
         className=" box"
         style={{
-          marginTop: "80px",
+          marginTop: "1.5%",
           width: "98%",
           height: "auto",
           marginLeft: "10px",
@@ -731,6 +828,7 @@ function ZeregTsol(props) {
                     <td>
                       <input
                         disabled={edit}
+                        placeholder="утгаа оруулна уу"
                         className="Borderless"
                         value={data.Fame[index]?.FAME_ORG}
                         onChange={(text) => {
@@ -749,7 +847,6 @@ function ZeregTsol(props) {
                     <td>
                       <input
                         type="date"
-                        id="start"
                         disabled={edit}
                         className="Borderless"
                         style={{ width: "118px" }}
@@ -757,14 +854,9 @@ function ZeregTsol(props) {
                           new Date(data.Fame[index].FAME_DATE),
                           "yyyy-mm-dd"
                         )}
-                        min="1930-01-01"
-                        max="2021-12-31"
                         onChange={(e) => {
                           let value = [...data?.Fame];
-                          value[index].FAME_DATE = dateFormat(
-                            e.target.value,
-                            "dd-mmm-yy"
-                          );
+                          value[index].FAME_DATE = e.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -777,6 +869,7 @@ function ZeregTsol(props) {
                     <td>
                       <input
                         disabled={edit}
+                        placeholder="утгаа оруулна уу"
                         className="Borderless"
                         value={data.Fame[index]?.FAME_NO}
                         onChange={(text) => {
@@ -839,4 +932,4 @@ function ZeregTsol(props) {
   return listItems;
 }
 
-export default Mergeshliin;
+export { Mergeshliin, ZeregTsol };
