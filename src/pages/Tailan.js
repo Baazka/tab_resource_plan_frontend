@@ -9,7 +9,6 @@ import DataTable, { createTheme } from "react-data-table-component";
 import { Search, Filter, Add } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 
-
 var rowNumber = 1;
 createTheme("solarized", {
   text: {
@@ -62,7 +61,7 @@ const Home = (props) => {
   const history = useHistory();
   const [jagsaalt, setJagsaalt] = useState();
   const [Button1, setButtons1] = useState(1);
-    useEffect(() => {
+  useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
         url: "http://10.10.10.46:3002/api/v1/employees",
@@ -75,7 +74,7 @@ const Home = (props) => {
     test();
     console.log("jagsaalt", jagsaalt);
   }, [props]);
- 
+
   return (
     <div
       style={{
@@ -125,9 +124,12 @@ const Home = (props) => {
             <div className="columns">
               <div className="column is-12">
                 <div
-                onClick={() => {
-                    history.push("/web/Tailan/AnketA",{TailanNer: "ТАЙЛАН", turul:"emergency"});
-                }}
+                  onClick={() => {
+                    history.push("/web/Tailan/AnketA", {
+                      TailanNer: "ТАЙЛАН",
+                      turul: "emergency",
+                    });
+                  }}
                   className="button"
                   style={{
                     display: "block",
@@ -142,13 +144,16 @@ const Home = (props) => {
             </div>
           ) : null}
         </div>
-        
+
         {Button1 ? (
           <div>
             <div
-                onClick={() => {
-                    history.push("/web/Tailan/AnketA",{TailanNer: "ТАЙЛАН", turul:"gerBvl"});
-                }}
+              onClick={() => {
+                history.push("/web/Tailan/AnketA", {
+                  TailanNer: "ТАЙЛАН",
+                  turul: "gerBvl",
+                });
+              }}
               className="button"
               style={{
                 display: "block",
@@ -160,14 +165,17 @@ const Home = (props) => {
               Гэр бүлийн байдал
             </div>
           </div>
-          ) : null}
-       
+        ) : null}
+
         {Button1 ? (
           <div>
             <div
-               onClick={() => {
-                history.push("/web/Tailan/AnketA",{TailanNer: "ТАЙЛАН", turul:"sadan"});
-            }}
+              onClick={() => {
+                history.push("/web/Tailan/AnketA", {
+                  TailanNer: "ТАЙЛАН",
+                  turul: "sadan",
+                });
+              }}
               className="button"
               style={{
                 display: "block",
@@ -179,13 +187,16 @@ const Home = (props) => {
               Садан төрлийн байдал
             </div>
           </div>
-         ) : null}
-          {Button1 ? (
+        ) : null}
+        {Button1 ? (
           <div>
             <div
-               onClick={() => {
-                history.push("/web/Tailan/AnketA",{TailanNer: "ТАЙЛАН", turul:"ShalgaltiinTalaarkhMedeelel"});
-            }}
+              onClick={() => {
+                history.push("/web/Tailan/AnketA", {
+                  TailanNer: "ТАЙЛАН",
+                  turul: "ShalgaltiinTalaarkhMedeelel",
+                });
+              }}
               className="button"
               style={{
                 display: "block",
@@ -197,13 +208,16 @@ const Home = (props) => {
               Төрийн жинхэнэ албаны шалгалтын талаарх мэдээлэл
             </div>
           </div>
-         ) : null}
-         {Button1 ? (
+        ) : null}
+        {Button1 ? (
           <div>
             <div
-               onClick={() => {
-                history.push("/web/Tailan/AnketA",{TailanNer: "ТАЙЛАН", turul:"TangaragiinBvrtgel"});
-            }}
+              onClick={() => {
+                history.push("/web/Tailan/AnketA", {
+                  TailanNer: "ТАЙЛАН",
+                  turul: "TangaragiinBvrtgel",
+                });
+              }}
               className="button"
               style={{
                 display: "block",
@@ -215,13 +229,16 @@ const Home = (props) => {
               Тангарагын бүртгэл
             </div>
           </div>
-         ) : null}
-       {Button1 ? (
+        ) : null}
+        {Button1 ? (
           <div>
             <div
-               onClick={() => {
-                history.push("/web/Tailan/AnketA",{TailanNer: "ТАЙЛАН", turul:"GadaadHelniiMedleg"});
-            }}
+              onClick={() => {
+                history.push("/web/Tailan/AnketA", {
+                  TailanNer: "ТАЙЛАН",
+                  turul: "GadaadHelniiMedleg",
+                });
+              }}
               className="button"
               style={{
                 display: "block",
@@ -230,17 +247,20 @@ const Home = (props) => {
                 textAlign: "left",
               }}
             >
-             Гадаад хэлний мэдлэг
+              Гадаад хэлний мэдлэг
             </div>
           </div>
-         ) : null}
- 
-           {Button1 ? (
+        ) : null}
+
+        {Button1 ? (
           <div>
             <div
-               onClick={() => {
-                history.push("/web/Tailan/AnketA",{TailanNer: "ТАЙЛАН", turul:"Bolowsrol"});
-            }}
+              onClick={() => {
+                history.push("/web/Tailan/AnketA", {
+                  TailanNer: "ТАЙЛАН",
+                  turul: "Bolowsrol",
+                });
+              }}
               className="button"
               style={{
                 display: "block",
@@ -252,13 +272,16 @@ const Home = (props) => {
               Боловсрол
             </div>
           </div>
-         ) : null}
-          {Button1 ? (
+        ) : null}
+        {Button1 ? (
           <div>
             <div
-               onClick={() => {
-                history.push("/web/Tailan/AnketA",{TailanNer: "ТАЙЛАН", turul:"BolowsrolDoktor"});
-            }}
+              onClick={() => {
+                history.push("/web/Tailan/AnketA", {
+                  TailanNer: "ТАЙЛАН",
+                  turul: "BolowsrolDoktor",
+                });
+              }}
               className="button"
               style={{
                 display: "block",
@@ -270,13 +293,16 @@ const Home = (props) => {
               Боловсрол-доктор
             </div>
           </div>
-         ) : null}
-          {Button1 ? (
+        ) : null}
+        {Button1 ? (
           <div>
             <div
-               onClick={() => {
-                history.push("/web/Tailan/AnketA",{TailanNer: "ТАЙЛАН", turul:"MergeshliinBeltgel"});
-            }}
+              onClick={() => {
+                history.push("/web/Tailan/AnketA", {
+                  TailanNer: "ТАЙЛАН",
+                  turul: "MergeshliinBeltgel",
+                });
+              }}
               className="button"
               style={{
                 display: "block",
@@ -288,13 +314,16 @@ const Home = (props) => {
               Мэргэшлийн бэлтгэл
             </div>
           </div>
-         ) : null}
-           {Button1 ? (
+        ) : null}
+        {Button1 ? (
           <div>
             <div
-               onClick={() => {
-                history.push("/web/Tailan/AnketA",{TailanNer: "ТАЙЛАН", turul:"ErdmiinTsol"});
-            }}
+              onClick={() => {
+                history.push("/web/Tailan/AnketA", {
+                  TailanNer: "ТАЙЛАН",
+                  turul: "ErdmiinTsol",
+                });
+              }}
               className="button"
               style={{
                 display: "block",
@@ -303,16 +332,19 @@ const Home = (props) => {
                 textAlign: "left",
               }}
             >
-             Эрдмийн цол
+              Эрдмийн цол
             </div>
           </div>
-         ) : null}
-         {Button1 ? (
+        ) : null}
+        {Button1 ? (
           <div>
             <div
-               onClick={() => {
-                history.push("/web/Tailan/AnketA",{TailanNer: "Цэргийн алба", turul:"TsergiinAlba"});
-            }}
+              onClick={() => {
+                history.push("/web/Tailan/AnketA", {
+                  TailanNer: "Цэргийн алба",
+                  turul: "TsergiinAlba",
+                });
+              }}
               className="button"
               style={{
                 display: "block",
@@ -321,16 +353,19 @@ const Home = (props) => {
                 textAlign: "left",
               }}
             >
-             Цэргийн алба
+              Цэргийн алба
             </div>
           </div>
-         ) : null}
-          {Button1 ? (
+        ) : null}
+        {Button1 ? (
           <div>
             <div
-               onClick={() => {
-                history.push("/web/Tailan/AnketA",{TailanNer: "ТАЙЛАН", turul:"ShagnaliinTalaarhMedeelel"});
-            }}
+              onClick={() => {
+                history.push("/web/Tailan/AnketA", {
+                  TailanNer: "ТАЙЛАН",
+                  turul: "ShagnaliinTalaarhMedeelel",
+                });
+              }}
               className="button"
               style={{
                 display: "block",
@@ -339,16 +374,19 @@ const Home = (props) => {
                 textAlign: "left",
               }}
             >
-             Шагналын талаарх мэдээлэл
+              Шагналын талаарх мэдээлэл
             </div>
           </div>
-         ) : null}
-       {Button1 ? (
+        ) : null}
+        {Button1 ? (
           <div>
             <div
-               onClick={() => {
-                history.push("/web/Tailan/AnketA",{TailanNer: "ТАЙЛАН", turul:"TurshlagiinTalaarhMedeelel"});
-            }}
+              onClick={() => {
+                history.push("/web/Tailan/AnketA", {
+                  TailanNer: "ТАЙЛАН",
+                  turul: "TurshlagiinTalaarhMedeelel",
+                });
+              }}
               className="button"
               style={{
                 display: "block",
@@ -357,16 +395,19 @@ const Home = (props) => {
                 textAlign: "left",
               }}
             >
-             Туршлагын талаарх мэдээлэл
+              Туршлагын талаарх мэдээлэл
             </div>
           </div>
-         ) : null}
-         {Button1 ? (
+        ) : null}
+        {Button1 ? (
           <div>
             <div
-               onClick={() => {
-                history.push("/web/Tailan/AnketA",{TailanNer: "Бүтээлийн жагсаалт", turul:"BvteeliinJagsaalt"});
-            }}
+              onClick={() => {
+                history.push("/web/Tailan/AnketA", {
+                  TailanNer: "Бүтээлийн жагсаалт",
+                  turul: "BvteeliinJagsaalt",
+                });
+              }}
               className="button"
               style={{
                 display: "block",
@@ -375,10 +416,10 @@ const Home = (props) => {
                 textAlign: "left",
               }}
             >
-             Бүтээлийн жагсаалт
+              Бүтээлийн жагсаалт
             </div>
           </div>
-         ) : null}
+        ) : null}
       </div>
 
       <Footer />
