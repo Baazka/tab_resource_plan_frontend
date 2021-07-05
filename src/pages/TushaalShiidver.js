@@ -81,6 +81,7 @@ const Home = (props) => {
   function anketA() {
     history.push("/web/anketA/1");
   }
+  const [NuutsiinBvrtgel, setNuutsiinBvrtgel] = useState(1);
 
   const columns = [
     {
@@ -212,8 +213,22 @@ const Home = (props) => {
             <span style={{ width: "40", height: "40" }}>
               <img src={Filter} width="35" height="40" />
             </span>
-          </div>
-        </div>
+          
+        {/* <button
+              class="input  is-size-7"
+              style={{
+                borderRadius: "6px",
+                width: "8rem",
+                backgroundColor: "#418ee6",
+                color: "white",
+                justifyContent: "center",
+                paddingRight: "0px",
+                paddingLeft: "0px",
+              }}
+              onClick={() => setNuutsiinBvrtgel(!NuutsiinBvrtgel)}
+            >
+              Нөөцийн бүртгэл
+            </button> */}
         <DataTable
           columns={columns}
           data={jagsaalt}
@@ -229,6 +244,8 @@ const Home = (props) => {
           overflowY={true}
           overflowYOffset={"390px"}
         />
+        </div>
+        </div>
       </div>
       <Footer />
     </div>
