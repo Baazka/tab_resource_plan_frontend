@@ -71,17 +71,17 @@ function Subnational(props) {
           id="browser"
           disabled={props.edit}
           className="anketInput"
-          value={props.personChild?.SURNAME_NAME}
+          value={props.personChild?.SURNAME}
           onChange={(text) =>
             props.setPersonChild({
               ...props.personChild,
-              ...{ SURNAME_NAME: text.target.value },
+              ...{ SURNAME: text.target.value },
             })
           }
         />
         <datalist id="browsers">
           {data?.map((nation, index) => (
-            <option key={index} value={nation.SURNAME_NAME} />
+            <option key={index} value={nation.SURNAME} />
           ))}
         </datalist>
       </div>

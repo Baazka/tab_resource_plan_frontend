@@ -131,6 +131,7 @@ function AnketNeg(props) {
           DYNASTY_ID: 1,
           BIRTH_OFFICE_ID: 1,
           BIRTH_SUBOFFICE_ID: 1,
+          SURNAME: "",
           BIRTH_PLACE: "",
           IS_MARRIED: 0,
           IS_ACTIVE: 1,
