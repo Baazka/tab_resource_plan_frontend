@@ -35,14 +35,7 @@ const options = {
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter
-      forceRefresh={true}
-      getUserConfirmation={(message, callback) => {
-        // this is the default behavior
-        const allowTransition = window.confirm(message);
-        callback(allowTransition);
-      }}
-    >
+    <BrowserRouter>
       <AlertProvider template={AlertTemplate} {...options}>
         <App />
       </AlertProvider>
