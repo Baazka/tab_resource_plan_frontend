@@ -27,6 +27,8 @@ import {
   DocumentsB,
   DashboardW,
   Dashboard,
+  Tailan,
+  TailanB,
 } from "../assets/images/zurag";
 
 const SideBar = (props) => {
@@ -221,7 +223,7 @@ const SideBar = (props) => {
                   onClick={() => SelectMenu({ menu5: !menuClick.menu5 })}
                 >
                   <img
-                    src={menuClick.menu5 ? DocumentsB : Documents}
+                    src={menuClick.menu5 ? TailanB : Tailan}
                     width="40"
                     height="30"
                   />

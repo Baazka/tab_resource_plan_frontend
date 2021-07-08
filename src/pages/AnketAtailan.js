@@ -2,12 +2,19 @@ import Header from "../components/header";
 import React, { useEffect, useState } from "react";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { Excel } from "../assets/images/zurag";
+import { useHistory } from "react-router-dom";
+import { DepartmentID } from "../components/library";
+import { useAlert } from "react-alert";
 var dateFormat = require("dateformat");
 
 const axios = require("axios");
 
-function anketAtailan(props) {
-  console.log(props, "props");
+function AnketAtailan(props) {
+  const history = useHistory();
+  function butsakh() {
+    history.goBack();
+  }
+
   return (
     <div
       style={{
@@ -18,7 +25,7 @@ function anketAtailan(props) {
         backgroundColor: "#f1f1f1",
       }}
     >
-      <Header title="Тайлан"></Header>
+      <Header title="Тайлан" back={true} butsakh={butsakh}></Header>
       <div style={{ marginTop: "5%" }}>
         {props.match.params.turul === "emergency" ? <Emergency /> : null}
         {props.match.params.turul === "gerBvl" ? <GerBvl /> : null}
@@ -56,13 +63,31 @@ function anketAtailan(props) {
 }
 function Emergency(props) {
   const [data, loadData] = useState();
+  const [department, setDepartment] = useState({
+    EMP_DEPARTMENT_ID: 1,
+    check: true,
+  });
+  const alert = useAlert();
+  const [register, setRegister] = useState(true);
+
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/reportEmergency/"
+      "http://hr.audit.mn/hr/api/v1/reportEmergency/"
     );
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
+  useEffect(async () => {
+    if (department.check !== true) {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/reportEmergency/" +
+          department.EMP_DEPARTMENT_ID
+      );
+      if (listItems.data !== undefined && listItems.data.length === 0)
+        alert.show("өгөгдөл байхгүй байна");
+      else loadData(listItems?.data);
+    }
+  }, [department]);
 
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -76,11 +101,39 @@ function Emergency(props) {
           className="box"
           style={{ marginLeft: "7%", padding: "20px 2px 19% 10px" }}
         >
-          <div className="columns">
-            <div className="column is-4 ml-6   " style={{ fontSize: "20px" }}>
-              Зайлшгүй шаардлагатай үед холбоо барих хүн
+          <span
+            style={{
+              fontSize: "2rem",
+              marginLeft: "3rem",
+              marginBottom: "3rem",
+            }}
+          >
+            Зайлшгүй шаардлагатай үед холбоо барих хүн
+          </span>
+          <div className="columns mt-1">
+            <div className="column is-5 ml-6" style={{ fontSize: "0.7rem" }}>
+              <div class="select">
+                <DepartmentID
+                  personChild={department}
+                  setPersonChild={setDepartment}
+                />
+              </div>
+
+              <label
+                class="checkbox"
+                style={{ marginLeft: "10px", marginTop: "5px" }}
+              >
+                <input
+                  type="checkbox"
+                  value={register}
+                  onChange={() => setRegister(!register)}
+                />
+                <span style={{ marginLeft: "2px" }}>
+                  Регистерийн дугаар харах эсэх
+                </span>
+              </label>
             </div>
-            <div className="column is-3 ml-6"></div>
+            <div className="column is-2 ml-6"></div>
             <div className="column is-1 ">
               <div style={{ display: "none" }}>
                 <ReactHTMLTableToExcel
@@ -122,6 +175,7 @@ function Emergency(props) {
                     <td>Овог</td>
                     <td>Нэр</td>
                     <td>Утасны дугаар</td>
+                    {register === false ? <td>Регистерийн дугаар</td> : null}
                   </tr>
                 </thead>
                 <tbody>
@@ -138,6 +192,11 @@ function Emergency(props) {
                       <td style={{ width: "20rem" }}>
                         {value.EMERGENCY_PHONE}
                       </td>
+                      {register === false ? (
+                        <td style={{ width: "20rem" }}>
+                          {value.PERSON_REGISTER_NO}
+                        </td>
+                      ) : null}
                     </tr>
                   ))}
                 </tbody>
@@ -155,13 +214,30 @@ function Emergency(props) {
 }
 function GerBvl(props) {
   const [data, loadData] = useState();
+  const [department, setDepartment] = useState({
+    EMP_DEPARTMENT_ID: 1,
+    check: true,
+  });
+  const alert = useAlert();
+  const [register, setRegister] = useState(true);
+
   useEffect(async () => {
-    let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/reportFamily/1/"
-    );
+    let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportFamily/1/");
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
+
+  useEffect(async () => {
+    if (department.check !== true) {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/reportFamily/" +
+          department.EMP_DEPARTMENT_ID
+      );
+      if (listItems.data !== undefined && listItems.data.length === 0)
+        alert.show("өгөгдөл байхгүй байна");
+      else loadData(listItems?.data);
+    }
+  }, [department]);
 
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -176,11 +252,39 @@ function GerBvl(props) {
           style={{ marginLeft: "7%", padding: "20px 2px 27% 10px" }}
         >
           <div>
+            <span
+              style={{
+                fontSize: "2rem",
+                marginLeft: "3rem",
+                marginBottom: "3rem",
+              }}
+            >
+              Гэр бүлийн байдал
+            </span>
             <div className="columns">
-              <div className="column is-3 ml-6 " style={{ fontSize: "20px" }}>
-                Гэр бүлийн байдал
+              <div className="column is-5 ml-6" style={{ fontSize: "0.7rem" }}>
+                <div class="select">
+                  <DepartmentID
+                    personChild={department}
+                    setPersonChild={setDepartment}
+                  />
+                </div>
+
+                <label
+                  class="checkbox"
+                  style={{ marginLeft: "10px", marginTop: "5px" }}
+                >
+                  <input
+                    type="checkbox"
+                    value={register}
+                    onChange={() => setRegister(!register)}
+                  />
+                  <span style={{ marginLeft: "2px" }}>
+                    Регистерийн дугаар харах эсэх
+                  </span>
+                </label>
               </div>
-              <div className="column is-6 ml-5"></div>
+              <div className="column is-2 ml-6"></div>
               <div className="column is-3 ">
                 <div style={{ display: "none" }}>
                   <ReactHTMLTableToExcel
@@ -257,6 +361,11 @@ function GerBvl(props) {
                         <td style={{ backgroundColor: "#f1f1f1" }}>
                           <span>Албан тушаал</span>
                         </td>
+                        {register === false ? (
+                          <td style={{ backgroundColor: "#f1f1f1" }}>
+                            Регистерийн дугаар
+                          </td>
+                        ) : null}
                       </tr>
                       {data?.map((value, index) => (
                         <tr>
@@ -280,6 +389,11 @@ function GerBvl(props) {
                           <td>{value.SUB_OFFICE_NAME}</td>
                           <td>{value.MEMBER_ORG}</td>
                           <td>{value.MEMBER_POSITION}</td>
+                          {register === false ? (
+                            <td style={{ width: "20rem" }}>
+                              {value.PERSON_REGISTER_NO}
+                            </td>
+                          ) : null}
                         </tr>
                       ))}
                     </tbody>
@@ -299,10 +413,11 @@ function GerBvl(props) {
 }
 function Sadan(props) {
   const [data, loadData] = useState();
+  const [department, setDepartment] = useState({
+    EMP_DEPARTMENT_ID: 1,
+  });
   useEffect(async () => {
-    let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/reportFamily/2/"
-    );
+    let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportFamily/2/");
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
@@ -323,6 +438,10 @@ function Sadan(props) {
             <div className="columns">
               <div className="column is-3 ml-6 " style={{ fontSize: "20px" }}>
                 Садан төрлийн байдал
+                <DepartmentID
+                  personChild={department}
+                  setPersonChild={setDepartment}
+                />
               </div>
               <div className="column is-6 ml-5"></div>
               <div className="column is-3 ">
@@ -444,7 +563,7 @@ function Sadan(props) {
 function ShalgaltiinTalaarkhMedeelel(props) {
   const [data, loadData] = useState();
   useEffect(async () => {
-    let listItems = await axios("http://172.16.24.103:3002/api/v1/reportExam/");
+    let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportExam/");
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
@@ -571,7 +690,7 @@ function ShalgaltiinTalaarkhMedeelel(props) {
 function TangaragiinBvrtgel(props) {
   const [data, loadData] = useState();
   useEffect(async () => {
-    let listItems = await axios("http://172.16.24.103:3002/api/v1/reportOath/");
+    let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportOath/");
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
@@ -688,9 +807,7 @@ function TangaragiinBvrtgel(props) {
 function GadaadHelniiMedleg(props) {
   const [data, loadData] = useState();
   useEffect(async () => {
-    let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/reportLanguage/"
-    );
+    let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportLanguage/");
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
@@ -808,7 +925,7 @@ function Bolowsrol(props) {
   const [data, loadData] = useState();
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/reportEducation/1/"
+      "http://hr.audit.mn/hr/api/v1/reportEducation/1/"
     );
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
@@ -938,7 +1055,7 @@ function BolowsrolDoktor(props) {
   const [data, loadData] = useState();
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/reportEducation/2/"
+      "http://hr.audit.mn/hr/api/v1/reportEducation/2/"
     );
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
@@ -1063,7 +1180,7 @@ function MergeshliinBeltgel(props) {
   const [data, loadData] = useState();
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/reportProfession/"
+      "http://hr.audit.mn/hr/api/v1/reportProfession/"
     );
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
@@ -1201,7 +1318,7 @@ function MergeshliinBeltgel(props) {
 function ErdmiinTsol(props) {
   const [data, loadData] = useState();
   useEffect(async () => {
-    let listItems = await axios("http://172.16.24.103:3002/api/v1/reportFame/");
+    let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportFame/");
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
@@ -1308,9 +1425,7 @@ function ErdmiinTsol(props) {
 function TsergiinAlba(props) {
   const [data, loadData] = useState();
   useEffect(async () => {
-    let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/reportForce/"
-    );
+    let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportForce/");
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
@@ -1401,9 +1516,7 @@ function TsergiinAlba(props) {
 function ShagnaliinTalaarhMedeelel(props) {
   const [data, loadData] = useState();
   useEffect(async () => {
-    let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/reportAward/"
-    );
+    let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportAward/");
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
@@ -1523,7 +1636,7 @@ function TurshlagiinTalaarhMedeelel(props) {
   const [data, loadData] = useState();
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/reportExperience/"
+      "http://hr.audit.mn/hr/api/v1/reportExperience/"
     );
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
@@ -1658,7 +1771,7 @@ function BvteeliinJagsaalt(props) {
   const [data, loadData] = useState();
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/reportLiterature/"
+      "http://hr.audit.mn/hr/api/v1/reportLiterature/"
     );
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
@@ -1772,4 +1885,4 @@ function BvteeliinJagsaalt(props) {
 
   return listItems;
 }
-export default anketAtailan;
+export default AnketAtailan;

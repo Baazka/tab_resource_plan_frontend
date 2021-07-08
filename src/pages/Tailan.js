@@ -61,21 +61,7 @@ const customStyles = {
 const Home = (props) => {
   const history = useHistory();
   const { turul } = useParams();
-  const [jagsaalt, setJagsaalt] = useState();
-  const [Button1, setButtons1] = useState(1);
-  useEffect(() => {
-    async function test() {
-      let jagsaalts = await DataRequest({
-        url: "http://10.10.10.46:3002/api/v1/employees",
-        method: "GET",
-        data: {},
-      });
-      setJagsaalt(jagsaalts?.data);
-      console.log(jagsaalts);
-    }
-    test();
-    console.log("jagsaalt", jagsaalt);
-  }, [props]);
+  const [Button1, setButtons1] = useState(false);
 
   return (
     <div
@@ -114,13 +100,13 @@ const Home = (props) => {
               width: "100%",
               border: "none",
               backgroundColor: "silver",
-              padding: "14px 28px",
+
               fontSize: "16px",
               cursor: "pointer",
               textAlign: "center",
             }}
           >
-            АНКЕТ А
+            Төрийн албан хаагчийн анкетийн А
           </div>
           {Button1 ? (
             <div className="columns">

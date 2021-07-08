@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from "react";
 import PropTypes from "prop-types";
 import { useHistory } from "react-router-dom";
-import { UserB, Noti } from "../assets/images/zurag";
+import { UserB, Noti, BackButton } from "../assets/images/zurag";
 
 import { DataRequest } from "../functions/DataApi";
 import { connect } from "react-redux";
@@ -52,11 +52,21 @@ const Header = (props) => {
       }}
     >
       <div style={{ marginLeft: "7%", marginTop: "20px" }}>
+        {props.back ? (
+          <img
+            src={BackButton}
+            height="25"
+            width="25"
+            onClick={() => props.butsakh()}
+            style={{ cursor: "pointer" }}
+          />
+        ) : null}
         <span
           style={{
             color: "#418ee6",
             fontSize: 25,
             fontFamily: "RalewayRegular",
+            marginLeft: "10px",
           }}
         >
           {props.title}

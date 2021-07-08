@@ -42,6 +42,10 @@ import Add from "../images/icons/add.png";
 import Delete from "./icons/delete.png";
 import AddBlue from "./icons/addBlue.png";
 import Excel from "./icons/EXCEL.png";
+import BackButton from "./icons/backButton.png";
+import Tailan from "./icons/tailan.png";
+import TailanB from "./icons/tailanB.png";
+
 export {
   LeftArrow,
   RigthArrow,
@@ -84,4 +88,7 @@ export {
   Delete,
   AddBlue,
   Excel,
+  BackButton,
+  Tailan,
+  TailanB,
 };

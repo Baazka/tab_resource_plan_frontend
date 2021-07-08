@@ -520,6 +520,41 @@ function Literaturetype(props) {
   return listItems;
 }
 
+function DepartmentID(props) {
+  const [data, loadData] = useState(null);
+  useEffect(async () => {
+    let listItems = await axios(
+      "http://hr.audit.mn/hr/api/v1/library/department"
+    );
+    loadData(listItems.data);
+  }, []);
+  let listItems;
+  if (data !== undefined) {
+    listItems = (
+      <select
+        disabled={props.edit}
+        className="anketInput"
+        value={props.personChild?.EMP_DEPARTMENT_ID}
+        onChange={(text) =>
+          props.setPersonChild({
+            ...props.personChild,
+            ...{ EMP_DEPARTMENT_ID: text.target.value, check: false },
+          })
+        }
+      >
+        {data?.map((nation, index) => (
+          <option key={index} value={nation.EMP_DEPARTMENT_ID}>
+            {nation.EMP_DEPARTMENT_NAME}
+          </option>
+        ))}
+      </select>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+}
+
 function DateInput(props) {
   const [dateShow, setDateShow] = useState(
     props.data?.dateValue !== undefined
@@ -604,4 +639,5 @@ export {
   Literaturetype,
   DateInput,
   DateInputArray,
+  DepartmentID,
 };
