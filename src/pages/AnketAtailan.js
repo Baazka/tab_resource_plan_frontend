@@ -74,8 +74,10 @@ function Emergency(props) {
     let listItems = await axios(
       "http://hr.audit.mn/hr/api/v1/reportEmergency/"
     );
-    console.log("amjilttai", listItems.data);
-    loadData(listItems?.data);
+
+    if (listItems.data !== undefined && listItems.data.length === 0)
+      alert.show("өгөгдөл байхгүй байна");
+    else loadData(listItems?.data);
   }, [props]);
   useEffect(async () => {
     if (department.check !== true) {
@@ -224,13 +226,15 @@ function GerBvl(props) {
   useEffect(async () => {
     let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportFamily/1/");
     console.log("amjilttai", listItems.data);
-    loadData(listItems?.data);
+    if (listItems.data !== undefined && listItems.data.length === 0)
+      alert.show("өгөгдөл байхгүй байна");
+    else loadData(listItems?.data);
   }, [props]);
 
   useEffect(async () => {
     if (department.check !== true) {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportFamily/" +
+        "http://hr.audit.mn/hr/api/v1/reportFamily/1/" +
           department.EMP_DEPARTMENT_ID
       );
       if (listItems.data !== undefined && listItems.data.length === 0)
