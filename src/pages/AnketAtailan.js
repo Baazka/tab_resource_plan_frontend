@@ -288,8 +288,8 @@ function GerBvl(props) {
                   </span>
                 </label>
               </div>
-              <div className="column is-2 ml-6"></div>
-              <div className="column is-3 ">
+              <div className="column is-4 ml-6"></div>
+              <div className="column is-2 ">
                 <div style={{ display: "none" }}>
                   <ReactHTMLTableToExcel
                     id="GerBvlXLS"
@@ -419,13 +419,26 @@ function Sadan(props) {
   const [data, loadData] = useState();
   const [department, setDepartment] = useState({
     EMP_DEPARTMENT_ID: 1,
+    check: true,
   });
+  const alert = useAlert();
+
   useEffect(async () => {
     let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportFamily/2/");
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
-
+  useEffect(async () => {
+    if (department.check !== true) {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/reportFamily/2/" +
+          department.EMP_DEPARTMENT_ID
+      );
+      if (listItems.data !== undefined && listItems.data.length === 0)
+        alert.show("өгөгдөл байхгүй байна");
+      else loadData(listItems?.data);
+    }
+  }, [department]);
   let listItems;
   if (data !== undefined && data.length > 0) {
     listItems = (
@@ -439,16 +452,26 @@ function Sadan(props) {
           style={{ marginLeft: "7%", padding: "20px 2px 32% 10px" }}
         >
           <div>
+            <span
+              style={{
+                fontSize: "2rem",
+                marginLeft: "3rem",
+                marginBottom: "3rem",
+              }}
+            >
+              Садан төрлийн байдал
+            </span>
             <div className="columns">
-              <div className="column is-3 ml-6 " style={{ fontSize: "20px" }}>
-                Садан төрлийн байдал
-                <DepartmentID
-                  personChild={department}
-                  setPersonChild={setDepartment}
-                />
+              <div className="column is-5 ml-6" style={{ fontSize: "0.7rem" }}>
+                <div class="select">
+                  <DepartmentID
+                    personChild={department}
+                    setPersonChild={setDepartment}
+                  />
+                </div>
               </div>
-              <div className="column is-6 ml-5"></div>
-              <div className="column is-3 ">
+              <div className="column is-4 ml-6"></div>
+              <div className="column is-2 ">
                 <div style={{ display: "none" }}>
                   <ReactHTMLTableToExcel
                     id="sadanXLS"
@@ -462,7 +485,7 @@ function Sadan(props) {
                 <button
                   class="text"
                   style={{
-                    marginLeft: "9%",
+                    marginLeft: "12%",
                     borderRadius: "1px",
                     backgroundColor: "#1cc88a",
                     color: "#fff",
@@ -566,11 +589,28 @@ function Sadan(props) {
 }
 function ShalgaltiinTalaarkhMedeelel(props) {
   const [data, loadData] = useState();
+  const [department, setDepartment] = useState({
+    EMP_DEPARTMENT_ID: 1,
+    check: true,
+  });
+  const alert = useAlert();
+
   useEffect(async () => {
     let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportExam/");
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
+  useEffect(async () => {
+    if (department.check !== true) {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/reportExam/" +
+          department.EMP_DEPARTMENT_ID
+      );
+      if (listItems.data !== undefined && listItems.data.length === 0)
+        alert.show("өгөгдөл байхгүй байна");
+      else loadData(listItems?.data);
+    }
+  }, [department]);
 
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -584,12 +624,26 @@ function ShalgaltiinTalaarkhMedeelel(props) {
           className="box"
           style={{ marginLeft: "7%", padding: "20px 6px 19% 20px" }}
         >
+          <span
+            style={{
+              fontSize: "2rem",
+              marginLeft: "3rem",
+              marginBottom: "3rem",
+            }}
+          >
+            Төрийн жинхэнэ албаны шалгалтын талаарх мэдээлэл
+          </span>
           <div className="columns">
-            <div className="column is-4 ml-6 " style={{ fontSize: "20px" }}>
-              Төрийн жинхэнэ албаны шалгалтын талаарх мэдээлэл
+            <div className="column is-4 ml-6" style={{ fontSize: "0.7rem" }}>
+              <div class="select">
+                <DepartmentID
+                  personChild={department}
+                  setPersonChild={setDepartment}
+                />
+              </div>
             </div>
-            <div className="column is-5  "></div>
-            <div className="column is-4">
+            <div className="column is-6 ml-1"></div>
+            <div className="column is-2 ">
               <div style={{ display: "none" }}>
                 <ReactHTMLTableToExcel
                   id="shalgaltiinTalaarkhMedeelelXLS"
@@ -603,7 +657,7 @@ function ShalgaltiinTalaarkhMedeelel(props) {
               <button
                 class="text"
                 style={{
-                  marginLeft: "30%",
+                  marginLeft: "0%",
                   borderRadius: "1px",
                   backgroundColor: "#1cc88a",
                   color: "#fff",
@@ -693,11 +747,28 @@ function ShalgaltiinTalaarkhMedeelel(props) {
 }
 function TangaragiinBvrtgel(props) {
   const [data, loadData] = useState();
+  const [department, setDepartment] = useState({
+    EMP_DEPARTMENT_ID: 1,
+    check: true,
+  });
+  const alert = useAlert();
+
   useEffect(async () => {
     let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportOath/");
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
+  useEffect(async () => {
+    if (department.check !== true) {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/reportOath/" +
+          department.EMP_DEPARTMENT_ID
+      );
+      if (listItems.data !== undefined && listItems.data.length === 0)
+        alert.show("өгөгдөл байхгүй байна");
+      else loadData(listItems?.data);
+    }
+  }, [department]);
 
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -711,12 +782,26 @@ function TangaragiinBvrtgel(props) {
           className="box"
           style={{ marginLeft: "7%", padding: "20px 27px 27% 20px" }}
         >
+          <span
+            style={{
+              fontSize: "2rem",
+              marginLeft: "3rem",
+              marginBottom: "3rem",
+            }}
+          >
+            Тангарагын бүртгэл
+          </span>
           <div className="columns">
-            <div className="column is-3 ml-6 " style={{ fontSize: "20px" }}>
-              Тангарагын бүртгэл
+            <div className="column is-3 ml-6" style={{ fontSize: "0.7rem" }}>
+              <div class="select">
+                <DepartmentID
+                  personChild={department}
+                  setPersonChild={setDepartment}
+                />
+              </div>
             </div>
-            <div className="column is-3  "></div>
-            <div className="column is-5">
+            <div className="column is-3 ml-6"></div>
+            <div className="column is-2 ">
               <div style={{ display: "none" }}>
                 <ReactHTMLTableToExcel
                   id="tangaragiinBvrtgelXLS"
@@ -730,8 +815,8 @@ function TangaragiinBvrtgel(props) {
               <button
                 class="text"
                 style={{
-                  marginLeft: "11%",
-                  borderRadius: "5px",
+                  marginLeft: "30%",
+                  borderRadius: "1px",
                   backgroundColor: "#1cc88a",
                   color: "#fff",
                   border: "double",
@@ -743,10 +828,9 @@ function TangaragiinBvrtgel(props) {
                 <span style={{ display: "flex" }}>
                   <img src={Excel} width="20px" height="20px "></img>Excel
                 </span>
-              </button>{" "}
+              </button>
             </div>
           </div>
-
           <div className="columns">
             <div className="column is-12 ml-6">
               <div className="table-container">
@@ -810,11 +894,28 @@ function TangaragiinBvrtgel(props) {
 }
 function GadaadHelniiMedleg(props) {
   const [data, loadData] = useState();
+  const [department, setDepartment] = useState({
+    EMP_DEPARTMENT_ID: 1,
+    check: true,
+  });
+  const alert = useAlert();
+
   useEffect(async () => {
     let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportLanguage/");
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
+  useEffect(async () => {
+    if (department.check !== true) {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/reportLanguage/" +
+          department.EMP_DEPARTMENT_ID
+      );
+      if (listItems.data !== undefined && listItems.data.length === 0)
+        alert.show("өгөгдөл байхгүй байна");
+      else loadData(listItems?.data);
+    }
+  }, [department]);
 
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -828,12 +929,26 @@ function GadaadHelniiMedleg(props) {
           className="box"
           style={{ marginLeft: "7%", padding: "20px 30px 30% 20px" }}
         >
+          <span
+            style={{
+              fontSize: "2rem",
+              marginLeft: "3rem",
+              marginBottom: "3rem",
+            }}
+          >
+            Гадаад хэлний мэдлэг
+          </span>
           <div className="columns">
-            <div className="column is-3 ml-6 " style={{ fontSize: "20px" }}>
-              Гадаад хэлний мэдлэг
+            <div className="column is-4 ml-6" style={{ fontSize: "0.7rem" }}>
+              <div class="select">
+                <DepartmentID
+                  personChild={department}
+                  setPersonChild={setDepartment}
+                />
+              </div>
             </div>
-            <div className="column is-5  "></div>
-            <div className="column is-4">
+            <div className="column is-4 ml-6"></div>
+            <div className="column is-2 ">
               <div style={{ display: "none" }}>
                 <ReactHTMLTableToExcel
                   id="gadaadHelniiMedlegXLS"
@@ -847,8 +962,8 @@ function GadaadHelniiMedleg(props) {
               <button
                 class="text"
                 style={{
-                  marginLeft: "20%",
-                  borderRadius: "5px",
+                  marginLeft: "23%",
+                  borderRadius: "1px",
                   backgroundColor: "#1cc88a",
                   color: "#fff",
                   border: "double",
@@ -927,6 +1042,12 @@ function GadaadHelniiMedleg(props) {
 }
 function Bolowsrol(props) {
   const [data, loadData] = useState();
+  const [department, setDepartment] = useState({
+    EMP_DEPARTMENT_ID: 1,
+    check: true,
+  });
+  const alert = useAlert();
+
   useEffect(async () => {
     let listItems = await axios(
       "http://hr.audit.mn/hr/api/v1/reportEducation/1/"
@@ -934,7 +1055,17 @@ function Bolowsrol(props) {
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
-
+  useEffect(async () => {
+    if (department.check !== true) {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/reportEducation/1/" +
+          department.EMP_DEPARTMENT_ID
+      );
+      if (listItems.data !== undefined && listItems.data.length === 0)
+        alert.show("өгөгдөл байхгүй байна");
+      else loadData(listItems?.data);
+    }
+  }, [department]);
   let listItems;
   if (data !== undefined && data.length > 0) {
     listItems = (
@@ -947,12 +1078,26 @@ function Bolowsrol(props) {
           className="box"
           style={{ marginLeft: "7%", padding: "20px 15px 15% 20px" }}
         >
+          <span
+            style={{
+              fontSize: "2rem",
+              marginLeft: "3rem",
+              marginBottom: "3rem",
+            }}
+          >
+            Боловсрол
+          </span>
           <div className="columns">
-            <div className="column is-3 ml-6 " style={{ fontSize: "20px" }}>
-              Боловсрол
+            <div className="column is-5 ml-6" style={{ fontSize: "0.7rem" }}>
+              <div class="select">
+                <DepartmentID
+                  personChild={department}
+                  setPersonChild={setDepartment}
+                />
+              </div>
             </div>
-            <div className="column is-7  "></div>
-            <div className="column is-2">
+            <div className="column is-5 ml-5"></div>
+            <div className="column is-2 ">
               <div style={{ display: "none" }}>
                 <ReactHTMLTableToExcel
                   id="bolowsrolXLS"
@@ -966,8 +1111,8 @@ function Bolowsrol(props) {
               <button
                 class="text"
                 style={{
-                  marginLeft: "20%",
-                  borderRadius: "5px",
+                  marginLeft: "11%",
+                  borderRadius: "1px",
                   backgroundColor: "#1cc88a",
                   color: "#fff",
                   border: "double",
@@ -977,7 +1122,7 @@ function Bolowsrol(props) {
                 <span style={{ display: "flex" }}>
                   <img src={Excel} width="20px" height="20px "></img>Excel
                 </span>
-              </button>{" "}
+              </button>
             </div>
           </div>
 
@@ -1057,6 +1202,12 @@ function Bolowsrol(props) {
 }
 function BolowsrolDoktor(props) {
   const [data, loadData] = useState();
+  const [department, setDepartment] = useState({
+    EMP_DEPARTMENT_ID: 1,
+    check: true,
+  });
+  const alert = useAlert();
+
   useEffect(async () => {
     let listItems = await axios(
       "http://hr.audit.mn/hr/api/v1/reportEducation/2/"
@@ -1064,7 +1215,17 @@ function BolowsrolDoktor(props) {
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
-
+  useEffect(async () => {
+    if (department.check !== true) {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/reportEducation/2/" +
+          department.EMP_DEPARTMENT_ID
+      );
+      if (listItems.data !== undefined && listItems.data.length === 0)
+        alert.show("өгөгдөл байхгүй байна");
+      else loadData(listItems?.data);
+    }
+  }, [department]);
   let listItems;
   if (data !== undefined && data.length > 0) {
     listItems = (
@@ -1077,12 +1238,26 @@ function BolowsrolDoktor(props) {
           className="box"
           style={{ marginLeft: "7%", padding: "15px 30px 24% 30px" }}
         >
+          <span
+            style={{
+              fontSize: "2rem",
+              marginLeft: "3rem",
+              marginBottom: "3rem",
+            }}
+          >
+            Боловсрол-доктор
+          </span>
           <div className="columns">
-            <div className="column is-3 ml-6 " style={{ fontSize: "20px" }}>
-              Боловсрол-доктор
+            <div className="column is-5 ml-6" style={{ fontSize: "0.7rem" }}>
+              <div class="select">
+                <DepartmentID
+                  personChild={department}
+                  setPersonChild={setDepartment}
+                />
+              </div>
             </div>
-            <div className="column is-7  "></div>
-            <div className="column is-2">
+            <div className="column is-5 ml-4"></div>
+            <div className="column is-2 ">
               <div style={{ display: "none" }}>
                 <ReactHTMLTableToExcel
                   id="bolowsrolDoktorXLS"
@@ -1096,8 +1271,8 @@ function BolowsrolDoktor(props) {
               <button
                 class="text"
                 style={{
-                  marginLeft: "20%",
-                  borderRadius: "5px",
+                  marginLeft: "14%",
+                  borderRadius: "1px",
                   backgroundColor: "#1cc88a",
                   color: "#fff",
                   border: "double",
@@ -1182,6 +1357,12 @@ function BolowsrolDoktor(props) {
 }
 function MergeshliinBeltgel(props) {
   const [data, loadData] = useState();
+  const [department, setDepartment] = useState({
+    EMP_DEPARTMENT_ID: 1,
+    check: true,
+  });
+  const alert = useAlert();
+
   useEffect(async () => {
     let listItems = await axios(
       "http://hr.audit.mn/hr/api/v1/reportProfession/"
@@ -1189,7 +1370,17 @@ function MergeshliinBeltgel(props) {
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
-
+  useEffect(async () => {
+    if (department.check !== true) {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/reportProfession/" +
+          department.EMP_DEPARTMENT_ID
+      );
+      if (listItems.data !== undefined && listItems.data.length === 0)
+        alert.show("өгөгдөл байхгүй байна");
+      else loadData(listItems?.data);
+    }
+  }, [department]);
   let listItems;
   if (data !== undefined && data.length > 0) {
     listItems = (
@@ -1202,42 +1393,53 @@ function MergeshliinBeltgel(props) {
           className="box"
           style={{ marginLeft: "7%", padding: "15px 30px 25% 30px" }}
         >
-          <div>
-            <div className="columns">
-              <div className="column is-3 ml-6 " style={{ fontSize: "20px" }}>
-                Мэргэшлийн бэлтгэл
+          <span
+            style={{
+              fontSize: "2rem",
+              marginLeft: "3rem",
+              marginBottom: "3rem",
+            }}
+          >
+            Мэргэшлийн бэлтгэл
+          </span>
+          <div className="columns">
+            <div className="column is-5 ml-6" style={{ fontSize: "0.7rem" }}>
+              <div class="select">
+                <DepartmentID
+                  personChild={department}
+                  setPersonChild={setDepartment}
+                />
               </div>
-              <div className="column is-6"></div>
-              <div className="column is-3">
-                <div style={{ display: "none" }}>
-                  <ReactHTMLTableToExcel
-                    id="mergeshliinBeltgelXls"
-                    className="download-table-xls-button"
-                    table="mergeshliinBeltgelXLS"
-                    filename="tablexls"
-                    sheet="tablexls"
-                    buttonText="XLS"
-                  />
-                </div>
-
-                <button
-                  class="text"
-                  style={{
-                    marginLeft: "13%",
-                    borderRadius: "5px",
-                    backgroundColor: "#1cc88a",
-                    color: "#fff",
-                    border: "double",
-                  }}
-                  onClick={() =>
-                    document.getElementById("mergeshliinBeltgelXls").click()
-                  }
-                >
-                  <span style={{ display: "flex" }}>
-                    <img src={Excel} width="20px" height="20px "></img>Excel
-                  </span>
-                </button>
+            </div>
+            <div className="column is-4 ml-4"></div>
+            <div className="column is-2 ">
+              <div style={{ display: "none" }}>
+                <ReactHTMLTableToExcel
+                  id="mergeshliinBeltgelXls"
+                  className="download-table-xls-button"
+                  table="mergeshliinBeltgelXLS"
+                  filename="tablexls"
+                  sheet="tablexls"
+                  buttonText="XLS"
+                />
               </div>
+              <button
+                class="text"
+                style={{
+                  marginLeft: "14%",
+                  borderRadius: "1px",
+                  backgroundColor: "#1cc88a",
+                  color: "#fff",
+                  border: "double",
+                }}
+                onClick={() =>
+                  document.getElementById("mergeshliinBeltgelXls").click()
+                }
+              >
+                <span style={{ display: "flex" }}>
+                  <img src={Excel} width="20px" height="20px "></img>Excel
+                </span>
+              </button>
             </div>
           </div>
 
@@ -1321,12 +1523,27 @@ function MergeshliinBeltgel(props) {
 }
 function ErdmiinTsol(props) {
   const [data, loadData] = useState();
+  const [department, setDepartment] = useState({
+    EMP_DEPARTMENT_ID: 1,
+    check: true,
+  });
+  const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportFame/");
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
-
+  useEffect(async () => {
+    if (department.check !== true) {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/reportFame/" +
+          department.EMP_DEPARTMENT_ID
+      );
+      if (listItems.data !== undefined && listItems.data.length === 0)
+        alert.show("өгөгдөл байхгүй байна");
+      else loadData(listItems?.data);
+    }
+  }, [department]);
   let listItems;
   if (data !== undefined && data.length > 0) {
     listItems = (
@@ -1339,81 +1556,93 @@ function ErdmiinTsol(props) {
           className="box"
           style={{ marginLeft: "7%", padding: "20px 2px 30% 10px" }}
         >
-          <div>
-            <div className="columns">
-              <div className="column is-3 ml-6 " style={{ fontSize: "20px" }}>
-                Эрдмийн цол
-              </div>
-              <div className="column is-2 "></div>
-              <div className="column is-7 ">
-                <div style={{ display: "none" }}>
-                  <ReactHTMLTableToExcel
-                    id="erdmiinTsolXLS"
-                    className="download-table-xls-button"
-                    table="erdmiinTsolXls"
-                    filename="tablexls"
-                    sheet="tablexls"
-                    buttonText="XLS"
-                  />
-                </div>
-                <button
-                  class="text"
-                  style={{
-                    marginLeft: "23%",
-                    borderRadius: "5px",
-                    backgroundColor: "#1cc88a",
-                    color: "#fff",
-                    border: "double",
-                  }}
-                  onClick={() =>
-                    document.getElementById("erdmiinTsolXLS").click()
-                  }
-                >
-                  <span style={{ display: "flex" }}>
-                    <img src={Excel} width="20px" height="20px "></img>Excel
-                  </span>
-                </button>
+          <span
+            style={{
+              fontSize: "2rem",
+              marginLeft: "3rem",
+              marginBottom: "3rem",
+            }}
+          >
+            Эрдмийн цол
+          </span>
+          <div className="columns">
+            <div className="column is-3 ml-6" style={{ fontSize: "0.7rem" }}>
+              <div class="select">
+                <DepartmentID
+                  personChild={department}
+                  setPersonChild={setDepartment}
+                />
               </div>
             </div>
+            <div className="column is-3 ml-6"></div>
+            <div className="column is-2 ">
+              <div style={{ display: "none" }}>
+                <ReactHTMLTableToExcel
+                  id="erdmiinTsolXLS"
+                  className="download-table-xls-button"
+                  table="erdmiinTsolXls"
+                  filename="tablexls"
+                  sheet="tablexls"
+                  buttonText="XLS"
+                />
+              </div>
+              <button
+                class="text"
+                style={{
+                  marginLeft: "20%",
+                  borderRadius: "1px",
+                  backgroundColor: "#1cc88a",
+                  color: "#fff",
+                  border: "double",
+                }}
+                onClick={() =>
+                  document.getElementById("erdmiinTsolXLS").click()
+                }
+              >
+                <span style={{ display: "flex" }}>
+                  <img src={Excel} width="20px" height="20px "></img>Excel
+                </span>
+              </button>
+            </div>
+          </div>
 
-            <div>
-              <div className="columns">
-                <div className="column is-9 ml-6  ">
-                  <table id={"erdmiinTsolXls"} className="table is-bordered ">
-                    <thead style={{ backgroundColor: "#f1f1f1" }}>
+          <div>
+            <div className="columns">
+              <div className="column is-9 ml-6  ">
+                <table id={"erdmiinTsolXls"} className="table is-bordered ">
+                  <thead style={{ backgroundColor: "#f1f1f1" }}>
+                    <tr>
+                      <td>№</td>
+                      <td>Ажилтны Нэр</td>
+                      <td>Цолны төрөл</td>
+                      <td>Цол</td>
+                      <td>Цол олгосон байгуулага</td>
+                      <td>Огноо</td>
+                      <td>Гэрчилгээ дипломын дугаар</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data?.map((value, index) => (
                       <tr>
-                        <td>№</td>
-                        <td>Ажилтны Нэр</td>
-                        <td>Цолны төрөл</td>
-                        <td>Цол</td>
-                        <td>Цол олгосон байгуулага</td>
-                        <td>Огноо</td>
-                        <td>Гэрчилгээ дипломын дугаар</td>
+                        <th>{index + 1}</th>
+                        <td>{value.PERSON_NAME}</td>
+                        <td>{value.FAME_TYPE_NAME}</td>
+                        <td>{value.SUBFAME_TYPE_NAME}</td>
+                        <td>{value.FAME_ORG}</td>
+                        <td>
+                          {dateFormat(
+                            value.FAME_DATE === null ||
+                              value.FAME_DATE === undefined
+                              ? new Date()
+                              : value.FAME_DATE,
+                            "yyyy-mm-dd"
+                          )}
+                        </td>
+                        <td>{value.FAME_NO}</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {data?.map((value, index) => (
-                        <tr>
-                          <th>{index + 1}</th>
-                          <td>{value.PERSON_NAME}</td>
-                          <td>{value.FAME_TYPE_NAME}</td>
-                          <td>{value.SUBFAME_TYPE_NAME}</td>
-                          <td>{value.FAME_ORG}</td>
-                          <td>
-                            {dateFormat(
-                              value.FAME_DATE === null ||
-                                value.FAME_DATE === undefined
-                                ? new Date()
-                                : value.FAME_DATE,
-                              "yyyy-mm-dd"
-                            )}
-                          </td>
-                          <td>{value.FAME_NO}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -1519,12 +1748,27 @@ function TsergiinAlba(props) {
 }
 function ShagnaliinTalaarhMedeelel(props) {
   const [data, loadData] = useState();
+  const [department, setDepartment] = useState({
+    EMP_DEPARTMENT_ID: 1,
+    check: true,
+  });
+  const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportAward/");
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
-
+  useEffect(async () => {
+    if (department.check !== true) {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/reportAward/" +
+          department.EMP_DEPARTMENT_ID
+      );
+      if (listItems.data !== undefined && listItems.data.length === 0)
+        alert.show("өгөгдөл байхгүй байна");
+      else loadData(listItems?.data);
+    }
+  }, [department]);
   let listItems;
   if (data !== undefined && data.length > 0) {
     listItems = (
@@ -1537,13 +1781,26 @@ function ShagnaliinTalaarhMedeelel(props) {
           className="box"
           style={{ marginLeft: "7%", padding: "20px 2px 21% 10px" }}
         >
+          <span
+            style={{
+              fontSize: "2rem",
+              marginLeft: "3rem",
+              marginBottom: "3rem",
+            }}
+          >
+            Шагналын талаарх мэдээлэл
+          </span>
           <div className="columns">
-            <div className="column is-6 ml-6">
-              <span style={{ fontSize: "20px" }}>
-                Шагналын талаарх мэдээлэл
-              </span>
+            <div className="column is-3 ml-6" style={{ fontSize: "0.7rem" }}>
+              <div class="select">
+                <DepartmentID
+                  personChild={department}
+                  setPersonChild={setDepartment}
+                />
+              </div>
             </div>
-            <div className="column is-6 ">
+            <div className="column is-3 ml-1"></div>
+            <div className="column is-1 ">
               <div style={{ display: "none" }}>
                 <ReactHTMLTableToExcel
                   id="shagnalButtonXSL"
@@ -1557,8 +1814,8 @@ function ShagnaliinTalaarhMedeelel(props) {
               <button
                 class="text"
                 style={{
-                  marginLeft: "6%",
-                  borderRadius: "5px",
+                  marginLeft: "1%",
+                  borderRadius: "1px",
                   backgroundColor: "#1cc88a",
                   color: "#fff",
                   border: "double",
@@ -1638,6 +1895,11 @@ function ShagnaliinTalaarhMedeelel(props) {
 }
 function TurshlagiinTalaarhMedeelel(props) {
   const [data, loadData] = useState();
+  const [department, setDepartment] = useState({
+    EMP_DEPARTMENT_ID: 1,
+    check: true,
+  });
+  const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios(
       "http://hr.audit.mn/hr/api/v1/reportExperience/"
@@ -1645,6 +1907,17 @@ function TurshlagiinTalaarhMedeelel(props) {
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
+  useEffect(async () => {
+    if (department.check !== true) {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/reportExperience/" +
+          department.EMP_DEPARTMENT_ID
+      );
+      if (listItems.data !== undefined && listItems.data.length === 0)
+        alert.show("өгөгдөл байхгүй байна");
+      else loadData(listItems?.data);
+    }
+  }, [department]);
 
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -1658,18 +1931,31 @@ function TurshlagiinTalaarhMedeelel(props) {
           className="box"
           style={{ marginLeft: "7%", padding: "20px 30px 7% 30px" }}
         >
+          <span
+            style={{
+              fontSize: "2rem",
+              marginLeft: "3rem",
+              marginBottom: "3rem",
+            }}
+          >
+            Туршлагын талаарх мэдээлэл
+          </span>
           <div className="columns">
-            <div className="column is-11">
-              <span style={{ fontSize: "20px" }}>
-                Туршлагын талаарх мэдээлэл
-              </span>
+            <div className="column is-5 ml-6" style={{ fontSize: "0.7rem" }}>
+              <div class="select">
+                <DepartmentID
+                  personChild={department}
+                  setPersonChild={setDepartment}
+                />
+              </div>
             </div>
-            <div className="column is-1 ml-6">
+            <div className="column is-5 ml-6"></div>
+            <div className="column is-2 ">
               <div style={{ display: "none" }}>
                 <ReactHTMLTableToExcel
                   id="turshlagiinTalaarhMedeelelXls"
                   className="download-table-xls-button"
-                  table="turshlagiinTalaarhMedeelelXLS"
+                  table="turshlagiinTalaarhMedeelelXls"
                   filename="tablexls"
                   sheet="tablexls"
                   buttonText="XLS"
@@ -1678,8 +1964,8 @@ function TurshlagiinTalaarhMedeelel(props) {
               <button
                 class="text"
                 style={{
-                  marginLeft: "5%",
-                  borderRadius: "5px",
+                  marginLeft: "38%",
+                  borderRadius: "1px",
                   backgroundColor: "#1cc88a",
                   color: "#fff",
                   border: "double",
@@ -1693,13 +1979,13 @@ function TurshlagiinTalaarhMedeelel(props) {
                 <span style={{ display: "flex" }}>
                   <img src={Excel} width="20px" height="20px "></img>Excel
                 </span>
-              </button>{" "}
+              </button>
             </div>
           </div>
 
           <div>
             <div>
-              <div class="columns is-12 is-gapless">
+              <div class="columns is-12 ml-6 is-gapless">
                 <div class="column is-0 " />
 
                 <table
@@ -1773,6 +2059,12 @@ function TurshlagiinTalaarhMedeelel(props) {
 }
 function BvteeliinJagsaalt(props) {
   const [data, loadData] = useState();
+  const [department, setDepartment] = useState({
+    EMP_DEPARTMENT_ID: 1,
+    check: true,
+  });
+  const alert = useAlert();
+
   useEffect(async () => {
     let listItems = await axios(
       "http://hr.audit.mn/hr/api/v1/reportLiterature/"
@@ -1780,7 +2072,17 @@ function BvteeliinJagsaalt(props) {
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
-
+  useEffect(async () => {
+    if (department.check !== true) {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/reportLiterature/" +
+          department.EMP_DEPARTMENT_ID
+      );
+      if (listItems.data !== undefined && listItems.data.length === 0)
+        alert.show("өгөгдөл байхгүй байна");
+      else loadData(listItems?.data);
+    }
+  }, [department]);
   let listItems;
   if (data !== undefined && data.length > 0) {
     listItems = (
@@ -1793,91 +2095,104 @@ function BvteeliinJagsaalt(props) {
           className="box"
           style={{ marginLeft: "7%", padding: "20px 2px 35% 10px" }}
         >
-          <div style={{ backgroundColor: "white" }}>
-            <div className="columns">
-              <div className="column is-4 ml-6">
-                <span style={{ fontSize: "20px" }}>Бүтээлийн жагсаалт</span>
-              </div>
-              <div className="column is-8">
-                <div style={{ display: "none" }}>
-                  <ReactHTMLTableToExcel
-                    id="bvteeliinJagsaaltXSL"
-                    className="download-table-xls-button"
-                    table="bvteeliinJagsaaltXls"
-                    filename="tablexls"
-                    sheet="tablexls"
-                    buttonText="XLS"
-                  />
-                </div>
-                <button
-                  class="text"
-                  style={{
-                    marginLeft: "8%",
-                    borderRadius: "5px",
-                    backgroundColor: "#1cc88a",
-                    color: "#fff",
-                    border: "double",
-                  }}
-                  onClick={() =>
-                    document.getElementById("bvteeliinJagsaaltXSL").click()
-                  }
-                >
-                  <span style={{ display: "flex" }}>
-                    <img src={Excel} width="20px" height="20px "></img>Excel
-                  </span>
-                </button>
+          <span
+            style={{
+              fontSize: "2rem",
+              marginLeft: "3rem",
+              marginBottom: "3rem",
+            }}
+          >
+            Бүтээлийн жагсаалт
+          </span>
+          <div className="columns">
+            <div className="column is-3 ml-6" style={{ fontSize: "0.7rem" }}>
+              <div class="select">
+                <DepartmentID
+                  personChild={department}
+                  setPersonChild={setDepartment}
+                />
               </div>
             </div>
-
-            <div>
-              <div class="columns  is-gapless">
-                <div class="column is-0 " />
-
-                <table
-                  id={"bvteeliinJagsaaltXls"}
-                  className="table is-bordered ml-6"
-                >
-                  <thead style={{ backgroundColor: "#f1f1f1" }}>
-                    <tr>
-                      <td>№</td>
-                      <td>Ажилтны Нэр</td>
-                      <td>Бүтээлийн нэр</td>
-                      <td>Бүтээлийн төрөл</td>
-                      <td>Бүтээл гаргасан огноо</td>
-                      <td>Тайлбар</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data?.map((value, index) => (
-                      <tr>
-                        <td>{index + 1}</td>
-                        <td>{value.PERSON_NAME}</td>
-                        <td>{value.LITERATURE_NAME}</td>
-                        <td>{value.LITERATURE_TYPE}</td>
-
-                        <td>
-                          {dateFormat(
-                            value.LITERATURE_DATE === null ||
-                              value.LITERATURE_DATE === undefined
-                              ? new Date()
-                              : value.LITERATURE_DATE,
-                            "yyyy-mm-dd"
-                          )}
-                        </td>
-                        <td>
-                          {dateFormat(
-                            value.LITERATURE_DATE === null ||
-                              value.LITERATURE_DATE === undefined
-                              ? new Date()
-                              : value.LITERATURE_DATE,
-                            "yyyy-mm-dd"
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+            <div className="column is-1 ml-6"></div>
+            <div className="column is-2 ">
+              <div style={{ display: "none" }}>
+                <ReactHTMLTableToExcel
+                  id="bvteeliinJagsaaltXSL"
+                  className="download-table-xls-button"
+                  table="bvteeliinJagsaaltXls"
+                  filename="tablexls"
+                  sheet="tablexls"
+                  buttonText="XLS"
+                />
               </div>
+              <button
+                class="text"
+                style={{
+                  marginLeft: "23%",
+                  borderRadius: "1px",
+                  backgroundColor: "#1cc88a",
+                  color: "#fff",
+                  border: "double",
+                }}
+                onClick={() =>
+                  document.getElementById("bvteeliinJagsaaltXSL").click()
+                }
+              >
+                <span style={{ display: "flex" }}>
+                  <img src={Excel} width="20px" height="20px "></img>Excel
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <div class="columns  is-gapless">
+              <div class="column is-0 " />
+
+              <table
+                id={"bvteeliinJagsaaltXls"}
+                className="table is-bordered ml-6"
+              >
+                <thead style={{ backgroundColor: "#f1f1f1" }}>
+                  <tr>
+                    <td>№</td>
+                    <td>Ажилтны Нэр</td>
+                    <td>Бүтээлийн нэр</td>
+                    <td>Бүтээлийн төрөл</td>
+                    <td>Бүтээл гаргасан огноо</td>
+                    <td>Тайлбар</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data?.map((value, index) => (
+                    <tr>
+                      <td>{index + 1}</td>
+                      <td>{value.PERSON_NAME}</td>
+                      <td>{value.LITERATURE_NAME}</td>
+                      <td>{value.LITERATURE_TYPE}</td>
+
+                      <td>
+                        {dateFormat(
+                          value.LITERATURE_DATE === null ||
+                            value.LITERATURE_DATE === undefined
+                            ? new Date()
+                            : value.LITERATURE_DATE,
+                          "yyyy-mm-dd"
+                        )}
+                      </td>
+                      <td>
+                        {dateFormat(
+                          value.LITERATURE_DATE === null ||
+                            value.LITERATURE_DATE === undefined
+                            ? new Date()
+                            : value.LITERATURE_DATE,
+                          "yyyy-mm-dd"
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
