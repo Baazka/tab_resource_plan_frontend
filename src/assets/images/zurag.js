@@ -45,6 +45,7 @@ import Excel from "./icons/EXCEL.png";
 import BackButton from "./icons/backButton.png";
 import Tailan from "./icons/tailan.png";
 import TailanB from "./icons/tailanB.png";
+import M from "../images/icons/M.png";
 
 export {
   LeftArrow,
@@ -91,4 +92,5 @@ export {
   BackButton,
   Tailan,
   TailanB,
+  M,
 };

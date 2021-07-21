@@ -52,6 +52,12 @@
 .searchFilter:focus {
   border-color: silver;
 }
+.classTbdy {
+  padding: 1px !important;
+}
+.message-body {
+  padding: 0px !important;
+}
 
 @keyframes App-logo-spin {
   from {

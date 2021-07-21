@@ -8,6 +8,7 @@ import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
 import { Search, Filter, Add } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
+var dateFormat = require("dateformat");
 
 var rowNumber = 1;
 createTheme("solarized", {
@@ -63,15 +64,14 @@ const Home = (props) => {
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/employees",
+        url: "http://hr.audit.mn/hr/api/v1/decision",
         method: "GET",
         data: {},
       });
       setJagsaalt(jagsaalts?.data);
-      console.log(jagsaalts);
+      console.log(jagsaalts, "jagsaalts");
     }
     test();
-    console.log("jagsaalt", jagsaalt);
   }, [props]);
 
   const handleChange = (state) => {
@@ -86,59 +86,68 @@ const Home = (props) => {
   const columns = [
     {
       name: "№",
-      selector: "",
+      selector: (row, index) => {
+        return index + 1;
+      },
       sortable: true,
+      width: "40px",
     },
     {
       name: "Ажилтны нэр",
-      selector: "",
+      selector: "PERSON_FIRSTNAME",
       sortable: true,
     },
     {
       name: "Ажилтны овог",
-      selector: "",
+      selector: "PERSON_LASTNAME",
       sortable: true,
     },
     {
       name: "Газар нэгж",
-      selector: "",
+      selector: "DEPARTMENT_NAME",
       sortable: true,
     },
-    {
-      name: "Алба, хэлтэс",
-      selector: "",
-      sortable: true,
-    },
+    // {
+    //   name: "Алба, хэлтэс",
+    //   selector: "",
+    //   sortable: true,
+    // },
     {
       name: "Албан тушаал",
-      selector: "",
+      selector: "POSITION_NAME",
       sortable: true,
     },
     {
       name: "Тушаалын төрөл",
-      selector: "",
+      selector: "DECISION_TYPE_NAME",
       sortable: true,
     },
     {
       name: "Тушаалын дугаар",
-      selector: "",
+      selector: "DECISION_NO",
       sortable: true,
     },
     {
       name: "Хэрэгжих огноо",
-      selector: "",
+
+      selector: (row, index) => {
+        return dateFormat(row.START_DATE, "yyyy-mm-dd");
+      },
       sortable: true,
     },
     {
       name: "Бүртгэсэн огноо",
-      selector: "",
+
+      selector: (row, index) => {
+        return dateFormat(row.REGISTER_DATE, "yyyy-mm-dd");
+      },
       sortable: true,
     },
-    {
-      name: "Бүртгэсэн хэрэглэгч",
-      selector: "",
-      sortable: true,
-    },
+    // {
+    //   name: "Бүртгэсэн хэрэглэгч",
+    //   selector: "",
+    //   sortable: true,
+    // },
   ];
 
   return (
@@ -149,7 +158,7 @@ const Home = (props) => {
         maxHeight: "100vh !important",
       }}
     >
-      <Header title="ТУШААЛ ШИЙДВЭРИЙН БҮРТГЭЛ" />
+      <Header title="АЛБАН ТУШААЛЫН БҮРТГЭЛ" />
       <div
         style={{
           backgroundColor: "white",
@@ -213,7 +222,8 @@ const Home = (props) => {
             <span style={{ width: "40", height: "40" }}>
               <img src={Filter} width="35" height="40" />
             </span>
-          
+          </div>
+        </div>
         {/* <button
               class="input  is-size-7"
               style={{
@@ -229,24 +239,23 @@ const Home = (props) => {
             >
               Нөөцийн бүртгэл
             </button> */}
+
         <DataTable
           columns={columns}
           data={jagsaalt}
           theme="solarized"
           customStyles={customStyles}
+          noDataComponent="мэдээлэл байхгүй байна"
           pagination={false}
           paginationPerPage={10}
           selectableRows // add for checkbox selection
           Clicked
           onSelectedRowsChange={handleChange}
-          noDataComponent="Өгөгдөл байхгүй байна"
           noHeader={true}
           fixedHeader={true}
           overflowY={true}
           overflowYOffset={"390px"}
         />
-        </div>
-        </div>
       </div>
       <Footer />
     </div>
