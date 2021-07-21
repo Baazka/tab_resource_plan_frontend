@@ -319,7 +319,7 @@ function GerBvl(props) {
             </div>
 
             <div className="columns">
-              <div className="column is-12 ml-6">
+              <div className="column is-11 ml-6">
                 <div className="table-container">
                   <table
                     id={"GerBvlXls"}
@@ -331,8 +331,15 @@ function GerBvl(props) {
                           <span>№</span>
                         </td>
                         <td rowspan="2" style={{ backgroundColor: "#f1f1f1" }}>
+                          <span>Овог</span>
+                        </td>
+                        <td rowspan="2" style={{ backgroundColor: "#f1f1f1" }}>
+                          <span>Нэр</span>
+                        </td>
+                        <td rowspan="2" style={{ backgroundColor: "#f1f1f1" }}>
                           <span>Таны юу болох</span>
                         </td>
+
                         <td rowspan="2" style={{ backgroundColor: "#f1f1f1" }}>
                           {" "}
                           <span>Гэр бүлийн гишүүний эцэг,эхийн нэр</span>
@@ -349,7 +356,7 @@ function GerBvl(props) {
                         <td rowspan="2" style={{ backgroundColor: "#f1f1f1" }}>
                           <span>Төрсөн сум, дүүрэг</span>
                         </td>
-                        <td colspan="2" style={{ backgroundColor: "#f1f1f1" }}>
+                        <td colspan="3" style={{ backgroundColor: "#f1f1f1" }}>
                           <span>Одоо эрхэлэж буй ажил</span>
                         </td>
                         <td
@@ -377,6 +384,8 @@ function GerBvl(props) {
                             {" "}
                             <span>{index + 1}</span>
                           </td>
+                          <td>{value.PERSON_LASTNAME}</td>
+                          <td>{value.PERSON_NAME}</td>
                           <td>{value.PERSON_NAME}</td>
                           <td>{value.MEMBER_LASTNAME}</td>
                           <td>{value.MEMBER_FIRSTNAME}</td>
