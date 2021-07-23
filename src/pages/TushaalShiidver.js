@@ -213,8 +213,8 @@ const Home = (props) => {
             <span style={{ width: "40", height: "40" }}>
               <img src={Filter} width="35" height="40" />
             </span>
-          
-        {/* <button
+
+            <button
               class="input  is-size-7"
               style={{
                 borderRadius: "6px",
@@ -228,24 +228,24 @@ const Home = (props) => {
               onClick={() => setNuutsiinBvrtgel(!NuutsiinBvrtgel)}
             >
               Нөөцийн бүртгэл
-            </button> */}
-        <DataTable
-          columns={columns}
-          data={jagsaalt}
-          theme="solarized"
-          customStyles={customStyles}
-          pagination={false}
-          paginationPerPage={10}
-          selectableRows // add for checkbox selection
-          Clicked
-          onSelectedRowsChange={handleChange}
-          noDataComponent="Өгөгдөл байхгүй байна"
-          noHeader={true}
-          fixedHeader={true}
-          overflowY={true}
-          overflowYOffset={"390px"}
-        />
-        </div>
+            </button>
+            <DataTable
+              columns={columns}
+              data={jagsaalt}
+              theme="solarized"
+              customStyles={customStyles}
+              pagination={false}
+              paginationPerPage={10}
+              selectableRows // add for checkbox selection
+              Clicked
+              onSelectedRowsChange={handleChange}
+              noDataComponent="Өгөгдөл байхгүй байна"
+              noHeader={true}
+              fixedHeader={true}
+              overflowY={true}
+              overflowYOffset={"390px"}
+            />
+          </div>
         </div>
       </div>
       <Footer />
