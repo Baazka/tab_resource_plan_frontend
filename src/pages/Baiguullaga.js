@@ -98,18 +98,16 @@ const Baiguullaga = (props) => {
     //   width: "50px",
     // },
     {
-      name: "Байгууллагын нэр",
-      selector: "EMP_DEPARTMENT_NAME",
+      name: "Төрийн аудиты байгууллага",
+      selector: "DEPARTMENT_NAME",
     },
     {
-      name: "Газар, нэгжийн нэр",
-      selector: "EMP_SUBDEPARTMENT_NAME",
-      width: "300px",
+      name: "Харъяа газар",
+      selector: "SUB_DEPARTMENT_NAME",
     },
     {
-      name: "Алба, хэлтсийн нэр",
-      selector: "EMP_COMPARTMENT_NAME",
-      sortable: true,
+      name: "Дотооод бүтцийн нэгж",
+      selector: "COMPARTMENT_NAME",
     },
     {
       name: "Албан тушаалын код",

@@ -70,6 +70,7 @@ function Home(props) {
   const [found, setFound] = useState();
   const alert = useAlert();
   const [loading, setLoading] = useState(true);
+  const [buttonValue, setButtonValue] = useState(1);
 
   const override = css`
     display: block;
@@ -89,6 +90,7 @@ function Home(props) {
     });
     setJagsaalt(jagsaalts?.data);
     setLoading(false);
+    setButtonValue(2);
   }
   async function Active() {
     setLoading(true);
@@ -99,6 +101,7 @@ function Home(props) {
     });
     setJagsaalt(jagsaalts?.data);
     setLoading(false);
+    setButtonValue(1);
   }
   async function newPeople() {
     setLoading(true);
@@ -109,6 +112,7 @@ function Home(props) {
     });
     setJagsaalt(jagsaalts?.data);
     setLoading(false);
+    setButtonValue(3);
   }
 
   useEffect(() => {
@@ -134,8 +138,9 @@ function Home(props) {
         "personDetail",
         JSON.stringify({
           person_id:
-            state?.selectedRows[0]?.PERSON_ID === undefined
-              ? state?.selectedRows[0]?.EMP_PERSON_ID
+            state?.selectedRows[0]?.EMP_ID !== undefined &&
+            state?.selectedRows[0]?.EMP_ID !== null
+              ? state?.selectedRows[0]?.EMP_ID
               : state?.selectedRows[0].PERSON_ID,
           type: "employ",
         })
@@ -150,6 +155,11 @@ function Home(props) {
     if (data?.checked === true) history.push("/web/anketA/1");
     else alert.show("Албан тушаалтан сонго");
   }
+  async function anketB() {
+    if (data?.checked === true) history.push("/web/anketB/1");
+    else alert.show("Албан тушаалтан сонго");
+  }
+
   async function anketANew() {
     localStorage.removeItem("person_id");
     localStorage.setItem(
@@ -355,24 +365,27 @@ function Home(props) {
             >
               АНКЕТ А ХЭСЭГ
             </button>
-            {/* <button
-              className="button is-focused"
-              style={{
-                backgroundColor: "#418ee6",
-                color: "white",
-                borderColor: "#418ee6",
-                borderStyle: "solid",
-                border: "2px",
-                borderRadius: "5px",
-                width: "12rem",
-                height: "2.1rem",
-                fontFamily: "RalewaySemiBold",
-                fontSize: "1rem",
-                marginLeft: "0.5rem",
-              }}
-            >
-              АНКЕТ Б ХЭСЭГ
-            </button> */}
+            {buttonValue === 1 ? (
+              <button
+                className="button is-focused"
+                style={{
+                  backgroundColor: "#418ee6",
+                  color: "white",
+                  borderColor: "#418ee6",
+                  borderStyle: "solid",
+                  border: "2px",
+                  borderRadius: "5px",
+                  width: "12rem",
+                  height: "2.1rem",
+                  fontFamily: "RalewaySemiBold",
+                  fontSize: "1rem",
+                  marginLeft: "0.5rem",
+                }}
+                onClick={() => anketB()}
+              >
+                АНКЕТ Б ХЭСЭГ
+              </button>
+            ) : null}
           </div>
         </div>
         <div

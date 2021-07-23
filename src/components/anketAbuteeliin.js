@@ -38,6 +38,7 @@ function Buteeliin(props) {
         ],
       });
   }, [data]);
+
   function saveToDB() {
     props.loading(true);
     if (requiredField(data) === true) {
@@ -110,11 +111,13 @@ function Buteeliin(props) {
       props.loading(false);
     }
   }
+
   function setLiterature(value) {
     let arr = data.Literature;
     arr[value.index] = value;
     loadData({ Literature: arr });
   }
+
   function requiredField() {
     for (let i = 0; i < data.Literature.length; i++) {
       if (

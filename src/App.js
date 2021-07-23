@@ -14,6 +14,7 @@ import Home from "./pages/Home";
 import { useAlert } from "react-alert";
 import Login from "./pages/Login";
 import AnketA from "./components/anketNeg";
+import AnketB from "./components/AnketB";
 import SideBar from "./components/sidebar";
 import AlbanTushaal from "./pages/AlbanTushaal";
 import Dashboard from "./pages/Dashboard";
@@ -57,6 +58,7 @@ function App() {
           <AlbanTushaal />
         </Route>
         <Route path="/web/anketA/:id" component={AnketA} exact />
+        <Route path="/web/anketB/:id" component={AnketB} exact />
         <Route path="/web/dashboard/" component={Dashboard} exact />
         <Route path="/web/Baiguullaga/" component={Baiguullaga} exact />
         <Route path="/web/AlbanTushaal/" component={AlbanTushaal} exact />
