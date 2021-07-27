@@ -32,12 +32,12 @@ import { useAlert } from "react-alert";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import override from "../css/override";
 const axios = require("axios");
-const personDetail = JSON.parse(localStorage.getItem("personDetail"));
+
 var dateFormat = require("dateformat");
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
 function AnketB(props) {
-  console.log("anketB", personDetail);
+  console.log("anketB", JSON.parse(localStorage.getItem("personDetail")));
   const [menu, setMenu] = useState(1);
   const [loading, setLoading] = useState(false);
 
@@ -93,32 +93,10 @@ function AnketB(props) {
             }}
             onClick={() => setMenu(1)}
           >
-            I-II. АЛБАН ТУШААЛ
+            III. АЛБАН ТУШААЛ
           </button>
         </div>
-        <div className="AnketList">
-          <img
-            src={menu === 2 ? BlueKhoyor : BlackKhoyor}
-            width="45px"
-            height="45px"
-          />
-          <button
-            className="button"
-            style={{
-              color: `${menu === 2 ? "#418ee6" : "#5d5d5d"}`,
-              border: "none",
-              width: "17rem",
-              fontFamily: "RalewayRegular",
-              fontWeight: "bold",
-              whiteSpace: "nowrap",
-              marginTop: "3px",
-              fontSize: "1rem",
-            }}
-            onClick={() => setMenu(2)}
-          >
-            III. ЦАЛИН ХӨЛС
-          </button>
-        </div>
+
         <div className="AnketList">
           <img
             src={menu === 3 ? BlueGurav : BlackGurav}
@@ -162,7 +140,7 @@ function AnketB(props) {
             }}
             onClick={() => setMenu(4)}
           >
-            V.НӨХӨХ МӨЛБӨР
+            V.НӨХӨХ ТӨЛБӨР
           </button>
         </div>
         <div className="AnketList">
@@ -301,7 +279,7 @@ function AnketB(props) {
             {menu === 3 ? <Uramshuulal loading={setLoading} /> : null}
             {menu === 4 ? <NuhuhMulbur loading={setLoading} /> : null}
             {menu === 5 ? <Tuslamj loading={setLoading} /> : null}
-            {menu === 6 ? <Surhalt loading={setLoading} /> : null}
+            {menu === 6 ? <Surgalt loading={setLoading} /> : null}
             {menu === 7 ? <Shiitgel loading={setLoading} /> : null}
             {menu === 8 ? <HuwiinHereg loading={setLoading} /> : null}
           </div>
@@ -754,13 +732,18 @@ function TsalinHuls(props) {
 }
 
 function Uramshuulal(props) {
-  const [zasakhTowch, setZasakhTowch] = useState(false);
+  const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
 
   useEffect(async () => {
     let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/Promotion/400"
+      "http://172.16.24.103:3002/api/v1/Promotion/" +
+        JSON.parse(
+          localStorage.getItem("personDetail") === undefined
+            ? "{}"
+            : localStorage.getItem("personDetail")
+        )?.emp_id
       // + props.person_id
     );
     console.log(listItems, "Tangarag");
@@ -772,20 +755,23 @@ function Uramshuulal(props) {
       loadData({
         Promotion: [
           {
-            DOCUMENT_ID: 1,
-            DOCUMENT_NAME: "",
-            DOCUMENT_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            PAGE_COUNT: 10,
-            PROCESS_NOTE: "",
-            COMPLETION_POSISION: "",
-            COMPLETION_ENTRY_NAME: "",
-            DOCUMENT_URL: null,
-            PERSON_ID: props.person_id,
+            PROMOTION_ID: 1,
+            PROMOTION_NAME: "",
+            PROMOTION_AMOUNT: 0,
+            DECISION_NAME: "",
+            DECISION_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            DECISION_NO: "",
+            PROMOTION_MOTIVE: "",
+            PROMOTION_DESC: "",
             IS_ACTIVE: "1",
             CREATED_BY: userDetils?.USER_ID,
             CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
             ROWTYPE: "NEW",
-            EMP_ID: 400,
+            EMP_ID: JSON.parse(
+              localStorage.getItem("personDetail") === undefined
+                ? "{}"
+                : localStorage.getItem("personDetail")
+            )?.emp_id,
           },
         ],
       });
@@ -794,28 +780,31 @@ function Uramshuulal(props) {
   async function addRow() {
     let value = data.Promotion;
     value.push({
-      DOCUMENT_ID: 1,
-      DOCUMENT_NAME: "",
-      DOCUMENT_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-      PAGE_COUNT: 0,
-      PROCESS_NOTE: "",
-      COMPLETION_POSISION: "",
-      COMPLETION_ENTRY_NAME: "",
-      DOCUMENT_URL: null,
-      PERSON_ID: props.person_id,
+      PROMOTION_ID: 1,
+      PROMOTION_NAME: "",
+      PROMOTION_AMOUNT: 0,
+      DECISION_NAME: "",
+      DECISION_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+      DECISION_NO: "",
+      PROMOTION_MOTIVE: "",
+      PROMOTION_DESC: "",
       IS_ACTIVE: "1",
       CREATED_BY: userDetils?.USER_ID,
       CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
       ROWTYPE: "NEW",
-      EMP_ID: 400,
+      EMP_ID: JSON.parse(
+        localStorage.getItem("personDetail") === undefined
+          ? "{}"
+          : localStorage.getItem("personDetail")
+      )?.emp_id,
     });
 
-    await loadData({ Document: value });
+    await loadData({ Promotion: value });
   }
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/PromotionDelete",
+        url: "http://172.16.24.103:3002/api/v1/PromotionDelete",
         method: "POST",
         data: {
           Promotion: {
@@ -862,9 +851,9 @@ function Uramshuulal(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Promotion",
+          url: "http://172.16.24.103:3002/api/v1/Promotion",
           method: "POST",
-          data: { Document: newRow },
+          data: { Promotion: newRow },
         })
           .then(function (response) {
             console.log("UpdateResponse", response);
@@ -891,10 +880,10 @@ function Uramshuulal(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/document",
+          url: "http://172.16.24.103:3002/api/v1/Promotion",
           method: "PUT",
           data: {
-            Document: oldRow,
+            Promotion: oldRow,
             UPDATED_BY: userDetils?.USER_ID,
             UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
           },
@@ -921,32 +910,37 @@ function Uramshuulal(props) {
             props.loading(false);
           });
       }
-      props.loading(false);
     } else {
       props.loading(false);
     }
   }
   function requiredField() {
-    for (let i = 0; i < data.Document.length; i++) {
+    for (let i = 0; i < data.Promotion.length; i++) {
       if (
-        data.Document[i].DOCUMENT_NAME === null ||
-        data.Document[i].DOCUMENT_NAME === ""
+        data.Promotion[i].PROMOTION_NAME === null ||
+        data.Promotion[i].PROMOTION_NAME === ""
       ) {
-        alert.show("Баримт бичгийн нэр оруулан уу");
+        alert.show("Урамшууллын нэр оруулан уу");
         return false;
       } else if (
-        data.Document[i].COMPLETION_POSISION === null ||
-        data.Document[i].COMPLETION_POSISION === ""
+        data.Promotion[i].DECISION_NAME === null ||
+        data.Promotion[i].DECISION_NAME === ""
       ) {
-        alert.show("Бүрдүүлэлт хийсэн албан тушаалтан оруулан уу");
+        alert.show("Шийдвэрийн нэр оруулан уу");
         return false;
       } else if (
-        data.Document[i].COMPLETION_ENTRY_NAME === null ||
-        data.Document[i].COMPLETION_ENTRY_NAME === ""
+        data.Promotion[i].DECISION_NO === null ||
+        data.Promotion[i].DECISION_NO === ""
       ) {
-        alert.show("Бүрдүүлэлт хийсэн албан хаагчийн нэр оруулан уу");
+        alert.show("Шийдэрийн дугаар оруулан уу");
         return false;
-      } else if (i === data.Document.length - 1) {
+      } else if (
+        data.Promotion[i].PROMOTION_MOTIVE === null ||
+        data.Promotion[i].PROMOTION_MOTIVE === ""
+      ) {
+        alert.show("Урамшуулал үндэслэл оруулан уу");
+        return false;
+      } else if (i === data.Promotion.length - 1) {
         return true;
       }
     }
@@ -1004,15 +998,22 @@ function Uramshuulal(props) {
               <th>Шийдэрийн дугаар </th>
               <th>Урамшуулал үндэслэл</th>
               <th>Тайлбар</th>
-              <th
-                style={{
-                  paddingLeft: "0px",
-                  width: "80px",
-                  textAlignLast: "start",
-                }}
-              >
-                <img src={Add} width="30px" height="30px" />
-              </th>
+              {!zasakhTowch ? (
+                <th
+                  style={{
+                    paddingLeft: "0px",
+                    width: "80px",
+                    textAlignLast: "start",
+                  }}
+                >
+                  <img
+                    src={Add}
+                    width="30px"
+                    height="30px"
+                    onClick={() => addRow()}
+                  />
+                </th>
+              ) : null}
             </tr>
           </thead>
           <tbody>
@@ -1155,15 +1156,22 @@ function Uramshuulal(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
-                  <img src={Delete} width="30px" height="30px" />
-                </td>
+                {!zasakhTowch ? (
+                  <td className="classTbdy">
+                    <img
+                      src={Delete}
+                      width="30px"
+                      height="30px"
+                      onClick={() => removeRow(index, value)}
+                    />
+                  </td>
+                ) : null}
               </tr>
             ))}
           </tbody>
         </table>
 
-        {zasakhTowch ? (
+        {!zasakhTowch ? (
           <div className="columns ">
             <div className="column is-11" />
 
@@ -1171,7 +1179,9 @@ function Uramshuulal(props) {
               {/* <button className="button is-info is-small is-focused ml-6">
             Хэвлэх
           </button> */}
-              <button className="buttonTsenkher">Хадгалах</button>
+              <button className="buttonTsenkher" onClick={saveToDB}>
+                Хадгалах
+              </button>
             </div>
           </div>
         ) : null}
@@ -1184,13 +1194,18 @@ function Uramshuulal(props) {
 }
 
 function NuhuhMulbur(props) {
-  const [zasakhTowch, setZasakhTowch] = useState(false);
+  const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
 
   useEffect(async () => {
     let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/amends/400"
+      "http://172.16.24.103:3002/api/v1/amends/" +
+        JSON.parse(
+          localStorage.getItem("personDetail") === undefined
+            ? "{}"
+            : localStorage.getItem("personDetail")
+        )?.emp_id
       // + props.person_id
     );
     console.log(listItems, "amends");
@@ -1202,20 +1217,23 @@ function NuhuhMulbur(props) {
       loadData({
         Amends: [
           {
-            DOCUMENT_ID: 1,
-            DOCUMENT_NAME: "",
-            DOCUMENT_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            PAGE_COUNT: 10,
-            PROCESS_NOTE: "",
-            COMPLETION_POSISION: "",
-            COMPLETION_ENTRY_NAME: "",
-            DOCUMENT_URL: null,
-            PERSON_ID: props.person_id,
+            AMENDS_ID: 1,
+            AMENDS_NAME: "",
+            AMENDS_AMOUNT: 0,
+            DECISION_NAME: "",
+            DECISION_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            DECISION_NO: "",
+            AMENDS_MOTIVE: "",
+            AMENDS_DESC: "",
             IS_ACTIVE: "1",
             CREATED_BY: userDetils?.USER_ID,
             CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
             ROWTYPE: "NEW",
-            EMP_ID: 400,
+            EMP_ID: JSON.parse(
+              localStorage.getItem("personDetail") === undefined
+                ? "{}"
+                : localStorage.getItem("personDetail")
+            )?.emp_id,
           },
         ],
       });
@@ -1224,28 +1242,31 @@ function NuhuhMulbur(props) {
   async function addRow() {
     let value = data.Amends;
     value.push({
-      DOCUMENT_ID: 1,
-      DOCUMENT_NAME: "",
-      DOCUMENT_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-      PAGE_COUNT: 0,
-      PROCESS_NOTE: "",
-      COMPLETION_POSISION: "",
-      COMPLETION_ENTRY_NAME: "",
-      DOCUMENT_URL: null,
-      PERSON_ID: props.person_id,
+      AMENDS_ID: 1,
+      AMENDS_NAME: "",
+      AMENDS_AMOUNT: 0,
+      DECISION_NAME: "",
+      DECISION_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+      DECISION_NO: "",
+      AMENDS_MOTIVE: "",
+      AMENDS_DESC: "",
       IS_ACTIVE: "1",
       CREATED_BY: userDetils?.USER_ID,
       CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
       ROWTYPE: "NEW",
-      EMP_ID: 400,
+      EMP_ID: JSON.parse(
+        localStorage.getItem("personDetail") === undefined
+          ? "{}"
+          : localStorage.getItem("personDetail")
+      )?.emp_id,
     });
 
-    await loadData({ amends: value });
+    await loadData({ Amends: value });
   }
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/amendsDelete",
+        url: "http://172.16.24.103:3002/api/v1/amendsDelete",
         method: "POST",
         data: {
           Amends: {
@@ -1273,15 +1294,15 @@ function NuhuhMulbur(props) {
         });
     }
     loadData({
-      amends: data?.amends.filter((element, index) => index !== indexParam),
+      Amends: data?.Amends.filter((element, index) => index !== indexParam),
     }); //splice(indexParam, 0)
   }
 
   function saveToDB() {
     props.loading(true);
     if (requiredField(data) === true) {
-      let newRow = data?.amends?.filter((value) => value.ROWTYPE === "NEW");
-      let oldRow = data?.amends?.filter(
+      let newRow = data?.Amends?.filter((value) => value.ROWTYPE === "NEW");
+      let oldRow = data?.Amends?.filter(
         (value) =>
           value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
       );
@@ -1290,9 +1311,9 @@ function NuhuhMulbur(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/amends",
+          url: "http://172.16.24.103:3002/api/v1/amends",
           method: "POST",
-          data: { amends: newRow },
+          data: { Amends: newRow },
         })
           .then(function (response) {
             console.log("UpdateResponse", response);
@@ -1319,10 +1340,10 @@ function NuhuhMulbur(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/amends",
+          url: "http://172.16.24.103:3002/api/v1/amends",
           method: "PUT",
           data: {
-            Document: oldRow,
+            Amends: oldRow,
             UPDATED_BY: userDetils?.USER_ID,
             UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
           },
@@ -1349,7 +1370,6 @@ function NuhuhMulbur(props) {
             props.loading(false);
           });
       }
-      props.loading(false);
     } else {
       props.loading(false);
     }
@@ -1357,24 +1377,30 @@ function NuhuhMulbur(props) {
   function requiredField() {
     for (let i = 0; i < data.Amends.length; i++) {
       if (
-        data.Amends[i].DOCUMENT_NAME === null ||
-        data.Amends[i].DOCUMENT_NAME === ""
+        data.Amends[i].AMENDS_NAME === null ||
+        data.Amends[i].AMENDS_NAME === ""
       ) {
-        alert.show("Баримт бичгийн нэр оруулан уу");
+        alert.show("Нөхөх төлбөрийн нэр оруулан уу");
         return false;
       } else if (
-        data.Amends[i].COMPLETION_POSISION === null ||
-        data.Amends[i].COMPLETION_POSISION === ""
+        data.Amends[i].DECISION_NAME === null ||
+        data.Amends[i].DECISION_NAME === ""
       ) {
-        alert.show("Бүрдүүлэлт хийсэн албан тушаалтан оруулан уу");
+        alert.show("Шийдвэрийн нэр оруулан уу");
         return false;
       } else if (
-        data.Amends[i].COMPLETION_ENTRY_NAME === null ||
-        data.Amends[i].COMPLETION_ENTRY_NAME === ""
+        data.Amends[i].DECISION_NO === null ||
+        data.Amends[i].DECISION_NO === ""
       ) {
-        alert.show("Бүрдүүлэлт хийсэн албан хаагчийн нэр оруулан уу");
+        alert.show("Шийдэрийн дугаар оруулан уу");
         return false;
-      } else if (i === data.amends.length - 1) {
+      } else if (
+        data.Amends[i].AMENDS_DESC === null ||
+        data.Amends[i].AMENDS_DESC === ""
+      ) {
+        alert.show("Нөхөх төлбөр олгосон үндэслэл оруулан уу");
+        return false;
+      } else if (i === data.Amends.length - 1) {
         return true;
       }
     }
@@ -1431,22 +1457,33 @@ function NuhuhMulbur(props) {
               <th>Шийдэрийн дугаар </th>
               <th>Нөхөх төлбөр олгосон үндэслэл</th>
               <th>Тайлбар</th>
-              <th
-                style={{
-                  paddingLeft: "12px",
-                  width: "70px",
-                  textAlignLast: "start",
-                }}
-              >
-                <img src={Add} width="30px" height="30px" />
-              </th>
+              {!zasakhTowch ? (
+                <th
+                  style={{
+                    paddingLeft: "12px",
+                    width: "70px",
+                    textAlignLast: "start",
+                  }}
+                >
+                  <img
+                    src={Add}
+                    width="30px"
+                    height="30px"
+                    onClick={() => addRow()}
+                  />
+                </th>
+              ) : null}
             </tr>
           </thead>
           <tbody>
             {data?.Amends?.map((value, index) => (
               <tr>
                 <td className="classTbdy">
-                  <input style={{ width: "2rem" }} value={index + 1} />
+                  <input
+                    style={{ width: "2rem" }}
+                    value={index + 1}
+                    disabled={true}
+                  />
                 </td>
                 <td className="classTbdy">
                   <input
@@ -1578,15 +1615,22 @@ function NuhuhMulbur(props) {
                     }}
                   />
                 </td>
-                <td className="classTdby">
-                  <img src={Delete} width="30px" height="30px" />
-                </td>
+                {!zasakhTowch ? (
+                  <td className="classTdby">
+                    <img
+                      src={Delete}
+                      width="30px"
+                      height="30px"
+                      onClick={() => removeRow(index, value)}
+                    />
+                  </td>
+                ) : null}
               </tr>
             ))}
           </tbody>
         </table>
 
-        {zasakhTowch ? (
+        {!zasakhTowch ? (
           <div className="columns ">
             <div className="column is-11" />
 
@@ -1594,7 +1638,9 @@ function NuhuhMulbur(props) {
               {/* <button className="button is-info is-small is-focused ml-6">
             Хэвлэх
           </button> */}
-              <button className="buttonTsenkher">Хадгалах</button>
+              <button className="buttonTsenkher" onClick={saveToDB}>
+                Хадгалах
+              </button>
             </div>
           </div>
         ) : null}
@@ -1606,13 +1652,18 @@ function NuhuhMulbur(props) {
   return listItems;
 }
 function Tuslamj(props) {
-  const [zasakhTowch, setZasakhTowch] = useState(false);
+  const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
 
   useEffect(async () => {
     let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/Aid/400"
+      "http://172.16.24.103:3002/api/v1/Aid/" +
+        JSON.parse(
+          localStorage.getItem("personDetail") === undefined
+            ? "{}"
+            : localStorage.getItem("personDetail")
+        )?.emp_id
       // + props.person_id
     );
     console.log(listItems?.data.Aid, "Aid");
@@ -1624,53 +1675,59 @@ function Tuslamj(props) {
       loadData({
         Aid: [
           {
-            DOCUMENT_ID: 1,
-            DOCUMENT_NAME: "",
-            DOCUMENT_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            PAGE_COUNT: 10,
-            PROCESS_NOTE: "",
-            COMPLETION_POSISION: "",
-            COMPLETION_ENTRY_NAME: "",
-            DOCUMENT_URL: null,
-            PERSON_ID: props.person_id,
+            AID_ID: 1,
+            AID_NAME: "",
+            AID_AMOUNT: 0,
+            DECISION_NAME: "",
+            DECISION_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            DECISION_NO: "",
+            AID_MOTIVE: "",
+            AID_DESC: "",
             IS_ACTIVE: "1",
             CREATED_BY: userDetils?.USER_ID,
             CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
             ROWTYPE: "NEW",
-            EMP_ID: 400,
+            EMP_ID: JSON.parse(
+              localStorage.getItem("personDetail") === undefined
+                ? "{}"
+                : localStorage.getItem("personDetail")
+            )?.emp_id,
           },
         ],
       });
   }, [data]);
 
   async function addRow() {
-    let value = data.Document;
+    let value = data.Aid;
     value.push({
-      DOCUMENT_ID: 1,
-      DOCUMENT_NAME: "",
-      DOCUMENT_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-      PAGE_COUNT: 0,
-      PROCESS_NOTE: "",
-      COMPLETION_POSISION: "",
-      COMPLETION_ENTRY_NAME: "",
-      DOCUMENT_URL: null,
-      PERSON_ID: props.person_id,
+      AID_ID: 1,
+      AID_NAME: "",
+      AID_AMOUNT: 0,
+      DECISION_NAME: "",
+      DECISION_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+      DECISION_NO: "",
+      AID_MOTIVE: "",
+      AID_DESC: "",
       IS_ACTIVE: "1",
       CREATED_BY: userDetils?.USER_ID,
       CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
       ROWTYPE: "NEW",
-      EMP_ID: 400,
+      EMP_ID: JSON.parse(
+        localStorage.getItem("personDetail") === undefined
+          ? "{}"
+          : localStorage.getItem("personDetail")
+      )?.emp_id,
     });
 
-    await loadData({ Document: value });
+    await loadData({ Aid: value });
   }
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/AidDelete",
+        url: "http://172.16.24.103:3002/api/v1/AidDelete",
         method: "POST",
         data: {
-          Document: {
+          Aid: {
             ...value,
             ...{
               IS_ACTIVE: 1,
@@ -1712,7 +1769,7 @@ function Tuslamj(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Aid",
+          url: "http://172.16.24.103:3002/api/v1/Aid",
           method: "POST",
           data: { Aid: newRow },
         })
@@ -1741,7 +1798,7 @@ function Tuslamj(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Aid",
+          url: "http://172.16.24.103:3002/api/v1/Aid",
           method: "PUT",
           data: {
             Aid: oldRow,
@@ -1771,29 +1828,34 @@ function Tuslamj(props) {
             props.loading(false);
           });
       }
-      props.loading(false);
     } else {
       props.loading(false);
     }
   }
   function requiredField() {
     for (let i = 0; i < data.Aid.length; i++) {
-      if (
-        data.Aid[i].DOCUMENT_NAME === null ||
-        data.Aid[i].DOCUMENT_NAME === ""
-      ) {
-        alert.show("Баримт бичгийн нэр оруулан уу");
+      if (data.Aid[i].AID_NAME === null || data.Aid[i].AID_NAME === "") {
+        alert.show("Тусламжийн нэр оруулан уу");
         return false;
       } else if (
-        data.Aid[i].COMPLETION_POSISION === null ||
-        data.Aid[i].COMPLETION_POSISION === ""
+        data.Aid[i].DECISION_NAME === null ||
+        data.Aid[i].DECISION_NAME === ""
       ) {
-        alert.show("Бүрдүүлэлт хийсэн албан тушаалтан оруулан уу");
+        alert.show("Шийдвэрийн нэр оруулан уу");
         return false;
       } else if (
-        data.Aid[i].COMPLETION_ENTRY_NAME === null ||
-        data.Aid[i].COMPLETION_ENTRY_NAME === ""
+        data.Aid[i].DECISION_NO === null ||
+        data.Aid[i].DECISION_NO === ""
       ) {
+        alert.show("Шийдэрийн дугаар оруулан уу");
+        return false;
+      } else if (
+        data.Aid[i].AID_MOTIVE === null ||
+        data.Aid[i].AID_MOTIVE === ""
+      ) {
+        alert.show("Тайлбар оруулан уу");
+        return false;
+      } else if (data.Aid[i].AID_DESC === null || data.Aid[i].AID_DESC === "") {
         alert.show("Бүрдүүлэлт хийсэн албан хаагчийн нэр оруулан уу");
         return false;
       } else if (i === data.Aid.length - 1) {
@@ -1854,17 +1916,28 @@ function Tuslamj(props) {
               <th>Шийдэрийн дугаар </th>
               <th>Тусламж олгосон үндэслэл</th>
               <th>Тайлбар</th>
-              <th style={{ paddingLeft: "0px" }}>
-                {" "}
-                <img src={Add} width="43px" height="30px" />
-              </th>
+              {!zasakhTowch ? (
+                <th style={{ paddingLeft: "0px" }}>
+                  {" "}
+                  <img
+                    src={Add}
+                    width="30px"
+                    height="30px"
+                    onClick={() => addRow()}
+                  />
+                </th>
+              ) : null}
             </tr>
           </thead>
           <tbody>
             {data?.Aid?.map((value, index) => (
               <tr>
                 <td className="classTbdy">
-                  <input style={{ width: "2rem" }} value={index + 1} />
+                  <input
+                    style={{ width: "2rem" }}
+                    value={index + 1}
+                    disabled={true}
+                  />
                 </td>
                 <td className="classTbdy">
                   <input
@@ -1996,23 +2069,31 @@ function Tuslamj(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
-                  <img src={Delete} width="30px" height="30px" />
-                </td>
+                {!zasakhTowch ? (
+                  <td className="classTbdy">
+                    <img
+                      src={Delete}
+                      width="30px"
+                      height="30px"
+                      onClick={() => removeRow(index, value)}
+                    />
+                  </td>
+                ) : null}
               </tr>
             ))}
           </tbody>
         </table>
 
-        {zasakhTowch ? (
+        {!zasakhTowch ? (
           <div className="columns ">
             <div className="column is-11" />
-
             <div className="column is-1">
               {/* <button className="button is-info is-small is-focused ml-6">
             Хэвлэх
           </button> */}
-              <button className="buttonTsenkher">Хадгалах</button>
+              <button className="buttonTsenkher" onClick={saveToDB}>
+                Хадгалах
+              </button>
             </div>
           </div>
         ) : null}
@@ -2024,14 +2105,19 @@ function Tuslamj(props) {
 
   return listItems;
 }
-function Surhalt(props) {
-  const [zasakhTowch, setZasakhTowch] = useState(false);
+function Surgalt(props) {
+  const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
 
   useEffect(async () => {
     let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/training/400"
+      "http://172.16.24.103:3002/api/v1/training/" +
+        JSON.parse(
+          localStorage.getItem("personDetail") === undefined
+            ? "{}"
+            : localStorage.getItem("personDetail")
+        )?.emp_id
       // + props.person_id
     );
     console.log(listItems, "Training");
@@ -2042,20 +2128,23 @@ function Surhalt(props) {
       loadData({
         Training: [
           {
-            DOCUMENT_ID: 1,
-            DOCUMENT_NAME: "",
-            DOCUMENT_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            PAGE_COUNT: 10,
-            PROCESS_NOTE: "",
-            COMPLETION_POSISION: "",
-            COMPLETION_ENTRY_NAME: "",
-            DOCUMENT_URL: null,
-            PERSON_ID: props.person_id,
+            TRAINING_ID: 1,
+            TRAINING_SOURCE: "",
+            TRAINING_PLACE: "",
+            TRAINING_ORG: "",
+            TRAINING_NAME: "",
+            START_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            END_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            TRAINING_DESC: "",
             IS_ACTIVE: "1",
             CREATED_BY: userDetils?.USER_ID,
             CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
             ROWTYPE: "NEW",
-            EMP_ID: 400,
+            EMP_ID: JSON.parse(
+              localStorage.getItem("personDetail") === undefined
+                ? "{}"
+                : localStorage.getItem("personDetail")
+            )?.emp_id,
           },
         ],
       });
@@ -2063,31 +2152,34 @@ function Surhalt(props) {
   async function addRow() {
     let value = data.Training;
     value.push({
-      DOCUMENT_ID: 1,
-      DOCUMENT_NAME: "",
-      DOCUMENT_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-      PAGE_COUNT: 0,
-      PROCESS_NOTE: "",
-      COMPLETION_POSISION: "",
-      COMPLETION_ENTRY_NAME: "",
-      DOCUMENT_URL: null,
-      PERSON_ID: props.person_id,
+      TRAINING_ID: 1,
+      TRAINING_SOURCE: "",
+      TRAINING_PLACE: "",
+      TRAINING_ORG: "",
+      TRAINING_NAME: "",
+      START_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+      END_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+      TRAINING_DESC: "",
       IS_ACTIVE: "1",
       CREATED_BY: userDetils?.USER_ID,
       CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
       ROWTYPE: "NEW",
-      EMP_ID: 400,
+      EMP_ID: JSON.parse(
+        localStorage.getItem("personDetail") === undefined
+          ? "{}"
+          : localStorage.getItem("personDetail")
+      )?.emp_id,
     });
 
-    await loadData({ Document: value });
+    await loadData({ Training: value });
   }
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/documentDelete",
+        url: "http://172.16.24.103:3002/api/v1/TrainingDelete",
         method: "POST",
         data: {
-          Document: {
+          Training: {
             ...value,
             ...{
               IS_ACTIVE: 1,
@@ -2128,7 +2220,7 @@ function Surhalt(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Training",
+          url: "http://172.16.24.103:3002/api/v1/Training",
           method: "POST",
           data: { Training: newRow },
         })
@@ -2157,10 +2249,10 @@ function Surhalt(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Training",
+          url: "http://172.16.24.103:3002/api/v1/Training",
           method: "PUT",
           data: {
-            Document: oldRow,
+            Training: oldRow,
             UPDATED_BY: userDetils?.USER_ID,
             UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
           },
@@ -2187,7 +2279,6 @@ function Surhalt(props) {
             props.loading(false);
           });
       }
-      props.loading(false);
     } else {
       props.loading(false);
     }
@@ -2195,22 +2286,34 @@ function Surhalt(props) {
   function requiredField() {
     for (let i = 0; i < data.Training.length; i++) {
       if (
-        data.Training[i].DOCUMENT_NAME === null ||
-        data.Training[i].DOCUMENT_NAME === ""
+        data.Training[i].TRAINING_SOURCE === null ||
+        data.Training[i].TRAINING_SOURCE === ""
       ) {
-        alert.show("Баримт бичгийн нэр оруулан уу");
+        alert.show("Хөтөлбөрийн эх үүсвэр оруулан уу");
         return false;
       } else if (
-        data.Training[i].COMPLETION_POSISION === null ||
-        data.Training[i].COMPLETION_POSISION === ""
+        data.Training[i].TRAINING_PLACE === null ||
+        data.Training[i].TRAINING_PLACE === ""
       ) {
-        alert.show("Бүрдүүлэлт хийсэн албан тушаалтан оруулан уу");
+        alert.show("Мэргэшүүлэх сургалтанд хамрагдсан газар оруулан уу");
         return false;
       } else if (
-        data.Training[i].COMPLETION_ENTRY_NAME === null ||
-        data.Training[i].COMPLETION_ENTRY_NAME === ""
+        data.Training[i].TRAINING_ORG === null ||
+        data.Training[i].TRAINING_ORG === ""
       ) {
-        alert.show("Бүрдүүлэлт хийсэн албан хаагчийн нэр оруулан уу");
+        alert.show("Хаана, дотоод гадаадын ямар байгууллагад оруулан уу");
+        return false;
+      } else if (
+        data.Training[i].TRAINING_NAME === null ||
+        data.Training[i].TRAINING_NAME === ""
+      ) {
+        alert.show("Мэргэшүүлэх сургалтын нэр оруулан уу");
+        return false;
+      } else if (
+        data.Training[i].TRAINING_DESC === null ||
+        data.Training[i].TRAINING_DESC === ""
+      ) {
+        alert.show("Ямар чиглэлээр оруулан уу");
         return false;
       } else if (i === data.Training.length - 1) {
         return true;
@@ -2269,15 +2372,22 @@ function Surhalt(props) {
               <th>Дууссан он,сар,өдөр</th>
 
               <th>Ямар чиглэлээр</th>
-              <th
-                style={{
-                  paddingLeft: "0px",
-                  width: "80px",
-                  textAlignLast: "start",
-                }}
-              >
-                <img src={Add} width="30px" height="30px" />
-              </th>
+              {!zasakhTowch ? (
+                <th
+                  style={{
+                    paddingLeft: "0px",
+                    width: "80px",
+                    textAlignLast: "start",
+                  }}
+                >
+                  <img
+                    src={Add}
+                    width="30px"
+                    height="30px"
+                    onClick={() => addRow()}
+                  />
+                </th>
+              ) : null}
             </tr>
           </thead>
           <tbody>
@@ -2424,16 +2534,22 @@ function Surhalt(props) {
                     }}
                   />
                 </td>
-
-                <td className="classTbdy">
-                  <img src={Delete} width="30px" height="30px" />
-                </td>
+                {!zasakhTowch ? (
+                  <td className="classTbdy">
+                    <img
+                      src={Delete}
+                      width="30px"
+                      height="30px"
+                      onClick={() => removeRow(index, value)}
+                    />
+                  </td>
+                ) : null}
               </tr>
             ))}
           </tbody>
         </table>
 
-        {zasakhTowch ? (
+        {!zasakhTowch ? (
           <div className="columns ">
             <div className="column is-11" />
 
@@ -2441,7 +2557,9 @@ function Surhalt(props) {
               {/* <button className="button is-info is-small is-focused ml-6">
             Хэвлэх
           </button> */}
-              <button className="buttonTsenkher">Хадгалах</button>
+              <button className="buttonTsenkher" onClick={saveToDB}>
+                Хадгалах
+              </button>
             </div>
           </div>
         ) : null}
@@ -2454,13 +2572,18 @@ function Surhalt(props) {
   return listItems;
 }
 function Shiitgel(props) {
-  const [zasakhTowch, setZasakhTowch] = useState(false);
+  const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
 
   useEffect(async () => {
     let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/Punishment/400"
+      "http://172.16.24.103:3002/api/v1/Punishment/" +
+        JSON.parse(
+          localStorage.getItem("personDetail") === undefined
+            ? "{}"
+            : localStorage.getItem("personDetail")
+        )?.emp_id
       // + props.person_id
     );
     console.log(listItems, "Punishment");
@@ -2471,20 +2594,21 @@ function Shiitgel(props) {
       loadData({
         Punishment: [
           {
-            DOCUMENT_ID: 1,
-            DOCUMENT_NAME: "",
-            DOCUMENT_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            PAGE_COUNT: 10,
-            PROCESS_NOTE: "",
-            COMPLETION_POSISION: "",
-            COMPLETION_ENTRY_NAME: "",
-            DOCUMENT_URL: null,
-            PERSON_ID: props.person_id,
+            PUNISHMENT_ID: 1,
+            PUNISHMENT_HOLDER: "",
+            DECISION_NAME: "",
+            DECISION_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            DECISION_NO: "",
+            PUNISHMENT_DESC: "",
             IS_ACTIVE: "1",
             CREATED_BY: userDetils?.USER_ID,
             CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
             ROWTYPE: "NEW",
-            EMP_ID: 400,
+            EMP_ID: JSON.parse(
+              localStorage.getItem("personDetail") === undefined
+                ? "{}"
+                : localStorage.getItem("personDetail")
+            )?.emp_id,
           },
         ],
       });
@@ -2492,20 +2616,21 @@ function Shiitgel(props) {
   async function addRow() {
     let value = data.Punishment;
     value.push({
-      DOCUMENT_ID: 1,
-      DOCUMENT_NAME: "",
-      DOCUMENT_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-      PAGE_COUNT: 0,
-      PROCESS_NOTE: "",
-      COMPLETION_POSISION: "",
-      COMPLETION_ENTRY_NAME: "",
-      DOCUMENT_URL: null,
-      PERSON_ID: props.person_id,
+      PUNISHMENT_ID: 1,
+      PUNISHMENT_HOLDER: "",
+      DECISION_NAME: "",
+      DECISION_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+      DECISION_NO: "",
+      PUNISHMENT_DESC: "",
       IS_ACTIVE: "1",
       CREATED_BY: userDetils?.USER_ID,
       CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
       ROWTYPE: "NEW",
-      EMP_ID: 400,
+      EMP_ID: JSON.parse(
+        localStorage.getItem("personDetail") === undefined
+          ? "{}"
+          : localStorage.getItem("personDetail")
+      )?.emp_id,
     });
 
     await loadData({ Punishment: value });
@@ -2513,7 +2638,7 @@ function Shiitgel(props) {
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/PunishmentDelete",
+        url: "http://172.16.24.103:3002/api/v1/PunishmentDelete",
         method: "POST",
         data: {
           Punishment: {
@@ -2541,7 +2666,7 @@ function Shiitgel(props) {
         });
     }
     loadData({
-      Document: data?.Punishment.filter(
+      Punishment: data?.Punishment.filter(
         (element, index) => index !== indexParam
       ),
     }); //splice(indexParam, 0)
@@ -2558,9 +2683,9 @@ function Shiitgel(props) {
       let message = 0;
 
       if (newRow?.length > 0) {
-        console.log("insert", JSON.stringify(newRow));
+        console.log("insertPunishment", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Punishment",
+          url: "http://172.16.24.103:3002/api/v1/Punishment",
           method: "POST",
           data: { Punishment: newRow },
         })
@@ -2587,9 +2712,9 @@ function Shiitgel(props) {
           });
       }
       if (oldRow?.length > 0) {
-        console.log("update", JSON.stringify(oldRow));
+        console.log("updatePunishment", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Punishment",
+          url: "http://172.16.24.103:3002/api/v1/Punishment",
           method: "PUT",
           data: {
             Punishment: oldRow,
@@ -2619,7 +2744,6 @@ function Shiitgel(props) {
             props.loading(false);
           });
       }
-      props.loading(false);
     } else {
       props.loading(false);
     }
@@ -2627,22 +2751,28 @@ function Shiitgel(props) {
   function requiredField() {
     for (let i = 0; i < data.Punishment.length; i++) {
       if (
-        data.Punishment[i].DOCUMENT_NAME === null ||
-        data.Punishment[i].DOCUMENT_NAME === ""
+        data.Punishment[i].PUNISHMENT_HOLDER === null ||
+        data.Punishment[i].PUNISHMENT_HOLDER === ""
       ) {
-        alert.show("Баримт бичгийн нэр оруулан уу");
+        alert.show("Шийтгэл ногдуулсан албан тушаалтан оруулан уу");
         return false;
       } else if (
-        data.Punishment[i].COMPLETION_POSISION === null ||
-        data.Punishment[i].COMPLETION_POSISION === ""
+        data.Punishment[i].DECISION_NAME === null ||
+        data.Punishment[i].DECISION_NAME === ""
       ) {
-        alert.show("Бүрдүүлэлт хийсэн албан тушаалтан оруулан уу");
+        alert.show("Шийдтэрийн нэр оруулан уу");
         return false;
       } else if (
-        data.Punishment[i].COMPLETION_ENTRY_NAME === null ||
-        data.Punishment[i].COMPLETION_ENTRY_NAME === ""
+        data.Punishment[i].DECISION_NO === null ||
+        data.Punishment[i].DECISION_NO === ""
       ) {
-        alert.show("Бүрдүүлэлт хийсэн албан хаагчийн нэр оруулан уу");
+        alert.show("Шийдвэрийн дугаар оруулан уу");
+        return false;
+      } else if (
+        data.Punishment[i].PUNISHMENT_DESC === null ||
+        data.Punishment[i].PUNISHMENT_DESC === ""
+      ) {
+        alert.show("Юуны учир, ямар шийтгэл ногдуулсан оруулан уу");
         return false;
       } else if (i === data.Punishment.length - 1) {
         return true;
@@ -2726,9 +2856,16 @@ function Shiitgel(props) {
                 Юуны учир, ямар
                 <br /> шийтгэл ногдуулсан
               </th>
-              <th style={{ paddingLeft: "0px" }}>
-                <img src={Add} width="30px" height="30px" />
-              </th>
+              {!zasakhTowch ? (
+                <th style={{ paddingLeft: "0px" }}>
+                  <img
+                    src={Add}
+                    width="30px"
+                    height="30px"
+                    onClick={() => addRow()}
+                  />
+                </th>
+              ) : null}
             </tr>
           </thead>
           <tbody>
@@ -2833,15 +2970,22 @@ function Shiitgel(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
-                  <img src={Delete} width="30px" height="30px" />
-                </td>
+                {!zasakhTowch ? (
+                  <td className="classTbdy">
+                    <img
+                      src={Delete}
+                      width="30px"
+                      height="30px"
+                      onClick={() => removeRow(index, value)}
+                    />
+                  </td>
+                ) : null}
               </tr>
             ))}
           </tbody>
         </table>
 
-        {zasakhTowch ? (
+        {!zasakhTowch ? (
           <div className="columns ">
             <div className="column is-11" />
 
@@ -2849,7 +2993,9 @@ function Shiitgel(props) {
               {/* <button className="button is-info is-small is-focused ml-6">
             Хэвлэх
           </button> */}
-              <button className="buttonTsenkher">Хадгалах</button>
+              <button className="buttonTsenkher" onClick={saveToDB}>
+                Хадгалах
+              </button>
             </div>
           </div>
         ) : null}
@@ -2868,7 +3014,12 @@ function HuwiinHereg(props) {
   const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/document/400"
+      "http://172.16.24.103:3002/api/v1/document/" +
+        JSON.parse(
+          localStorage.getItem("personDetail") === undefined
+            ? "{}"
+            : localStorage.getItem("personDetail")
+        )?.emp_id
       // + props.person_id
     );
     console.log(listItems, "Tangarag");
@@ -2883,7 +3034,7 @@ function HuwiinHereg(props) {
             DOCUMENT_ID: 1,
             DOCUMENT_NAME: "",
             DOCUMENT_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            PAGE_COUNT: 10,
+            PAGE_COUNT: 0,
             PROCESS_NOTE: "",
             COMPLETION_POSISION: "",
             COMPLETION_ENTRY_NAME: "",
@@ -2893,7 +3044,11 @@ function HuwiinHereg(props) {
             CREATED_BY: userDetils?.USER_ID,
             CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
             ROWTYPE: "NEW",
-            EMP_ID: 400,
+            EMP_ID: JSON.parse(
+              localStorage.getItem("personDetail") === undefined
+                ? "{}"
+                : localStorage.getItem("personDetail")
+            )?.emp_id,
           },
         ],
       });
@@ -2915,7 +3070,11 @@ function HuwiinHereg(props) {
       CREATED_BY: userDetils?.USER_ID,
       CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
       ROWTYPE: "NEW",
-      EMP_ID: 400,
+      EMP_ID: JSON.parse(
+        localStorage.getItem("personDetail") === undefined
+          ? "{}"
+          : localStorage.getItem("personDetail")
+      )?.emp_id,
     });
 
     await loadData({ Document: value });
@@ -2923,7 +3082,7 @@ function HuwiinHereg(props) {
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/documentDelete",
+        url: "http://172.16.24.103:3002/api/v1/documentDelete",
         method: "POST",
         data: {
           Document: {
@@ -2968,7 +3127,7 @@ function HuwiinHereg(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/document",
+          url: "http://172.16.24.103:3002/api/v1/document",
           method: "POST",
           data: { Document: newRow },
         })
@@ -2997,7 +3156,7 @@ function HuwiinHereg(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/document",
+          url: "http://172.16.24.103:3002/api/v1/document",
           method: "PUT",
           data: {
             Document: oldRow,
@@ -3027,7 +3186,6 @@ function HuwiinHereg(props) {
             props.loading(false);
           });
       }
-      props.loading(false);
     } else {
       props.loading(false);
     }

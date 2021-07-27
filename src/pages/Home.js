@@ -131,17 +131,19 @@ function Home(props) {
 
   const handleChange = (state) => {
     // You can use setState or dispatch with something like Redux so we can use the retrieved data
-    console.log("Selected Rows: ", state);
+    localStorage.removeItem("personDetail");
     if (state?.selectedRows != undefined) {
-      localStorage.removeItem("personDetail");
+      console.log("Selected Rows: ", state?.selectedRows[0]?.EMP_ID);
+
       localStorage.setItem(
         "personDetail",
         JSON.stringify({
           person_id:
-            state?.selectedRows[0]?.EMP_ID !== undefined &&
-            state?.selectedRows[0]?.EMP_ID !== null
-              ? state?.selectedRows[0]?.EMP_ID
+            state?.selectedRows[0]?.EMP_PERSON_ID !== undefined &&
+            state.selectedRows[0]?.EMP_PERSON_ID !== null
+              ? state?.selectedRows[0]?.EMP_PERSON_ID
               : state?.selectedRows[0].PERSON_ID,
+          emp_id: state?.selectedRows[0].EMP_ID,
           type: "employ",
         })
       );

@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import Header from "../components/header";
-import AnketNeg from "../components/anketNeg";
 import Footer from "../components/footer";
-import SideBar from "../components/sidebar";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Search, Filter, Add } from "../assets/images/zurag";
+import { Search, Filter, Add, M, Stop, Trush } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
+const axios = require("axios");
 var dateFormat = require("dateformat");
 
 var rowNumber = 1;
@@ -222,24 +220,23 @@ const Home = (props) => {
             <span style={{ width: "40", height: "40" }}>
               <img src={Filter} width="35" height="40" />
             </span>
-          </div>
-        </div>
-        {/* <button
-              class="input  is-size-7"
+            <button
+              class="ml-3"
               style={{
-                borderRadius: "6px",
-                width: "8rem",
+                borderRadius: "4px",
+                border: "none",
                 backgroundColor: "#418ee6",
                 color: "white",
                 justifyContent: "center",
-                paddingRight: "0px",
-                paddingLeft: "0px",
+                whiteSpace: "nowrap",
               }}
               onClick={() => setNuutsiinBvrtgel(!NuutsiinBvrtgel)}
             >
               Нөөцийн бүртгэл
-            </button> */}
-
+            </button>
+          </div>
+        </div>
+        {NuutsiinBvrtgel ? <TushaalAjiltan /> : null}
         <DataTable
           columns={columns}
           data={jagsaalt}
@@ -261,5 +258,394 @@ const Home = (props) => {
     </div>
   );
 };
+const bagana = [
+  {
+    name: "№",
+    selector: (row, index) => {
+      return index + 1;
+    },
+    sortable: true,
+    width: "40px",
+  },
+  {
+    name: "Ажилтны овог",
+    selector: "PERSON_LASTNAME",
+    sortable: true,
+  },
+  {
+    name: "Ажилтны нэр",
+    selector: "PERSON_FIRSTNAME",
+    sortable: true,
+  },
 
+  {
+    name: "регистрийн дугаар",
+    selector: "PERSON_REGISTER_NO",
+    sortable: true,
+    center: true,
+  },
+];
+
+function TushaalAjiltan(props) {
+  const [tsalinKhuls, setTsalin] = useState(false);
+  const [button, setbutton] = useState(1);
+  const [jagsaalt, setJagsaalt] = useState();
+  useEffect(async () => {
+    let listItems = await axios("http://172.16.24.103:3002/api/v1/personall");
+    console.log(listItems, "Tangarag");
+    setJagsaalt(listItems?.data);
+  }, [props]);
+  const handleChange = (state) => {
+    // You can use setState or dispatch with something like Redux so we can use the retrieved data
+    console.log("Selected Rows: ", state.selectedRows);
+  };
+  let listItems;
+  if (jagsaalt !== undefined || jagsaalt?.length !== 0) {
+    listItems = (
+      <div
+        style={{
+          position: "absolute",
+          width: "50%",
+          height: "auto",
+          left: "30%",
+          top: "15%",
+          borderRadius: "6px",
+          backgroundColor: "white",
+          boxShadow:
+            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+          zIndex: "1",
+        }}
+      >
+        <div
+          style={{
+            height: "auto",
+            backgroundColor: "#418ee6",
+            padding: "18px 10px 18px 10px",
+            color: "white",
+            marginBottom: "10px",
+            borderTopLeftRadius: "6px",
+            borderTopRightRadius: "6px",
+          }}
+        >
+          <span>ТУШААЛЫН БҮРТГЭЛ</span>
+        </div>
+        <div style={{ padding: "15px 15px 35px 15px" }}>
+          <div
+            class="control has-icons-left has-icons-right"
+            style={{ marginLeft: "10px" }}
+          >
+            <input
+              class="input is-small is-gray"
+              type="email"
+              placeholder="хайлт  хийх утгаа оруулна уу"
+              style={{
+                borderRadius: "5px",
+              }}
+            />
+            <span class="icon is-small is-right">
+              <img src={Search} />
+            </span>
+            <span class="icon is-small is-right"></span>
+          </div>
+          <DataTable
+            columns={bagana}
+            data={jagsaalt}
+            theme="solarized"
+            customStyles={customStyles}
+            noDataComponent="мэдээлэл байхгүй байна"
+            pagination={false}
+            paginationPerPage={10}
+            selectableRows // add for checkbox selection
+            Clicked
+            onSelectedRowsChange={handleChange}
+            noHeader={true}
+            fixedHeader={true}
+            overflowY={true}
+            overflowYOffset={"390px"}
+          />
+        </div>
+      </div>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+
+  return listItems;
+}
+
+function Khoyor(props) {
+  const [tsalinKhuls, setTsalin] = useState(false);
+  const [button, setbutton] = useState(1);
+  return (
+    <div>
+      <div className="columns">
+        <div className="column is-4">
+          <button
+            style={{
+              border: "none",
+              borderRadius: "4px",
+              backgroundColor: "#418ee6",
+              color: "white",
+              justifyContent: "center",
+            }}
+            onClick={() => setbutton(1)}
+          >
+            ҮНДСЭН МЭДЭЭЛЭЛ
+          </button>
+
+          <button
+            style={{
+              border: "none",
+              borderRadius: "6px",
+              backgroundColor: "#e8e8e8",
+              color: "#418ee6",
+              justifyContent: "center",
+              marginLeft: "5px",
+            }}
+            onClick={() => setbutton(2)}
+          >
+            ЦАЛИН ХӨЛС
+          </button>
+        </div>
+
+        <div className="column is-6"></div>
+        <div className="column is-2 has-text-right">
+          <button
+            onClick={() => setTsalin(!tsalinKhuls)}
+            className="buttonTsenkher"
+          >
+            Засварлах
+          </button>
+        </div>
+      </div>
+      {button === 1 ? (
+        <div>
+          <div className="columns  ">
+            <div className="column is-3">
+              <h1>Ажилтны нэр</h1>
+              <input class="input  is-size-7" />
+            </div>
+            <div className="column is-3">
+              <h1>Ажилтны овог</h1>
+              <input class="input  is-size-7" />
+            </div>
+            <div className="column is-6">
+              <h1>
+                {" "}
+                <span style={{ color: "red" }}>*</span>Тушаалын төрөл
+              </h1>
+              <input class="input  is-size-7" />
+            </div>
+          </div>
+
+          <div>
+            <div className="columns">
+              <div className="column is-6">
+                <h1>байгууллага</h1>
+                <input class="input  is-size-7" />
+              </div>
+              <div className="column is-6">
+                <h1>
+                  {" "}
+                  <span style={{ color: "red" }}>*</span>Тушаалын дугаар
+                </h1>
+                <input class="input  is-size-7" />
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="columns">
+              <div className="column is-6">
+                <h1>Газар нэгж</h1>
+                <input class="input  is-size-7" />
+              </div>
+              <div className="column is-6">
+                <h1>
+                  {" "}
+                  <span style={{ color: "red" }}>*</span>Тайлбар
+                </h1>
+                <input class="input  is-size-7" />
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="columns">
+              <div className="column is-6">
+                <h1>Албан хэлтэс</h1>
+                <input class="input  is-size-7" />
+              </div>
+
+              <div className="column is-3">
+                <h1>Хэрэгжих огноо</h1>
+                <input class="input  is-size-7" />
+              </div>
+
+              <div className="column is-3">
+                <h1>Бүртгэсэн огноо</h1>
+                <input class="input  is-size-7" />
+              </div>
+            </div>
+          </div>
+          <div>
+            <h1>
+              {" "}
+              <span style={{ color: "red" }}>*</span>Албан тушаалын код{" "}
+            </h1>
+            <div className="columns ">
+              <div className="column is-6">
+                <input class="input  is-size-7" />
+              </div>
+              <div className="column  is-1">
+                <h1>
+                  <span style={{ color: "red" }}>*</span>Тушаал
+                </h1>
+              </div>
+              <div className="column  is-1 ">
+                <img src={M} width="20px" height="20px" />
+                <img src={Trush} width="20px" height="20px" />
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="columns ">
+              <div className="column is-6  ">
+                <h1>
+                  {" "}
+                  <span style={{ color: "red" }}>*</span>Албан тушаал
+                </h1>
+                <input class="input  is-size-7" />
+              </div>
+            </div>
+          </div>
+          {tsalinKhuls ? (
+            <div className="columns">
+              <div className="column is-8"> </div>
+              <div className="column is-4 has-text-right">
+                <button className="buttonTsenkher ">Хэвлэх</button>
+                <button className="buttonTsenkher ml-1">Хадгалах</button>
+                <button className="buttonTsenkher ml-1">Хадгалаад харах</button>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      ) : (
+        <div
+          style={{
+            padding: "15px 10px 25px 10px",
+            backgroundColor: "#c0c0c05c",
+          }}
+        >
+          <div className="columns  ">
+            <div className="column is-3">
+              <h1>Ажилтны нэр</h1>
+              <input class="input  is-size-7" />
+            </div>
+            <div className="column is-3">
+              <h1>Ажилтны овог</h1>
+              <input class="input  is-size-7" />
+            </div>
+            <div className="column is-6">
+              <h1>
+                {" "}
+                <span style={{ color: "red" }}>*</span>Тушаалын төрөл
+              </h1>
+              <input class="input  is-size-7" />
+            </div>
+          </div>
+
+          <div>
+            <div className="columns">
+              <div className="column is-6">
+                <h1>байгууллага</h1>
+                <input class="input  is-size-7" />
+              </div>
+              <div className="column is-6">
+                <h1>
+                  {" "}
+                  <span style={{ color: "red" }}>*</span>Тушаалын дугаар
+                </h1>
+                <input class="input  is-size-7" />
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="columns">
+              <div className="column is-6">
+                <h1>Газар нэгж</h1>
+                <input class="input  is-size-7" />
+              </div>
+              <div className="column is-6">
+                <h1>
+                  {" "}
+                  <span style={{ color: "red" }}>*</span>Тайлбар
+                </h1>
+                <input class="input  is-size-7" />
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="columns">
+              <div className="column is-6">
+                <h1>Албан хэлтэс</h1>
+                <input class="input  is-size-7" />
+              </div>
+
+              <div className="column is-3">
+                <h1>Хэрэгжих огноо</h1>
+                <input class="input  is-size-7" />
+              </div>
+
+              <div className="column is-3">
+                <h1>Бүртгэсэн огноо</h1>
+                <input class="input  is-size-7" />
+              </div>
+            </div>
+          </div>
+          <div>
+            <h1>
+              {" "}
+              <span style={{ color: "red" }}>*</span>Албан тушаалын код{" "}
+            </h1>
+            <div className="columns ">
+              <div className="column is-6">
+                <input class="input  is-size-7" />
+              </div>
+              <div className="column  is-1">
+                <h1>
+                  <span style={{ color: "red" }}>*</span>Тушаал
+                </h1>
+              </div>
+              <div className="column  is-1 ">
+                <img src={M} width="20px" height="20px" />
+                <img src={Trush} width="20px" height="20px" />
+              </div>
+            </div>
+          </div>
+          <div>
+            <div className="columns ">
+              <div className="column is-6  ">
+                <h1>
+                  {" "}
+                  <span style={{ color: "red" }}>*</span>Албан тушаал
+                </h1>
+                <input class="input  is-size-7" />
+              </div>
+            </div>
+          </div>
+          {tsalinKhuls ? (
+            <div className="columns">
+              <div className="column is-8"> </div>
+              <div className="column is-4 has-text-right">
+                <button className="buttonTsenkher ">Хэвлэх</button>
+                <button className="buttonTsenkher ml-1">Хадгалах</button>
+                <button className="buttonTsenkher ml-1">Хадгалаад харах</button>
+              </div>
+            </div>
+          ) : null}
+          {button === 1 ? 2 : null}
+        </div>
+      )}
+    </div>
+  );
+}
 export default Home;

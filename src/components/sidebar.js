@@ -73,6 +73,7 @@ const SideBar = (props) => {
       setMenuCollapse(true);
     } else if (value?.menu4) {
       history.push("/web/TushaalShiidver");
+      setMenuCollapse(true);
     } else if (value?.menu5) {
       history.push("/web/Tailan");
       setMenuCollapse(true);
@@ -213,7 +214,7 @@ const SideBar = (props) => {
                     }}
                   >
                     {" "}
-                    Тушаал шийдвэрийн бүртгэл
+                    Шийдвэр тушаалын бүртгэл
                   </p>
                 </div>
               </MenuItem>
