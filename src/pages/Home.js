@@ -435,22 +435,40 @@ function Home(props) {
               <span class="icon is-small is-right"></span>
             </div>
 
-            <img
-              src={AddBlue}
-              width="30px"
-              height="30px"
+            <button
+              class="text"
+              style={{
+                marginLeft: "1%",
+                borderRadius: "5px",
+                backgroundColor: "#b8e6f3",
+                color: "#000",
+                border: "0px",
+              }}
               onClick={() => {
                 anketANew();
               }}
-            />
-            <img
-              src={Excel}
-              height="30px"
-              width="30px"
-              onClick={() =>
-                document.getElementById("test-table-xls-button").click()
-              }
-            />
+            >
+              {" "}
+              <span style={{ display: "flex", paddingRight: "22px" }}>
+                <img src={AddBlue} width="20px" height="20px "></img>Нэмэх
+              </span>
+            </button>
+
+            <button
+              class="text"
+              style={{
+                marginLeft: "1%",
+                borderRadius: "5px",
+                backgroundColor: "#1cc88a",
+                color: "#fff",
+                border: "double",
+              }}
+              onClick={() => document.getElementById("emergencyXLS").click()}
+            >
+              <span style={{ display: "flex", paddingRight: "22px" }}>
+                <img src={Excel} width="20px" height="20px "></img>Excel
+              </span>
+            </button>
             <EmployExcel />
           </div>
         </div>

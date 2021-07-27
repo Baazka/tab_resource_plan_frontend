@@ -534,17 +534,17 @@ function DepartmentID(props) {
       <select
         disabled={props.edit}
         className="anketInput"
-        value={props.personChild?.EMP_DEPARTMENT_ID}
+        value={props.personChild?.DEPARTMENT_ID}
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ EMP_DEPARTMENT_ID: text.target.value, check: false },
+            ...{ DEPARTMENT_ID: text.target.value, check: false },
           })
         }
       >
         {data?.map((nation, index) => (
-          <option key={index} value={nation.EMP_DEPARTMENT_ID}>
-            {nation.EMP_DEPARTMENT_NAME}
+          <option key={index} value={nation.DEPARTMENT_ID}>
+            {nation.DEPARTMENT_NAME}
           </option>
         ))}
       </select>

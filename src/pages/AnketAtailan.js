@@ -64,7 +64,7 @@ function AnketAtailan(props) {
 function Emergency(props) {
   const [data, loadData] = useState();
   const [department, setDepartment] = useState({
-    EMP_DEPARTMENT_ID: 1,
+    DEPARTMENT_ID: 1,
     check: true,
   });
   const alert = useAlert();
@@ -83,7 +83,7 @@ function Emergency(props) {
     if (department.check !== true) {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/reportEmergency/" +
-          department.EMP_DEPARTMENT_ID
+          department.DEPARTMENT_ID
       );
       if (listItems.data !== undefined && listItems.data.length === 0)
         alert.show("өгөгдөл байхгүй байна");
@@ -173,32 +173,34 @@ function Emergency(props) {
                 <thead style={{ backgroundColor: "#f1f1f1" }}>
                   <tr>
                     <td>№</td>
-                    <td>Таны юу болох</td>
+                    <td>Ажилтны нэр</td>
+                    {register === false ? <td>Регистерийн дугаар</td> : null}
                     <td>Овог</td>
                     <td>Нэр</td>
+                    <td>Таны юу болох</td>
                     <td>Утасны дугаар</td>
-                    {register === false ? <td>Регистерийн дугаар</td> : null}
                   </tr>
                 </thead>
                 <tbody>
                   {data?.map((value, index) => (
                     <tr>
                       <td style={{ width: "2rem" }}>{index + 1}</td>
-                      <td style={{ width: "10rem" }}>{value.FAMILY_NAME}</td>
+                      <td style={{ width: "10rem" }}>{value.PERSON_NAME}</td>
+                      {register === false ? (
+                        <td style={{ width: "20rem" }}>
+                          {value.PERSON_REGISTER_NO}
+                        </td>
+                      ) : null}
                       <td style={{ width: "10rem" }}>
                         {value.EMERGENCY_LASTNAME}
                       </td>
                       <td style={{ width: "10rem" }}>
                         {value.EMERGENCY_FIRSTNAME}
                       </td>
+                      <td style={{ width: "10rem" }}>{value.FAMILY_NAME}</td>
                       <td style={{ width: "20rem" }}>
                         {value.EMERGENCY_PHONE}
                       </td>
-                      {register === false ? (
-                        <td style={{ width: "20rem" }}>
-                          {value.PERSON_REGISTER_NO}
-                        </td>
-                      ) : null}
                     </tr>
                   ))}
                 </tbody>
@@ -217,7 +219,7 @@ function Emergency(props) {
 function GerBvl(props) {
   const [data, loadData] = useState();
   const [department, setDepartment] = useState({
-    EMP_DEPARTMENT_ID: 1,
+    DEPARTMENT_ID: 1,
     check: true,
   });
   const alert = useAlert();
@@ -235,7 +237,7 @@ function GerBvl(props) {
     if (department.check !== true) {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/reportFamily/1/" +
-          department.EMP_DEPARTMENT_ID
+          department.DEPARTMENT_ID
       );
       if (listItems.data !== undefined && listItems.data.length === 0)
         alert.show("өгөгдөл байхгүй байна");
@@ -331,11 +333,20 @@ function GerBvl(props) {
                           <span>№</span>
                         </td>
                         <td rowspan="2" style={{ backgroundColor: "#f1f1f1" }}>
+                          <span>Ажилтны нэр</span>
+                        </td>
+                        {register === false ? (
+                          <td
+                            rowspan="2"
+                            style={{ backgroundColor: "#f1f1f1" }}
+                          >
+                            Регистерийн дугаар
+                          </td>
+                        ) : null}
+                        {/* <td rowspan="2" style={{ backgroundColor: "#f1f1f1" }}>
                           <span>Овог</span>
-                        </td>
-                        <td rowspan="2" style={{ backgroundColor: "#f1f1f1" }}>
-                          <span>Нэр</span>
-                        </td>
+                        </td> */}
+
                         <td rowspan="2" style={{ backgroundColor: "#f1f1f1" }}>
                           <span>Таны юу болох</span>
                         </td>
@@ -372,11 +383,6 @@ function GerBvl(props) {
                         <td style={{ backgroundColor: "#f1f1f1" }}>
                           <span>Албан тушаал</span>
                         </td>
-                        {register === false ? (
-                          <td style={{ backgroundColor: "#f1f1f1" }}>
-                            Регистерийн дугаар
-                          </td>
-                        ) : null}
                       </tr>
                       {data?.map((value, index) => (
                         <tr>
@@ -384,9 +390,18 @@ function GerBvl(props) {
                             {" "}
                             <span>{index + 1}</span>
                           </td>
-                          <td>{value.PERSON_LASTNAME}</td>
+
                           <td>{value.PERSON_NAME}</td>
-                          <td>{value.PERSON_NAME}</td>
+
+                          {/* <td>{value.PERSON_LASTNAME}</td>
+
+                          <td>{value.PERSON_FIRSTNAME}</td> */}
+                          {register === false ? (
+                            <td style={{ width: "20rem" }}>
+                              {value.PERSON_REGISTER_NO}
+                            </td>
+                          ) : null}
+                          <td>{value.FAMILY_NAME}</td>
                           <td>{value.MEMBER_LASTNAME}</td>
                           <td>{value.MEMBER_FIRSTNAME}</td>
                           <td>
@@ -402,11 +417,6 @@ function GerBvl(props) {
                           <td>{value.SUB_OFFICE_NAME}</td>
                           <td>{value.MEMBER_ORG}</td>
                           <td>{value.MEMBER_POSITION}</td>
-                          {register === false ? (
-                            <td style={{ width: "20rem" }}>
-                              {value.PERSON_REGISTER_NO}
-                            </td>
-                          ) : null}
                         </tr>
                       ))}
                     </tbody>
@@ -427,10 +437,11 @@ function GerBvl(props) {
 function Sadan(props) {
   const [data, loadData] = useState();
   const [department, setDepartment] = useState({
-    EMP_DEPARTMENT_ID: 1,
+    DEPARTMENT_ID: 1,
     check: true,
   });
   const alert = useAlert();
+  const [register, setRegister] = useState(true);
 
   useEffect(async () => {
     let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportFamily/2/");
@@ -441,7 +452,7 @@ function Sadan(props) {
     if (department.check !== true) {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/reportFamily/2/" +
-          department.EMP_DEPARTMENT_ID
+          department.DEPARTMENT_ID
       );
       if (listItems.data !== undefined && listItems.data.length === 0)
         alert.show("өгөгдөл байхгүй байна");
@@ -478,7 +489,21 @@ function Sadan(props) {
                     setPersonChild={setDepartment}
                   />
                 </div>
+                <label
+                  class="checkbox"
+                  style={{ marginLeft: "10px", marginTop: "5px" }}
+                >
+                  <input
+                    type="checkbox"
+                    value={register}
+                    onChange={() => setRegister(!register)}
+                  />
+                  <span style={{ marginLeft: "2px" }}>
+                    Регистерийн дугаар харах эсэх
+                  </span>
+                </label>
               </div>
+
               <div className="column is-4 ml-6"></div>
               <div className="column is-2 ">
                 <div style={{ display: "none" }}>
@@ -523,7 +548,11 @@ function Sadan(props) {
                       <td rowspan="2" style={{ backgroundColor: "#f1f1f1" }}>
                         <span> Ажилтны нэр</span>
                       </td>
-
+                      {register === false ? (
+                        <td rowspan="2" style={{ backgroundColor: "#f1f1f1" }}>
+                          Регистерийн дугаар
+                        </td>
+                      ) : null}
                       <td rowspan="2" style={{ backgroundColor: "#f1f1f1" }}>
                         {" "}
                         <span>Гэр бүлийн гишүүний эцэг,эхийн нэр</span>
@@ -564,6 +593,11 @@ function Sadan(props) {
                           <span>{index + 1}</span>
                         </td>
                         <td>{value.PERSON_NAME}</td>
+                        {register === false ? (
+                          <td style={{ width: "20rem" }}>
+                            {value.PERSON_REGISTER_NO}
+                          </td>
+                        ) : null}
                         <td>{value.MEMBER_LASTNAME}</td>
                         <td>{value.MEMBER_FIRSTNAME}</td>
 
@@ -599,7 +633,7 @@ function Sadan(props) {
 function ShalgaltiinTalaarkhMedeelel(props) {
   const [data, loadData] = useState();
   const [department, setDepartment] = useState({
-    EMP_DEPARTMENT_ID: 1,
+    DEPARTMENT_ID: 1,
     check: true,
   });
   const alert = useAlert();
@@ -612,8 +646,7 @@ function ShalgaltiinTalaarkhMedeelel(props) {
   useEffect(async () => {
     if (department.check !== true) {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportExam/" +
-          department.EMP_DEPARTMENT_ID
+        "http://hr.audit.mn/hr/api/v1/reportExam/" + department.DEPARTMENT_ID
       );
       if (listItems.data !== undefined && listItems.data.length === 0)
         alert.show("өгөгдөл байхгүй байна");
@@ -757,7 +790,7 @@ function ShalgaltiinTalaarkhMedeelel(props) {
 function TangaragiinBvrtgel(props) {
   const [data, loadData] = useState();
   const [department, setDepartment] = useState({
-    EMP_DEPARTMENT_ID: 1,
+    DEPARTMENT_ID: 1,
     check: true,
   });
   const alert = useAlert();
@@ -770,8 +803,7 @@ function TangaragiinBvrtgel(props) {
   useEffect(async () => {
     if (department.check !== true) {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportOath/" +
-          department.EMP_DEPARTMENT_ID
+        "http://hr.audit.mn/hr/api/v1/reportOath/" + department.DEPARTMENT_ID
       );
       if (listItems.data !== undefined && listItems.data.length === 0)
         alert.show("өгөгдөл байхгүй байна");
@@ -851,7 +883,7 @@ function TangaragiinBvrtgel(props) {
                   <thead style={{ backgroundColor: "#f1f1f1" }}>
                     <tr>
                       <td>№</td>
-                      <td>Таны нэр</td>
+                      <td>Ажилтны нэр</td>
                       <td>Тангарагын төрөл</td>
                       <td>Тангараг өргөсөн огноо</td>
                       <td>Тангарагын шийдвэрийн дугаар</td>
@@ -904,7 +936,7 @@ function TangaragiinBvrtgel(props) {
 function GadaadHelniiMedleg(props) {
   const [data, loadData] = useState();
   const [department, setDepartment] = useState({
-    EMP_DEPARTMENT_ID: 1,
+    DEPARTMENT_ID: 1,
     check: true,
   });
   const alert = useAlert();
@@ -918,7 +950,7 @@ function GadaadHelniiMedleg(props) {
     if (department.check !== true) {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/reportLanguage/" +
-          department.EMP_DEPARTMENT_ID
+          department.DEPARTMENT_ID
       );
       if (listItems.data !== undefined && listItems.data.length === 0)
         alert.show("өгөгдөл байхгүй байна");
@@ -998,7 +1030,7 @@ function GadaadHelniiMedleg(props) {
                   <thead style={{ backgroundColor: "#f1f1f1" }}>
                     <tr>
                       <td>№</td>
-                      <td>Таны нэр</td>
+                      <td>Ажилтны нэр</td>
                       <td>Гадаад хэлний нэр</td>
                       <td>Ярих</td>
                       <td>Сонсож ойлгох</td>
@@ -1052,7 +1084,7 @@ function GadaadHelniiMedleg(props) {
 function Bolowsrol(props) {
   const [data, loadData] = useState();
   const [department, setDepartment] = useState({
-    EMP_DEPARTMENT_ID: 1,
+    DEPARTMENT_ID: 1,
     check: true,
   });
   const alert = useAlert();
@@ -1068,7 +1100,7 @@ function Bolowsrol(props) {
     if (department.check !== true) {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/reportEducation/1/" +
-          department.EMP_DEPARTMENT_ID
+          department.DEPARTMENT_ID
       );
       if (listItems.data !== undefined && listItems.data.length === 0)
         alert.show("өгөгдөл байхгүй байна");
@@ -1145,7 +1177,7 @@ function Bolowsrol(props) {
                   <thead style={{ backgroundColor: "#f1f1f1" }}>
                     <tr>
                       <td>№</td>
-                      <td>Таны нэр</td>
+                      <td>Ажилтны нэр</td>
                       <td>Боловсролын төрөл</td>
                       <td>Боловсролын төрлийн нэр</td>
                       <td>Боловсролын зэрэг</td>
@@ -1212,7 +1244,7 @@ function Bolowsrol(props) {
 function BolowsrolDoktor(props) {
   const [data, loadData] = useState();
   const [department, setDepartment] = useState({
-    EMP_DEPARTMENT_ID: 1,
+    DEPARTMENT_ID: 1,
     check: true,
   });
   const alert = useAlert();
@@ -1228,7 +1260,7 @@ function BolowsrolDoktor(props) {
     if (department.check !== true) {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/reportEducation/2/" +
-          department.EMP_DEPARTMENT_ID
+          department.DEPARTMENT_ID
       );
       if (listItems.data !== undefined && listItems.data.length === 0)
         alert.show("өгөгдөл байхгүй байна");
@@ -1304,7 +1336,7 @@ function BolowsrolDoktor(props) {
                   <thead style={{ backgroundColor: "#f1f1f1" }}>
                     <tr>
                       <td>№</td>
-                      <td>Таны нэр</td>
+                      <td>Ажилтны нэр</td>
                       <td>Боловсролын зэрэг</td>
                       <td>Боловсрол эзэмшсэн газар</td>
                       <td>Сургуулийн нэр</td>
@@ -1367,7 +1399,7 @@ function BolowsrolDoktor(props) {
 function MergeshliinBeltgel(props) {
   const [data, loadData] = useState();
   const [department, setDepartment] = useState({
-    EMP_DEPARTMENT_ID: 1,
+    DEPARTMENT_ID: 1,
     check: true,
   });
   const alert = useAlert();
@@ -1383,7 +1415,7 @@ function MergeshliinBeltgel(props) {
     if (department.check !== true) {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/reportProfession/" +
-          department.EMP_DEPARTMENT_ID
+          department.DEPARTMENT_ID
       );
       if (listItems.data !== undefined && listItems.data.length === 0)
         alert.show("өгөгдөл байхгүй байна");
@@ -1533,7 +1565,7 @@ function MergeshliinBeltgel(props) {
 function ErdmiinTsol(props) {
   const [data, loadData] = useState();
   const [department, setDepartment] = useState({
-    EMP_DEPARTMENT_ID: 1,
+    DEPARTMENT_ID: 1,
     check: true,
   });
   const alert = useAlert();
@@ -1545,8 +1577,7 @@ function ErdmiinTsol(props) {
   useEffect(async () => {
     if (department.check !== true) {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportFame/" +
-          department.EMP_DEPARTMENT_ID
+        "http://hr.audit.mn/hr/api/v1/reportFame/" + department.DEPARTMENT_ID
       );
       if (listItems.data !== undefined && listItems.data.length === 0)
         alert.show("өгөгдөл байхгүй байна");
@@ -1666,32 +1697,65 @@ function ErdmiinTsol(props) {
 }
 function TsergiinAlba(props) {
   const [data, loadData] = useState();
+
+  const [department, setDepartment] = useState({
+    DEPARTMENT_ID: 1,
+    check: true,
+  });
+  const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportForce/");
     console.log("amjilttai", listItems.data);
     loadData(listItems?.data);
   }, [props]);
-
+  useEffect(async () => {
+    if (department.check !== true) {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/reportForce/" + department.DEPARTMENT_ID
+      );
+      if (listItems.data !== undefined && listItems.data.length === 0)
+        alert.show("өгөгдөл байхгүй байна");
+      else loadData(listItems?.data);
+    }
+  }, [department]);
   let listItems;
+
   if (data !== undefined && data.length > 0) {
     listItems = (
       <div
         style={{
-          width: "55%",
+          width: "99%",
         }}
       >
         <div
           className="box"
-          style={{ marginLeft: "70%", padding: "0px", width: "inherit" }}
+          style={{ marginLeft: "7%", padding: "20px 2px 30% 10px" }}
         >
-          <div style={{ paddingRight: "40%" }}>
-            <div className="columns">
-              <div className="column is-10"></div>
-              <div className="column is-2">
+          <span
+            style={{
+              fontSize: "2rem",
+              marginLeft: "3rem",
+              marginBottom: "3rem",
+            }}
+          >
+            Цэргийн алба
+          </span>
+          <div className="columns">
+            <div className="column is-3 ml-6" style={{ fontSize: "0.7rem" }}>
+              <div class="select">
+                <DepartmentID
+                  personChild={department}
+                  setPersonChild={setDepartment}
+                />
+              </div>
+            </div>
+            <div className="column is-2 ml-3"></div>
+            <div className="column is-2 ">
+              <div style={{ display: "none" }}>
                 <ReactHTMLTableToExcel
-                  id="test-table-xls-button"
+                  id="erdmiinTsolXLS"
                   className="download-table-xls-button"
-                  table="table-to-xls"
+                  table="erdmiinTsolXls"
                   filename="tablexls"
                   sheet="tablexls"
                   buttonText="XLS"
@@ -1700,51 +1764,61 @@ function TsergiinAlba(props) {
               <button
                 class="text"
                 style={{
-                  marginLeft: "10%",
-                  borderRadius: "5px",
+                  marginLeft: "20%",
+                  borderRadius: "1px",
                   backgroundColor: "#1cc88a",
                   color: "#fff",
                   border: "double",
                 }}
+                onClick={() =>
+                  document.getElementById("erdmiinTsolXLS").click()
+                }
               >
                 <span style={{ display: "flex" }}>
                   <img src={Excel} width="20px" height="20px "></img>Excel
                 </span>
               </button>
             </div>
-            {data?.map((value, index) => (
-              <div>
-                <div className="columns">
-                  <div className="column is-11  has-text-right">
-                    Цэргийн үүрэгтний үнэмлэхийн дугаар
-                  </div>
-                  <div className="column ml-2">
-                    {" "}
-                    <option>{value.FORCE_NO}</option>
-                  </div>
-                </div>
-                <div className="columns">
-                  <div className="column is-11  has-text-right">
-                    Цэргийн алба хаасан байдал
-                  </div>
-                  <div className="column ml-2">
-                    <option>{value.FORCE_TYPE_NAME}</option>
-                  </div>
-                </div>
-                <div className="columns">
-                  <div className="column is-11 has-text-right">Хаана</div>
-                  <div className="column ml-2">
-                    <option>{value.FORCE_LOCATION}</option>
-                  </div>
-                </div>
-                <div className="columns">
-                  <div className="column is-11 has-text-right">Тайлбар</div>
-                  <div className="column ml-2">
-                    <option>{value.FORCE_DESC}</option>
-                  </div>
-                </div>
+          </div>
+
+          <div>
+            <div className="columns">
+              <div className="column is-9 ml-6  ">
+                <table
+                  id={"erdmiinTsolXls"}
+                  className="table is-bordered has-text-right "
+                >
+                  <thead style={{ backgroundColor: "#f1f1f1" }}>
+                    <tr>
+                      <td>№</td>
+                      <td>Ажилтны нэр</td>
+                      <td>Цэргийн алба хаасан байдал</td>
+                      <td>Цэргийн үүрэгтний үнэмлэхийн дугаар</td>
+                      <td>Хаана</td>
+                      <td>Тайлбар</td>
+                    </tr>
+                  </thead>
+                  {data?.map((value, index) => (
+                    <tbody>
+                      <td>{index + 1}</td>
+                      <td className="table has-text-left">
+                        {value.PERSON_NAME}
+                      </td>
+                      <td className="table has-text-left">
+                        {value.FORCE_TYPE_NAME}
+                      </td>
+                      <td className="table has-text-left">{value.FORCE_NO}</td>
+                      <td className="table has-text-left">
+                        {value.FORCE_LOCATION}
+                      </td>
+                      <td className="table has-text-left">
+                        {value.FORCE_DESC}
+                      </td>
+                    </tbody>
+                  ))}
+                </table>
               </div>
-            ))}
+            </div>
           </div>
         </div>
       </div>
@@ -1758,7 +1832,7 @@ function TsergiinAlba(props) {
 function ShagnaliinTalaarhMedeelel(props) {
   const [data, loadData] = useState();
   const [department, setDepartment] = useState({
-    EMP_DEPARTMENT_ID: 1,
+    DEPARTMENT_ID: 1,
     check: true,
   });
   const alert = useAlert();
@@ -1770,8 +1844,7 @@ function ShagnaliinTalaarhMedeelel(props) {
   useEffect(async () => {
     if (department.check !== true) {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportAward/" +
-          department.EMP_DEPARTMENT_ID
+        "http://hr.audit.mn/hr/api/v1/reportAward/" + department.DEPARTMENT_ID
       );
       if (listItems.data !== undefined && listItems.data.length === 0)
         alert.show("өгөгдөл байхгүй байна");
@@ -1905,7 +1978,7 @@ function ShagnaliinTalaarhMedeelel(props) {
 function TurshlagiinTalaarhMedeelel(props) {
   const [data, loadData] = useState();
   const [department, setDepartment] = useState({
-    EMP_DEPARTMENT_ID: 1,
+    DEPARTMENT_ID: 1,
     check: true,
   });
   const alert = useAlert();
@@ -1920,7 +1993,7 @@ function TurshlagiinTalaarhMedeelel(props) {
     if (department.check !== true) {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/reportExperience/" +
-          department.EMP_DEPARTMENT_ID
+          department.DEPARTMENT_ID
       );
       if (listItems.data !== undefined && listItems.data.length === 0)
         alert.show("өгөгдөл байхгүй байна");
@@ -2069,7 +2142,7 @@ function TurshlagiinTalaarhMedeelel(props) {
 function BvteeliinJagsaalt(props) {
   const [data, loadData] = useState();
   const [department, setDepartment] = useState({
-    EMP_DEPARTMENT_ID: 1,
+    DEPARTMENT_ID: 1,
     check: true,
   });
   const alert = useAlert();
@@ -2085,7 +2158,7 @@ function BvteeliinJagsaalt(props) {
     if (department.check !== true) {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/reportLiterature/" +
-          department.EMP_DEPARTMENT_ID
+          department.DEPARTMENT_ID
       );
       if (listItems.data !== undefined && listItems.data.length === 0)
         alert.show("өгөгдөл байхгүй байна");
