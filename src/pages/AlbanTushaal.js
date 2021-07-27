@@ -6,10 +6,15 @@ import Footer from "../components/footer";
 import SideBar from "../components/sidebar";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Search, Filter, Add } from "../assets/images/zurag";
+import ReactHTMLTableToExcel from "react-html-table-to-excel";
+import dateFormat from "dateformat";
+
+import { Search, Filter, Add, AddBlue, Excel } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 
 var rowNumber = 1;
+const axios = require("axios");
+
 createTheme("solarized", {
   text: {
     primary: "gray",
@@ -60,6 +65,10 @@ const customStyles = {
 const AlbanTushaal = (props) => {
   const history = useHistory();
   const [jagsaalt, setJagsaalt] = useState();
+  const [searchType, setSearchType] = useState("PERSON_FIRSTNAME");
+  const [found, setFound] = useState();
+  const [search, setSearch] = useState("");
+
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
@@ -78,10 +87,41 @@ const AlbanTushaal = (props) => {
     // You can use setState or dispatch with something like Redux so we can use the retrieved data
     console.log("Selected Rows: ", state.selectedRows);
   };
-  function anketA() {
+  async function anketANew() {
+    localStorage.removeItem("person_id");
+    localStorage.setItem(
+      "personDetail",
+      JSON.stringify({ person_id: "0", type: "newPerson" })
+    );
     history.push("/web/anketA/1");
   }
+  function makeSearch(value) {
+    setSearch(value);
 
+    let found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
+    console.log(found);
+    if (found != undefined && found.length > 0) setFound(found);
+    else setFound([]);
+  }
+  function equalStr(value1, value2) {
+    if (
+      value1 !== undefined &&
+      value1 !== "" &&
+      value2 !== undefined &&
+      value2 !== "" &&
+      value1 !== null &&
+      value2 !== null
+    )
+      if (searchType !== "PERSON_PHONE") {
+        if (
+          (value1 !== null ? value1.toUpperCase() : "").includes(
+            value2.toUpperCase()
+          )
+        )
+          return true;
+      } else if (value1.includes(value2)) return true;
+    return false;
+  }
   const columns = [
     {
       name: "№",
@@ -192,29 +232,42 @@ const AlbanTushaal = (props) => {
           }}
         >
           <div style={{ display: "flex" }}>
+            <div className="select is-small" style={{ marginRight: "10px" }}>
+              <select
+                value={searchType}
+                onChange={(text) => setSearchType(text.target.value)}
+              >
+                <option value={"EMP_DEPARTMENT_NAME"}>
+                  Төрийн аудиты байгууллага
+                </option>
+                <option value={"EMP_SUBDEPARTMENT_NAME"}>Харъяа газар</option>
+                <option value={"EMP_ROLE_NAME"}>Дотооод бүтцийн нэгж</option>
+                <option value={"PERSON_FIRSTNAME"}>
+                  Албан тушаалын түвшин
+                </option>
+                <option value={"PERSON_LASTNAME"}>Албан тушаалын нэр</option>
+                <option value={"EMP_COMPARTMENT_NAME"}>
+                  Албан тушаалын төрөл
+                </option>
+                <option value={"PERSON_PHONE"}>Албан тушаалын ангилал</option>
+                <option value={"PERSON_EMAIL"}>Албан тушаалын зэрэглэл</option>
+                <option value={"CONFIRMED_COUNT"}>Батлагдсан орон тоо</option>
+                <option value={"CONFIRMED_COUNT"}>Ажилтны тоо</option>
+                <option value={"CONFIRMED_COUNT"}>Эзгүй орон тоо</option>
+                <option value={"CONFIRMED_COUNT"}>Сул орон тоо</option>
+              </select>
+              {/* 
+              <span class="icon is-small is-right">
+                <img src={Filter} />
+              </span> */}
+            </div>
             <div class="control has-icons-left has-icons-right">
               <input
                 class="input is-small is-gray"
                 type="email"
                 placeholder="хайлт  хийх утгаа оруулна уу"
-                style={{
-                  borderRadius: "5px",
-                  width: "18rem",
-                }}
-              />
-              <span class="icon is-small is-right">
-                <img src={Add} />
-              </span>
-              <span class="icon is-small is-right"></span>
-            </div>
-            <div
-              class="control has-icons-left has-icons-right"
-              style={{ marginLeft: "10px" }}
-            >
-              <input
-                class="input is-small is-gray"
-                type="email"
-                placeholder="хайлт  хийх утгаа оруулна уу"
+                value={search}
+                onChange={(e) => makeSearch(e.target.value)}
                 style={{
                   borderRadius: "5px",
                   width: "18rem",
@@ -225,9 +278,42 @@ const AlbanTushaal = (props) => {
               </span>
               <span class="icon is-small is-right"></span>
             </div>
-            <span style={{ width: "40", height: "40" }}>
-              <img src={Filter} width="35" height="40" />
-            </span>
+
+            <button
+              class="text"
+              style={{
+                marginLeft: "1%",
+                borderRadius: "5px",
+                backgroundColor: "#b8e6f3",
+                color: "#000",
+                border: "0px",
+              }}
+              onClick={() => {
+                anketANew();
+              }}
+            >
+              {" "}
+              <span style={{ display: "flex", paddingRight: "22px" }}>
+                <img src={AddBlue} width="20px" height="20px "></img>Нэмэх
+              </span>
+            </button>
+
+            <button
+              class="text"
+              style={{
+                marginLeft: "1%",
+                borderRadius: "5px",
+                backgroundColor: "#1cc88a",
+                color: "#fff",
+                border: "double",
+              }}
+              onClick={() => document.getElementById("emergencyXLS").click()}
+            >
+              <span style={{ display: "flex", paddingRight: "22px" }}>
+                <img src={Excel} width="20px" height="20px "></img>Excel
+              </span>
+            </button>
+            <EmployExcel />
           </div>
         </div>
         <DataTable
@@ -251,5 +337,88 @@ const AlbanTushaal = (props) => {
     </div>
   );
 };
+function EmployExcel(props) {
+  const [data, loadData] = useState(null);
 
+  useEffect(async () => {
+    let listItems = await axios("http://hr.audit.mn/hr/api/v1/excelPerson/");
+    console.log(listItems, "tailan");
+    loadData(listItems?.data);
+  }, [props]);
+
+  let listItems;
+  if (data !== undefined || data.length !== 0) {
+    listItems = (
+      <div style={{ width: "30px", height: "30px" }}>
+        <img src={Excel} height="30px" width="30px" />
+        <div style={{ display: "none" }}>
+          <ReactHTMLTableToExcel
+            id="test-table-xls-button"
+            className="download-table-xls-button"
+            table="table-to-xls"
+            filename="tablexls"
+            sheet="tablexls"
+            buttonText="XLS"
+          />
+          <table id="table-to-xls">
+            <tr>
+              <th>Эцэг эхийн нэр</th>
+              <th>Өөрийн нэр</th>
+              <th>Регистерийн дугаар</th>
+              <th>Иргэншил</th>
+              <th>Ургийн овог</th>
+              <th>Үндэс угсаа</th>
+              <th>Хүйс</th>
+              <th>Төрсөн он,сар,өдөр</th>
+              <th>Төрсөн аймаг,хот</th>
+              <th>Төрсөн сум, дүүрэг</th>
+              <th>Төрсөн газар</th>
+              <th>Гэрлэсэн эсэх</th>
+              <th>Утас</th>
+              <th>N-мэйл</th>
+            </tr>
+            {data?.map((value, index) => (
+              <tr>
+                <td>{value.PERSON_LASTNAME}</td>
+                <td>{value.PERSON_FIRSTNAME}</td>
+                <td>{value.PERSON_REGISTER_NO}</td>
+                <td>{value.NATIONAL_NAME}</td>
+                <td>{value.SURNAME}</td>
+                <td>{value.DYNASTY_NAME}</td>
+                <td>
+                  {value.PERSON_GENDER === null
+                    ? ""
+                    : value.PERSON_GENDER === 1
+                    ? "Эмэгтэй"
+                    : "Эрэгтэй"}
+                </td>
+                <td>
+                  {value.PERSON_BORNDATE !== null &&
+                  value.PERSON_BORNDATE !== undefined
+                    ? dateFormat(new Date(value.PERSON_BORNDATE), "yyyy-mm-dd")
+                    : ""}
+                </td>
+                <td>{value.OFFICE_NAME}</td>
+                <td>{value.SUB_OFFICE_NAME}</td>
+                <td>{value.BIRTH_PLACE}</td>
+                <td>
+                  {value.IS_MARRIED === null
+                    ? ""
+                    : value.IS_MARRIED === 0
+                    ? "Гэрлэсэн"
+                    : "Гэрлээгүй"}
+                </td>
+                <td>{value.PERSON_PHONE}</td>
+                <td>{value.PERSON_EMAIL}</td>
+              </tr>
+            ))}
+          </table>
+        </div>
+      </div>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+}
 export default AlbanTushaal;

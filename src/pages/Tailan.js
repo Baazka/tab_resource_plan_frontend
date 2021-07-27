@@ -119,8 +119,9 @@ const Home = (props) => {
                   style={{
                     display: "block",
                     width: "100%",
-                    backgroundColor: "whitesmoke",
+                    backgroundColor: "white",
                     textAlign: "left",
+                    border: "hidden",
                   }}
                 >
                   Зайлшгүй шаардлагатай үед холбоо барих хүн
@@ -140,8 +141,10 @@ const Home = (props) => {
               style={{
                 display: "block",
                 width: "100%",
-                backgroundColor: "whitesmoke",
+                backgroundColor: "white",
                 textAlign: "left",
+                border: "hidden",
+                marginTop: "-23px",
               }}
             >
               Гэр бүлийн байдал
@@ -159,8 +162,10 @@ const Home = (props) => {
               style={{
                 display: "block",
                 width: "100%",
-                backgroundColor: "whitesmoke",
+                backgroundColor: "white",
                 textAlign: "left",
+                border: "hidden",
+                marginTop: "-10px",
               }}
             >
               Садан төрлийн байдал
@@ -177,8 +182,10 @@ const Home = (props) => {
               style={{
                 display: "block",
                 width: "100%",
-                backgroundColor: "whitesmoke",
+                backgroundColor: "white",
                 textAlign: "left",
+                border: "hidden",
+                marginTop: "-10px",
               }}
             >
               Төрийн жинхэнэ албаны шалгалтын талаарх мэдээлэл
@@ -195,8 +202,10 @@ const Home = (props) => {
               style={{
                 display: "block",
                 width: "100%",
-                backgroundColor: "whitesmoke",
+                backgroundColor: "white",
                 textAlign: "left",
+                border: "hidden",
+                marginTop: "-10px",
               }}
             >
               Тангарагын бүртгэл
@@ -213,8 +222,10 @@ const Home = (props) => {
               style={{
                 display: "block",
                 width: "100%",
-                backgroundColor: "whitesmoke",
+                backgroundColor: "white",
                 textAlign: "left",
+                border: "hidden",
+                marginTop: "-10px",
               }}
             >
               Гадаад хэлний мэдлэг
@@ -232,8 +243,10 @@ const Home = (props) => {
               style={{
                 display: "block",
                 width: "100%",
-                backgroundColor: "whitesmoke",
+                backgroundColor: "white",
                 textAlign: "left",
+                border: "hidden",
+                marginTop: "-10px",
               }}
             >
               Боловсрол
@@ -250,8 +263,10 @@ const Home = (props) => {
               style={{
                 display: "block",
                 width: "100%",
-                backgroundColor: "whitesmoke",
+                backgroundColor: "white",
                 textAlign: "left",
+                border: "hidden",
+                marginTop: "-10px",
               }}
             >
               Боловсрол-доктор
@@ -268,8 +283,10 @@ const Home = (props) => {
               style={{
                 display: "block",
                 width: "100%",
-                backgroundColor: "whitesmoke",
+                backgroundColor: "white",
                 textAlign: "left",
+                border: "hidden",
+                marginTop: "-10px",
               }}
             >
               Мэргэшлийн бэлтгэл
@@ -286,15 +303,17 @@ const Home = (props) => {
               style={{
                 display: "block",
                 width: "100%",
-                backgroundColor: "whitesmoke",
+                backgroundColor: "white",
                 textAlign: "left",
+                border: "hidden",
+                marginTop: "-10px",
               }}
             >
               Эрдмийн цол
             </div>
           </div>
         ) : null}
-        {/* {Button1 ? (
+        {Button1 ? (
           <div>
             <div
               onClick={() => {
@@ -304,14 +323,16 @@ const Home = (props) => {
               style={{
                 display: "block",
                 width: "100%",
-                backgroundColor: "whitesmoke",
+                backgroundColor: "white",
                 textAlign: "left",
+                border: "hidden",
+                marginTop: "-10px",
               }}
             >
               Цэргийн алба
             </div>
           </div>
-        ) : null} */}
+        ) : null}
         {Button1 ? (
           <div>
             <div
@@ -322,8 +343,10 @@ const Home = (props) => {
               style={{
                 display: "block",
                 width: "100%",
-                backgroundColor: "whitesmoke",
+                backgroundColor: "white",
                 textAlign: "left",
+                border: "hidden",
+                marginTop: "-10px",
               }}
             >
               Шагналын талаарх мэдээлэл
@@ -340,8 +363,10 @@ const Home = (props) => {
               style={{
                 display: "block",
                 width: "100%",
-                backgroundColor: "whitesmoke",
+                backgroundColor: "white",
                 textAlign: "left",
+                border: "hidden",
+                marginTop: "-10px",
               }}
             >
               Туршлагын талаарх мэдээлэл
@@ -358,8 +383,10 @@ const Home = (props) => {
               style={{
                 display: "block",
                 width: "100%",
-                backgroundColor: "whitesmoke",
+                backgroundColor: "white",
                 textAlign: "left",
+                border: "hidden",
+                marginTop: "-10px",
               }}
             >
               Бүтээлийн жагсаалт
