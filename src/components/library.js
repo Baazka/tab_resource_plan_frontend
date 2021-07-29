@@ -554,6 +554,164 @@ function DepartmentID(props) {
   }
   return listItems;
 }
+function Subdepartment(props) {
+  const [data, loadData] = useState(null);
+  useEffect(async () => {
+    let listItems = await axios(
+      "http://hr.audit.mn/hr/api/v1/library/subdepartment"
+    );
+    if (
+      props.personChild.DEPARTMENT_ID === undefined ||
+      props.personChild.DEPARTMENT_ID === null ||
+      props.personChild.DEPARTMENT_ID === ""
+    ) {
+      loadData(listItems.data);
+    } else
+      loadData(
+        listItems.data?.filter(
+          (a) =>
+            parseInt(a.DEPARTMENT_ID) ===
+            parseInt(props.personChild.DEPARTMENT_ID)
+        )
+      );
+  }, []);
+
+  let listItems;
+  if (data !== undefined) {
+    listItems = (
+      <select
+        disabled={props.edit}
+        className="anketInput"
+        value={props.personChild?.SUB_DEPARTMENT_ID}
+        onChange={(text) =>
+          props.setPersonChild({
+            ...props.personChild,
+            ...{ SUB_DEPARTMENT_ID: text.target.value, check: false },
+          })
+        }
+      >
+        {data?.map((nation, index) => (
+          <option key={index} value={nation.SUB_DEPARTMENT_ID}>
+            {nation.SUB_DEPARTMENT_NAME}
+          </option>
+        ))}
+      </select>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+}
+function Compartment(props) {
+  const [data, loadData] = useState(null);
+  useEffect(async () => {
+    let listItems = await axios(
+      "http://hr.audit.mn/hr/api/v1/library/Compartment"
+    );
+    if (
+      props.personChild.SUB_DEPARTMENT_ID !== undefined &&
+      props.personChild.SUB_DEPARTMENT_ID !== null &&
+      props.personChild.SUB_DEPARTMENT_ID !== "" &&
+      props.personChild.DEPARTMENT_ID !== undefined &&
+      props.personChild.DEPARTMENT_ID !== null &&
+      props.personChild.DEPARTMENT_ID !== ""
+    ) {
+      loadData(
+        listItems.data?.filter(
+          (a) =>
+            parseInt(a.DEPARTMENT_ID) ===
+              parseInt(props.personChild.DEPARTMENT_ID) &&
+            parseInt(a.SUB_DEPARTMENT_ID) ===
+              parseInt(props.personChild.SUB_DEPARTMENT_ID)
+        )
+      );
+    } else if (
+      props.personChild.SUB_DEPARTMENT_ID !== undefined &&
+      props.personChild.SUB_DEPARTMENT_ID !== null &&
+      props.personChild.SUB_DEPARTMENT_ID !== ""
+    ) {
+      loadData(
+        listItems.data?.filter(
+          (a) =>
+            parseInt(a.SUB_DEPARTMENT_ID) ===
+            parseInt(props.personChild.SUB_DEPARTMENT_ID)
+        )
+      );
+    } else if (
+      props.personChild.DEPARTMENT_ID !== undefined &&
+      props.personChild.DEPARTMENT_ID !== null &&
+      props.personChild.DEPARTMENT_ID !== ""
+    ) {
+      loadData(
+        listItems.data?.filter(
+          (a) =>
+            parseInt(a.DEPARTMENT_ID) ===
+            parseInt(props.personChild.DEPARTMENT_ID)
+        )
+      );
+    } else loadData(listItems.data);
+  }, []);
+
+  let listItems;
+  if (data !== undefined) {
+    listItems = (
+      <select
+        disabled={props.edit}
+        className="anketInput"
+        value={props.personChild?.COMPARTMENT_ID}
+        onChange={(text) =>
+          props.setPersonChild({
+            ...props.personChild,
+            ...{ COMPARTMENT_ID: text.target.value, check: false },
+          })
+        }
+      >
+        {data?.map((nation, index) => (
+          <option key={index} value={nation.COMPARTMENT_ID}>
+            {nation.COMPARTMENT_NAME}
+          </option>
+        ))}
+      </select>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+}
+function Positionlevel(props) {
+  const [data, loadData] = useState(null);
+  useEffect(async () => {
+    let listItems = await axios(
+      "http://hr.audit.mn/hr/api/v1/library/positionlevel"
+    );
+    loadData(listItems.data);
+  }, []);
+  let listItems;
+  if (data !== undefined) {
+    listItems = (
+      <select
+        disabled={props.edit}
+        className="anketInput"
+        value={props.personChild?.POSITION_LEVEL_ID}
+        onChange={(text) =>
+          props.setPersonChild({
+            ...props.personChild,
+            ...{ POSITION_LEVEL_ID: text.target.value, check: false },
+          })
+        }
+      >
+        {data?.map((nation, index) => (
+          <option key={index} value={nation.POSITION_LEVEL_ID}>
+            {nation.POSITION_LEVEL_NAME}
+          </option>
+        ))}
+      </select>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+}
 
 function DateInput(props) {
   const [dateShow, setDateShow] = useState(
@@ -640,4 +798,7 @@ export {
   DateInput,
   DateInputArray,
   DepartmentID,
+  Subdepartment,
+  Compartment,
+  Positionlevel,
 };
