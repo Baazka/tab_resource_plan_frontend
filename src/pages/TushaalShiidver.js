@@ -3,7 +3,15 @@ import Header from "../components/header";
 import Footer from "../components/footer";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Search, Filter, Add, Excel, AddBlue } from "../assets/images/zurag";
+import {
+  Search,
+  Filter,
+  Add,
+  Excel,
+  AddBlue,
+  M,
+  Trush,
+} from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
@@ -64,6 +72,8 @@ const Home = (props) => {
   const [searchType, setSearchType] = useState("PERSON_FIRSTNAME");
   const [found, setFound] = useState();
   const [search, setSearch] = useState("");
+  const [NuutsiinBvrtgel, setNuutsiinBvrtgel] = useState(1);
+
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
@@ -81,45 +91,6 @@ const Home = (props) => {
     // You can use setState or dispatch with something like Redux so we can use the retrieved data
     console.log("Selected Rows: ", state.selectedRows);
   };
-  function anketA() {
-    history.push("/web/anketA/1");
-  }
-  async function anketANew() {
-    localStorage.removeItem("person_id");
-    localStorage.setItem(
-      "personDetail",
-      JSON.stringify({ person_id: "0", type: "newPerson" })
-    );
-    history.push("/web/anketA/1");
-  }
-  function makeSearch(value) {
-    setSearch(value);
-
-    let found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
-    console.log(found);
-    if (found != undefined && found.length > 0) setFound(found);
-    else setFound([]);
-  }
-  function equalStr(value1, value2) {
-    if (
-      value1 !== undefined &&
-      value1 !== "" &&
-      value2 !== undefined &&
-      value2 !== "" &&
-      value1 !== null &&
-      value2 !== null
-    )
-      if (searchType !== "PERSON_PHONE") {
-        if (
-          (value1 !== null ? value1.toUpperCase() : "").includes(
-            value2.toUpperCase()
-          )
-        )
-          return true;
-      } else if (value1.includes(value2)) return true;
-    return false;
-  }
-  const [NuutsiinBvrtgel, setNuutsiinBvrtgel] = useState(1);
 
   const columns = [
     {
@@ -260,43 +231,22 @@ const Home = (props) => {
                 <img src={Search} />
               </span>
               <span class="icon is-small is-right"></span>
+              <button
+                class="input  is-size-7"
+                style={{
+                  borderRadius: "6px",
+                  width: "8rem",
+                  backgroundColor: "#418ee6",
+                  color: "white",
+                  justifyContent: "center",
+                  paddingRight: "0px",
+                  paddingLeft: "0px",
+                }}
+                onClick={() => setNuutsiinBvrtgel(!NuutsiinBvrtgel)}
+              >
+                Нөөцийн бүртгэл
+              </button>
             </div>
-
-            <button
-              class="text"
-              style={{
-                marginLeft: "1%",
-                borderRadius: "5px",
-                backgroundColor: "#b8e6f3",
-                color: "#000",
-                border: "0px",
-              }}
-              onClick={() => {
-                anketANew();
-              }}
-            >
-              {" "}
-              <span style={{ display: "flex", paddingRight: "22px" }}>
-                <img src={AddBlue} width="20px" height="20px "></img>Нэмэх
-              </span>
-            </button>
-
-            <button
-              class="text"
-              style={{
-                marginLeft: "1%",
-                borderRadius: "5px",
-                backgroundColor: "#1cc88a",
-                color: "#fff",
-                border: "double",
-              }}
-              onClick={() => document.getElementById("emergencyXLS").click()}
-            >
-              <span style={{ display: "flex", paddingRight: "22px" }}>
-                <img src={Excel} width="20px" height="20px "></img>Excel
-              </span>
-            </button>
-            <EmployExcel />
           </div>
         </div>
         <DataTable
