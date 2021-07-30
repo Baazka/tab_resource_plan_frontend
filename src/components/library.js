@@ -541,6 +541,7 @@ function DepartmentID(props) {
             ...{ DEPARTMENT_ID: text.target.value, check: false },
           })
         }
+        style={{ width: "-webkit-fill-available" }}
       >
         {data?.map((nation, index) => (
           <option key={index} value={nation.DEPARTMENT_ID}>
@@ -561,12 +562,9 @@ function Subdepartment(props) {
       "http://hr.audit.mn/hr/api/v1/library/subdepartment"
     );
     if (
-      props.personChild.DEPARTMENT_ID === undefined ||
-      props.personChild.DEPARTMENT_ID === null ||
-      props.personChild.DEPARTMENT_ID === ""
+      props.personChild.DEPARTMENT_ID !== null &&
+      props.personChild.DEPARTMENT_ID !== ""
     ) {
-      loadData(listItems.data);
-    } else
       loadData(
         listItems.data?.filter(
           (a) =>
@@ -574,7 +572,8 @@ function Subdepartment(props) {
             parseInt(props.personChild.DEPARTMENT_ID)
         )
       );
-  }, []);
+    } else loadData(listItems.data);
+  }, [props]);
 
   let listItems;
   if (data !== undefined) {
@@ -582,6 +581,7 @@ function Subdepartment(props) {
       <select
         disabled={props.edit}
         className="anketInput"
+        style={{ width: "-webkit-fill-available" }}
         value={props.personChild?.SUB_DEPARTMENT_ID}
         onChange={(text) =>
           props.setPersonChild({
@@ -590,6 +590,7 @@ function Subdepartment(props) {
           })
         }
       >
+        <option value={null}>хоосон</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.SUB_DEPARTMENT_ID}>
             {nation.SUB_DEPARTMENT_NAME}
@@ -606,13 +607,11 @@ function Compartment(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
     let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/Compartment"
+      "http://hr.audit.mn/hr/api/v1/library/compartment"
     );
     if (
-      props.personChild.SUB_DEPARTMENT_ID !== undefined &&
       props.personChild.SUB_DEPARTMENT_ID !== null &&
       props.personChild.SUB_DEPARTMENT_ID !== "" &&
-      props.personChild.DEPARTMENT_ID !== undefined &&
       props.personChild.DEPARTMENT_ID !== null &&
       props.personChild.DEPARTMENT_ID !== ""
     ) {
@@ -626,7 +625,6 @@ function Compartment(props) {
         )
       );
     } else if (
-      props.personChild.SUB_DEPARTMENT_ID !== undefined &&
       props.personChild.SUB_DEPARTMENT_ID !== null &&
       props.personChild.SUB_DEPARTMENT_ID !== ""
     ) {
@@ -638,7 +636,6 @@ function Compartment(props) {
         )
       );
     } else if (
-      props.personChild.DEPARTMENT_ID !== undefined &&
       props.personChild.DEPARTMENT_ID !== null &&
       props.personChild.DEPARTMENT_ID !== ""
     ) {
@@ -650,7 +647,7 @@ function Compartment(props) {
         )
       );
     } else loadData(listItems.data);
-  }, []);
+  }, [data]);
 
   let listItems;
   if (data !== undefined) {
@@ -658,6 +655,7 @@ function Compartment(props) {
       <select
         disabled={props.edit}
         className="anketInput"
+        style={{ width: "-webkit-fill-available" }}
         value={props.personChild?.COMPARTMENT_ID}
         onChange={(text) =>
           props.setPersonChild({
@@ -666,6 +664,7 @@ function Compartment(props) {
           })
         }
       >
+        <option value={null}>хоосон</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.COMPARTMENT_ID}>
             {nation.COMPARTMENT_NAME}
@@ -678,6 +677,124 @@ function Compartment(props) {
   }
   return listItems;
 }
+function Position(props) {
+  const [data, loadData] = useState(null);
+  useEffect(async () => {
+    let listItems = await axios(
+      "http://hr.audit.mn/hr/api/v1/library/position"
+    );
+    if (
+      props.personChild.SUB_DEPARTMENT_ID !== null &&
+      props.personChild.SUB_DEPARTMENT_ID !== "" &&
+      props.personChild.DEPARTMENT_ID !== null &&
+      props.personChild.DEPARTMENT_ID !== "" &&
+      props.personChild.COMPARTMENT_ID !== null &&
+      props.personChild.COMPARTMENT_ID !== ""
+    ) {
+      loadData(
+        listItems.data?.filter(
+          (a) =>
+            parseInt(a.DEPARTMENT_ID) ===
+              parseInt(props.personChild.DEPARTMENT_ID) &&
+            parseInt(a.SUB_DEPARTMENT_ID) ===
+              parseInt(props.personChild.SUB_DEPARTMENT_ID) &&
+            parseInt(a.COMPARTMENT_ID) ===
+              parseInt(props.personChild.COMPARTMENT_ID)
+        )
+      );
+    } else if (
+      props.personChild.SUB_DEPARTMENT_ID !== null &&
+      props.personChild.SUB_DEPARTMENT_ID !== ""
+    ) {
+      loadData(
+        listItems.data?.filter(
+          (a) =>
+            parseInt(a.DEPARTMENT_ID) ===
+              parseInt(props.personChild.DEPARTMENT_ID) &&
+            parseInt(a.SUB_DEPARTMENT_ID) ===
+              parseInt(props.personChild.SUB_DEPARTMENT_ID)
+        )
+      );
+    } else if (
+      props.personChild.COMPARTMENT_ID !== null &&
+      props.personChild.COMPARTMENT_ID !== ""
+    ) {
+      loadData(
+        listItems.data?.filter(
+          (a) =>
+            parseInt(a.DEPARTMENT_ID) ===
+              parseInt(props.personChild.DEPARTMENT_ID) &&
+            parseInt(a.COMPARTMENT_ID) ===
+              parseInt(props.personChild.COMPARTMENT_ID)
+        )
+      );
+    } else loadData(listItems.data);
+  }, [data]);
+
+  let listItems;
+  if (data !== undefined) {
+    listItems = (
+      <select
+        disabled={props.edit}
+        className="anketInput"
+        style={{ width: "-webkit-fill-available" }}
+        value={props.personChild?.POSITION_ID}
+        onChange={(text) =>
+          props.setPersonChild({
+            ...props.personChild,
+            ...{ POSITION_ID: text.target.value, check: false },
+          })
+        }
+      >
+        {data?.map((nation, index) => (
+          <option key={index} value={nation.POSITION_ID}>
+            {nation.POSITION_NAME}
+          </option>
+        ))}
+      </select>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+}
+
+function Decisiontype(props) {
+  const [data, loadData] = useState(null);
+  useEffect(async () => {
+    let listItems = await axios(
+      "http://hr.audit.mn/hr/api/v1/library/decisiontype"
+    );
+    loadData(listItems.data);
+  }, []);
+  let listItems;
+  if (data !== undefined) {
+    listItems = (
+      <select
+        disabled={props.edit}
+        className="anketInput"
+        style={{ width: "-webkit-fill-available" }}
+        value={props.personChild?.DECISION_TYPE_ID}
+        onChange={(text) =>
+          props.setPersonChild({
+            ...props.personChild,
+            ...{ DECISION_TYPE_ID: text.target.value, check: false },
+          })
+        }
+      >
+        {data?.map((nation, index) => (
+          <option key={index} value={nation.DECISION_TYPE_ID}>
+            {nation.DECISION_TYPE_NAME}
+          </option>
+        ))}
+      </select>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+}
+
 function Positionlevel(props) {
   const [data, loadData] = useState(null);
   useEffect(async () => {
@@ -692,6 +809,7 @@ function Positionlevel(props) {
       <select
         disabled={props.edit}
         className="anketInput"
+        style={{ width: "-webkit-fill-available" }}
         value={props.personChild?.POSITION_LEVEL_ID}
         onChange={(text) =>
           props.setPersonChild({
@@ -801,4 +919,6 @@ export {
   Subdepartment,
   Compartment,
   Positionlevel,
+  Position,
+  Decisiontype,
 };

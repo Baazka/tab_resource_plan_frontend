@@ -291,444 +291,611 @@ function AnketB(props) {
 
 function AlbanTushaal(props) {
   const [turul, setTurul] = useState("urdun");
-  return (
-    <div>
-      <div
-        className="box"
-        style={{
-          marginTop: "80px",
-          width: "98%",
-          height: "auto",
-          marginLeft: "15px",
-        }}
-      >
-        <div className="columns">
-          <div className="column is-11">
-            <span style={{ color: "#418ee6" }}>Нэг.</span> Үндсэн мэдээлэл{" "}
-            <label className="checkbox"></label>
-          </div>
-          <div className="column is-1"></div>
-          <div className="column is-1"></div>
-        </div>
-        <div className="columns">
-          <div className="column is-3  has-text-right">Ажилтаны төрөл</div>
-          <div className="column is-2">
-            <select
-              style={{ border: "2px solid silver", width: "15rem" }}
-              value={"default"}
-            >
-              <option value="default"></option>
-              <option value="saab">Saab</option>
-            </select>
-          </div>
-          <div className="column is-3 has-text-right">
-            Албан тушаалын зэрэглэл
-          </div>
-          <div className="column is-4 ">
-            <input
-              style={{ border: "2px solid silver", width: "15rem" }}
-              value={"ТАБ-5"}
-            ></input>
-          </div>
-        </div>
-        <div className="columns">
-          <div className="column is-3  has-text-right">Газар Нэгжийн нэр </div>
-          <div className="column is-2">
-            <input
-              style={{ border: "2px solid silver", width: "15rem" }}
-              value={"Хөгжилийн бодлого төрөвл...."}
-            ></input>
-          </div>
-          <div className="column is-3 has-text-right">Тушаалын дугаар</div>
-          <div className="column is-4 ">
-            <input
-              style={{ border: "2px solid silver", width: "15rem" }}
-              value={""}
-            ></input>
-          </div>
-        </div>
-        <div className="columns">
-          <div className="column is-3  has-text-right">
-            Албан хэлтэсийн нэр{" "}
-          </div>
-          <div className="column is-2">
-            <input
-              style={{ border: "2px solid silver", width: "15rem" }}
-              value={"Сургалтын хэлтэс"}
-            ></input>
-          </div>
-          <div className="column is-3  has-text-right">
-            Тушаалын хэрэгжих огноо
-          </div>
-          <div className="column is-4 ">
-            <input
-              style={{ border: "2px solid silver", width: "15rem" }}
-              value={""}
-            ></input>
-          </div>
-        </div>
-        <div className="columns">
-          <div className="column is-3  has-text-right">Албан тушаалын нэр</div>
-          <div className="column is-2">
-            <input
-              style={{ border: "2px solid silver", width: "15rem" }}
-              value={"Сургалтын менежер"}
-            ></input>
-          </div>
-          <div className="column is-3 has-text-right">
-            Тушаал бүртгэсэн огноо
-          </div>
-          <div className="column is-4 ">
-            <input
-              style={{ border: "2px solid silver", width: "15rem" }}
-              value={""}
-            ></input>
-          </div>
-        </div>
-        <div className="columns">
-          <div
-            className="column is-3  has-text-right"
-            style={{ marginBottom: "0px" }}
-          >
-            Албан тушаалын төрөл
-          </div>
-          <div className="column is-2">
-            <input
-              style={{ border: "2px solid silver", width: "15rem" }}
-              value={"Төрийн тусгай"}
-            ></input>
-          </div>
-          <div className="column is-3 has-text-right">
-            Тушаал бүртгэсэн ажилтан
-          </div>
-          <div className="column is-4 ">
-            <input
-              style={{
-                border: "2px solid silver",
-                width: "15rem",
-              }}
-              value={""}
-            ></input>
-          </div>
-        </div>
-        <div className="columns">
-          <div className="column is-3  has-text-right">
-            Албан тушаалын ангилал
-          </div>
-          <div className="column is-2">
-            <input
-              style={{ border: "2px solid silver", width: "15rem" }}
-              value={"Төрийн Аудитын ахлах тү....."}
-            ></input>
-          </div>
-        </div>
-      </div>
-      <div
-        className="box"
-        style={{
-          marginTop: "10px",
-          width: "98%",
-          height: "auto",
-          marginLeft: "15px",
-        }}
-      >
-        <div className="columns">
-          <div className="column is-11">
-            <th>
-              <span style={{ color: "#418ee6" }}>Хоёр.</span>Албан тушаалын
-              томилгоо{" "}
-            </th>
-          </div>
-        </div>
-        <div className="columns is-gapless">
-          <div className="column is-3">
-            <table
-              className="table is-bordered "
-              style={{ textAlign: "center" }}
-            >
-              <thead>
-                <tr>
-                  <td>№</td>
-                  <td>Газар нэгжийн нэр</td>
-                  <td>Албан хэлтсийн нэр</td>
-                  <td>Албан тушаалын төрөл</td>
-                  <td>Албан тушаалын зэрэглэл</td>
-                  <td>Тушаалын дугаар</td>
-                  <td>Томилсон огноо</td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th></th>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tbody>
-              <tbody>
-                <tr>
-                  <th></th>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tbody>
-              <tbody>
-                <tr>
-                  <th></th>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
-            <div className="column is-9" />
-          </div>
-          <div
-            className="column is-2 "
-            style={{ marginTop: "115px", marginLeft: "17rem" }}
-          >
-            <img src={M} width="30px" height="30px" />
-          </div>
-        </div>
-      </div>
-      <div
-        className="box"
-        style={{
-          marginTop: "80px",
-          width: "98%",
-          height: "auto",
-          marginLeft: "15px",
-        }}
-      >
-        <div className="columns is-gapless">
-          <div className="column is-10">
-            <div className="columns">
-              <div className="column is-2">
-                <th>
-                  <span style={{ color: "#418ee6" }}>Гурав.</span>Цалин хөлсний
-                  мэдээлэл{" "}
-                </th>
-              </div>
+  const [data, loadData] = useState(null);
+  const [edit, setEdit] = useState(true);
+  const alert = useAlert();
+  useEffect(async () => {
+    let listItems = await axios(
+      "http://hr.audit.mn/hr/api/v1/positionEmployee/" +
+        JSON.parse(
+          localStorage.getItem("personDetail") === undefined
+            ? "{}"
+            : localStorage.getItem("personDetail")
+        )?.emp_id
+    );
+    console.log(listItems, "salary");
+    loadData(
+      listItems?.data.sort(function sortFunction(a, b) {
+        var dateA = new Date(a.CREATED_DATE).getTime();
+        var dateB = new Date(b.CREATED_DATE).getTime();
+        return dateA > dateB ? 1 : -1;
+      })
+    );
+  }, [props]);
+  let listItems;
+  if (data !== undefined && data?.length !== 0 && data !== null) {
+    listItems = (
+      <div>
+        <div
+          className="box"
+          style={{
+            marginTop: "80px",
+            width: "98%",
+            height: "auto",
+            marginLeft: "15px",
+            paddingBottom: "2.5rem",
+          }}
+        >
+          <div className="columns">
+            <div className="column is-11">
+              <span style={{ color: "#418ee6" }}>Нэг.</span> Үндсэн мэдээлэл{" "}
+              <label className="checkbox"></label>
             </div>
-            <table
-              className="table is-bordered "
-              style={{ textAlign: "center" }}
-            >
-              <thead>
-                <tr>
-                  <td>№</td>
-                  <td>Цалингийн төрөл</td>
-                  <td>Цалин хөлс нэмэгдэлийн нэр</td>
-                  <td>Цалин хөлс Өөрчилсөн үндэслэл</td>
-                  <td>Тушаалын нэр</td>
-                  <td>Тушаалын дугаар</td>
-                  <td>Томилсон огноо</td>
-                  <td>Тайлбар</td>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th></th>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tbody>
-              <tbody>
-                <tr>
-                  <th></th>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tbody>
-              <tbody>
-                <tr>
-                  <th></th>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table>
+            <div className="column is-1"></div>
+            <div className="column is-1"></div>
           </div>
-          <div className="column is-2 " style={{ marginTop: "160px" }}>
-            <img src={M} width="30px" height="30px" />
+          <div className="columns">
+            <div className="column is-3  has-text-right">Байгууллагын нэр</div>
+            <div className="column is-2">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+                value={data[data?.length - 1].DEPARTMENT_NAME}
+              ></input>
+            </div>
+            <div className="column is-3 has-text-right">Газар нэгжийн нэр</div>
+            <div className="column is-4 ">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+                value={data[data?.length - 1].SUB_DEPARTMENT_NAME}
+              ></input>
+            </div>
+          </div>
+          <div className="columns">
+            <div className="column is-3  has-text-right">Албан хэлтэс </div>
+            <div className="column is-2">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+                value={data[data?.length - 1].COMPARTMENT_NAME}
+              ></input>
+            </div>
+            <div className="column is-3 has-text-right">
+              Албан тушаалын түвшин
+            </div>
+            <div className="column is-4 ">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+                value={data[data?.length - 1].POSITION_LEVEL_NAME}
+              ></input>
+            </div>
+          </div>
+
+          <div className="columns">
+            <div className="column is-3  has-text-right">
+              Албан тушаалын нэр{" "}
+            </div>
+            <div className="column is-2">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+                value={data[data?.length - 1].POSITION_NAME}
+              ></input>
+            </div>
+            <div className="column is-3  has-text-right">
+              Тушаалын хэрэгжих огноо
+            </div>
+            <div className="column is-4 ">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+                value={dateFormat(
+                  data[data?.length - 1].START_DATE,
+                  "yyyy-mm-dd"
+                )}
+              ></input>
+            </div>
+          </div>
+
+          <div className="columns">
+            <div className="column is-3  has-text-right">
+              Албан тушаалын ангилал
+            </div>
+            <div className="column is-2">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+                value={data[data?.length - 1].POSITION_CATEGORY_NAME}
+              ></input>
+            </div>
+            <div className="column is-3 has-text-right">
+              Тушаал бүртгэсэн огноо
+            </div>
+            <div className="column is-4 ">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+                value={dateFormat(
+                  data[data?.length - 1].REGISTER_DATE,
+                  "yyyy-mm-dd"
+                )}
+              ></input>
+            </div>
+          </div>
+
+          <div className="columns">
+            <div
+              className="column is-3  has-text-right"
+              style={{ marginBottom: "0px" }}
+            >
+              Албан тушаалын дугаар
+            </div>
+            <div className="column is-2">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+                value={data[data?.length - 1].DECISION_NO}
+              ></input>
+            </div>
+            <div className="column is-3 has-text-right">
+              Тушаал бүртгэсэн ажилтан
+            </div>
+            <div className="column is-4 ">
+              <input
+                style={{
+                  border: "2px solid silver",
+                  width: "15rem",
+                }}
+                value={""}
+              ></input>
+            </div>
           </div>
         </div>
+        <div
+          className="box"
+          style={{
+            marginTop: "10px",
+            width: "98%",
+            height: "auto",
+            marginLeft: "15px",
+          }}
+        >
+          <div className="columns">
+            <div className="column is-11">
+              <th>
+                <span style={{ color: "#418ee6" }}>Хоёр.</span>Албан тушаалын
+                томилгоо{" "}
+              </th>
+            </div>
+          </div>
+          <div className="columns is-gapless">
+            <div className="column is-3">
+              <table
+                className="table is-bordered "
+                style={{ textAlign: "center" }}
+              >
+                <thead>
+                  <tr>
+                    <td>№</td>
+                    <td>Байгууллага нэр</td>
+                    <td>Газар нэгж нэр</td>
+                    <td>Албан хэлтэс нэр</td>
+                    <td>Албан тушаалын түвшин</td>
+                    <td>Албан тушаал</td>
+                    <td>Тушаалын дугаар</td>
+                    <td>Томилсон огноо</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data?.map((value, index) => (
+                    <tr>
+                      <th>
+                        <input
+                          disabled={edit}
+                          className="Borderless"
+                          value={index + 1}
+                          style={{ width: "30px" }}
+                        />
+                      </th>
+                      <td>
+                        {" "}
+                        <input
+                          disabled={edit}
+                          className="Borderless"
+                          value={value.DEPARTMENT_NAME}
+                          onChange={(text) => {
+                            let value = [...data];
+                            value[index].POSITION_SALARY = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData(value);
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          disabled={edit}
+                          className="Borderless"
+                          value={value.SUB_DEPARTMENT_NAME}
+                          onChange={(text) => {
+                            let value = [...data];
+                            value[index].POSITION_SALARY = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData(value);
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          disabled={edit}
+                          className="Borderless"
+                          value={value.POSITION_LEVEL_NAME}
+                          onChange={(text) => {
+                            let value = [...data];
+                            value[index].POSITION_SALARY = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData(value);
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          disabled={edit}
+                          className="Borderless"
+                          value={value.COMPARTMENT_NAME}
+                          onChange={(text) => {
+                            let value = [...data];
+                            value[index].POSITION_SALARY = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData(value);
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          disabled={edit}
+                          className="Borderless"
+                          value={value.POSITION_NAME}
+                          onChange={(text) => {
+                            let value = [...data];
+                            value[index].POSITION_SALARY = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData(value);
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          disabled={edit}
+                          className="Borderless"
+                          value={value.DECISION_NO}
+                          onChange={(text) => {
+                            let value = [...data];
+                            value[index].POSITION_SALARY = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData(value);
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          disabled={edit}
+                          className="Borderless"
+                          value={dateFormat(value.START_DATE, "yyyy-mm-dd")}
+                          onChange={(text) => {
+                            let value = [...data];
+                            value[index].POSITION_SALARY = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData(value);
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div className="column is-9" />
+            </div>
+            {/* <div
+              className="column is-2 "
+              style={{ marginTop: "115px", marginLeft: "17rem" }}
+            >
+              <img src={M} width="30px" height="30px" />
+            </div> */}
+          </div>
+        </div>
+        <TsalinHuls />
       </div>
-    </div>
-  );
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+
+  return listItems;
 }
 function TsalinHuls(props) {
   const [zasakhTowch, setZasakhTowch] = useState(false);
-  return (
-    <div
-      className="box"
-      style={{
-        marginTop: "80px",
-        width: "98%",
-        height: "auto",
-        marginLeft: "15px",
-      }}
-    >
-      <div className="columns">
-        <div className="column is-11">
-          <span style={{ color: "#418ee6" }}>Гурав.</span>
-          <span>Цалин хөлсний талаарх мэдээлэл</span>
-        </div>
-        <div className="column is-1">
-          <button
-            onClick={() => setZasakhTowch(!zasakhTowch)}
-            className="buttonTsenkher"
-          >
-            Засварлах
-          </button>
-        </div>
-      </div>
-      <div className="columns">
-        <div className="column is-7">
-          <article className="message is-info ">
-            <div className="message-body">
-              <strong style={{ color: "black" }}>
-                (Төрийн албаны тухай хуулийн 57 дугаар зүйлийн 57.2-т заасан
-                цалин хөлсийг бичнэ)
-              </strong>
-            </div>
-          </article>
-        </div>
-      </div>
-      <div className="columns">
-        <div className="column is-7">
-          <article className="message is-info ">
-            <div className="message-body">
-              <strong style={{ color: "black" }}>Цалин хөлс /мян.мөр/</strong>
-            </div>
-          </article>
-        </div>
-      </div>
-      <div className="table ">
-        <table className="table" style={{ padding: "0%" }}>
-          <thead>
-            <tr style={{ textAlign: "center" }}>
-              <th>№</th>
-              <th>Цалингийн төрөл</th>
-              <th>Цалин хөлс/нэмэгдэлийн нэр</th>
-              <th>Цалин хөлс өөрчилсөн үндэслэл</th>
-              <th>Шийдвэр, тушаалын нэр</th>
-              <th>Шийдвэр, тушаалын дугаар</th>
-              <th>Шийдвэр, тушаалын огноо</th>
-              <th>Тайлбар</th>
-              <th
-                style={{
-                  paddingLeft: "13px",
-                  width: "80px",
-                  textAlignLast: "start",
-                }}
-              >
-                <img src={Add} width="30px" height="30px" />
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <td className="classTbdy">
-                <input style={{ width: "2rem" }} />
-              </td>
-              <td className="classTbdy">
-                <input style={{ color: "silver" }} />
-              </td>
-              <td className="classTbdy">
-                <input style={{ width: "-webkit-fill-available" }} />
-              </td>
-              <td className="classTbdy">
-                <input style={{ width: "-webkit-fill-available" }} />
-              </td>
-              <td className="classTbdy">
-                <input style={{ width: "-webkit-fill-available" }} />
-              </td>
-              <td className="classTbdy">
-                <input style={{ width: "-webkit-fill-available" }} />
-              </td>
-              <td className="classTbdy">
-                <input style={{ width: "-webkit-fill-available" }} />
-              </td>
-              <td className="classTbdy">
-                <input />
-              </td>
-            </tr>
-          </tbody>
-          <tbody>
-            <tr>
-              <td className="classTbdy">
-                <input style={{ width: "2rem" }} />
-              </td>
-              <td className="classTbdy">
-                <input />
-              </td>
-              <td className="classTbdy">
-                <input style={{ width: "-webkit-fill-available" }} />
-              </td>
-              <td className="classTbdy">
-                <input style={{ width: "-webkit-fill-available" }} />
-              </td>
-              <td className="classTbdy">
-                <input style={{ width: "-webkit-fill-available" }} />
-              </td>
-              <td className="classTbdy">
-                <input style={{ width: "-webkit-fill-available" }} />
-              </td>
-              <td className="classTbdy">
-                <input style={{ width: "-webkit-fill-available" }} />
-              </td>
-              <td className="classTbdy">
-                <input />
-              </td>
-              <td className="classTdby">
-                <img src={Delete} width="30px" height="30px" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      {zasakhTowch ? (
-        <div className="columns ">
-          <div className="column is-11" />
-
+  const [data, loadData] = useState(null);
+  const [edit, setEdit] = useState(true);
+  const alert = useAlert();
+  useEffect(async () => {
+    let listItems = await axios(
+      "http://hr.audit.mn/hr/api/v1/salary/" +
+        JSON.parse(
+          localStorage.getItem("personDetail") === undefined
+            ? "{}"
+            : localStorage.getItem("personDetail")
+        )?.emp_id
+    );
+    console.log(listItems, "salary");
+    loadData(listItems?.data);
+  }, [props]);
+  let listItems;
+  if (data?.salary !== undefined || data?.salary.length !== 0) {
+    listItems = (
+      <div
+        className="box"
+        style={{
+          width: "98%",
+          height: "auto",
+          marginLeft: "15px",
+        }}
+      >
+        <div className="columns">
+          <div className="column is-11">
+            <span style={{ color: "#418ee6" }}>Гурав.</span>
+            <span>Цалин хөлсний талаарх мэдээлэл</span>
+          </div>
           <div className="column is-1">
-            {/* <button className="button is-info is-small is-focused ml-6">
-            Хэвлэх
-          </button> */}
-            <button className="buttonTsenkher">Хадгалах</button>
+            {/* <button
+              onClick={() => setZasakhTowch(!zasakhTowch)}
+              className="buttonTsenkher"
+            >
+              Засварлах
+            </button> */}
           </div>
         </div>
-      ) : null}
-    </div>
-  );
+
+        <div className="table ">
+          <table className="table is-bordered " style={{ textAlign: "center" }}>
+            <thead>
+              <tr>
+                <td>
+                  <span className="textSaaral">№</span>
+                </td>
+                <td>
+                  <span className="textSaaral">Албан тушаалын</span>
+                </td>
+                <td>
+                  <span className="textSaaral">
+                    Албан ажлын онцгой нөхцөлийн
+                  </span>
+                </td>
+                <td>
+                  <span className="textSaaral">
+                    Төрийн алба хаасан хугацааны
+                  </span>
+                </td>
+                <td>
+                  <span className="textSaaral">Зэрэг дэвийн</span>
+                </td>
+                <td>
+                  <span className="textSaaral">Цол</span>
+                </td>
+                <td>
+                  <span className="textSaaral">Бусад</span>
+                </td>
+                <td>
+                  <span className="textSaaral">Тайлбар</span>
+                </td>
+                <td>
+                  <span className="textSaaral">Нийт</span>
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              {data?.salary?.map((value, index) => (
+                <tr>
+                  <td>
+                    <span className="textSaaral">{index + 1}</span>
+                  </td>
+                  <td>
+                    <input
+                      disabled={edit}
+                      className="Borderless"
+                      value={data.salary[index]?.POSITION_SALARY}
+                      onChange={(text) => {
+                        let value = [...data?.salary];
+                        value[index].POSITION_SALARY = text.target.value;
+                        value[index].UPDATED_BY = userDetils?.USER_ID;
+                        value[index].UPDATED_DATE = dateFormat(
+                          new Date(),
+                          "dd-mmm-yy"
+                        );
+                        loadData({ salary: value });
+                      }}
+                    />
+                  </td>
+
+                  <td>
+                    <input
+                      disabled={edit}
+                      style={{ width: "80px" }}
+                      className="Borderless"
+                      value={data.salary[index]?.EMERGENCY_SALARY}
+                      onChange={(text) => {
+                        let value = [...data?.salary];
+                        value[index].EMERGENCY_SALARY = text.target.value;
+                        value[index].UPDATED_BY = userDetils?.USER_ID;
+                        value[index].UPDATED_DATE = dateFormat(
+                          new Date(),
+                          "dd-mmm-yy"
+                        );
+                        loadData({ salary: value });
+                      }}
+                    />
+                  </td>
+
+                  <td>
+                    <input
+                      disabled={edit}
+                      style={{ width: "80px" }}
+                      className="Borderless"
+                      value={data.salary[index]?.CIVIL_SALARY}
+                      onChange={(text) => {
+                        let value = [...data?.salary];
+                        value[index].CIVIL_SALARY = text.target.value;
+                        value[index].UPDATED_BY = userDetils?.USER_ID;
+                        value[index].UPDATED_DATE = dateFormat(
+                          new Date(),
+                          "dd-mmm-yy"
+                        );
+                        loadData({ salary: value });
+                      }}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      disabled={edit}
+                      className="Borderless"
+                      style={{ width: "80px" }}
+                      value={data.salary[index]?.DEGREE_SALARY}
+                      onChange={(text) => {
+                        let value = [...data?.salary];
+                        value[index].DEGREE_SALARY = text.target.value;
+                        value[index].UPDATED_BY = userDetils?.USER_ID;
+                        value[index].UPDATED_DATE = dateFormat(
+                          new Date(),
+                          "dd-mmm-yy"
+                        );
+                        loadData({ salary: value });
+                      }}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      disabled={edit}
+                      className="Borderless"
+                      style={{ width: "80px" }}
+                      value={data.salary[index]?.FAME_SALARY}
+                      onChange={(text) => {
+                        let value = [...data?.salary];
+                        value[index].FAME_SALARY = text.target.value;
+                        value[index].UPDATED_BY = userDetils?.USER_ID;
+                        value[index].UPDATED_DATE = dateFormat(
+                          new Date(),
+                          "dd-mmm-yy"
+                        );
+                        loadData({ salary: value });
+                      }}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      disabled={edit}
+                      className="Borderless"
+                      style={{ width: "80px" }}
+                      value={data.salary[index]?.OTHER_SALARY}
+                      onChange={(text) => {
+                        let value = [...data?.salary];
+                        value[index].OTHER_SALARY = text.target.value;
+                        value[index].UPDATED_BY = userDetils?.USER_ID;
+                        value[index].UPDATED_DATE = dateFormat(
+                          new Date(),
+                          "dd-mmm-yy"
+                        );
+                        loadData({ salary: value });
+                      }}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      disabled={edit}
+                      className="Borderless"
+                      style={{ width: "80px" }}
+                      value={data.salary[index]?.SALARY_DESC}
+                      onChange={(text) => {
+                        let value = [...data?.salary];
+                        value[index].SALARY_DESC = text.target.value;
+                        value[index].UPDATED_BY = userDetils?.USER_ID;
+                        value[index].UPDATED_DATE = dateFormat(
+                          new Date(),
+                          "dd-mmm-yy"
+                        );
+                        loadData({ salary: value });
+                      }}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      disabled={edit}
+                      className="Borderless"
+                      style={{ width: "80px" }}
+                      value={
+                        parseFloat(data.salary[index]?.POSITION_SALARY) +
+                        parseFloat(data.salary[index]?.EMERGENCY_SALARY) +
+                        parseFloat(data.salary[index]?.CIVIL_SALARY) +
+                        parseFloat(data.salary[index]?.DEGREE_SALARY) +
+                        parseFloat(data.salary[index]?.FAME_SALARY) +
+                        parseFloat(data.salary[index]?.OTHER_SALARY)
+                      }
+                      onChange={(text) => {
+                        let value = [...data?.salary];
+                        value[index].TOTAL = text.target.value;
+                        value[index].UPDATED_BY = userDetils?.USER_ID;
+                        value[index].UPDATED_DATE = dateFormat(
+                          new Date(),
+                          "dd-mmm-yy"
+                        );
+                        loadData({ salary: value });
+                      }}
+                      disabled
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {zasakhTowch ? (
+          <div className="columns ">
+            <div className="column is-11" />
+
+            <div className="column is-1">
+              {/* <button className="button is-info is-small is-focused ml-6">
+            Хэвлэх
+          </button> */}
+              <button className="buttonTsenkher">Хадгалах</button>
+            </div>
+          </div>
+        ) : null}
+      </div>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+
+  return listItems;
 }
 
 function Uramshuulal(props) {
@@ -738,7 +905,7 @@ function Uramshuulal(props) {
 
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/Promotion/" +
+      "http://hr.audit.mn/hr/api/v1/Promotion/" +
         JSON.parse(
           localStorage.getItem("personDetail") === undefined
             ? "{}"
@@ -804,7 +971,7 @@ function Uramshuulal(props) {
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/PromotionDelete",
+        url: "http://hr.audit.mn/hr/api/v1/PromotionDelete",
         method: "POST",
         data: {
           Promotion: {
@@ -851,7 +1018,7 @@ function Uramshuulal(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/Promotion",
+          url: "http://hr.audit.mn/hr/api/v1/Promotion",
           method: "POST",
           data: { Promotion: newRow },
         })
@@ -880,7 +1047,7 @@ function Uramshuulal(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/Promotion",
+          url: "http://hr.audit.mn/hr/api/v1/Promotion",
           method: "PUT",
           data: {
             Promotion: oldRow,
@@ -1200,7 +1367,7 @@ function NuhuhMulbur(props) {
 
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/amends/" +
+      "http://hr.audit.mn/hr/api/v1/amends/" +
         JSON.parse(
           localStorage.getItem("personDetail") === undefined
             ? "{}"
@@ -1266,7 +1433,7 @@ function NuhuhMulbur(props) {
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/amendsDelete",
+        url: "http://hr.audit.mn/hr/api/v1/amendsDelete",
         method: "POST",
         data: {
           Amends: {
@@ -1311,7 +1478,7 @@ function NuhuhMulbur(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/amends",
+          url: "http://hr.audit.mn/hr/api/v1/amends",
           method: "POST",
           data: { Amends: newRow },
         })
@@ -1340,7 +1507,7 @@ function NuhuhMulbur(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/amends",
+          url: "http://hr.audit.mn/hr/api/v1/amends",
           method: "PUT",
           data: {
             Amends: oldRow,
@@ -1658,7 +1825,7 @@ function Tuslamj(props) {
 
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/Aid/" +
+      "http://hr.audit.mn/hr/api/v1/Aid/" +
         JSON.parse(
           localStorage.getItem("personDetail") === undefined
             ? "{}"
@@ -1724,7 +1891,7 @@ function Tuslamj(props) {
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/AidDelete",
+        url: "http://hr.audit.mn/hr/api/v1/AidDelete",
         method: "POST",
         data: {
           Aid: {
@@ -1769,7 +1936,7 @@ function Tuslamj(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/Aid",
+          url: "http://hr.audit.mn/hr/api/v1/Aid",
           method: "POST",
           data: { Aid: newRow },
         })
@@ -1798,7 +1965,7 @@ function Tuslamj(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/Aid",
+          url: "http://hr.audit.mn/hr/api/v1/Aid",
           method: "PUT",
           data: {
             Aid: oldRow,
@@ -2112,7 +2279,7 @@ function Surgalt(props) {
 
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/training/" +
+      "http://hr.audit.mn/hr/api/v1/training/" +
         JSON.parse(
           localStorage.getItem("personDetail") === undefined
             ? "{}"
@@ -2176,7 +2343,7 @@ function Surgalt(props) {
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/TrainingDelete",
+        url: "http://hr.audit.mn/hr/api/v1/TrainingDelete",
         method: "POST",
         data: {
           Training: {
@@ -2220,7 +2387,7 @@ function Surgalt(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/Training",
+          url: "http://hr.audit.mn/hr/api/v1/Training",
           method: "POST",
           data: { Training: newRow },
         })
@@ -2249,7 +2416,7 @@ function Surgalt(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/Training",
+          url: "http://hr.audit.mn/hr/api/v1/Training",
           method: "PUT",
           data: {
             Training: oldRow,
@@ -2578,7 +2745,7 @@ function Shiitgel(props) {
 
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/Punishment/" +
+      "http://hr.audit.mn/hr/api/v1/Punishment/" +
         JSON.parse(
           localStorage.getItem("personDetail") === undefined
             ? "{}"
@@ -2638,7 +2805,7 @@ function Shiitgel(props) {
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/PunishmentDelete",
+        url: "http://hr.audit.mn/hr/api/v1/PunishmentDelete",
         method: "POST",
         data: {
           Punishment: {
@@ -2685,7 +2852,7 @@ function Shiitgel(props) {
       if (newRow?.length > 0) {
         console.log("insertPunishment", JSON.stringify(newRow));
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/Punishment",
+          url: "http://hr.audit.mn/hr/api/v1/Punishment",
           method: "POST",
           data: { Punishment: newRow },
         })
@@ -2714,7 +2881,7 @@ function Shiitgel(props) {
       if (oldRow?.length > 0) {
         console.log("updatePunishment", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/Punishment",
+          url: "http://hr.audit.mn/hr/api/v1/Punishment",
           method: "PUT",
           data: {
             Punishment: oldRow,
@@ -3014,7 +3181,7 @@ function HuwiinHereg(props) {
   const alert = useAlert();
   useEffect(async () => {
     let listItems = await axios(
-      "http://172.16.24.103:3002/api/v1/document/" +
+      "http://hr.audit.mn/hr/api/v1/document/" +
         JSON.parse(
           localStorage.getItem("personDetail") === undefined
             ? "{}"
@@ -3082,7 +3249,7 @@ function HuwiinHereg(props) {
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.103:3002/api/v1/documentDelete",
+        url: "http://hr.audit.mn/hr/api/v1/documentDelete",
         method: "POST",
         data: {
           Document: {
@@ -3127,7 +3294,7 @@ function HuwiinHereg(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/document",
+          url: "http://hr.audit.mn/hr/api/v1/document",
           method: "POST",
           data: { Document: newRow },
         })
@@ -3156,7 +3323,7 @@ function HuwiinHereg(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/document",
+          url: "http://hr.audit.mn/hr/api/v1/document",
           method: "PUT",
           data: {
             Document: oldRow,

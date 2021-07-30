@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
+import { useAlert } from "react-alert";
 import {
   Search,
   Filter,
@@ -11,13 +12,22 @@ import {
   AddBlue,
   M,
   Trush,
+  Delete,
 } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
+import {
+  DepartmentID,
+  Subdepartment,
+  Compartment,
+  Positionlevel,
+  Position,
+  Decisiontype,
+} from "../components/library";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
 var dateFormat = require("dateformat");
 const axios = require("axios");
-
+const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 var rowNumber = 1;
 createTheme("solarized", {
   text: {
@@ -40,6 +50,29 @@ createTheme("solarized", {
     disabled: "rgba(0,0,0,.12)",
   },
 });
+const customStylesTable = {
+  rows: {
+    style: {
+      minHeight: "50px", // override the row height
+    },
+  },
+  headCells: {
+    style: {
+      paddingLeft: "8px", // override the cell padding for head cells
+      paddingRight: "4px",
+      fontWeight: "bold",
+      fontSize: "15px",
+      borderColor: "white",
+    },
+  },
+  cells: {
+    style: {
+      paddingLeft: "5px", // override the cell padding for data cells
+      paddingRight: "5px",
+      webkitBoxShadow: "0px 0px 3px 1px rgb(255 0 0)",
+    },
+  },
+};
 const customStyles = {
   rows: {
     style: {
@@ -72,7 +105,10 @@ const Home = (props) => {
   const [searchType, setSearchType] = useState("PERSON_FIRSTNAME");
   const [found, setFound] = useState();
   const [search, setSearch] = useState("");
-  const [NuutsiinBvrtgel, setNuutsiinBvrtgel] = useState(1);
+  const [NuutsiinBvrtgel, setNuutsiinBvrtgel] = useState({
+    tsonkh: false,
+    type: 0,
+  });
 
   useEffect(() => {
     async function test() {
@@ -91,6 +127,37 @@ const Home = (props) => {
     // You can use setState or dispatch with something like Redux so we can use the retrieved data
     console.log("Selected Rows: ", state.selectedRows);
   };
+  function anketA() {
+    history.push("/web/anketA/1");
+  }
+
+  function makeSearch(value) {
+    setSearch(value);
+
+    let found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
+    console.log(found);
+    if (found != undefined && found.length > 0) setFound(found);
+    else setFound([]);
+  }
+  function equalStr(value1, value2) {
+    if (
+      value1 !== undefined &&
+      value1 !== "" &&
+      value2 !== undefined &&
+      value2 !== "" &&
+      value1 !== null &&
+      value2 !== null
+    )
+      if (searchType !== "PERSON_PHONE") {
+        if (
+          (value1 !== null ? value1.toUpperCase() : "").includes(
+            value2.toUpperCase()
+          )
+        )
+          return true;
+      } else if (value1.includes(value2)) return true;
+    return false;
+  }
 
   const columns = [
     {
@@ -226,29 +293,44 @@ const Home = (props) => {
                   width: "18rem",
                 }}
               />
-
               <span class="icon is-small is-right">
                 <img src={Search} />
               </span>
-              <span class="icon is-small is-right"></span>
-              <button
-                class="input  is-size-7"
-                style={{
-                  borderRadius: "6px",
-                  width: "8rem",
-                  backgroundColor: "#418ee6",
-                  color: "white",
-                  justifyContent: "center",
-                  paddingRight: "0px",
-                  paddingLeft: "0px",
-                }}
-                onClick={() => setNuutsiinBvrtgel(!NuutsiinBvrtgel)}
-              >
-                Нөөцийн бүртгэл
-              </button>
             </div>
+            <button
+              class="button  ml-3"
+              style={{
+                borderRadius: "6px",
+                backgroundColor: "#418ee6",
+                color: "white",
+                height: "2rem",
+              }}
+              onClick={() => setNuutsiinBvrtgel({ tsonkh: true, type: 1 })}
+            >
+              Томилох
+            </button>
+            <button
+              class="button  ml-3"
+              style={{
+                borderRadius: "6px",
+                backgroundColor: "#418ee6",
+                color: "white",
+                height: "2rem",
+              }}
+              onClick={() => setNuutsiinBvrtgel({ tsonkh: true, type: 2 })}
+            >
+              Чөлөөлөх
+            </button>
           </div>
         </div>
+        {NuutsiinBvrtgel?.tsonkh ? (
+          <div>
+            <TushaalAjiltan
+              setNuutsiinBvrtgel={setNuutsiinBvrtgel}
+              type={NuutsiinBvrtgel.type}
+            />
+          </div>
+        ) : null}
         <DataTable
           columns={columns}
           data={jagsaalt}
@@ -256,9 +338,9 @@ const Home = (props) => {
           customStyles={customStyles}
           noDataComponent="мэдээлэл байхгүй байна"
           pagination={false}
-          paginationPerPage={10}
-          selectableRows // add for checkbox selection
+          // add for checkbox selection
           Clicked
+          selectableRowsSingle={true}
           onSelectedRowsChange={handleChange}
           noHeader={true}
           fixedHeader={true}
@@ -299,28 +381,70 @@ const bagana = [
 ];
 
 function TushaalAjiltan(props) {
-  const [tsalinKhuls, setTsalin] = useState(false);
-  const [button, setbutton] = useState(1);
   const [jagsaalt, setJagsaalt] = useState();
+  const [found, setFound] = useState();
+  const [search, setSearch] = useState("");
+  const [tsonkhnuud, setTsonkhnuud] = useState(1);
+  const [worker, setWorker] = useState();
+
   useEffect(async () => {
-    let listItems = await axios("http://172.16.24.103:3002/api/v1/personall");
-    console.log(listItems, "Tangarag");
+    let listItems = await axios("http://hr.audit.mn/hr/api/v1/personall");
+
     setJagsaalt(listItems?.data);
   }, [props]);
+
+  function makeSearch(value) {
+    setSearch(value);
+
+    let found = jagsaalt?.filter((obj) =>
+      equalStr(obj.PERSON_FIRSTNAME, value)
+    );
+    // console.log(found, "found");
+    // if (found === undefined || found.length === 0) {
+    //   found = jagsaalt?.filter((obj) =>
+    //     equalStr(obj.PERSON_REGISTER_NO, value)
+    //   );
+    // } else if (found === undefined || found.length === 0) {
+    //   found = jagsaalt?.filter((obj) => equalStr(obj.PERSON_LASTNAME, value));
+    // } else
+    if (found !== undefined || found.length > 0) setFound(found);
+    else setFound([]);
+  }
+  function equalStr(value1, value2) {
+    if (
+      value1 !== undefined &&
+      value1 !== "" &&
+      value2 !== undefined &&
+      value2 !== "" &&
+      value1 !== null &&
+      value2 !== null
+    )
+      if (
+        (value1 !== null ? value1.toUpperCase() : "").includes(
+          value2.toUpperCase()
+        )
+      )
+        return true;
+
+    return false;
+  }
   const handleChange = (state) => {
     // You can use setState or dispatch with something like Redux so we can use the retrieved data
     console.log("Selected Rows: ", state.selectedRows);
+    setWorker(state.selectedRows[0]);
+    setTsonkhnuud(2);
   };
+
   let listItems;
   if (jagsaalt !== undefined || jagsaalt?.length !== 0) {
     listItems = (
       <div
         style={{
           position: "absolute",
-          width: "50%",
+          width: "60%",
           height: "auto",
-          left: "30%",
-          top: "15%",
+          left: "25%",
+          top: "10%",
           borderRadius: "6px",
           backgroundColor: "white",
           boxShadow:
@@ -337,44 +461,68 @@ function TushaalAjiltan(props) {
             marginBottom: "10px",
             borderTopLeftRadius: "6px",
             borderTopRightRadius: "6px",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
           }}
         >
-          <span>ТУШААЛЫН БҮРТГЭЛ</span>
+          <div>
+            <span>ТУШААЛЫН БҮРТГЭЛ</span>
+          </div>
+          <div>
+            <span
+              style={{
+                fontWeight: "bold",
+                cursor: " -webkit-grab",
+                cursor: "grab",
+              }}
+              onClick={() => props.setNuutsiinBvrtgel(false)}
+            >
+              X
+            </span>
+          </div>
         </div>
         <div style={{ padding: "15px 15px 35px 15px" }}>
-          <div
-            class="control has-icons-left has-icons-right"
-            style={{ marginLeft: "10px" }}
-          >
-            <input
-              class="input is-small is-gray"
-              type="email"
-              placeholder="хайлт  хийх утгаа оруулна уу"
-              style={{
-                borderRadius: "5px",
-              }}
-            />
-            <span class="icon is-small is-right">
-              <img src={Search} />
-            </span>
-            <span class="icon is-small is-right"></span>
-          </div>
-          <DataTable
-            columns={bagana}
-            data={jagsaalt}
-            theme="solarized"
-            customStyles={customStyles}
-            noDataComponent="мэдээлэл байхгүй байна"
-            pagination={false}
-            paginationPerPage={10}
-            selectableRows // add for checkbox selection
-            Clicked
-            onSelectedRowsChange={handleChange}
-            noHeader={true}
-            fixedHeader={true}
-            overflowY={true}
-            overflowYOffset={"390px"}
-          />
+          {tsonkhnuud === 1 ? (
+            <div>
+              <div
+                class="control has-icons-left has-icons-right"
+                style={{ marginLeft: "10px" }}
+              >
+                <input
+                  class="input is-small is-gray"
+                  type="email"
+                  placeholder="хайлт  хийх утгаа оруулна уу"
+                  style={{
+                    borderRadius: "5px",
+                  }}
+                  onChange={(value) => makeSearch(value.target.value)}
+                />
+                <span class="icon is-small is-right">
+                  <img src={Search} />
+                </span>
+                <span class="icon is-small is-right"></span>
+              </div>
+              <DataTable
+                columns={bagana}
+                data={search === "" ? jagsaalt : found}
+                theme="solarized"
+                customStyles={customStylesTable}
+                noDataComponent="мэдээлэл байхгүй байна"
+                pagination={false}
+                paginationPerPage={10}
+                selectableRows // add for checkbox selection
+                Clicked
+                onSelectedRowsChange={handleChange}
+                noHeader={true}
+                fixedHeader={true}
+                overflowY={true}
+                overflowYOffset={"390px"}
+              />
+            </div>
+          ) : tsonkhnuud === 2 ? (
+            <Khoyor worker={worker} type={props.type} />
+          ) : null}
         </div>
       </div>
     );
@@ -387,7 +535,63 @@ function TushaalAjiltan(props) {
 
 function Khoyor(props) {
   const [tsalinKhuls, setTsalin] = useState(false);
+  const alert = useAlert();
   const [button, setbutton] = useState(1);
+  const [EMPLOYEE_ID, setEMPLOYEE_ID] = useState();
+  const [data, loadData] = useState({
+    PERSON_ID: props.worker.PERSON_ID,
+    DEPARTMENT_ID: 1,
+    SUB_DEPARTMENT_ID: 1,
+    COMPARTMENT_ID: 1,
+    POSITION_ID: 1,
+    IS_ACTIVE: 1,
+    CREATED_BY: 1,
+    CREATED_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+    DECISION_TYPE_ID: props.type,
+    DECISION_NO: "test",
+    DECISION_DESC: "test",
+    START_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+    REGISTER_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+    SHEET_NO: 0,
+  });
+  const [, forceRender] = useReducer((s) => s + 1, 0);
+  useEffect(() => {
+    forceRender();
+  }, [data]);
+  function saveToDB() {
+    DataRequest({
+      url: "http://hr.audit.mn/hr/api/v1/decision",
+      method: "POST",
+      data: data,
+    })
+      .then(function (response) {
+        console.log("tushaalResponse", response);
+        if (response?.data?.message === "success") {
+          setEMPLOYEE_ID(response?.data?.EMPLOYEE_ID);
+          alert.show("амжилттай хадгаллаа");
+          setbutton(2);
+        } else {
+          alert.show("амжилтгүй алдаа");
+        }
+        //history.push('/sample')
+      })
+      .catch(function (error) {
+        //alert(error.response.data.error.message);
+        console.log(error.response);
+        alert.show("амжилтгүй алдаа");
+      });
+  }
+  function salary() {
+    if (
+      EMPLOYEE_ID !== null &&
+      EMPLOYEE_ID !== "" &&
+      EMPLOYEE_ID !== undefined
+    ) {
+      setbutton(2);
+    } else {
+      alert.show("үндсэн мэдээлэл бөглөөд хадгалана уу");
+    }
+  }
   return (
     <div>
       <div className="columns">
@@ -414,7 +618,7 @@ function Khoyor(props) {
               justifyContent: "center",
               marginLeft: "5px",
             }}
-            onClick={() => setbutton(2)}
+            onClick={() => salary()}
           >
             ЦАЛИН ХӨЛС
           </button>
@@ -422,12 +626,12 @@ function Khoyor(props) {
 
         <div className="column is-6"></div>
         <div className="column is-2 has-text-right">
-          <button
+          {/* <button
             onClick={() => setTsalin(!tsalinKhuls)}
             className="buttonTsenkher"
           >
             Засварлах
-          </button>
+          </button> */}
         </div>
       </div>
       {button === 1 ? (
@@ -435,33 +639,64 @@ function Khoyor(props) {
           <div className="columns  ">
             <div className="column is-3">
               <h1>Ажилтны нэр</h1>
-              <input class="input  is-size-7" />
+              <input
+                class="input  is-size-7"
+                value={props.worker.PERSON_LASTNAME}
+                disabled={true}
+              />
             </div>
             <div className="column is-3">
               <h1>Ажилтны овог</h1>
-              <input class="input  is-size-7" />
+              <input
+                class="input  is-size-7"
+                value={props.worker.PERSON_FIRSTNAME}
+                disabled={true}
+              />
             </div>
             <div className="column is-6">
               <h1>
                 {" "}
                 <span style={{ color: "red" }}>*</span>Тушаалын төрөл
               </h1>
-              <input class="input  is-size-7" />
+              <input
+                class="input  is-size-7"
+                disabled
+                value={data?.DECISION_TYPE_ID === 1 ? "Томилох" : "Чөлөөлөх"}
+                onChange={(e) => {
+                  loadData({
+                    ...data,
+                    ...{
+                      DECISION_TYPE_ID: e.target.value,
+                    },
+                  });
+                }}
+              />
             </div>
           </div>
 
           <div>
             <div className="columns">
               <div className="column is-6">
-                <h1>байгууллага</h1>
-                <input class="input  is-size-7" />
+                <h1>Байгууллага нэр</h1>
+                <DepartmentID personChild={data} setPersonChild={loadData} />
               </div>
               <div className="column is-6">
                 <h1>
                   {" "}
                   <span style={{ color: "red" }}>*</span>Тушаалын дугаар
                 </h1>
-                <input class="input  is-size-7" />
+                <input
+                  class="input  is-size-7"
+                  value={data?.DECISION_NO}
+                  onChange={(e) => {
+                    loadData({
+                      ...data,
+                      ...{
+                        DECISION_NO: e.target.value,
+                      },
+                    });
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -469,14 +704,25 @@ function Khoyor(props) {
             <div className="columns">
               <div className="column is-6">
                 <h1>Газар нэгж</h1>
-                <input class="input  is-size-7" />
+                <Subdepartment personChild={data} setPersonChild={loadData} />
               </div>
               <div className="column is-6">
                 <h1>
                   {" "}
                   <span style={{ color: "red" }}>*</span>Тайлбар
                 </h1>
-                <input class="input  is-size-7" />
+                <input
+                  class="input  is-size-7"
+                  value={data?.DECISION_DESC}
+                  onChange={(e) => {
+                    loadData({
+                      ...data,
+                      ...{
+                        DECISION_DESC: e.target.value,
+                      },
+                    });
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -484,30 +730,82 @@ function Khoyor(props) {
             <div className="columns">
               <div className="column is-6">
                 <h1>Албан хэлтэс</h1>
-                <input class="input  is-size-7" />
+                <Compartment personChild={data} setPersonChild={loadData} />
               </div>
 
               <div className="column is-3">
                 <h1>Хэрэгжих огноо</h1>
-                <input class="input  is-size-7" />
+                <input
+                  type="date"
+                  disabled={props.edit}
+                  className="anketInput"
+                  value={dateFormat(data?.START_DATE, "yyyy-mm-dd")}
+                  onChange={(e) => {
+                    loadData({
+                      ...data,
+                      ...{
+                        START_DATE: e.target.value,
+                      },
+                    });
+                  }}
+                ></input>
               </div>
 
               <div className="column is-3">
                 <h1>Бүртгэсэн огноо</h1>
-                <input class="input  is-size-7" />
+                <input
+                  type="date"
+                  disabled={props.edit}
+                  className="anketInput"
+                  value={dateFormat(data?.REGISTER_DATE, "yyyy-mm-dd")}
+                  onChange={(e) => {
+                    loadData({
+                      ...data,
+                      ...{
+                        REGISTER_DATE: e.target.value,
+                      },
+                    });
+                  }}
+                ></input>
               </div>
             </div>
           </div>
           <div>
-            <h1>
-              {" "}
-              <span style={{ color: "red" }}>*</span>Албан тушаалын код{" "}
-            </h1>
             <div className="columns ">
               <div className="column is-6">
-                <input class="input  is-size-7" />
+                <h1>
+                  {" "}
+                  <span style={{ color: "red" }}>*</span>Албан тушаалын түвшин{" "}
+                </h1>
+                <Positionlevel personChild={data} setPersonChild={loadData} />
               </div>
-              <div className="column  is-1">
+              {props.type === 2 ? (
+                <div className="column is-3">
+                  <h1>
+                    {" "}
+                    <span style={{ color: "red" }}>*</span>Тойрох хуудасны
+                    дугаар
+                  </h1>
+                </div>
+              ) : null}
+              {props.type === 2 ? (
+                <div className="column  is-2 ">
+                  <input
+                    class="input  is-size-7"
+                    value={data?.SHEET_NO}
+                    onChange={(e) => {
+                      loadData({
+                        ...data,
+                        ...{
+                          SHEET_NO: e.target.value,
+                        },
+                      });
+                    }}
+                  />
+                </div>
+              ) : null}
+
+              {/* <div className="column  is-1">
                 <h1>
                   <span style={{ color: "red" }}>*</span>Тушаал
                 </h1>
@@ -515,7 +813,7 @@ function Khoyor(props) {
               <div className="column  is-1 ">
                 <img src={M} width="20px" height="20px" />
                 <img src={Trush} width="20px" height="20px" />
-              </div>
+              </div> */}
             </div>
           </div>
           <div>
@@ -525,139 +823,509 @@ function Khoyor(props) {
                   {" "}
                   <span style={{ color: "red" }}>*</span>Албан тушаал
                 </h1>
-                <input class="input  is-size-7" />
+                <Position personChild={data} setPersonChild={loadData} />
               </div>
             </div>
           </div>
-          {tsalinKhuls ? (
-            <div className="columns">
-              <div className="column is-8"> </div>
-              <div className="column is-4 has-text-right">
-                <button className="buttonTsenkher ">Хэвлэх</button>
-                <button className="buttonTsenkher ml-1">Хадгалах</button>
-                <button className="buttonTsenkher ml-1">Хадгалаад харах</button>
-              </div>
+          {/* {tsalinKhuls ? ( */}
+          <div className="columns">
+            <div className="column is-8"> </div>
+            <div className="column is-4 has-text-right">
+              <button
+                className="buttonTsenkher ml-1"
+                onClick={() => {
+                  saveToDB();
+                }}
+              >
+                Хадгалах
+              </button>
             </div>
-          ) : null}
+          </div>
+          {/* ) : null} */}
         </div>
       ) : (
         <div
           style={{
             padding: "15px 10px 25px 10px",
-            backgroundColor: "#c0c0c05c",
           }}
         >
-          <div className="columns  ">
-            <div className="column is-3">
-              <h1>Ажилтны нэр</h1>
-              <input class="input  is-size-7" />
-            </div>
-            <div className="column is-3">
-              <h1>Ажилтны овог</h1>
-              <input class="input  is-size-7" />
-            </div>
-            <div className="column is-6">
-              <h1>
-                {" "}
-                <span style={{ color: "red" }}>*</span>Тушаалын төрөл
-              </h1>
-              <input class="input  is-size-7" />
-            </div>
-          </div>
-
-          <div>
-            <div className="columns">
-              <div className="column is-6">
-                <h1>байгууллага</h1>
-                <input class="input  is-size-7" />
-              </div>
-              <div className="column is-6">
-                <h1>
-                  {" "}
-                  <span style={{ color: "red" }}>*</span>Тушаалын дугаар
-                </h1>
-                <input class="input  is-size-7" />
-              </div>
-            </div>
-          </div>
-          <div>
-            <div className="columns">
-              <div className="column is-6">
-                <h1>Газар нэгж</h1>
-                <input class="input  is-size-7" />
-              </div>
-              <div className="column is-6">
-                <h1>
-                  {" "}
-                  <span style={{ color: "red" }}>*</span>Тайлбар
-                </h1>
-                <input class="input  is-size-7" />
-              </div>
-            </div>
-          </div>
-          <div>
-            <div className="columns">
-              <div className="column is-6">
-                <h1>Албан хэлтэс</h1>
-                <input class="input  is-size-7" />
-              </div>
-
-              <div className="column is-3">
-                <h1>Хэрэгжих огноо</h1>
-                <input class="input  is-size-7" />
-              </div>
-
-              <div className="column is-3">
-                <h1>Бүртгэсэн огноо</h1>
-                <input class="input  is-size-7" />
-              </div>
-            </div>
-          </div>
-          <div>
-            <h1>
-              {" "}
-              <span style={{ color: "red" }}>*</span>Албан тушаалын код{" "}
-            </h1>
-            <div className="columns ">
-              <div className="column is-6">
-                <input class="input  is-size-7" />
-              </div>
-              <div className="column  is-1">
-                <h1>
-                  <span style={{ color: "red" }}>*</span>Тушаал
-                </h1>
-              </div>
-              <div className="column  is-1 ">
-                <img src={M} width="20px" height="20px" />
-                <img src={Trush} width="20px" height="20px" />
-              </div>
-            </div>
-          </div>
-          <div>
-            <div className="columns ">
-              <div className="column is-6  ">
-                <h1>
-                  {" "}
-                  <span style={{ color: "red" }}>*</span>Албан тушаал
-                </h1>
-                <input class="input  is-size-7" />
-              </div>
-            </div>
-          </div>
-          {tsalinKhuls ? (
-            <div className="columns">
-              <div className="column is-8"> </div>
-              <div className="column is-4 has-text-right">
-                <button className="buttonTsenkher ">Хэвлэх</button>
-                <button className="buttonTsenkher ml-1">Хадгалах</button>
-                <button className="buttonTsenkher ml-1">Хадгалаад харах</button>
-              </div>
-            </div>
-          ) : null}
-          {button === 1 ? 2 : null}
+          <Salary EMPLOYEE_ID={EMPLOYEE_ID} />
         </div>
       )}
     </div>
   );
+}
+
+function Salary(props) {
+  const [data, loadData] = useState(null);
+  const [edit, setEdit] = useState(true);
+  const alert = useAlert();
+  useEffect(async () => {
+    let listItems = await axios(
+      "http://hr.audit.mn/hr/api/v1/salary/" + props.EMPLOYEE_ID
+    );
+    console.log(listItems, "EMPLOYEE_ID");
+    loadData(listItems?.data);
+  }, [props]);
+
+  useEffect(() => {
+    console.log("userSalary", userDetils);
+    if (data?.salary === undefined || data?.salary.length === 0)
+      loadData({
+        salary: [
+          {
+            POSITION_SALARY: 0,
+            EMERGENCY_SALARY: 0,
+            CIVIL_SALARY: 0,
+            DEGREE_SALARY: 0,
+            FAME_SALARY: 0,
+            OTHER_SALARY: 0,
+            SALARY_DESC: "",
+            TOTAL: 0,
+            EMPLOYEE_ID: props.EMPLOYEE_ID,
+            IS_ACTIVE: 1,
+            CREATED_BY: userDetils?.USER_ID,
+            CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            ROWTYPE: "NEW",
+          },
+        ],
+      });
+  }, [data]);
+
+  function saveToDB() {
+    if (requiredField(data) === true) {
+      let newRow = data?.salary?.filter((value) => value.ROWTYPE === "NEW");
+      let oldRow = data?.salary?.filter(
+        (value) =>
+          value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
+      );
+      let message = 0;
+
+      if (newRow?.length > 0) {
+        console.log("insert", JSON.stringify(newRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/salary/",
+          method: "POST",
+          data: { salary: newRow },
+        })
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 1;
+              if (message !== 2) alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+            }
+            //history.push('/sample')
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+          });
+      }
+      if (oldRow?.length > 0) {
+        console.log("update", JSON.stringify(oldRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/salary/",
+          method: "PUT",
+          data: { salary: oldRow },
+        })
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 2;
+              //history.push('/sample')
+              if (message !== 1) alert.show("амжилттай хадгаллаа");
+              setEdit(!edit);
+            } else {
+              alert.show("амжилтгүй алдаа");
+              setEdit(!edit);
+            }
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+          });
+      }
+    }
+  }
+
+  function requiredField() {
+    for (let i = 0; i < data.salary.length; i++) {
+      if (
+        data.salary[i].POSITION_SALARY === null ||
+        data.salary[i].POSITION_SALARY === ""
+      ) {
+        alert.show("албан тушаалын оруулан уу");
+        return false;
+      } else if (i === data.salary.length - 1) {
+        return true;
+      }
+    }
+  }
+
+  async function addRow() {
+    let value = data.salary;
+    value.push({
+      POSITION_SALARY: 0,
+      EMERGENCY_SALARY: 0,
+      CIVIL_SALARY: 0,
+      DEGREE_SALARY: 0,
+      FAME_SALARY: 0,
+      OTHER_SALARY: 0,
+      SALARY_DESC: "",
+      EMPLOYEE_ID: props.EMPLOYEE_ID,
+      TOTAL: 0,
+      IS_ACTIVE: "1",
+      CREATED_BY: userDetils?.USER_ID,
+      CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+      ROWTYPE: "NEW",
+    });
+
+    await loadData({ salary: value });
+  }
+  function removeRow(indexParam, value) {
+    console.log(indexParam, "index");
+    if (value?.ROWTYPE !== "NEW") {
+      DataRequest({
+        url: "http://hr.audit.mn/hr/api/v1/salaryDelete",
+        method: "POST",
+        data: {
+          salary: {
+            ...value,
+            ...{
+              IS_ACTIVE: 1,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
+          },
+        },
+      })
+        .then(function (response) {
+          console.log("UpdateResponse", response);
+          //history.push('/sample')
+          if (response?.data?.message === "success") {
+            alert.show("амжилттай устлаа");
+            setEdit(!edit);
+          }
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+          alert.show("aldaa");
+        });
+    }
+    loadData({
+      salary: data?.salary.filter((element, index) => index !== indexParam),
+    }); //splice(indexParam, 0)
+  }
+
+  let listItems;
+  if (data?.salary !== undefined || data?.salary.length !== 0) {
+    listItems = (
+      <div>
+        <div className="columns">
+          <div className="column is-11">
+            <span className="headerTextBold">Цалингийн мэдээлэл</span>
+          </div>
+          <div className="column is-1">
+            <button
+              className="buttonTsenkher"
+              onClick={() => {
+                setEdit(!edit);
+              }}
+            >
+              Засварлах
+            </button>
+          </div>
+        </div>
+        <div className="columns">
+          <div className="column is-12">
+            <table className="table is-bordered ">
+              <thead>
+                <tr>
+                  <td>
+                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                      №
+                    </span>
+                  </td>
+                  <td>
+                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                      Албан тушаалын
+                    </span>
+                  </td>
+                  <td>
+                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                      Албан ажлын онцгой нөхцөлийн
+                    </span>
+                  </td>
+                  <td>
+                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                      Төрийн алба хаасан хугацааны
+                    </span>
+                  </td>
+                  <td>
+                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                      Зэрэг дэвийн
+                    </span>
+                  </td>
+                  <td>
+                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                      Цол
+                    </span>
+                  </td>
+                  <td>
+                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                      Бусад
+                    </span>
+                  </td>
+                  <td>
+                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                      Тайлбар
+                    </span>
+                  </td>
+                  <td>
+                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                      Нийт
+                    </span>
+                  </td>
+                  {!edit ? (
+                    <td
+                      style={{
+                        borderColor: "transparent",
+                        border: "none",
+                        paddingLeft: "0px",
+                        width: "50px",
+                      }}
+                    >
+                      <img
+                        src={Add}
+                        width="30px"
+                        height="30px"
+                        onClick={() => addRow()}
+                      />
+                    </td>
+                  ) : null}
+                </tr>
+              </thead>
+              <tbody>
+                {data?.salary?.map((value, index) => (
+                  <tr>
+                    <td>
+                      <span className="textSaaral">{index + 1}</span>
+                    </td>
+                    <td>
+                      <input
+                        disabled={edit}
+                        className="Borderless"
+                        placeholder="утгаа оруулна уу"
+                        value={data.salary[index]?.POSITION_SALARY}
+                        onChange={(text) => {
+                          let value = [...data?.salary];
+                          value[index].POSITION_SALARY = text.target.value;
+                          value[index].UPDATED_BY = userDetils?.USER_ID;
+                          value[index].UPDATED_DATE = dateFormat(
+                            new Date(),
+                            "dd-mmm-yy"
+                          );
+                          loadData({ salary: value });
+                        }}
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        disabled={edit}
+                        style={{ width: "80px" }}
+                        className="Borderless"
+                        placeholder="утгаа оруулна уу"
+                        value={data.salary[index]?.EMERGENCY_SALARY}
+                        onChange={(text) => {
+                          let value = [...data?.salary];
+                          value[index].EMERGENCY_SALARY = text.target.value;
+                          value[index].UPDATED_BY = userDetils?.USER_ID;
+                          value[index].UPDATED_DATE = dateFormat(
+                            new Date(),
+                            "dd-mmm-yy"
+                          );
+                          loadData({ salary: value });
+                        }}
+                      />
+                    </td>
+
+                    <td>
+                      <input
+                        disabled={edit}
+                        style={{ width: "80px" }}
+                        className="Borderless"
+                        placeholder="утгаа оруулна уу"
+                        value={data.salary[index]?.CIVIL_SALARY}
+                        onChange={(text) => {
+                          let value = [...data?.salary];
+                          value[index].CIVIL_SALARY = text.target.value;
+                          value[index].UPDATED_BY = userDetils?.USER_ID;
+                          value[index].UPDATED_DATE = dateFormat(
+                            new Date(),
+                            "dd-mmm-yy"
+                          );
+                          loadData({ salary: value });
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        disabled={edit}
+                        className="Borderless"
+                        style={{ width: "80px" }}
+                        placeholder="утгаа оруулна уу"
+                        value={data.salary[index]?.DEGREE_SALARY}
+                        onChange={(text) => {
+                          let value = [...data?.salary];
+                          value[index].DEGREE_SALARY = text.target.value;
+                          value[index].UPDATED_BY = userDetils?.USER_ID;
+                          value[index].UPDATED_DATE = dateFormat(
+                            new Date(),
+                            "dd-mmm-yy"
+                          );
+                          loadData({ salary: value });
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        disabled={edit}
+                        className="Borderless"
+                        placeholder="утгаа оруулна уу"
+                        style={{ width: "80px" }}
+                        value={data.salary[index]?.FAME_SALARY}
+                        onChange={(text) => {
+                          let value = [...data?.salary];
+                          value[index].FAME_SALARY = text.target.value;
+                          value[index].UPDATED_BY = userDetils?.USER_ID;
+                          value[index].UPDATED_DATE = dateFormat(
+                            new Date(),
+                            "dd-mmm-yy"
+                          );
+                          loadData({ salary: value });
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        disabled={edit}
+                        className="Borderless"
+                        placeholder="утгаа оруулна уу"
+                        style={{ width: "80px" }}
+                        value={data.salary[index]?.OTHER_SALARY}
+                        onChange={(text) => {
+                          let value = [...data?.salary];
+                          value[index].OTHER_SALARY = text.target.value;
+                          value[index].UPDATED_BY = userDetils?.USER_ID;
+                          value[index].UPDATED_DATE = dateFormat(
+                            new Date(),
+                            "dd-mmm-yy"
+                          );
+                          loadData({ salary: value });
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        disabled={edit}
+                        className="Borderless"
+                        placeholder="утгаа оруулна уу"
+                        style={{ width: "80px" }}
+                        value={data.salary[index]?.SALARY_DESC}
+                        onChange={(text) => {
+                          let value = [...data?.salary];
+                          value[index].SALARY_DESC = text.target.value;
+                          value[index].UPDATED_BY = userDetils?.USER_ID;
+                          value[index].UPDATED_DATE = dateFormat(
+                            new Date(),
+                            "dd-mmm-yy"
+                          );
+                          loadData({ salary: value });
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        disabled={edit}
+                        className="Borderless"
+                        placeholder="утгаа оруулна уу"
+                        style={{ width: "80px" }}
+                        value={
+                          parseFloat(data.salary[index]?.POSITION_SALARY) +
+                          parseFloat(data.salary[index]?.EMERGENCY_SALARY) +
+                          parseFloat(data.salary[index]?.CIVIL_SALARY) +
+                          parseFloat(data.salary[index]?.DEGREE_SALARY) +
+                          parseFloat(data.salary[index]?.FAME_SALARY) +
+                          parseFloat(data.salary[index]?.OTHER_SALARY)
+                        }
+                        onChange={(text) => {
+                          let value = [...data?.salary];
+                          value[index].TOTAL = text.target.value;
+                          value[index].UPDATED_BY = userDetils?.USER_ID;
+                          value[index].UPDATED_DATE = dateFormat(
+                            new Date(),
+                            "dd-mmm-yy"
+                          );
+                          loadData({ salary: value });
+                        }}
+                        disabled
+                      />
+                    </td>
+                    {!edit ? (
+                      <td
+                        style={{
+                          paddingLeft: "0px",
+                          borderColor: "transparent",
+                          width: "50px",
+                        }}
+                      >
+                        <img
+                          src={Delete}
+                          width="30px"
+                          height="30px"
+                          onClick={() => removeRow(index, value)}
+                        />
+                      </td>
+                    ) : null}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="columns">
+          <div className="column is-11"></div>
+
+          {!edit ? (
+            <div className="column is-1 ">
+              {/* <button
+              className="buttonTsenkher"
+              style={{ marginRight: "0.4rem" }}
+            >
+              Хэвлэх
+            </button> */}
+              <button className="buttonTsenkher" onClick={saveToDB}>
+                Хадгалах
+              </button>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
 }
 export default Home;
