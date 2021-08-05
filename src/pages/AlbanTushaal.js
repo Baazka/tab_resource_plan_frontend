@@ -288,9 +288,9 @@ const AlbanTushaal = (props) => {
                 color: "#000",
                 border: "0px",
               }}
-              onClick={() => {
-                anketANew();
-              }}
+              // onClick={() => {
+              //   anketANew();
+              // }}
             >
               {" "}
               <span style={{ display: "flex", paddingRight: "22px" }}>
@@ -307,7 +307,7 @@ const AlbanTushaal = (props) => {
                 color: "#fff",
                 border: "double",
               }}
-              onClick={() => document.getElementById("emergencyXLS").click()}
+              // onClick={() => document.getElementById("emergencyXLS").click()}
             >
               <span style={{ display: "flex", paddingRight: "22px" }}>
                 <img src={Excel} width="20px" height="20px "></img>Excel
