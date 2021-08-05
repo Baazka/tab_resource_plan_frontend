@@ -26,7 +26,7 @@ function UrChadvar(props) {
               PERSON_ID: props.person_id,
               EXAM_TYPE_ID: 2,
               EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-              IS_EXAM: 1,
+              IS_EXAM: "",
               OFFICE_ID: "1",
               EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
               EXAM_POINT: "",
@@ -42,7 +42,7 @@ function UrChadvar(props) {
               PERSON_ID: props.person_id,
               EXAM_TYPE_ID: 3,
               EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-              IS_EXAM: 1,
+              IS_EXAM: "",
               OFFICE_ID: "1",
               EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
               EXAM_POINT: "",
@@ -64,7 +64,7 @@ function UrChadvar(props) {
             PERSON_ID: props.person_id,
             EXAM_TYPE_ID: 3,
             EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-            IS_EXAM: 1,
+            IS_EXAM: "",
             OFFICE_ID: "1",
             EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
             EXAM_POINT: "",
@@ -88,7 +88,7 @@ function UrChadvar(props) {
             IS_EXAM: 1,
             OFFICE_ID: "1",
             EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            EXAM_POINT: "",
+            EXAM_POINT: "0",
             DECISION_NO: "",
             DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
             DECISION_DESC: "",
@@ -101,10 +101,10 @@ function UrChadvar(props) {
             PERSON_ID: props.person_id,
             EXAM_TYPE_ID: 2,
             EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-            IS_EXAM: 1,
+            IS_EXAM: "",
             OFFICE_ID: "1",
             EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            EXAM_POINT: "",
+            EXAM_POINT: "0",
             DECISION_NO: "",
             DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
             DECISION_DESC: "",
@@ -117,10 +117,10 @@ function UrChadvar(props) {
             PERSON_ID: props.person_id,
             EXAM_TYPE_ID: 3,
             EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-            IS_EXAM: 1,
+            IS_EXAM: "",
             OFFICE_ID: "1",
             EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            EXAM_POINT: "",
+            EXAM_POINT: "0",
             DECISION_NO: "",
             DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
             DECISION_DESC: "",
@@ -135,6 +135,7 @@ function UrChadvar(props) {
   }, [props]);
 
   function saveToDB() {
+    props.loading(true);
     let newRow = data.Exam.filter((value) => value.ROWTYPE === "NEW");
     let oldRow = data.Exam.filter(
       (value) =>
@@ -155,12 +156,19 @@ function UrChadvar(props) {
             message = 1;
             if (message !== 2) alert.show("амжилттай хадгаллаа");
             setEdit(!edit);
+          } else {
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
           }
           //history.push('/sample')
         })
         .catch(function (error) {
           //alert(error.response.data.error.message);
           console.log(error.response);
+          alert.show("амжилтгүй алдаа");
+          setEdit(!edit);
+          props.loading(false);
         });
     }
     if (oldRow?.length > 0) {
@@ -177,12 +185,18 @@ function UrChadvar(props) {
             //history.push('/sample')
             if (message !== 1) alert.show("амжилттай хадгаллаа");
             setEdit(!edit);
+          } else {
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+            props.loading(false);
           }
         })
         .catch(function (error) {
           //alert(error.response.data.error.message);
           console.log(error.response);
-          alert.show("алдаа");
+          alert.show("амжилтгүй алдаа");
+          setEdit(!edit);
+          props.loading(false);
         });
     }
   }
@@ -245,10 +259,10 @@ function UrChadvar(props) {
                     <select
                       disabled={edit}
                       className="Borderless"
-                      value={data?.Exam[0].EXAM_TYPE_ID}
+                      value={data?.Exam[0].IS_EXAM}
                       onChange={(text) => {
                         let value = [...data?.Exam];
-                        value[0].EXAM_TYPE_ID = text.target.value;
+                        value[0].IS_EXAM = text.target.value;
                         value[0].UPDATED_BY = userDetils?.USER_ID;
                         value[0].UPDATED_DATE = dateFormat(
                           new Date(),
@@ -276,10 +290,7 @@ function UrChadvar(props) {
                       type="date"
                       disabled={edit}
                       className="Borderless"
-                      value={dateFormat(
-                        new Date(data.Exam[0].EXAM_DATE),
-                        "yyyy-mm-dd"
-                      )}
+                      value={dateFormat(data.Exam[0].EXAM_DATE, "yyyy-mm-dd")}
                       onChange={(e) => {
                         let value = [...data?.Exam];
                         value[0].EXAM_DATE = e.target.value;
@@ -298,10 +309,10 @@ function UrChadvar(props) {
                       style={{ width: "70px" }}
                       disabled={edit}
                       className="Borderless"
-                      rows="1"
-                      cols="10"
-                      wrap="soft"
                       value={data.Exam[0]?.EXAM_POINT}
+                      type="number"
+                      min="0"
+                      max="100"
                       onChange={(text) => {
                         let value = [...data?.Exam];
                         value[0].EXAM_POINT = text.target.value;
@@ -337,7 +348,7 @@ function UrChadvar(props) {
                       disabled={edit}
                       className="Borderless"
                       value={dateFormat(
-                        new Date(data.Exam[0].DECISION_DATE),
+                        data.Exam[0].DECISION_DATE,
                         "yyyy-mm-dd"
                       )}
                       onChange={(e) => {
@@ -381,10 +392,10 @@ function UrChadvar(props) {
                     <select
                       disabled={edit}
                       className="Borderless"
-                      value={data.Exam[1].EXAM_TYPE_ID}
+                      value={data.Exam[1].IS_EXAM}
                       onChange={(text) => {
                         let value = [...data?.Exam];
-                        value[1].EXAM_TYPE_ID = text.target.value;
+                        value[1].IS_EXAM = text.target.value;
                         value[1].UPDATED_BY = userDetils?.USER_ID;
                         value[1].UPDATED_DATE = dateFormat(
                           new Date(),
@@ -412,10 +423,7 @@ function UrChadvar(props) {
                       type="date"
                       disabled={edit}
                       className="Borderless"
-                      value={dateFormat(
-                        new Date(data.Exam[1].EXAM_DATE),
-                        "yyyy-mm-dd"
-                      )}
+                      value={dateFormat(data.Exam[1].EXAM_DATE, "yyyy-mm-dd")}
                       onChange={(e) => {
                         let value = [...data?.Exam];
                         value[1].EXAM_DATE = e.target.value;
@@ -434,9 +442,9 @@ function UrChadvar(props) {
                       style={{ width: "70px" }}
                       disabled={edit}
                       className="Borderless"
-                      rows="1"
-                      cols="10"
-                      wrap="soft"
+                      type="number"
+                      min="0"
+                      max="100"
                       value={data.Exam[1]?.EXAM_POINT}
                       onChange={(text) => {
                         let value = [...data?.Exam];
@@ -478,7 +486,7 @@ function UrChadvar(props) {
                       disabled={edit}
                       className="Borderless"
                       value={dateFormat(
-                        new Date(data.Exam[1].DECISION_DATE),
+                        data.Exam[1].DECISION_DATE,
                         "yyyy-mm-dd"
                       )}
                       onChange={(e) => {
@@ -521,10 +529,10 @@ function UrChadvar(props) {
                   <select
                     disabled={edit}
                     className="Borderless"
-                    value={data.Exam[2].EXAM_TYPE_ID}
+                    value={data.Exam[2].IS_EXAM}
                     onChange={(text) => {
                       let value = [...data?.Exam];
-                      value[2].EXAM_TYPE_ID = text.target.value;
+                      value[2].IS_EXAM = text.target.value;
                       value[2].UPDATED_BY = userDetils?.USER_ID;
                       value[2].UPDATED_DATE = dateFormat(
                         new Date(),
@@ -552,10 +560,7 @@ function UrChadvar(props) {
                     type="date"
                     disabled={edit}
                     className="Borderless"
-                    value={dateFormat(
-                      new Date(data.Exam[2].EXAM_DATE),
-                      "yyyy-mm-dd"
-                    )}
+                    value={dateFormat(data.Exam[2].EXAM_DATE, "yyyy-mm-dd")}
                     onChange={(e) => {
                       let value = [...data?.Exam];
                       value[2].EXAM_DATE = e.target.value;
@@ -574,9 +579,9 @@ function UrChadvar(props) {
                     style={{ width: "70px" }}
                     disabled={edit}
                     className="Borderless"
-                    rows="1"
-                    cols="10"
-                    wrap="soft"
+                    type="number"
+                    min="0"
+                    max="100"
                     value={data.Exam[2]?.EXAM_POINT}
                     onChange={(text) => {
                       let value = [...data?.Exam];
@@ -617,10 +622,7 @@ function UrChadvar(props) {
                     type="date"
                     disabled={edit}
                     className="Borderless"
-                    value={dateFormat(
-                      new Date(data.Exam[2].DECISION_DATE),
-                      "yyyy-mm-dd"
-                    )}
+                    value={dateFormat(data.Exam[2].DECISION_DATE, "yyyy-mm-dd")}
                     onChange={(e) => {
                       let value = [...data?.Exam];
                       value[2].DECISION_DATE = e.target.value;
@@ -767,11 +769,7 @@ function TangaragBurtgel(props) {
       props.loading(false);
     }
   }
-  function setOath(value) {
-    let arr = data.Oath;
-    arr[value.index] = value;
-    loadData({ Oath: arr });
-  }
+
   function requiredField() {
     console.log("testestsetsetsetsetsetse", data.Oath);
     for (let i = 0; i < data.Oath.length; i++) {
@@ -962,7 +960,7 @@ function TangaragBurtgel(props) {
                         disabled={edit}
                         className="Borderless"
                         value={dateFormat(
-                          new Date(data.Oath[index].OATH_DATE),
+                          data.Oath[index].OATH_DATE,
                           "yyyy-mm-dd"
                         )}
                         onChange={(e) => {
@@ -1001,7 +999,7 @@ function TangaragBurtgel(props) {
                         disabled={edit}
                         className="Borderless"
                         value={dateFormat(
-                          new Date(data.Oath[index].DECISION_DATE),
+                          data.Oath[index].DECISION_DATE,
                           "yyyy-mm-dd"
                         )}
                         onChange={(e) => {
@@ -1433,7 +1431,7 @@ function GadaadKhel(props) {
                         disabled={edit}
                         className="Borderless"
                         value={dateFormat(
-                          new Date(data.Language[index].EXAM_DATE),
+                          data.Language[index].EXAM_DATE,
                           "yyyy-mm-dd"
                         )}
                         onChange={(e) => {

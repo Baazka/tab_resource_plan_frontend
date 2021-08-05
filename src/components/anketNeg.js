@@ -750,10 +750,7 @@ function Yrunkhii(props) {
             type="date"
             disabled={props.edit}
             className="anketInput"
-            value={dateFormat(
-              new Date(props.data?.PERSON_BORNDATE),
-              "yyyy-mm-dd"
-            )}
+            value={dateFormat(props.data?.PERSON_BORNDATE, "yyyy-mm-dd")}
             onChange={(e) => {
               props.loadData({
                 ...props.data,
@@ -1634,7 +1631,7 @@ function GerBul(props) {
               MEMBER_ID: 1,
               MEMBER_LASTNAME: "",
               MEMBER_FIRSTNAME: "",
-              MEMBER_BIRTHDATE: "09-Jun-21",
+              MEMBER_BIRTHDATE: dateFormat(new Date(), "yyyy-mm-dd"),
               OFFICE_ID: "1",
               SUB_OFFICE_ID: "1",
               MEMBER_ORG: "",
@@ -2034,10 +2031,7 @@ function GerBul(props) {
                         style={{ width: "120px" }}
                         disabled={edit}
                         className="anketInput"
-                        value={dateFormat(
-                          new Date(value.MEMBER_BIRTHDATE),
-                          "yyyy-mm-dd"
-                        )}
+                        value={dateFormat(value.MEMBER_BIRTHDATE, "yyyy-mm-dd")}
                         onChange={(e) => {
                           family[index].MEMBER_BIRTHDATE = e.target.value;
                           family[index].UPDATED_BY = userDetils?.USER_ID;
@@ -2130,11 +2124,11 @@ function GerBul(props) {
       </div>
       <div className="columns">
         <div className="column is-12 ">
-          <em className="utas m-1">
+          <span className="headerTextBold">
             Садан төрлийн байдал (таны, эцэг, эх төрөн ах, эгч дүү, өрх
             тусгаарласан хүүхэд болон таны эхнэр /нөхөр/-ийн эцэг, эхийг
             орлуулна)
-          </em>
+          </span>
         </div>
       </div>
 
@@ -2257,10 +2251,7 @@ function GerBul(props) {
                         style={{ width: "120px" }}
                         disabled={edit}
                         className="anketInput"
-                        value={dateFormat(
-                          new Date(value.MEMBER_BIRTHDATE),
-                          "yyyy-mm-dd"
-                        )}
+                        value={dateFormat(value.MEMBER_BIRTHDATE, "yyyy-mm-dd")}
                         onChange={(e) => {
                           family2[index].MEMBER_BIRTHDATE = e.target.value;
                           family2[index].UPDATED_BY = userDetils?.USER_ID;

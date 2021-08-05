@@ -436,7 +436,7 @@ function Bolowsrol(props) {
                         disabled={edit}
                         className="Borderless"
                         value={dateFormat(
-                          new Date(data.Education[index].START_DATE),
+                          data.Education[index].START_DATE,
                           "yyyy-mm-dd"
                         )}
                         onChange={(e) => {
@@ -457,7 +457,7 @@ function Bolowsrol(props) {
                         disabled={edit}
                         className="Borderless"
                         value={dateFormat(
-                          new Date(data.Education[index].END_DATE),
+                          data.Education[index].END_DATE,
                           "yyyy-mm-dd"
                         )}
                         onChange={(e) => {
@@ -695,7 +695,7 @@ function Bolowsrol(props) {
                         disabled={edit}
                         className="Borderless"
                         value={dateFormat(
-                          new Date(dataSecond.Education[index].START_DATE),
+                          dataSecond.Education[index].START_DATE,
                           "yyyy-mm-dd"
                         )}
                         onChange={(e) => {
@@ -716,7 +716,7 @@ function Bolowsrol(props) {
                         disabled={edit}
                         className="Borderless"
                         value={dateFormat(
-                          new Date(dataSecond.Education[index].END_DATE),
+                          dataSecond.Education[index].END_DATE,
                           "yyyy-mm-dd"
                         )}
                         onChange={(e) => {

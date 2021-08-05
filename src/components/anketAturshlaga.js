@@ -438,7 +438,7 @@ function Turshlgin(props) {
                         className="Borderless"
                         style={{ width: "118px" }}
                         value={dateFormat(
-                          new Date(data.Experience[index].ENTERED_DATE),
+                          data.Experience[index].ENTERED_DATE,
                           "yyyy-mm-dd"
                         )}
                         onChange={(e) => {
@@ -479,7 +479,7 @@ function Turshlgin(props) {
                         className="Borderless"
                         style={{ width: "118px" }}
                         value={dateFormat(
-                          new Date(data.Experience[index].EXPIRED_DATE),
+                          data.Experience[index].EXPIRED_DATE,
                           "yyyy-mm-dd"
                         )}
                         onChange={(e) => {

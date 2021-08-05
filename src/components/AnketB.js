@@ -31,6 +31,7 @@ import {
 import { useAlert } from "react-alert";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import override from "../css/override";
+import { useHistory } from "react-router-dom";
 const axios = require("axios");
 
 var dateFormat = require("dateformat");
@@ -40,6 +41,7 @@ function AnketB(props) {
   console.log("anketB", JSON.parse(localStorage.getItem("personDetail")));
   const [menu, setMenu] = useState(1);
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   return (
     <div
@@ -58,6 +60,30 @@ function AnketB(props) {
           height: "100hv",
         }}
       >
+        <div
+          style={{
+            padding: 0,
+            marginTop: "4.5rem",
+            textAlign: "left",
+            pointerEvents: "initial",
+          }}
+        >
+          <button
+            className="button is-small"
+            style={{
+              border: "none",
+              backgroundColor: "transparent",
+              padding: "0px",
+              color: "#2980b9",
+              borderRadius: "0px",
+              pointerEvents: "initial",
+              textDecoration: "underline",
+            }}
+            onClick={() => history.push("/web/workerlist", { back: true })}
+          >
+            {"<  Буцах"}
+          </button>
+        </div>
         <div style={{ marginTop: "7rem" }}>
           <img src={AvatarB} width="120px" height="120px" />
         </div>
@@ -93,7 +119,7 @@ function AnketB(props) {
             }}
             onClick={() => setMenu(1)}
           >
-            III. АЛБАН ТУШААЛ
+            I-III. АЛБАН ТУШААЛ
           </button>
         </div>
 
@@ -328,8 +354,8 @@ function AlbanTushaal(props) {
         >
           <div className="columns">
             <div className="column is-11">
-              <span style={{ color: "#418ee6" }}>Нэг.</span> Үндсэн мэдээлэл{" "}
-              <label className="checkbox"></label>
+              <span style={{ color: "#418ee6", fontWeight: "bold" }}>Нэг.</span>{" "}
+              <span style={{ fontWeight: "bold" }}>Үндсэн мэдээлэл</span>
             </div>
             <div className="column is-1"></div>
             <div className="column is-1"></div>
@@ -430,7 +456,7 @@ function AlbanTushaal(props) {
                 value={data[data?.length - 1].DECISION_NO}
               ></input>
             </div>
-            <div className="column is-3 has-text-right">
+            {/* <div className="column is-3 has-text-right">
               Тушаал бүртгэсэн ажилтан
             </div>
             <div className="column is-4 ">
@@ -441,7 +467,7 @@ function AlbanTushaal(props) {
                 }}
                 value={""}
               ></input>
-            </div>
+            </div> */}
           </div>
         </div>
         <div
@@ -1673,7 +1699,10 @@ function NuhuhMulbur(props) {
                 <td className="classTbdy">
                   <input
                     style={{ width: "-webkit-fill-available" }}
-                    value={value.AMENDS_AMOUNT}
+                    value={value.AMENDS_AMOUNT.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}
+                    step="any"
                     disabled={zasakhTowch}
                     placeholder="утгаа оруулна уу"
                     onChange={(text) => {
@@ -2020,10 +2049,10 @@ function Tuslamj(props) {
         data.Aid[i].AID_MOTIVE === null ||
         data.Aid[i].AID_MOTIVE === ""
       ) {
-        alert.show("Тайлбар оруулан уу");
+        alert.show("Тусламж олгосон үндэслэл");
         return false;
       } else if (data.Aid[i].AID_DESC === null || data.Aid[i].AID_DESC === "") {
-        alert.show("Бүрдүүлэлт хийсэн албан хаагчийн нэр оруулан уу");
+        alert.show("Тайлбар");
         return false;
       } else if (i === data.Aid.length - 1) {
         return true;
@@ -2127,7 +2156,9 @@ function Tuslamj(props) {
                 <td className="classTbdy">
                   <input
                     style={{ width: "-webkit-fill-available" }}
-                    value={value.AID_AMOUNT}
+                    value={value.AID_AMOUNT.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}
                     disabled={zasakhTowch}
                     placeholder="утгаа оруулна уу"
                     onChange={(text) => {
@@ -2927,7 +2958,7 @@ function Shiitgel(props) {
         data.Punishment[i].DECISION_NAME === null ||
         data.Punishment[i].DECISION_NAME === ""
       ) {
-        alert.show("Шийдтэрийн нэр оруулан уу");
+        alert.show("Шийдвэрийн нэр оруулан уу");
         return false;
       } else if (
         data.Punishment[i].DECISION_NO === null ||
@@ -3010,7 +3041,7 @@ function Shiitgel(props) {
                 Шийтгэл ногдуулсан
                 <br /> албан тушаалтан
               </th>
-              <th>Шийдтэрийн нэр</th>
+              <th>Шийдвэрийн нэр</th>
               <th>
                 Шийдвэрийн
                 <br /> огноо

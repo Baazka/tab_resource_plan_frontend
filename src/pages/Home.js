@@ -132,7 +132,11 @@ function Home(props) {
   const handleChange = (state) => {
     // You can use setState or dispatch with something like Redux so we can use the retrieved data
     localStorage.removeItem("personDetail");
-    if (state?.selectedRows != undefined) {
+    if (
+      state?.selectedRows !== undefined &&
+      state?.selectedRows?.length !== 0
+    ) {
+      console.log("state?.selectRows?.length", state.selectedRows);
       console.log("Selected Rows: ", state?.selectedRows[0]?.EMP_ID);
 
       localStorage.setItem(
@@ -163,11 +167,13 @@ function Home(props) {
   }
 
   async function anketANew() {
-    localStorage.removeItem("person_id");
-    localStorage.setItem(
-      "personDetail",
-      JSON.stringify({ person_id: "0", type: "newPerson" })
-    );
+    if (localStorage.get("person_id") !== undefined) {
+      localStorage.removeItem("person_id");
+      localStorage.setItem(
+        "personDetail",
+        JSON.stringify({ person_id: "0", type: "newPerson" })
+      );
+    }
     history.push("/web/anketA/1");
   }
 

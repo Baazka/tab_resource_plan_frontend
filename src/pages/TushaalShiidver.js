@@ -22,6 +22,7 @@ import {
   Positionlevel,
   Position,
   Decisiontype,
+  Salarytype,
 } from "../components/library";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
@@ -103,12 +104,15 @@ const Home = (props) => {
   const history = useHistory();
   const [jagsaalt, setJagsaalt] = useState();
   const [searchType, setSearchType] = useState("PERSON_FIRSTNAME");
+  const [, forceRender] = useReducer((s) => s + 1, 0);
   const [found, setFound] = useState();
   const [search, setSearch] = useState("");
   const [NuutsiinBvrtgel, setNuutsiinBvrtgel] = useState({
     tsonkh: false,
     type: 0,
   });
+  const [deleteList, setDeleteList] = useState();
+  const alert = useAlert();
 
   useEffect(() => {
     async function test() {
@@ -124,21 +128,24 @@ const Home = (props) => {
   }, [props]);
 
   const handleChange = (state) => {
-    // You can use setState or dispatch with something like Redux so we can use the retrieved data
     console.log("Selected Rows: ", state.selectedRows);
+    if (
+      state.selectedRows !== undefined &&
+      state.selectedRows !== null &&
+      state.selectedRows?.length !== 0
+    ) {
+      setDeleteList(state.selectedRows[0]);
+    }
   };
-  function anketA() {
-    history.push("/web/anketA/1");
-  }
 
   function makeSearch(value) {
     setSearch(value);
-
     let found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
     console.log(found);
     if (found != undefined && found.length > 0) setFound(found);
     else setFound([]);
   }
+
   function equalStr(value1, value2) {
     if (
       value1 !== undefined &&
@@ -148,7 +155,7 @@ const Home = (props) => {
       value1 !== null &&
       value2 !== null
     )
-      if (searchType !== "PERSON_PHONE") {
+      if ((searchType !== "START_DATE", searchType !== "REGISTER_DATE")) {
         if (
           (value1 !== null ? value1.toUpperCase() : "").includes(
             value2.toUpperCase()
@@ -158,7 +165,46 @@ const Home = (props) => {
       } else if (value1.includes(value2)) return true;
     return false;
   }
+  function deleteDecision() {
+    if (
+      deleteList?.DECISION_ID !== undefined &&
+      deleteList?.DECISION_ID !== "" &&
+      deleteList?.DECISION_ID !== null
+    ) {
+      DataRequest({
+        url: "http://hr.audit.mn/hr/api/v1/decisionDelete/",
 
+        method: "POST",
+        data: {
+          DECISION_ID: deleteList?.DECISION_ID,
+          IS_ACTIVE: 1,
+          UPDATED_BY: userDetils?.USER_ID,
+          UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+        },
+      })
+        .then(function (response) {
+          console.log("UpdateResponse", response);
+          //history.push('/sample')
+          if (response?.data?.message === "success") {
+            setJagsaalt(
+              jagsaalt?.filter(
+                (element, index) =>
+                  element.DECISION_ID !== deleteList?.DECISION_ID
+              )
+            );
+            forceRender();
+            alert.show("амжилттай устлаа");
+          }
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+          alert.show("aldaa");
+        });
+    } else {
+      alert.show("устгах өгөгдлөө сонгон уу?");
+    }
+  }
   const columns = [
     {
       name: "№",
@@ -234,7 +280,7 @@ const Home = (props) => {
         maxHeight: "100vh !important",
       }}
     >
-      <Header title="АЛБАН ТУШААЛЫН БҮРТГЭЛ" />
+      <Header title="ШИЙДВЭРИЙН ТУШААЛЫН БҮРТГЭЛ" />
       <div
         style={{
           backgroundColor: "white",
@@ -273,8 +319,8 @@ const Home = (props) => {
                 <option value={"POSITION_NAME"}>Албан тушаал</option>
                 <option value={"DECISION_TYPE_NAME"}>Тушаалын төрөл</option>
                 <option value={"DECISION_NO"}>Тушаалын дугаар</option>
-                <option value={"date"}>Хэрэгжих огноо</option>
-                <option value={"date"}>Бүртгэсэн огноо</option>
+                <option value={"START_DATE"}>Хэрэгжих огноо</option>
+                <option value={"REGISTER_DATE"}>Бүртгэсэн огноо</option>
               </select>
               {/* 
               <span class="icon is-small is-right">
@@ -293,7 +339,7 @@ const Home = (props) => {
                   width: "18rem",
                 }}
               />
-              <span class="icon is-small is-right">
+              <span class="icon is-small is-right" style={{ zIndex: 0 }}>
                 <img src={Search} />
               </span>
             </div>
@@ -321,6 +367,18 @@ const Home = (props) => {
             >
               Чөлөөлөх
             </button>
+            <button
+              class="button  ml-3"
+              style={{
+                borderRadius: "6px",
+                backgroundColor: "#418ee6",
+                color: "white",
+                height: "2rem",
+              }}
+              onClick={() => deleteDecision()}
+            >
+              Устгах
+            </button>
           </div>
         </div>
         {NuutsiinBvrtgel?.tsonkh ? (
@@ -333,11 +391,12 @@ const Home = (props) => {
         ) : null}
         <DataTable
           columns={columns}
-          data={jagsaalt}
+          data={search === "" ? jagsaalt : found}
           theme="solarized"
           customStyles={customStyles}
           noDataComponent="мэдээлэл байхгүй байна"
           pagination={false}
+          selectableRows
           // add for checkbox selection
           Clicked
           selectableRowsSingle={true}
@@ -521,7 +580,11 @@ function TushaalAjiltan(props) {
               />
             </div>
           ) : tsonkhnuud === 2 ? (
-            <Khoyor worker={worker} type={props.type} />
+            <Khoyor
+              worker={worker}
+              type={props.type}
+              close={props.setNuutsiinBvrtgel}
+            />
           ) : null}
         </div>
       </div>
@@ -569,7 +632,7 @@ function Khoyor(props) {
         if (response?.data?.message === "success") {
           setEMPLOYEE_ID(response?.data?.EMPLOYEE_ID);
           alert.show("амжилттай хадгаллаа");
-          setbutton(2);
+          if (props.type !== 2) setbutton(2);
         } else {
           alert.show("амжилтгүй алдаа");
         }
@@ -608,20 +671,21 @@ function Khoyor(props) {
           >
             ҮНДСЭН МЭДЭЭЛЭЛ
           </button>
-
-          <button
-            style={{
-              border: "none",
-              borderRadius: "6px",
-              backgroundColor: "#e8e8e8",
-              color: "#418ee6",
-              justifyContent: "center",
-              marginLeft: "5px",
-            }}
-            onClick={() => salary()}
-          >
-            ЦАЛИН ХӨЛС
-          </button>
+          {props.type !== 2 ? (
+            <button
+              style={{
+                border: "none",
+                borderRadius: "6px",
+                backgroundColor: "#e8e8e8",
+                color: "#418ee6",
+                justifyContent: "center",
+                marginLeft: "5px",
+              }}
+              onClick={() => salary()}
+            >
+              ЦАЛИН ХӨЛС
+            </button>
+          ) : null}
         </div>
 
         <div className="column is-6"></div>
@@ -849,7 +913,7 @@ function Khoyor(props) {
             padding: "15px 10px 25px 10px",
           }}
         >
-          <Salary EMPLOYEE_ID={EMPLOYEE_ID} />
+          <Salary EMPLOYEE_ID={EMPLOYEE_ID} close={props.close} />
         </div>
       )}
     </div>
@@ -874,13 +938,11 @@ function Salary(props) {
       loadData({
         salary: [
           {
-            POSITION_SALARY: 0,
-            EMERGENCY_SALARY: 0,
-            CIVIL_SALARY: 0,
-            DEGREE_SALARY: 0,
-            FAME_SALARY: 0,
-            OTHER_SALARY: 0,
+            SALARY_TYPE_ID: 1,
+            SALARY_SUPPLEMENT: "",
+            SALARY_MOTIVE: "",
             SALARY_DESC: "",
+            SALARY_AMOUNT: 0,
             TOTAL: 0,
             EMPLOYEE_ID: props.EMPLOYEE_ID,
             IS_ACTIVE: 1,
@@ -912,8 +974,11 @@ function Salary(props) {
             console.log("UpdateResponse", response);
             if (response?.data?.message === "success") {
               message = 1;
-              if (message !== 2) alert.show("амжилттай хадгаллаа");
-              setEdit(!edit);
+              if (message !== 2) {
+                alert.show("амжилттай хадгаллаа");
+                setEdit(!edit);
+                props.close(false);
+              }
             } else {
               alert.show("амжилтгүй алдаа");
               setEdit(!edit);
@@ -939,8 +1004,11 @@ function Salary(props) {
             if (response?.data?.message === "success") {
               message = 2;
               //history.push('/sample')
-              if (message !== 1) alert.show("амжилттай хадгаллаа");
-              setEdit(!edit);
+              if (message !== 1) {
+                alert.show("амжилттай хадгаллаа");
+                setEdit(!edit);
+                props.close(false);
+              }
             } else {
               alert.show("амжилтгүй алдаа");
               setEdit(!edit);
@@ -973,14 +1041,12 @@ function Salary(props) {
   async function addRow() {
     let value = data.salary;
     value.push({
-      POSITION_SALARY: 0,
-      EMERGENCY_SALARY: 0,
-      CIVIL_SALARY: 0,
-      DEGREE_SALARY: 0,
-      FAME_SALARY: 0,
-      OTHER_SALARY: 0,
+      SALARY_TYPE_ID: 1,
+      SALARY_SUPPLEMENT: "",
+      SALARY_MOTIVE: "",
       SALARY_DESC: "",
       EMPLOYEE_ID: props.EMPLOYEE_ID,
+      SALARY_AMOUNT: 0,
       TOTAL: 0,
       IS_ACTIVE: "1",
       CREATED_BY: userDetils?.USER_ID,
@@ -1057,32 +1123,22 @@ function Salary(props) {
                   </td>
                   <td>
                     <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      Албан тушаалын
+                      Цалингийн төрөл
                     </span>
                   </td>
                   <td>
                     <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      Албан ажлын онцгой нөхцөлийн
+                      Цалин хөлс нэмэгдлийн нэр
                     </span>
                   </td>
                   <td>
                     <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      Төрийн алба хаасан хугацааны
+                      Цалин хөлс өөрчилсөн үндэслэл
                     </span>
                   </td>
                   <td>
                     <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      Зэрэг дэвийн
-                    </span>
-                  </td>
-                  <td>
-                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      Цол
-                    </span>
-                  </td>
-                  <td>
-                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      Бусад
+                      Дүн
                     </span>
                   </td>
                   <td>
@@ -1090,11 +1146,7 @@ function Salary(props) {
                       Тайлбар
                     </span>
                   </td>
-                  <td>
-                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      Нийт
-                    </span>
-                  </td>
+
                   {!edit ? (
                     <td
                       style={{
@@ -1121,14 +1173,21 @@ function Salary(props) {
                       <span className="textSaaral">{index + 1}</span>
                     </td>
                     <td>
+                      <Salarytype
+                        personChild={data}
+                        setPersonChild={loadData}
+                      />
+                    </td>
+
+                    <td>
                       <input
                         disabled={edit}
                         className="Borderless"
                         placeholder="утгаа оруулна уу"
-                        value={data.salary[index]?.POSITION_SALARY}
+                        value={data.salary[index]?.SALARY_SUPPLEMENT}
                         onChange={(text) => {
                           let value = [...data?.salary];
-                          value[index].POSITION_SALARY = text.target.value;
+                          value[index].SALARY_SUPPLEMENT = text.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -1142,13 +1201,31 @@ function Salary(props) {
                     <td>
                       <input
                         disabled={edit}
-                        style={{ width: "80px" }}
                         className="Borderless"
                         placeholder="утгаа оруулна уу"
-                        value={data.salary[index]?.EMERGENCY_SALARY}
+                        value={data.salary[index]?.SALARY_MOTIVE}
                         onChange={(text) => {
                           let value = [...data?.salary];
-                          value[index].EMERGENCY_SALARY = text.target.value;
+                          value[index].SALARY_MOTIVE = text.target.value;
+                          value[index].UPDATED_BY = userDetils?.USER_ID;
+                          value[index].UPDATED_DATE = dateFormat(
+                            new Date(),
+                            "dd-mmm-yy"
+                          );
+                          loadData({ salary: value });
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        disabled={edit}
+                        type="number"
+                        className="Borderless"
+                        placeholder="утгаа оруулна уу"
+                        value={data.salary[index]?.SALARY_AMOUNT}
+                        onChange={(text) => {
+                          let value = [...data?.salary];
+                          value[index].SALARY_AMOUNT = text.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -1162,85 +1239,8 @@ function Salary(props) {
                     <td>
                       <input
                         disabled={edit}
-                        style={{ width: "80px" }}
                         className="Borderless"
                         placeholder="утгаа оруулна уу"
-                        value={data.salary[index]?.CIVIL_SALARY}
-                        onChange={(text) => {
-                          let value = [...data?.salary];
-                          value[index].CIVIL_SALARY = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ salary: value });
-                        }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        disabled={edit}
-                        className="Borderless"
-                        style={{ width: "80px" }}
-                        placeholder="утгаа оруулна уу"
-                        value={data.salary[index]?.DEGREE_SALARY}
-                        onChange={(text) => {
-                          let value = [...data?.salary];
-                          value[index].DEGREE_SALARY = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ salary: value });
-                        }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        style={{ width: "80px" }}
-                        value={data.salary[index]?.FAME_SALARY}
-                        onChange={(text) => {
-                          let value = [...data?.salary];
-                          value[index].FAME_SALARY = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ salary: value });
-                        }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        style={{ width: "80px" }}
-                        value={data.salary[index]?.OTHER_SALARY}
-                        onChange={(text) => {
-                          let value = [...data?.salary];
-                          value[index].OTHER_SALARY = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ salary: value });
-                        }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        style={{ width: "80px" }}
                         value={data.salary[index]?.SALARY_DESC}
                         onChange={(text) => {
                           let value = [...data?.salary];
@@ -1254,33 +1254,7 @@ function Salary(props) {
                         }}
                       />
                     </td>
-                    <td>
-                      <input
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        style={{ width: "80px" }}
-                        value={
-                          parseFloat(data.salary[index]?.POSITION_SALARY) +
-                          parseFloat(data.salary[index]?.EMERGENCY_SALARY) +
-                          parseFloat(data.salary[index]?.CIVIL_SALARY) +
-                          parseFloat(data.salary[index]?.DEGREE_SALARY) +
-                          parseFloat(data.salary[index]?.FAME_SALARY) +
-                          parseFloat(data.salary[index]?.OTHER_SALARY)
-                        }
-                        onChange={(text) => {
-                          let value = [...data?.salary];
-                          value[index].TOTAL = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ salary: value });
-                        }}
-                        disabled
-                      />
-                    </td>
+
                     {!edit ? (
                       <td
                         style={{

@@ -590,7 +590,7 @@ function Subdepartment(props) {
           })
         }
       >
-        <option value={null}>хоосон</option>
+        <option value={""}>хоосон</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.SUB_DEPARTMENT_ID}>
             {nation.SUB_DEPARTMENT_NAME}
@@ -664,7 +664,7 @@ function Compartment(props) {
           })
         }
       >
-        <option value={null}>хоосон</option>
+        <option value={""}>хоосон</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.COMPARTMENT_ID}>
             {nation.COMPARTMENT_NAME}
@@ -728,11 +728,13 @@ function Position(props) {
               parseInt(props.personChild.COMPARTMENT_ID)
         )
       );
-    } else loadData(listItems.data);
+    } else {
+      loadData(listItems.data);
+    }
   }, [data]);
 
   let listItems;
-  if (data !== undefined) {
+  if (data !== undefined && data !== null && data?.length !== 0) {
     listItems = (
       <select
         disabled={props.edit}
@@ -749,6 +751,41 @@ function Position(props) {
         {data?.map((nation, index) => (
           <option key={index} value={nation.POSITION_ID}>
             {nation.POSITION_NAME}
+          </option>
+        ))}
+      </select>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+}
+function Salarytype(props) {
+  const [data, loadData] = useState(null);
+  useEffect(async () => {
+    let listItems = await axios(
+      "http://hr.audit.mn/hr/api/v1/library/salarytype"
+    );
+    loadData(listItems.data);
+  }, []);
+  let listItems;
+  if (data !== undefined) {
+    listItems = (
+      <select
+        disabled={props.edit}
+        className="anketInput"
+        style={{ width: "-webkit-fill-available" }}
+        value={props.personChild?.SALARY_TYPE_ID}
+        onChange={(text) =>
+          props.setPersonChild({
+            ...props.personChild,
+            ...{ SALARY_TYPE_ID: text.target.value, check: false },
+          })
+        }
+      >
+        {data?.map((nation, index) => (
+          <option key={index} value={nation.SALARY_TYPE_ID}>
+            {nation.SALARY_TYPE_NAME}
           </option>
         ))}
       </select>
@@ -921,4 +958,5 @@ export {
   Positionlevel,
   Position,
   Decisiontype,
+  Salarytype,
 };

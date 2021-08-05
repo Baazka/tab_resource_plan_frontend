@@ -315,7 +315,7 @@ function Buteeliin(props) {
                         disabled={edit}
                         className="Borderless"
                         value={dateFormat(
-                          new Date(data.Literature[index].LITERATURE_DATE),
+                          data.Literature[index].LITERATURE_DATE,
                           "yyyy-mm-dd"
                         )}
                         onChange={(e) => {

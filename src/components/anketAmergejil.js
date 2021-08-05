@@ -381,7 +381,7 @@ function Mergeshliin(props) {
                           className="Borderless"
                           style={{ width: "118px" }}
                           value={dateFormat(
-                            new Date(data.Profession[index].START_DATE),
+                            data.Profession[index].START_DATE,
                             "yyyy-mm-dd"
                           )}
                           onChange={(e) => {
@@ -403,7 +403,7 @@ function Mergeshliin(props) {
                           className="Borderless"
                           style={{ width: "118px" }}
                           value={dateFormat(
-                            new Date(data.Profession[index].END_DATE),
+                            data.Profession[index].END_DATE,
                             "yyyy-mm-dd"
                           )}
                           onChange={(e) => {
@@ -483,7 +483,7 @@ function Mergeshliin(props) {
                           className="Borderless"
                           style={{ width: "118px" }}
                           value={dateFormat(
-                            new Date(data.Profession[index].DIPLOM_DATE),
+                            data.Profession[index].DIPLOM_DATE,
                             "yyyy-mm-dd"
                           )}
                           onChange={(e) => {
@@ -851,7 +851,7 @@ function ZeregTsol(props) {
                         className="Borderless"
                         style={{ width: "118px" }}
                         value={dateFormat(
-                          new Date(data.Fame[index].FAME_DATE),
+                          data.Fame[index].FAME_DATE,
                           "yyyy-mm-dd"
                         )}
                         onChange={(e) => {

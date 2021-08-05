@@ -349,7 +349,7 @@ function Shagnaliin(props) {
                         disabled={edit}
                         className="Borderless"
                         value={dateFormat(
-                          new Date(data.Award[index].AWARD_DATE),
+                          data.Award[index].AWARD_DATE,
                           "yyyy-mm-dd"
                         )}
                         onChange={(e) => {
@@ -407,7 +407,7 @@ function Shagnaliin(props) {
                         disabled={edit}
                         className="Borderless"
                         value={dateFormat(
-                          new Date(data.Award[index].DECISION_DATE),
+                          data.Award[index].DECISION_DATE,
                           "yyyy-mm-dd"
                         )}
                         onChange={(e) => {

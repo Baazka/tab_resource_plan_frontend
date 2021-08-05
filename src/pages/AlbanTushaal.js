@@ -65,7 +65,7 @@ const customStyles = {
 const AlbanTushaal = (props) => {
   const history = useHistory();
   const [jagsaalt, setJagsaalt] = useState();
-  const [searchType, setSearchType] = useState("PERSON_FIRSTNAME");
+  const [searchType, setSearchType] = useState("DEPARTMENT_NAME");
   const [found, setFound] = useState();
   const [search, setSearch] = useState("");
 
@@ -237,16 +237,16 @@ const AlbanTushaal = (props) => {
                 value={searchType}
                 onChange={(text) => setSearchType(text.target.value)}
               >
-                <option value={"EMP_DEPARTMENT_NAME"}>
+                <option value={"DEPARTMENT_NAME"}>
                   Төрийн аудиты байгууллага
                 </option>
-                <option value={"EMP_SUBDEPARTMENT_NAME"}>Харъяа газар</option>
-                <option value={"EMP_ROLE_NAME"}>Дотооод бүтцийн нэгж</option>
-                <option value={"PERSON_FIRSTNAME"}>
+                <option value={"SUB_DEPARTMENT_NAME"}>Харъяа газар</option>
+                <option value={"COMPARTMENT_NAME"}>Дотооод бүтцийн нэгж</option>
+                <option value={"POSITION_LEVEL_NAME"}>
                   Албан тушаалын түвшин
                 </option>
-                <option value={"PERSON_LASTNAME"}>Албан тушаалын нэр</option>
-                <option value={"EMP_COMPARTMENT_NAME"}>
+                <option value={"POSITION_NAME"}>Албан тушаалын нэр</option>
+                {/* <option value={"EMP_COMPARTMENT_NAME"}>
                   Албан тушаалын төрөл
                 </option>
                 <option value={"PERSON_PHONE"}>Албан тушаалын ангилал</option>
@@ -254,7 +254,7 @@ const AlbanTushaal = (props) => {
                 <option value={"CONFIRMED_COUNT"}>Батлагдсан орон тоо</option>
                 <option value={"CONFIRMED_COUNT"}>Ажилтны тоо</option>
                 <option value={"CONFIRMED_COUNT"}>Эзгүй орон тоо</option>
-                <option value={"CONFIRMED_COUNT"}>Сул орон тоо</option>
+                <option value={"CONFIRMED_COUNT"}>Сул орон тоо</option> */}
               </select>
               {/* 
               <span class="icon is-small is-right">
@@ -318,7 +318,7 @@ const AlbanTushaal = (props) => {
         </div>
         <DataTable
           columns={columns}
-          data={jagsaalt}
+          data={search === "" ? jagsaalt : found}
           theme="solarized"
           customStyles={customStyles}
           noDataComponent="мэдээлэл байхгүй байна"
