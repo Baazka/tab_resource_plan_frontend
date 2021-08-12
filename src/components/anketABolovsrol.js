@@ -13,20 +13,23 @@ function Bolowsrol(props) {
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
 
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/education/" + props.person_id
-    );
-    loadData({
-      Education: listItems?.data?.Education.filter(
-        (a) => a.EDUCATION_LEVEL === 1
-      ),
-    });
-    loadDataSecond({
-      Education: listItems?.data?.Education.filter(
-        (a) => a.EDUCATION_LEVEL === 2
-      ),
-    });
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/education/" + props.person_id
+      );
+      loadData({
+        Education: listItems?.data?.Education.filter(
+          (a) => a.EDUCATION_LEVEL === 1
+        ),
+      });
+      loadDataSecond({
+        Education: listItems?.data?.Education.filter(
+          (a) => a.EDUCATION_LEVEL === 2
+        ),
+      });
+    }
+    fetchData();
   }, [props]);
 
   useEffect(() => {
@@ -313,520 +316,541 @@ function Bolowsrol(props) {
         </div>
         <div class="columns">
           <div class="column is-12">
-            <em className="TABLE m-3 has-text-link	">
+            <em className="m-3 has-text-link	">
               3.1.Боловсрол (суурь Боловсрол. дипломын дээд
               боловсрол,бакалавр,магистрын зэргийг оролуулан)
             </em>
           </div>
         </div>
-        <div class="columns">
-          <div class="column is-12">
-            <table className="table is-bordered p-3">
-              <thead>
-                <tr>
-                  <td>
-                    <span className="textSaaral">№</span>
-                  </td>
-                  <td style={{ width: " 180px" }}>
-                    <span className="textSaaral">Боловсролын зэрэг</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Боловсрол эзэмшсэн газар</span>
-                  </td>
-                  <td>
-                    <span style={{ color: "red" }}>*</span>
-                    <span className="textSaaral">Сургуулийн нэр</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Орсон он,сар</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Төгссөн он,сар</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Эзэмшсэн мэргэжил</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">
-                      Гэрчилгээ дипломын дугаар
-                    </span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">
-                      Сургуулийн холбоо барих мэдээлэл
-                    </span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Диплом хамгаалсан сэдэв</span>
-                  </td>
-                  {!edit ? (
-                    <td
-                      style={{
-                        borderColor: "transparent",
-                        border: "none",
-                        paddingLeft: "0px",
-                        width: "90px",
-                      }}
-                    >
-                      <img
-                        src={Add}
-                        width="30px"
-                        height="30px"
-                        onClick={() => addRow()}
-                      />
-                    </td>
-                  ) : null}
-                </tr>
-              </thead>
-              <tbody>
-                {data?.Education?.map((value, index) => (
+        <div className="table-container">
+          <div class="columns">
+            <div class="column is-12">
+              <table className="table is-bordered p-3">
+                <thead>
                   <tr>
                     <td>
-                      <span className="textSaaral">{index + 1}</span>
+                      <span className="textSaaral">№</span>
+                    </td>
+                    <td style={{ width: " 180px" }}>
+                      <span className="textSaaral">Боловсролын зэрэг</span>
                     </td>
                     <td>
-                      <Edutype
-                        personChild={data.Education[index]}
-                        setPersonChild={setEduType}
-                        index={index}
-                        edit={edit}
-                      />
+                      <span className="textSaaral">
+                        Боловсрол эзэмшсэн газар
+                      </span>
                     </td>
                     <td>
-                      <input
-                        style={{ width: "110px" }}
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={data.Education[index]?.EDUCATION_COUNTRY}
-                        onChange={(text) => {
-                          let value = [...data?.Education];
-                          value[index].EDUCATION_COUNTRY = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ Education: value });
-                        }}
-                      />
+                      <span style={{ color: "red" }}>*</span>
+                      <span className="textSaaral">Сургуулийн нэр</span>
                     </td>
                     <td>
-                      <input
-                        style={{ width: "110px" }}
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={data.Education[index]?.SCHOOL_NAME}
-                        onChange={(text) => {
-                          let value = [...data?.Education];
-                          value[index].SCHOOL_NAME = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ Education: value });
-                        }}
-                      />
+                      <span className="textSaaral">Орсон он,сар</span>
                     </td>
                     <td>
-                      <input
-                        type="date"
-                        disabled={edit}
-                        className="Borderless"
-                        value={dateFormat(
-                          data.Education[index].START_DATE,
-                          "yyyy-mm-dd"
-                        )}
-                        onChange={(e) => {
-                          let value = [...data?.Education];
-                          value[index].START_DATE = e.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ Education: value });
-                        }}
-                      />
+                      <span className="textSaaral">Төгссөн он,сар</span>
                     </td>
                     <td>
-                      <input
-                        type="date"
-                        disabled={edit}
-                        className="Borderless"
-                        value={dateFormat(
-                          data.Education[index].END_DATE,
-                          "yyyy-mm-dd"
-                        )}
-                        onChange={(e) => {
-                          let value = [...data?.Education];
-                          value[index].END_DATE = e.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ Education: value });
-                        }}
-                      />
+                      <span className="textSaaral">Эзэмшсэн мэргэжил</span>
                     </td>
                     <td>
-                      <input
-                        style={{ width: "100px" }}
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={data.Education[index]?.PROFESSION_NAME}
-                        onChange={(text) => {
-                          let value = [...data?.Education];
-                          value[index].PROFESSION_NAME = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ Education: value });
-                        }}
-                      />
+                      <span className="textSaaral">
+                        Гэрчилгээ дипломын дугаар
+                      </span>
                     </td>
                     <td>
-                      <input
-                        style={{ width: "70px" }}
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={data.Education[index]?.DIPLOM_NO}
-                        onChange={(text) => {
-                          let value = [...data?.Education];
-                          value[index].DIPLOM_NO = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ Education: value });
-                        }}
-                      />
+                      <span className="textSaaral">
+                        Сургуулийн холбоо барих мэдээлэл
+                      </span>
                     </td>
                     <td>
-                      <input
-                        style={{ width: "100px" }}
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={data.Education[index]?.SCHOOL_CONTACT}
-                        onChange={(text) => {
-                          let value = [...data?.Education];
-                          value[index].SCHOOL_CONTACT = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ Education: value });
-                        }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        style={{ width: "80px" }}
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={data.Education[index]?.DIPLOM_SUBJECT}
-                        onChange={(text) => {
-                          let value = [...data?.Education];
-                          value[index].DIPLOM_SUBJECT = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ Education: value });
-                        }}
-                      />
+                      <span className="textSaaral">
+                        Диплом хамгаалсан сэдэв
+                      </span>
                     </td>
                     {!edit ? (
                       <td
                         style={{
-                          paddingLeft: "0px",
                           borderColor: "transparent",
-                          width: "80px",
+                          border: "none",
+                          paddingLeft: "0px",
+                          width: "90px",
                         }}
                       >
                         <img
-                          src={Delete}
+                          src={Add}
                           width="30px"
                           height="30px"
-                          onClick={() => removeRow(index, value)}
+                          onClick={() => addRow()}
                         />
+                        <input
+                          style={{ width: "30px", visibility: "hidden" }}
+                        ></input>
                       </td>
                     ) : null}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {data?.Education?.map((value, index) => (
+                    <tr>
+                      <td>
+                        <span className="textSaaral">{index + 1}</span>
+                      </td>
+                      <td>
+                        <Edutype
+                          personChild={data.Education[index]}
+                          setPersonChild={setEduType}
+                          index={index}
+                          edit={edit}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          style={{ width: "110px" }}
+                          disabled={edit}
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={data.Education[index]?.EDUCATION_COUNTRY}
+                          onChange={(text) => {
+                            let value = [...data?.Education];
+                            value[index].EDUCATION_COUNTRY = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData({ Education: value });
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          style={{ width: "110px" }}
+                          disabled={edit}
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={data.Education[index]?.SCHOOL_NAME}
+                          onChange={(text) => {
+                            let value = [...data?.Education];
+                            value[index].SCHOOL_NAME = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData({ Education: value });
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="date"
+                          disabled={edit}
+                          className="Borderless"
+                          value={dateFormat(
+                            data.Education[index].START_DATE,
+                            "yyyy-mm-dd"
+                          )}
+                          onChange={(e) => {
+                            let value = [...data?.Education];
+                            value[index].START_DATE = e.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData({ Education: value });
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="date"
+                          disabled={edit}
+                          className="Borderless"
+                          value={dateFormat(
+                            data.Education[index].END_DATE,
+                            "yyyy-mm-dd"
+                          )}
+                          onChange={(e) => {
+                            let value = [...data?.Education];
+                            value[index].END_DATE = e.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData({ Education: value });
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          style={{ width: "100px" }}
+                          disabled={edit}
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={data.Education[index]?.PROFESSION_NAME}
+                          onChange={(text) => {
+                            let value = [...data?.Education];
+                            value[index].PROFESSION_NAME = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData({ Education: value });
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          style={{ width: "70px" }}
+                          disabled={edit}
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={data.Education[index]?.DIPLOM_NO}
+                          onChange={(text) => {
+                            let value = [...data?.Education];
+                            value[index].DIPLOM_NO = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData({ Education: value });
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          style={{ width: "100px" }}
+                          disabled={edit}
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={data.Education[index]?.SCHOOL_CONTACT}
+                          onChange={(text) => {
+                            let value = [...data?.Education];
+                            value[index].SCHOOL_CONTACT = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData({ Education: value });
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          style={{ width: "80px" }}
+                          disabled={edit}
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={data.Education[index]?.DIPLOM_SUBJECT}
+                          onChange={(text) => {
+                            let value = [...data?.Education];
+                            value[index].DIPLOM_SUBJECT = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData({ Education: value });
+                          }}
+                        />
+                      </td>
+                      {!edit ? (
+                        <td
+                          style={{
+                            paddingLeft: "0px",
+                            borderColor: "transparent",
+                            width: "80px",
+                          }}
+                        >
+                          <img
+                            src={Delete}
+                            width="30px"
+                            height="30px"
+                            onClick={() => removeRow(index, value)}
+                          />
+                          <input
+                            style={{ width: "30px", visibility: "hidden" }}
+                          ></input>
+                        </td>
+                      ) : null}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-        <div class="columns ">
-          <div class="column is-12">
-            <em className="TABLE m-3 has-text-link">
-              3.2. Боловсролын болон шинжлэх ухааны докторын зэрэг
-            </em>
+          <div class="columns ">
+            <div class="column is-12">
+              <em className="TABLE m-3 has-text-link">
+                3.2. Боловсролын болон шинжлэх ухааны докторын зэрэг
+              </em>
+            </div>
           </div>
-        </div>
 
-        <div class="columns">
-          <div class="column is-12">
-            <table className="table is-bordered p-3">
-              <thead>
-                <tr>
-                  <td>
-                    <span className="textSaaral">№</span>
-                  </td>
-                  <td style={{ width: "180px" }}>
-                    <span className="textSaaral">Боловсролын зэрэг</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Боловсрол эзэмшсэн газар</span>
-                  </td>
-                  <td>
-                    <span style={{ color: "red" }}>*</span>
-                    <span className="textSaaral">Сургуулийн нэр</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Орсон он,сар</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Төгссөн он,сар</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Эзэмшсэн мэргэжил</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">
-                      Гэрчилгээ дипломын дугаар
-                    </span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">
-                      Сургуулийн холбоо барих мэдээлэл
-                    </span>
-                  </td>
-                  <td>
-                    <span className="textSaaral">Диплом хамгаалсан сэдэв</span>
-                  </td>
-                  {!edit ? (
-                    <td
-                      style={{
-                        borderColor: "transparent",
-                        border: "none",
-                        paddingLeft: "0px",
-                        width: "90px",
-                      }}
-                    >
-                      <img
-                        src={Add}
-                        width="30px"
-                        height="30px"
-                        onClick={() => addRowSecond()}
-                      />
-                    </td>
-                  ) : null}
-                </tr>
-              </thead>
-              <tbody>
-                {dataSecond?.Education?.map((value, index) => (
+          <div class="columns">
+            <div class="column is-12">
+              <table className="table is-bordered p-3">
+                <thead>
                   <tr>
                     <td>
-                      <span className="textSaaral">{index + 1}</span>
+                      <span className="textSaaral">№</span>
+                    </td>
+                    <td style={{ width: "180px" }}>
+                      <span className="textSaaral">Боловсролын зэрэг</span>
                     </td>
                     <td>
-                      <Edutype
-                        personChild={dataSecond.Education[index]}
-                        setPersonChild={setEduTypeSecond}
-                        index={index}
-                        edit={edit}
-                      />
+                      <span className="textSaaral">
+                        Боловсрол эзэмшсэн газар
+                      </span>
                     </td>
                     <td>
-                      <input
-                        style={{ width: "100px" }}
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={dataSecond.Education[index]?.EDUCATION_COUNTRY}
-                        onChange={(text) => {
-                          let value = [...dataSecond?.Education];
-                          value[index].EDUCATION_COUNTRY = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadDataSecond({ Education: value });
-                        }}
-                      />
+                      <span style={{ color: "red" }}>*</span>
+                      <span className="textSaaral">Сургуулийн нэр</span>
                     </td>
                     <td>
-                      <input
-                        style={{ width: "100px" }}
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={dataSecond.Education[index]?.SCHOOL_NAME}
-                        onChange={(text) => {
-                          let value = [...dataSecond?.Education];
-                          value[index].SCHOOL_NAME = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadDataSecond({ Education: value });
-                        }}
-                      />
+                      <span className="textSaaral">Орсон он,сар</span>
                     </td>
                     <td>
-                      <input
-                        type="date"
-                        disabled={edit}
-                        className="Borderless"
-                        value={dateFormat(
-                          dataSecond.Education[index].START_DATE,
-                          "yyyy-mm-dd"
-                        )}
-                        onChange={(e) => {
-                          let value = [...dataSecond?.Education];
-                          value[index].START_DATE = e.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadDataSecond({ Education: value });
-                        }}
-                      />
+                      <span className="textSaaral">Төгссөн он,сар</span>
                     </td>
                     <td>
-                      <input
-                        type="date"
-                        disabled={edit}
-                        className="Borderless"
-                        value={dateFormat(
-                          dataSecond.Education[index].END_DATE,
-                          "yyyy-mm-dd"
-                        )}
-                        onChange={(e) => {
-                          let value = [...dataSecond?.Education];
-                          value[index].END_DATE = e.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadDataSecond({ Education: value });
-                        }}
-                      />
+                      <span className="textSaaral">Эзэмшсэн мэргэжил</span>
                     </td>
                     <td>
-                      <input
-                        style={{ width: "100px" }}
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={dataSecond.Education[index]?.PROFESSION_NAME}
-                        onChange={(text) => {
-                          let value = [...dataSecond?.Education];
-                          value[index].PROFESSION_NAME = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadDataSecond({ Education: value });
-                        }}
-                      />
+                      <span className="textSaaral">
+                        Гэрчилгээ дипломын дугаар
+                      </span>
                     </td>
                     <td>
-                      <input
-                        style={{ width: "80px" }}
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={dataSecond.Education[index]?.DIPLOM_NO}
-                        onChange={(text) => {
-                          let value = [...dataSecond?.Education];
-                          value[index].DIPLOM_NO = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadDataSecond({ Education: value });
-                        }}
-                      />
+                      <span className="textSaaral">
+                        Сургуулийн холбоо барих мэдээлэл
+                      </span>
                     </td>
                     <td>
-                      <input
-                        style={{ width: "80px" }}
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={dataSecond.Education[index]?.SCHOOL_CONTACT}
-                        onChange={(text) => {
-                          let value = [...dataSecond?.Education];
-                          value[index].SCHOOL_CONTACT = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadDataSecond({ Education: value });
-                        }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        style={{ width: "90px" }}
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={dataSecond.Education[index]?.DIPLOM_SUBJECT}
-                        onChange={(text) => {
-                          let value = [...dataSecond?.Education];
-                          value[index].DIPLOM_SUBJECT = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadDataSecond({ Education: value });
-                        }}
-                      />
+                      <span className="textSaaral">
+                        Диплом хамгаалсан сэдэв
+                      </span>
                     </td>
                     {!edit ? (
                       <td
                         style={{
-                          paddingLeft: "0px",
                           borderColor: "transparent",
-                          width: "80px",
+                          border: "none",
+                          paddingLeft: "0px",
+                          width: "90px",
                         }}
                       >
                         <img
-                          src={Delete}
+                          src={Add}
                           width="30px"
                           height="30px"
-                          onClick={() => removeRow(index, value)}
+                          onClick={() => addRowSecond()}
                         />
+                        <input
+                          style={{ width: "30px", visibility: "hidden" }}
+                        ></input>
                       </td>
                     ) : null}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {dataSecond?.Education?.map((value, index) => (
+                    <tr>
+                      <td>
+                        <span className="textSaaral">{index + 1}</span>
+                      </td>
+                      <td>
+                        <Edutype
+                          personChild={dataSecond.Education[index]}
+                          setPersonChild={setEduTypeSecond}
+                          index={index}
+                          edit={edit}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          style={{ width: "100px" }}
+                          disabled={edit}
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={dataSecond.Education[index]?.EDUCATION_COUNTRY}
+                          onChange={(text) => {
+                            let value = [...dataSecond?.Education];
+                            value[index].EDUCATION_COUNTRY = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadDataSecond({ Education: value });
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          style={{ width: "100px" }}
+                          disabled={edit}
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={dataSecond.Education[index]?.SCHOOL_NAME}
+                          onChange={(text) => {
+                            let value = [...dataSecond?.Education];
+                            value[index].SCHOOL_NAME = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadDataSecond({ Education: value });
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="date"
+                          disabled={edit}
+                          className="Borderless"
+                          value={dateFormat(
+                            dataSecond.Education[index].START_DATE,
+                            "yyyy-mm-dd"
+                          )}
+                          onChange={(e) => {
+                            let value = [...dataSecond?.Education];
+                            value[index].START_DATE = e.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadDataSecond({ Education: value });
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="date"
+                          disabled={edit}
+                          className="Borderless"
+                          value={dateFormat(
+                            dataSecond.Education[index].END_DATE,
+                            "yyyy-mm-dd"
+                          )}
+                          onChange={(e) => {
+                            let value = [...dataSecond?.Education];
+                            value[index].END_DATE = e.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadDataSecond({ Education: value });
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          style={{ width: "100px" }}
+                          disabled={edit}
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={dataSecond.Education[index]?.PROFESSION_NAME}
+                          onChange={(text) => {
+                            let value = [...dataSecond?.Education];
+                            value[index].PROFESSION_NAME = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadDataSecond({ Education: value });
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          style={{ width: "80px" }}
+                          disabled={edit}
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={dataSecond.Education[index]?.DIPLOM_NO}
+                          onChange={(text) => {
+                            let value = [...dataSecond?.Education];
+                            value[index].DIPLOM_NO = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadDataSecond({ Education: value });
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          style={{ width: "80px" }}
+                          disabled={edit}
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={dataSecond.Education[index]?.SCHOOL_CONTACT}
+                          onChange={(text) => {
+                            let value = [...dataSecond?.Education];
+                            value[index].SCHOOL_CONTACT = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadDataSecond({ Education: value });
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          style={{ width: "90px" }}
+                          disabled={edit}
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={dataSecond.Education[index]?.DIPLOM_SUBJECT}
+                          onChange={(text) => {
+                            let value = [...dataSecond?.Education];
+                            value[index].DIPLOM_SUBJECT = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadDataSecond({ Education: value });
+                          }}
+                        />
+                      </td>
+                      {!edit ? (
+                        <td
+                          style={{
+                            paddingLeft: "0px",
+                            borderColor: "transparent",
+                          }}
+                        >
+                          <img
+                            src={Delete}
+                            width="30px"
+                            height="30px"
+                            onClick={() => removeRow(index, value)}
+                          />
+                          <input
+                            style={{ width: "30px", visibility: "hidden" }}
+                          ></input>
+                        </td>
+                      ) : null}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
         <div className="columns">

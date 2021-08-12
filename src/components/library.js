@@ -6,11 +6,14 @@ const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
 function National(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/national"
-    );
-    loadData(listItems.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/national"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
   }, []);
   let listItems;
   if (data !== undefined) {
@@ -41,9 +44,14 @@ function National(props) {
 
 function Subnational(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios("http://hr.audit.mn/hr/api/v1/library/surname");
-    loadData(listItems.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/surname"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
   }, []);
   let listItems;
   if (data !== undefined) {
@@ -94,10 +102,15 @@ function Subnational(props) {
 
 function Dynasty(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios("http://hr.audit.mn/hr/api/v1/library/dynasty");
-    loadData(listItems.data);
-  }, []);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/dynasty"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
   let listItems;
   if (data !== undefined) {
     listItems = (
@@ -126,10 +139,15 @@ function Dynasty(props) {
 }
 function Office(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios("http://hr.audit.mn/hr/api/v1/library/office");
-    loadData(listItems.data);
-  }, []);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/office"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
   let listItems;
   if (data !== undefined) {
     listItems = (
@@ -160,16 +178,19 @@ function Office(props) {
 
 function Suboffice(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/suboffice"
-    );
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/suboffice"
+      );
 
-    loadData(
-      listItems.data?.filter(
-        (a) => parseInt(a.OFFICE_ID) === parseInt(props.personChild.OFFICE_ID)
-      )
-    );
+      loadData(
+        listItems.data?.filter(
+          (a) => parseInt(a.OFFICE_ID) === parseInt(props.personChild.OFFICE_ID)
+        )
+      );
+    }
+    fetchData();
   }, [props]);
   let listItems;
   if (data !== undefined) {
@@ -199,9 +220,14 @@ function Suboffice(props) {
 }
 function Edutype(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios("http://hr.audit.mn/hr/api/v1/library/edutype");
-    loadData(listItems.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/edutype"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
   }, []);
   let listItems;
   if (data !== undefined) {
@@ -232,10 +258,15 @@ function Edutype(props) {
 function FamilyArray(props) {
   const [, forceRender] = useReducer((s) => s + 1, 0);
   const [data, loadData] = useState();
-  useEffect(async () => {
-    let listItems = await axios("http://hr.audit.mn/hr/api/v1/library/family");
-    loadData(listItems.data);
-  }, []);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/family"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
   let listItems;
 
   if (data !== undefined) {
@@ -271,12 +302,15 @@ function FamilyArray(props) {
 }
 function Examtype(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/examtype"
-    );
-    loadData(listItems.data);
-  }, []);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/examtype"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
   let listItems;
   if (data !== undefined) {
     listItems = (
@@ -306,12 +340,16 @@ function Examtype(props) {
 
 function Fametype(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/fametype"
-    );
-    loadData(listItems.data);
-  }, []);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/fametype"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
+
   let listItems;
   if (data !== undefined) {
     listItems = (
@@ -340,12 +378,15 @@ function Fametype(props) {
 }
 function Subfametype(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/subfametype"
-    );
-    loadData(listItems.data);
-  }, []);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/subfametype"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
   let listItems;
   if (data !== undefined) {
     listItems = (
@@ -375,12 +416,15 @@ function Subfametype(props) {
 
 function Forcetype(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/forcetype"
-    );
-    loadData(listItems.data);
-  }, []);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/forcetype"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
   let listItems;
   if (data !== undefined) {
     listItems = (
@@ -410,12 +454,14 @@ function Forcetype(props) {
 
 function Language(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/language"
-    );
-    loadData(listItems.data);
-  }, []);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/language"
+      );
+      loadData(listItems.data);
+    }
+  }, [props]);
   let listItems;
   if (data !== undefined) {
     listItems = (
@@ -448,11 +494,14 @@ function Language(props) {
 }
 function Languagetype(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/languagetype"
-    );
-    loadData(listItems.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/languagetype"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
   }, [props]);
   let listItems;
   if (data !== undefined) {
@@ -487,12 +536,15 @@ function Languagetype(props) {
 
 function Literaturetype(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/literaturetype"
-    );
-    loadData(listItems.data);
-  }, []);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/literaturetype"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
   let listItems;
   if (data !== undefined) {
     listItems = (
@@ -522,12 +574,15 @@ function Literaturetype(props) {
 
 function DepartmentID(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/department"
-    );
-    loadData(listItems.data);
-  }, []);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/department"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
   let listItems;
   if (data !== undefined) {
     listItems = (
@@ -538,7 +593,12 @@ function DepartmentID(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ DEPARTMENT_ID: text.target.value, check: false },
+            ...{
+              DEPARTMENT_ID: text.target.value,
+              check: false,
+              SUB_DEPARTMENT_ID: "null",
+              COMPARTMENT_ID: "null",
+            },
           })
         }
         style={{ width: "-webkit-fill-available" }}
@@ -557,22 +617,25 @@ function DepartmentID(props) {
 }
 function Subdepartment(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/subdepartment"
-    );
-    if (
-      props.personChild.DEPARTMENT_ID !== null &&
-      props.personChild.DEPARTMENT_ID !== ""
-    ) {
-      loadData(
-        listItems.data?.filter(
-          (a) =>
-            parseInt(a.DEPARTMENT_ID) ===
-            parseInt(props.personChild.DEPARTMENT_ID)
-        )
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/subdepartment"
       );
-    } else loadData(listItems.data);
+      if (
+        props.personChild.DEPARTMENT_ID !== null &&
+        props.personChild.DEPARTMENT_ID !== ""
+      ) {
+        loadData(
+          listItems.data?.filter(
+            (a) =>
+              parseInt(a.DEPARTMENT_ID) ===
+              parseInt(props.personChild.DEPARTMENT_ID)
+          )
+        );
+      } else loadData(listItems.data);
+    }
+    fetchData();
   }, [props]);
 
   let listItems;
@@ -590,7 +653,7 @@ function Subdepartment(props) {
           })
         }
       >
-        <option value={""}>хоосон</option>
+        <option value={"null"}>хоосон</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.SUB_DEPARTMENT_ID}>
             {nation.SUB_DEPARTMENT_NAME}
@@ -605,49 +668,53 @@ function Subdepartment(props) {
 }
 function Compartment(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/compartment"
-    );
-    if (
-      props.personChild.SUB_DEPARTMENT_ID !== null &&
-      props.personChild.SUB_DEPARTMENT_ID !== "" &&
-      props.personChild.DEPARTMENT_ID !== null &&
-      props.personChild.DEPARTMENT_ID !== ""
-    ) {
-      loadData(
-        listItems.data?.filter(
-          (a) =>
-            parseInt(a.DEPARTMENT_ID) ===
-              parseInt(props.personChild.DEPARTMENT_ID) &&
-            parseInt(a.SUB_DEPARTMENT_ID) ===
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/compartment"
+      );
+
+      if (
+        props.personChild.SUB_DEPARTMENT_ID != "null" &&
+        props.personChild.SUB_DEPARTMENT_ID !== "" &&
+        props.personChild.DEPARTMENT_ID != "null" &&
+        props.personChild.DEPARTMENT_ID !== ""
+      ) {
+        loadData(
+          listItems.data?.filter(
+            (a) =>
+              parseInt(a.DEPARTMENT_ID) ===
+                parseInt(props.personChild.DEPARTMENT_ID) &&
+              parseInt(a.SUB_DEPARTMENT_ID) ===
+                parseInt(props.personChild.SUB_DEPARTMENT_ID)
+          )
+        );
+      } else if (
+        props.personChild.SUB_DEPARTMENT_ID != "null" &&
+        props.personChild.SUB_DEPARTMENT_ID !== ""
+      ) {
+        loadData(
+          listItems.data?.filter(
+            (a) =>
+              parseInt(a.SUB_DEPARTMENT_ID) ===
               parseInt(props.personChild.SUB_DEPARTMENT_ID)
-        )
-      );
-    } else if (
-      props.personChild.SUB_DEPARTMENT_ID !== null &&
-      props.personChild.SUB_DEPARTMENT_ID !== ""
-    ) {
-      loadData(
-        listItems.data?.filter(
-          (a) =>
-            parseInt(a.SUB_DEPARTMENT_ID) ===
-            parseInt(props.personChild.SUB_DEPARTMENT_ID)
-        )
-      );
-    } else if (
-      props.personChild.DEPARTMENT_ID !== null &&
-      props.personChild.DEPARTMENT_ID !== ""
-    ) {
-      loadData(
-        listItems.data?.filter(
-          (a) =>
-            parseInt(a.DEPARTMENT_ID) ===
-            parseInt(props.personChild.DEPARTMENT_ID)
-        )
-      );
-    } else loadData(listItems.data);
-  }, [data]);
+          )
+        );
+      } else if (
+        props.personChild.DEPARTMENT_ID != "null" &&
+        props.personChild.DEPARTMENT_ID !== ""
+      ) {
+        loadData(
+          listItems.data?.filter(
+            (a) =>
+              parseInt(a.DEPARTMENT_ID) ===
+              parseInt(props.personChild.DEPARTMENT_ID)
+          )
+        );
+      } else loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
 
   let listItems;
   if (data !== undefined) {
@@ -664,7 +731,7 @@ function Compartment(props) {
           })
         }
       >
-        <option value={""}>хоосон</option>
+        <option value={"null"}>хоосон</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.COMPARTMENT_ID}>
             {nation.COMPARTMENT_NAME}
@@ -679,59 +746,70 @@ function Compartment(props) {
 }
 function Position(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/position"
-    );
-    if (
-      props.personChild.SUB_DEPARTMENT_ID !== null &&
-      props.personChild.SUB_DEPARTMENT_ID !== "" &&
-      props.personChild.DEPARTMENT_ID !== null &&
-      props.personChild.DEPARTMENT_ID !== "" &&
-      props.personChild.COMPARTMENT_ID !== null &&
-      props.personChild.COMPARTMENT_ID !== ""
-    ) {
-      loadData(
-        listItems.data?.filter(
-          (a) =>
-            parseInt(a.DEPARTMENT_ID) ===
-              parseInt(props.personChild.DEPARTMENT_ID) &&
-            parseInt(a.SUB_DEPARTMENT_ID) ===
-              parseInt(props.personChild.SUB_DEPARTMENT_ID) &&
-            parseInt(a.COMPARTMENT_ID) ===
-              parseInt(props.personChild.COMPARTMENT_ID)
-        )
+  useEffect(() => {
+    console.log(props, "Position");
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/position"
       );
-    } else if (
-      props.personChild.SUB_DEPARTMENT_ID !== null &&
-      props.personChild.SUB_DEPARTMENT_ID !== ""
-    ) {
-      loadData(
-        listItems.data?.filter(
-          (a) =>
-            parseInt(a.DEPARTMENT_ID) ===
-              parseInt(props.personChild.DEPARTMENT_ID) &&
-            parseInt(a.SUB_DEPARTMENT_ID) ===
-              parseInt(props.personChild.SUB_DEPARTMENT_ID)
-        )
-      );
-    } else if (
-      props.personChild.COMPARTMENT_ID !== null &&
-      props.personChild.COMPARTMENT_ID !== ""
-    ) {
-      loadData(
-        listItems.data?.filter(
-          (a) =>
-            parseInt(a.DEPARTMENT_ID) ===
-              parseInt(props.personChild.DEPARTMENT_ID) &&
-            parseInt(a.COMPARTMENT_ID) ===
-              parseInt(props.personChild.COMPARTMENT_ID)
-        )
-      );
-    } else {
-      loadData(listItems.data);
+      console.log(listItems, "PositionlistItems");
+      if (
+        props.personChild.SUB_DEPARTMENT_ID != "null" &&
+        props.personChild.SUB_DEPARTMENT_ID != "" &&
+        props.personChild.DEPARTMENT_ID != "null" &&
+        props.personChild.DEPARTMENT_ID != "" &&
+        props.personChild.COMPARTMENT_ID != "null" &&
+        props.personChild.COMPARTMENT_ID != ""
+      ) {
+        loadData(
+          listItems.data?.filter(
+            (a) =>
+              parseInt(a.DEPARTMENT_ID) ==
+                parseInt(props.personChild.DEPARTMENT_ID) &&
+              parseInt(a.SUB_DEPARTMENT_ID) ==
+                parseInt(props.personChild.SUB_DEPARTMENT_ID) &&
+              parseInt(a.COMPARTMENT_ID) ==
+                parseInt(props.personChild.COMPARTMENT_ID)
+          )
+        );
+      } else if (
+        props.personChild.SUB_DEPARTMENT_ID != "null" &&
+        props.personChild.SUB_DEPARTMENT_ID != ""
+      ) {
+        loadData(
+          listItems.data?.filter(
+            (a) =>
+              parseInt(a.DEPARTMENT_ID) ==
+                parseInt(props.personChild.DEPARTMENT_ID) &&
+              parseInt(a.SUB_DEPARTMENT_ID) ==
+                parseInt(props.personChild.SUB_DEPARTMENT_ID)
+          )
+        );
+      } else if (
+        props.personChild.COMPARTMENT_ID != "null" &&
+        props.personChild.COMPARTMENT_ID != ""
+      ) {
+        loadData(
+          listItems.data?.filter(
+            (a) =>
+              parseInt(a.DEPARTMENT_ID) ===
+                parseInt(props.personChild.DEPARTMENT_ID) &&
+              parseInt(a.COMPARTMENT_ID) ===
+                parseInt(props.personChild.COMPARTMENT_ID)
+          )
+        );
+      } else {
+        loadData(
+          listItems.data?.filter(
+            (a) =>
+              parseInt(a.DEPARTMENT_ID) ===
+              parseInt(props.personChild.DEPARTMENT_ID)
+          )
+        );
+      }
     }
-  }, [data]);
+    fetchData();
+  }, [props]);
 
   let listItems;
   if (data !== undefined && data !== null && data?.length !== 0) {
@@ -762,12 +840,15 @@ function Position(props) {
 }
 function Salarytype(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/salarytype"
-    );
-    loadData(listItems.data);
-  }, []);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/salarytype"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
   let listItems;
   if (data !== undefined) {
     listItems = (
@@ -798,12 +879,15 @@ function Salarytype(props) {
 
 function Decisiontype(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/decisiontype"
-    );
-    loadData(listItems.data);
-  }, []);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/decisiontype"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
   let listItems;
   if (data !== undefined) {
     listItems = (
@@ -834,12 +918,16 @@ function Decisiontype(props) {
 
 function Positionlevel(props) {
   const [data, loadData] = useState(null);
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/library/positionlevel"
-    );
-    loadData(listItems.data);
-  }, []);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/positionlevel"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
+
   let listItems;
   if (data !== undefined) {
     listItems = (
@@ -858,6 +946,98 @@ function Positionlevel(props) {
         {data?.map((nation, index) => (
           <option key={index} value={nation.POSITION_LEVEL_ID}>
             {nation.POSITION_LEVEL_NAME}
+          </option>
+        ))}
+      </select>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+}
+function Positioncategorytype(props) {
+  const [data, loadData] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/positioncategorytype"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
+
+  let listItems;
+  if (data !== undefined) {
+    listItems = (
+      <select
+        disabled={props.edit}
+        className="anketInput"
+        style={{ width: "-webkit-fill-available" }}
+        value={props.personChild?.POSITION_CATEGORY_TYPE_ID}
+        onChange={(text) =>
+          props.setPersonChild({
+            ...props.personChild,
+            ...{ POSITION_CATEGORY_TYPE_ID: text.target.value, check: false },
+          })
+        }
+      >
+        {data?.map((nation, index) => (
+          <option key={index} value={nation.POSITION_CATEGORY_TYPE_ID}>
+            {nation.POSITION_CATEGORY_TYPE_NAME}
+          </option>
+        ))}
+      </select>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+}
+
+function Positioncategory(props) {
+  const [data, loadData] = useState(null);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/positioncategory"
+      );
+      if (
+        props.personChild.POSITION_CATEGORY_TYPE_ID !== null &&
+        props.personChild.POSITION_CATEGORY_TYPE_ID !== ""
+      ) {
+        loadData(
+          listItems.data?.filter(
+            (a) =>
+              parseInt(a.POSITION_CATEGORY_TYPE_ID) ===
+              parseInt(props.personChild.POSITION_CATEGORY_TYPE_ID)
+          )
+        );
+      } else loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
+
+  let listItems;
+  if (data !== undefined) {
+    listItems = (
+      <select
+        disabled={props.edit}
+        className="anketInput"
+        style={{ width: "-webkit-fill-available" }}
+        value={props.personChild?.POSITION_CATEGORY_ID}
+        onChange={(text) =>
+          props.setPersonChild({
+            ...props.personChild,
+            ...{ POSITION_CATEGORY_ID: text.target.value, check: false },
+          })
+        }
+      >
+        <option value={"null"}>хоосон</option>
+        {data?.map((nation, index) => (
+          <option key={index} value={nation.POSITION_CATEGORY_ID}>
+            {nation.POSITION_CATEGORY_NAME}
           </option>
         ))}
       </select>
@@ -959,4 +1139,6 @@ export {
   Position,
   Decisiontype,
   Salarytype,
+  Positioncategorytype,
+  Positioncategory,
 };

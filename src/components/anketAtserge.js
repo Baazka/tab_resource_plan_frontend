@@ -12,18 +12,21 @@ function TsergiinAlba(props) {
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/force/" + props.person_id
-    );
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/force/" + props.person_id
+      );
 
-    if (
-      listItems?.data?.Force !== undefined &&
-      listItems?.data.Force.length > 0
-    ) {
-      loadData(listItems?.data);
-      setEdit(!edit);
+      if (
+        listItems?.data?.Force !== undefined &&
+        listItems?.data.Force.length > 0
+      ) {
+        loadData(listItems?.data);
+        setEdit(!edit);
+      }
     }
+    fetchData();
   }, [props]);
 
   useEffect(() => {

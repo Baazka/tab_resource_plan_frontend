@@ -7,26 +7,23 @@ import {
   Face,
   Trush,
   Warning,
-  BlackNeg,
-  BlackKhoyor,
-  BlackGurav,
-  BlackDuruv,
-  BlackTav,
-  BlackZurgaa,
-  BlackDoloo,
-  BlackNaim,
   Add,
-  BlueNeg,
-  BlueKhoyor,
-  BlueKGurav,
-  BlueDuruv,
-  BlueTav,
-  BlueZurgaa,
-  BlueDoloo,
-  BlueNaim,
-  BlueGurav,
   Delete,
   M,
+  BNegB,
+  BNeg,
+  BGuravB,
+  BGurav,
+  BDuruvB,
+  BDuruv,
+  BTavB,
+  BTav,
+  BZurgaaB,
+  BZurgaa,
+  BDolooB,
+  BDoloo,
+  BNaimB,
+  BNaim,
 } from "../assets/images/zurag";
 import { useAlert } from "react-alert";
 import ScaleLoader from "react-spinners/ScaleLoader";
@@ -100,11 +97,7 @@ function AnketB(props) {
         </div>
 
         <div className="AnketList" style={{ marginTop: "3rem" }}>
-          <img
-            src={menu === 1 ? BlueNeg : BlackNeg}
-            width="45px"
-            height="45px"
-          />
+          <img src={menu === 1 ? BNegB : BNeg} width="45px" height="45px" />
           <button
             className="button"
             style={{
@@ -124,11 +117,7 @@ function AnketB(props) {
         </div>
 
         <div className="AnketList">
-          <img
-            src={menu === 3 ? BlueGurav : BlackGurav}
-            width="45px"
-            height="45px"
-          />
+          <img src={menu === 3 ? BGuravB : BGurav} width="45px" height="45px" />
           <button
             className="button"
             style={{
@@ -147,11 +136,7 @@ function AnketB(props) {
           </button>
         </div>
         <div className="AnketList">
-          <img
-            src={menu === 4 ? BlueDuruv : BlackDuruv}
-            width="45px"
-            height="45px"
-          />
+          <img src={menu === 4 ? BDuruvB : BDuruv} width="45px" height="45px" />
           <button
             className="button"
             style={{
@@ -170,11 +155,7 @@ function AnketB(props) {
           </button>
         </div>
         <div className="AnketList">
-          <img
-            src={menu === 5 ? BlueTav : BlackTav}
-            width="45px"
-            height="45px"
-          />
+          <img src={menu === 5 ? BTavB : BTav} width="45px" height="45px" />
           <button
             className="button"
             style={{
@@ -194,7 +175,7 @@ function AnketB(props) {
         </div>
         <div className="AnketList">
           <img
-            src={menu === 6 ? BlueZurgaa : BlackZurgaa}
+            src={menu === 6 ? BZurgaaB : BZurgaa}
             width="45px"
             height="45px"
           />
@@ -216,11 +197,7 @@ function AnketB(props) {
           </button>
         </div>
         <div className="AnketList">
-          <img
-            src={menu === 7 ? BlueDoloo : BlackDoloo}
-            width="45px"
-            height="45px"
-          />
+          <img src={menu === 7 ? BDolooB : BDoloo} width="45px" height="45px" />
           <button
             className="button"
             style={{
@@ -239,11 +216,7 @@ function AnketB(props) {
           </button>
         </div>
         <div className="AnketList">
-          <img
-            src={menu === 8 ? BlueNaim : BlackNaim}
-            width="45px"
-            height="45px"
-          />
+          <img src={menu === 8 ? BNaimB : BNaim} width="45px" height="45px" />
           <button
             className="button"
             style={{
@@ -320,24 +293,28 @@ function AlbanTushaal(props) {
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/positionEmployee/" +
-        JSON.parse(
-          localStorage.getItem("personDetail") === undefined
-            ? "{}"
-            : localStorage.getItem("personDetail")
-        )?.emp_id
-    );
-    console.log(listItems, "salary");
-    loadData(
-      listItems?.data.sort(function sortFunction(a, b) {
-        var dateA = new Date(a.CREATED_DATE).getTime();
-        var dateB = new Date(b.CREATED_DATE).getTime();
-        return dateA > dateB ? 1 : -1;
-      })
-    );
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/positionEmployee/" +
+          JSON.parse(
+            localStorage.getItem("personDetail") === undefined
+              ? "{}"
+              : localStorage.getItem("personDetail")
+          )?.emp_id
+      );
+      console.log(listItems, "salary");
+      loadData(
+        listItems?.data.sort(function sortFunction(a, b) {
+          var dateA = new Date(a.CREATED_DATE).getTime();
+          var dateB = new Date(b.CREATED_DATE).getTime();
+          return dateA > dateB ? 1 : -1;
+        })
+      );
+    }
+    fetchData();
   }, [props]);
+
   let listItems;
   if (data !== undefined && data?.length !== 0 && data !== null) {
     listItems = (
@@ -664,17 +641,20 @@ function TsalinHuls(props) {
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/salary/" +
-        JSON.parse(
-          localStorage.getItem("personDetail") === undefined
-            ? "{}"
-            : localStorage.getItem("personDetail")
-        )?.emp_id
-    );
-    console.log(listItems, "salary");
-    loadData(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/salary/" +
+          JSON.parse(
+            localStorage.getItem("personDetail") === undefined
+              ? "{}"
+              : localStorage.getItem("personDetail")
+          )?.emp_id
+      );
+      console.log(listItems, "salary");
+      loadData(listItems?.data);
+    }
+    fetchData();
   }, [props]);
   let listItems;
   if (data?.salary !== undefined || data?.salary.length !== 0) {
@@ -929,18 +909,21 @@ function Uramshuulal(props) {
   const [data, loadData] = useState(null);
   const alert = useAlert();
 
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/Promotion/" +
-        JSON.parse(
-          localStorage.getItem("personDetail") === undefined
-            ? "{}"
-            : localStorage.getItem("personDetail")
-        )?.emp_id
-      // + props.person_id
-    );
-    console.log(listItems, "Tangarag");
-    loadData(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/Promotion/" +
+          JSON.parse(
+            localStorage.getItem("personDetail") === undefined
+              ? "{}"
+              : localStorage.getItem("personDetail")
+          )?.emp_id
+        // + props.person_id
+      );
+      console.log(listItems, "Tangarag");
+      loadData(listItems?.data);
+    }
+    fetchData();
   }, [props]);
 
   useEffect(() => {
@@ -1391,18 +1374,21 @@ function NuhuhMulbur(props) {
   const [data, loadData] = useState(null);
   const alert = useAlert();
 
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/amends/" +
-        JSON.parse(
-          localStorage.getItem("personDetail") === undefined
-            ? "{}"
-            : localStorage.getItem("personDetail")
-        )?.emp_id
-      // + props.person_id
-    );
-    console.log(listItems, "amends");
-    loadData(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/amends/" +
+          JSON.parse(
+            localStorage.getItem("personDetail") === undefined
+              ? "{}"
+              : localStorage.getItem("personDetail")
+          )?.emp_id
+        // + props.person_id
+      );
+      console.log(listItems, "amends");
+      loadData(listItems?.data);
+    }
+    fetchData();
   }, [props]);
 
   useEffect(() => {
@@ -1852,18 +1838,21 @@ function Tuslamj(props) {
   const [data, loadData] = useState(null);
   const alert = useAlert();
 
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/Aid/" +
-        JSON.parse(
-          localStorage.getItem("personDetail") === undefined
-            ? "{}"
-            : localStorage.getItem("personDetail")
-        )?.emp_id
-      // + props.person_id
-    );
-    console.log(listItems?.data.Aid, "Aid");
-    loadData(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/Aid/" +
+          JSON.parse(
+            localStorage.getItem("personDetail") === undefined
+              ? "{}"
+              : localStorage.getItem("personDetail")
+          )?.emp_id
+        // + props.person_id
+      );
+      console.log(listItems?.data.Aid, "Aid");
+      loadData(listItems?.data);
+    }
+    fetchData();
   }, [props]);
 
   useEffect(() => {
@@ -2121,6 +2110,9 @@ function Tuslamj(props) {
                     height="30px"
                     onClick={() => addRow()}
                   />
+                  <input
+                    style={{ width: "30px", visibility: "hidden" }}
+                  ></input>
                 </th>
               ) : null}
             </tr>
@@ -2275,6 +2267,9 @@ function Tuslamj(props) {
                       height="30px"
                       onClick={() => removeRow(index, value)}
                     />
+                    <input
+                      style={{ width: "30px", visibility: "hidden" }}
+                    ></input>
                   </td>
                 ) : null}
               </tr>
@@ -2308,18 +2303,21 @@ function Surgalt(props) {
   const [data, loadData] = useState(null);
   const alert = useAlert();
 
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/training/" +
-        JSON.parse(
-          localStorage.getItem("personDetail") === undefined
-            ? "{}"
-            : localStorage.getItem("personDetail")
-        )?.emp_id
-      // + props.person_id
-    );
-    console.log(listItems, "Training");
-    loadData(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/training/" +
+          JSON.parse(
+            localStorage.getItem("personDetail") === undefined
+              ? "{}"
+              : localStorage.getItem("personDetail")
+          )?.emp_id
+        // + props.person_id
+      );
+      console.log(listItems, "Training");
+      loadData(listItems?.data);
+    }
+    fetchData();
   }, [props]);
   useEffect(() => {
     if (data?.Training === undefined || data?.Training?.length === 0)
@@ -2774,19 +2772,23 @@ function Shiitgel(props) {
   const [data, loadData] = useState(null);
   const alert = useAlert();
 
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/Punishment/" +
-        JSON.parse(
-          localStorage.getItem("personDetail") === undefined
-            ? "{}"
-            : localStorage.getItem("personDetail")
-        )?.emp_id
-      // + props.person_id
-    );
-    console.log(listItems, "Punishment");
-    loadData(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/Punishment/" +
+          JSON.parse(
+            localStorage.getItem("personDetail") === undefined
+              ? "{}"
+              : localStorage.getItem("personDetail")
+          )?.emp_id
+        // + props.person_id
+      );
+      console.log(listItems, "Punishment");
+      loadData(listItems?.data);
+    }
+    fetchData();
   }, [props]);
+
   useEffect(() => {
     if (data?.Punishment === undefined || data?.Punishment?.length === 0)
       loadData({
@@ -3031,7 +3033,7 @@ function Shiitgel(props) {
             </article>
           </div>
         </div>
-        <table className="table" style={{ padding: "0%" }}>
+        <table className="table" style={{ padding: "1px" }}>
           <thead>
             <tr style={{ textAlign: "center" }}>
               <th style={{ paddingRight: "0px", paddingLeft: "0px" }}>
@@ -3210,18 +3212,21 @@ function HuwiinHereg(props) {
   const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/document/" +
-        JSON.parse(
-          localStorage.getItem("personDetail") === undefined
-            ? "{}"
-            : localStorage.getItem("personDetail")
-        )?.emp_id
-      // + props.person_id
-    );
-    console.log(listItems, "Tangarag");
-    loadData(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/document/" +
+          JSON.parse(
+            localStorage.getItem("personDetail") === undefined
+              ? "{}"
+              : localStorage.getItem("personDetail")
+          )?.emp_id
+        // + props.person_id
+      );
+      console.log(listItems, "Tangarag");
+      loadData(listItems?.data);
+    }
+    fetchData();
   }, [props]);
 
   useEffect(() => {
@@ -3442,7 +3447,7 @@ function HuwiinHereg(props) {
             </button>
           </div>
         </div>
-        <table className="table" style={{ padding: "0%" }}>
+        <table className="table" style={{ padding: "1px" }}>
           <thead>
             <tr style={{ textAlign: "center" }}>
               <th style={{ paddingRight: "0px", paddingLeft: "0px" }}>

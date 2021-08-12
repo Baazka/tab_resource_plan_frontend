@@ -14,14 +14,93 @@ function UrChadvar(props) {
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
 
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/exam/" + props.person_id
-    );
-    if (listItems.data?.Exam !== undefined && listItems.data?.Exam.length > 0) {
-      if (listItems.data?.Exam.length === 1) {
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/exam/" + props.person_id
+      );
+      if (
+        listItems.data?.Exam !== undefined &&
+        listItems.data?.Exam.length > 0
+      ) {
+        if (listItems.data?.Exam.length === 1) {
+          loadData({
+            Exam: listItems.data?.Exam.concat([
+              {
+                PERSON_ID: props.person_id,
+                EXAM_TYPE_ID: 2,
+                EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
+                IS_EXAM: "",
+                OFFICE_ID: "1",
+                EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+                EXAM_POINT: "",
+                DECISION_NO: "A/12",
+                DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+                DECISION_DESC: "tailbar",
+                CREATED_BY: userDetils?.USER_ID,
+                CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+                ROWTYPE: "NEW",
+                IS_ACTIVE: "1",
+              },
+              {
+                PERSON_ID: props.person_id,
+                EXAM_TYPE_ID: 3,
+                EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
+                IS_EXAM: "",
+                OFFICE_ID: "1",
+                EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+                EXAM_POINT: "",
+                DECISION_NO: "A/12",
+                DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+                DECISION_DESC: "tailbar",
+                CREATED_BY: userDetils?.USER_ID,
+                CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+                ROWTYPE: "NEW",
+                IS_ACTIVE: "1",
+              },
+            ]),
+          });
+        } else if (listItems.data?.Exam.length === 3) {
+          loadData(listItems.data);
+        } else {
+          loadData({
+            Exam: listItems.data?.Exam.push({
+              PERSON_ID: props.person_id,
+              EXAM_TYPE_ID: 3,
+              EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
+              IS_EXAM: "",
+              OFFICE_ID: "1",
+              EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+              EXAM_POINT: "",
+              DECISION_NO: "",
+              DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+              DECISION_DESC: "",
+              CREATED_BY: userDetils?.USER_ID,
+              CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+              ROWTYPE: "NEW",
+              IS_ACTIVE: "1",
+            }),
+          });
+        }
+      } else {
         loadData({
           Exam: listItems.data?.Exam.concat([
+            {
+              PERSON_ID: props.person_id,
+              EXAM_TYPE_ID: 1,
+              EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
+              IS_EXAM: 1,
+              OFFICE_ID: "1",
+              EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+              EXAM_POINT: "0",
+              DECISION_NO: "",
+              DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+              DECISION_DESC: "",
+              CREATED_BY: userDetils?.USER_ID,
+              CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+              ROWTYPE: "NEW",
+              IS_ACTIVE: "1",
+            },
             {
               PERSON_ID: props.person_id,
               EXAM_TYPE_ID: 2,
@@ -29,10 +108,10 @@ function UrChadvar(props) {
               IS_EXAM: "",
               OFFICE_ID: "1",
               EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-              EXAM_POINT: "",
-              DECISION_NO: "A/12",
+              EXAM_POINT: "0",
+              DECISION_NO: "",
               DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-              DECISION_DESC: "tailbar",
+              DECISION_DESC: "",
               CREATED_BY: userDetils?.USER_ID,
               CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
               ROWTYPE: "NEW",
@@ -45,10 +124,10 @@ function UrChadvar(props) {
               IS_EXAM: "",
               OFFICE_ID: "1",
               EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-              EXAM_POINT: "",
-              DECISION_NO: "A/12",
+              EXAM_POINT: "0",
+              DECISION_NO: "",
               DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-              DECISION_DESC: "tailbar",
+              DECISION_DESC: "",
               CREATED_BY: userDetils?.USER_ID,
               CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
               ROWTYPE: "NEW",
@@ -56,82 +135,9 @@ function UrChadvar(props) {
             },
           ]),
         });
-      } else if (listItems.data?.Exam.length === 3) {
-        loadData(listItems.data);
-      } else {
-        loadData({
-          Exam: listItems.data?.Exam.push({
-            PERSON_ID: props.person_id,
-            EXAM_TYPE_ID: 3,
-            EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-            IS_EXAM: "",
-            OFFICE_ID: "1",
-            EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            EXAM_POINT: "",
-            DECISION_NO: "",
-            DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            DECISION_DESC: "",
-            CREATED_BY: userDetils?.USER_ID,
-            CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-            ROWTYPE: "NEW",
-            IS_ACTIVE: "1",
-          }),
-        });
       }
-    } else {
-      loadData({
-        Exam: listItems.data?.Exam.concat([
-          {
-            PERSON_ID: props.person_id,
-            EXAM_TYPE_ID: 1,
-            EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-            IS_EXAM: 1,
-            OFFICE_ID: "1",
-            EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            EXAM_POINT: "0",
-            DECISION_NO: "",
-            DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            DECISION_DESC: "",
-            CREATED_BY: userDetils?.USER_ID,
-            CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-            ROWTYPE: "NEW",
-            IS_ACTIVE: "1",
-          },
-          {
-            PERSON_ID: props.person_id,
-            EXAM_TYPE_ID: 2,
-            EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-            IS_EXAM: "",
-            OFFICE_ID: "1",
-            EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            EXAM_POINT: "0",
-            DECISION_NO: "",
-            DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            DECISION_DESC: "",
-            CREATED_BY: userDetils?.USER_ID,
-            CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-            ROWTYPE: "NEW",
-            IS_ACTIVE: "1",
-          },
-          {
-            PERSON_ID: props.person_id,
-            EXAM_TYPE_ID: 3,
-            EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-            IS_EXAM: "",
-            OFFICE_ID: "1",
-            EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            EXAM_POINT: "0",
-            DECISION_NO: "",
-            DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            DECISION_DESC: "",
-            CREATED_BY: userDetils?.USER_ID,
-            CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-            ROWTYPE: "NEW",
-            IS_ACTIVE: "1",
-          },
-        ]),
-      });
     }
+    fetchData();
   }, [props]);
 
   function saveToDB() {
@@ -689,12 +695,15 @@ function TangaragBurtgel(props) {
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/oath/" + props.person_id
-    );
-    console.log(listItems, "Tangarag");
-    loadData(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/oath/" + props.person_id
+      );
+      console.log(listItems, "Tangarag");
+      loadData(listItems?.data);
+    }
+    fetchData();
   }, [props]);
 
   function saveToDB() {
@@ -926,6 +935,9 @@ function TangaragBurtgel(props) {
                         height="30px"
                         onClick={() => addRow()}
                       />
+                      <input
+                        style={{ width: "40px", visibility: "hidden" }}
+                      ></input>
                     </td>
                   ) : null}
                 </tr>
@@ -1027,6 +1039,9 @@ function TangaragBurtgel(props) {
                           height="30px"
                           onClick={() => removeRow(index, value)}
                         />
+                        <input
+                          style={{ width: "40px", visibility: "hidden" }}
+                        ></input>
                       </td>
                     ) : null}
                   </tr>
@@ -1065,12 +1080,15 @@ function GadaadKhel(props) {
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/language/" + props.person_id
-    );
-    console.log(listItems, "Tangarag");
-    loadData(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/language/" + props.person_id
+      );
+      console.log(listItems, "Tangarag");
+      loadData(listItems?.data);
+    }
+    fetchData();
   }, [props]);
   function saveToDB() {
     props.loading(true);
@@ -1327,6 +1345,9 @@ function GadaadKhel(props) {
                         height="30px"
                         onClick={() => addRow()}
                       />
+                      <input
+                        style={{ width: "30px", visibility: "hidden" }}
+                      ></input>
                     </td>
                   ) : null}
                 </tr>
@@ -1482,6 +1503,9 @@ function GadaadKhel(props) {
                           height="30px"
                           onClick={() => removeRow(index, value)}
                         />
+                        <input
+                          style={{ width: "30px", visibility: "hidden" }}
+                        ></input>
                       </td>
                     ) : null}
                   </tr>

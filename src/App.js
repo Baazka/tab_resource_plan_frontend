@@ -23,6 +23,7 @@ import TushaalShiidver from "./pages/TushaalShiidver";
 import Tailan from "./pages/Tailan";
 import AnketAtailan from "./pages/AnketAtailan";
 import { HashRouter } from "react-router-dom";
+import AlbanTushaalBurtgel from "./components/AlbanTushaalBurtgel";
 const axios = require("axios");
 
 function App() {
@@ -64,6 +65,11 @@ function App() {
         <Route path="/web/AlbanTushaal/" component={AlbanTushaal} exact />
         <Route path="/web/TushaalShiidver/" component={TushaalShiidver} exact />
         <Route path="/web/Tailan/" component={Tailan} exact />
+        <Route
+          path="/web/AlbanTushaalBurtgel/:positionid"
+          component={AlbanTushaalBurtgel}
+          exact
+        />
         <Route
           path="/web/Tailan/AnketA/:turul"
           component={AnketAtailan}

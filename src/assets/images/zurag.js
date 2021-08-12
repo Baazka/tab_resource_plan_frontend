@@ -46,6 +46,24 @@ import BackButton from "./icons/backButton.png";
 import Tailan from "./icons/tailan.png";
 import TailanB from "./icons/tailanB.png";
 import M from "../images/icons/M.png";
+import Eye from "../images/icons/eye.png";
+
+import BNegB from "../images/icons/BNegB.png";
+import BNeg from "../images/icons/BNeg.png";
+import BKhoyorB from "../images/icons/BkhoyorB.png";
+import BKhoyor from "../images/icons/BkhoyorB.png";
+import BGuravB from "../images/icons/BGuravB.png";
+import BGurav from "../images/icons/BGurav.png";
+import BDuruvB from "../images/icons/BDuruvB.png";
+import BDuruv from "../images/icons/BDuruv.png";
+import BTavB from "../images/icons/BTavB.png";
+import BTav from "../images/icons/BTav.png";
+import BZurgaaB from "../images/icons/BZurgaaB.png";
+import BZurgaa from "../images/icons/BZurgaa.png";
+import BDolooB from "../images/icons/BDolooB.png";
+import BDoloo from "../images/icons/BDoloo.png";
+import BNaimB from "../images/icons/BNaimB.png";
+import BNaim from "../images/icons/BNaim.png";
 
 export {
   LeftArrow,
@@ -93,4 +111,21 @@ export {
   Tailan,
   TailanB,
   M,
+  BNegB,
+  BNeg,
+  BKhoyorB,
+  BKhoyor,
+  BGuravB,
+  BGurav,
+  BDuruvB,
+  BDuruv,
+  BTavB,
+  BTav,
+  BZurgaaB,
+  BZurgaa,
+  BDolooB,
+  BDoloo,
+  BNaimB,
+  BNaim,
+  Eye,
 };

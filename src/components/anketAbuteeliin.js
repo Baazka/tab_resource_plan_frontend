@@ -11,12 +11,15 @@ function Buteeliin(props) {
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/Literature/" + props.person_id
-    );
-    console.log(listItems, "Tangarag");
-    loadData(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/Literature/" + props.person_id
+      );
+      console.log(listItems, "Tangarag");
+      loadData(listItems?.data);
+    }
+    fetchData();
   }, [props]);
 
   useEffect(() => {

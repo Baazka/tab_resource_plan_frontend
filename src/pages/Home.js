@@ -138,7 +138,6 @@ function Home(props) {
     ) {
       console.log("state?.selectRows?.length", state.selectedRows);
       console.log("Selected Rows: ", state?.selectedRows[0]?.EMP_ID);
-
       localStorage.setItem(
         "personDetail",
         JSON.stringify({
@@ -518,10 +517,13 @@ function Home(props) {
 function EmployExcel(props) {
   const [data, loadData] = useState(null);
 
-  useEffect(async () => {
-    let listItems = await axios("http://hr.audit.mn/hr/api/v1/excelPerson/");
-    console.log(listItems, "tailan");
-    loadData(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios("http://hr.audit.mn/hr/api/v1/excelPerson/");
+      console.log(listItems, "tailan");
+      loadData(listItems?.data);
+    }
+    fetchData();
   }, [props]);
 
   let listItems;

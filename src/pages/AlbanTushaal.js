@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import Header from "../components/header";
-import AnketNeg from "../components/anketNeg";
 import Footer from "../components/footer";
-import SideBar from "../components/sidebar";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import dateFormat from "dateformat";
-
 import { Search, Filter, Add, AddBlue, Excel } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
-
+import { useAlert } from "react-alert";
 var rowNumber = 1;
 const axios = require("axios");
+const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
 createTheme("solarized", {
   text: {
@@ -68,6 +65,8 @@ const AlbanTushaal = (props) => {
   const [searchType, setSearchType] = useState("DEPARTMENT_NAME");
   const [found, setFound] = useState();
   const [search, setSearch] = useState("");
+  const [data, setData] = useState();
+  const alert = useAlert();
 
   useEffect(() => {
     async function test() {
@@ -86,14 +85,48 @@ const AlbanTushaal = (props) => {
   const handleChange = (state) => {
     // You can use setState or dispatch with something like Redux so we can use the retrieved data
     console.log("Selected Rows: ", state.selectedRows);
+    // You can use setState or dispatch with something like Redux so we can use the retrieved data
+    if (
+      state?.selectedRows !== undefined &&
+      state?.selectedRows?.length !== 0
+    ) {
+      setData(state?.selectedRows[0]);
+    }
   };
-  async function anketANew() {
-    localStorage.removeItem("person_id");
-    localStorage.setItem(
-      "personDetail",
-      JSON.stringify({ person_id: "0", type: "newPerson" })
-    );
-    history.push("/web/anketA/1");
+  async function AlbanTushaal() {
+    console.log("data?.POSITION_ID", data?.POSITION_ID);
+    history.push("/web/AlbanTushaalBurtgel/" + data?.POSITION_ID.toString());
+  }
+  function deleteAlbanTushaal() {
+    DataRequest({
+      url: "http://hr.audit.mn/hr/api/v1/positionDelete/",
+      method: "POST",
+      data: {
+        POSITION_ID: data?.POSITION_ID,
+        REASON_ID: 1,
+        REASON_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+        REASON_DESC: "",
+        UPDATED_BY: userDetils?.USER_ID,
+        UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+      },
+    })
+      .then(function (response) {
+        console.log("UpdateResponse", response);
+
+        if (response?.data?.message === "success") {
+          setJagsaalt(
+            jagsaalt?.filter(
+              (element, index) => element.POSITION_ID !== data?.POSITION_ID
+            )
+          );
+          alert.show("амжилттай устлаа");
+        }
+      })
+      .catch(function (error) {
+        //alert(error.response.data.error.message);
+        console.log(error.response);
+        alert.show("aldaa");
+      });
   }
   function makeSearch(value) {
     setSearch(value);
@@ -288,13 +321,12 @@ const AlbanTushaal = (props) => {
                 color: "#000",
                 border: "0px",
               }}
-              // onClick={() => {
-              //   anketANew();
-              // }}
+              onClick={() => AlbanTushaal()}
             >
               {" "}
               <span style={{ display: "flex", paddingRight: "22px" }}>
-                <img src={AddBlue} width="20px" height="20px "></img>Нэмэх
+                <img src={AddBlue} width="20px" height="20px "></img>
+                Нэмэх
               </span>
             </button>
 
@@ -312,6 +344,34 @@ const AlbanTushaal = (props) => {
               <span style={{ display: "flex", paddingRight: "22px" }}>
                 <img src={Excel} width="20px" height="20px "></img>Excel
               </span>
+            </button>
+            <button
+              class="text"
+              style={{
+                marginLeft: "1%",
+                borderRadius: "5px",
+                backgroundColor: "#418ee6",
+                color: "#fff",
+                border: "double",
+                padding: "0 10px",
+              }}
+              onClick={() => AlbanTushaal()}
+            >
+              Засах
+            </button>
+            <button
+              class="text"
+              style={{
+                marginLeft: "1%",
+                borderRadius: "5px",
+
+                color: "red",
+                border: "1px solid",
+                padding: "0 10px",
+              }}
+              onClick={() => deleteAlbanTushaal()}
+            >
+              Устгах
             </button>
             <EmployExcel />
           </div>
@@ -340,10 +400,13 @@ const AlbanTushaal = (props) => {
 function EmployExcel(props) {
   const [data, loadData] = useState(null);
 
-  useEffect(async () => {
-    let listItems = await axios("http://hr.audit.mn/hr/api/v1/excelPerson/");
-    console.log(listItems, "tailan");
-    loadData(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios("http://hr.audit.mn/hr/api/v1/excelPerson/");
+      console.log(listItems, "tailan");
+      loadData(listItems?.data);
+    }
+    fetchData();
   }, [props]);
 
   let listItems;

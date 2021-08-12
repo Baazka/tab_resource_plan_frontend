@@ -4,6 +4,7 @@
 }
 #header .pro-sidebar {
   height: 100vh;
+  height: "100%";
 }
 
 #header .closemenu {
@@ -25,10 +26,10 @@
   -ms-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+
   /* box-shadow: 0.5px 0.866px 2px 0px rgba(0, 0, 0, 0.15); */
 }
 .pro-sidebar > .pro-sidebar-inner > .pro-sidebar-layout .pro-sidebar-header {
-  border-bottom: 0px;
   padding-bottom: 150px;
 }
 #header .pro-sidebar-inner .pro-sidebar-layout {
@@ -37,7 +38,6 @@
 
 #header .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item {
   color: rgb(255, 255, 255);
-  margin: 10px 0px;
   font-weight: bold;
 }
 .dropdownPlace {

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-
 import "react-pro-sidebar/dist/css/styles.css";
 import "../css/sidebarHeader.css";
+
 import { useHistory } from "react-router-dom";
-import { ReactComponent as YourSvg } from "../assets/images/icons/USER.svg";
 import {
   ProSidebar,
   Menu,

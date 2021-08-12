@@ -44,7 +44,6 @@ function Login(props) {
   }
 
   function nevtrekh() {
-    console.log("ner nuuts ug", { username: ner, password: nuutsUg });
     if (ner !== undefined && nuutsUg !== undefined) {
       axios.defaults.headers["Content-Type"] =
         "application/x-www-form-urlencoded;charset=UTF-8";
@@ -62,7 +61,6 @@ function Login(props) {
         },
       })
         .then(function (response) {
-          console.log(response, "loginFirst");
           if (response?.data?.USER_ID !== 0) {
             if (sanuulakh) {
               localStorage.removeItem("rememberedUser");
@@ -82,7 +80,6 @@ function Login(props) {
               data: {},
             })
               .then(function (response) {
-                console.log("login", response);
                 props.userNem({
                   userID: response?.data?.USER_ID,
                   userDetail: response?.data,
@@ -96,14 +93,12 @@ function Login(props) {
               })
               .catch(function (error) {
                 //alert(error.response.data.error.message);
-                console.log(error.response);
               });
           } else alert.show("Хэрэглэгчийн нэвтрэх нэр, нууц үг буруу байна!!!");
           //history.push('/sample')
         })
         .catch(function (error) {
           //alert(error.response.data.error.message);
-          console.log(error.response);
         });
     }
   }

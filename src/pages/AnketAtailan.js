@@ -70,25 +70,31 @@ function Emergency(props) {
   const alert = useAlert();
   const [register, setRegister] = useState(true);
 
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/reportEmergency/"
-    );
-
-    if (listItems.data !== undefined && listItems.data.length === 0)
-      alert.show("өгөгдөл байхгүй байна");
-    else loadData(listItems?.data);
-  }, [props]);
-  useEffect(async () => {
-    if (department.check !== true) {
+  useEffect(() => {
+    async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportEmergency/" +
-          department.DEPARTMENT_ID
+        "http://hr.audit.mn/hr/api/v1/reportEmergency/"
       );
+
       if (listItems.data !== undefined && listItems.data.length === 0)
         alert.show("өгөгдөл байхгүй байна");
       else loadData(listItems?.data);
     }
+    fetchData();
+  }, [props]);
+  useEffect(() => {
+    async function fetchData() {
+      if (department.check !== true) {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportEmergency/" +
+            department.DEPARTMENT_ID
+        );
+        if (listItems.data !== undefined && listItems.data.length === 0)
+          alert.show("өгөгдөл байхгүй байна");
+        else loadData(listItems?.data);
+      }
+    }
+    fetchData();
   }, [department]);
 
   let listItems;
@@ -225,24 +231,32 @@ function GerBvl(props) {
   const alert = useAlert();
   const [register, setRegister] = useState(true);
 
-  useEffect(async () => {
-    let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportFamily/1/");
-    console.log("amjilttai", listItems.data);
-    if (listItems.data !== undefined && listItems.data.length === 0)
-      alert.show("өгөгдөл байхгүй байна");
-    else loadData(listItems?.data);
-  }, [props]);
-
-  useEffect(async () => {
-    if (department.check !== true) {
+  useEffect(() => {
+    async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportFamily/1/" +
-          department.DEPARTMENT_ID
+        "http://hr.audit.mn/hr/api/v1/reportFamily/1/"
       );
+      console.log("amjilttai", listItems.data);
       if (listItems.data !== undefined && listItems.data.length === 0)
         alert.show("өгөгдөл байхгүй байна");
       else loadData(listItems?.data);
     }
+    fetchData();
+  }, [props]);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (department.check !== true) {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportFamily/1/" +
+            department.DEPARTMENT_ID
+        );
+        if (listItems.data !== undefined && listItems.data.length === 0)
+          alert.show("өгөгдөл байхгүй байна");
+        else loadData(listItems?.data);
+      }
+    }
+    fetchData();
   }, [department]);
 
   let listItems;
@@ -443,21 +457,29 @@ function Sadan(props) {
   const alert = useAlert();
   const [register, setRegister] = useState(true);
 
-  useEffect(async () => {
-    let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportFamily/2/");
-    console.log("amjilttai", listItems.data);
-    loadData(listItems?.data);
-  }, [props]);
-  useEffect(async () => {
-    if (department.check !== true) {
+  useEffect(() => {
+    async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportFamily/2/" +
-          department.DEPARTMENT_ID
+        "http://hr.audit.mn/hr/api/v1/reportFamily/2/"
       );
-      if (listItems.data !== undefined && listItems.data.length === 0)
-        alert.show("өгөгдөл байхгүй байна");
-      else loadData(listItems?.data);
+      console.log("amjilttai", listItems.data);
+      loadData(listItems?.data);
     }
+    fetchData();
+  }, [props]);
+  useEffect(() => {
+    async function fetchData() {
+      if (department.check !== true) {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportFamily/2/" +
+            department.DEPARTMENT_ID
+        );
+        if (listItems.data !== undefined && listItems.data.length === 0)
+          alert.show("өгөгдөл байхгүй байна");
+        else loadData(listItems?.data);
+      }
+    }
+    fetchData();
   }, [department]);
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -638,20 +660,26 @@ function ShalgaltiinTalaarkhMedeelel(props) {
   });
   const alert = useAlert();
 
-  useEffect(async () => {
-    let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportExam/");
-    console.log("amjilttai", listItems.data);
-    loadData(listItems?.data);
-  }, [props]);
-  useEffect(async () => {
-    if (department.check !== true) {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportExam/" + department.DEPARTMENT_ID
-      );
-      if (listItems.data !== undefined && listItems.data.length === 0)
-        alert.show("өгөгдөл байхгүй байна");
-      else loadData(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportExam/");
+      console.log("amjilttai", listItems.data);
+      loadData(listItems?.data);
     }
+    fetchData();
+  }, [props]);
+  useEffect(() => {
+    async function fetchData() {
+      if (department.check !== true) {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportExam/" + department.DEPARTMENT_ID
+        );
+        if (listItems.data !== undefined && listItems.data.length === 0)
+          alert.show("өгөгдөл байхгүй байна");
+        else loadData(listItems?.data);
+      }
+    }
+    fetchData();
   }, [department]);
 
   let listItems;
@@ -795,20 +823,26 @@ function TangaragiinBvrtgel(props) {
   });
   const alert = useAlert();
 
-  useEffect(async () => {
-    let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportOath/");
-    console.log("amjilttai", listItems.data);
-    loadData(listItems?.data);
-  }, [props]);
-  useEffect(async () => {
-    if (department.check !== true) {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportOath/" + department.DEPARTMENT_ID
-      );
-      if (listItems.data !== undefined && listItems.data.length === 0)
-        alert.show("өгөгдөл байхгүй байна");
-      else loadData(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportOath/");
+      console.log("amjilttai", listItems.data);
+      loadData(listItems?.data);
     }
+    fetchData();
+  }, [props]);
+  useEffect(() => {
+    async function fetchData() {
+      if (department.check !== true) {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportOath/" + department.DEPARTMENT_ID
+        );
+        if (listItems.data !== undefined && listItems.data.length === 0)
+          alert.show("өгөгдөл байхгүй байна");
+        else loadData(listItems?.data);
+      }
+    }
+    fetchData();
   }, [department]);
 
   let listItems;
@@ -941,21 +975,29 @@ function GadaadHelniiMedleg(props) {
   });
   const alert = useAlert();
 
-  useEffect(async () => {
-    let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportLanguage/");
-    console.log("amjilttai", listItems.data);
-    loadData(listItems?.data);
-  }, [props]);
-  useEffect(async () => {
-    if (department.check !== true) {
+  useEffect(() => {
+    async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportLanguage/" +
-          department.DEPARTMENT_ID
+        "http://hr.audit.mn/hr/api/v1/reportLanguage/"
       );
-      if (listItems.data !== undefined && listItems.data.length === 0)
-        alert.show("өгөгдөл байхгүй байна");
-      else loadData(listItems?.data);
+      console.log("amjilttai", listItems.data);
+      loadData(listItems?.data);
     }
+    fetchData();
+  }, [props]);
+  useEffect(() => {
+    async function fetchData() {
+      if (department.check !== true) {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportLanguage/" +
+            department.DEPARTMENT_ID
+        );
+        if (listItems.data !== undefined && listItems.data.length === 0)
+          alert.show("өгөгдөл байхгүй байна");
+        else loadData(listItems?.data);
+      }
+    }
+    fetchData();
   }, [department]);
 
   let listItems;
@@ -1089,23 +1131,29 @@ function Bolowsrol(props) {
   });
   const alert = useAlert();
 
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/reportEducation/1/"
-    );
-    console.log("amjilttai", listItems.data);
-    loadData(listItems?.data);
-  }, [props]);
-  useEffect(async () => {
-    if (department.check !== true) {
+  useEffect(() => {
+    async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportEducation/1/" +
-          department.DEPARTMENT_ID
+        "http://hr.audit.mn/hr/api/v1/reportEducation/1/"
       );
-      if (listItems.data !== undefined && listItems.data.length === 0)
-        alert.show("өгөгдөл байхгүй байна");
-      else loadData(listItems?.data);
+      console.log("amjilttai", listItems.data);
+      loadData(listItems?.data);
     }
+    fetchData();
+  }, [props]);
+  useEffect(() => {
+    async function fetchData() {
+      if (department.check !== true) {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportEducation/1/" +
+            department.DEPARTMENT_ID
+        );
+        if (listItems.data !== undefined && listItems.data.length === 0)
+          alert.show("өгөгдөл байхгүй байна");
+        else loadData(listItems?.data);
+      }
+    }
+    fetchData();
   }, [department]);
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -1249,23 +1297,29 @@ function BolowsrolDoktor(props) {
   });
   const alert = useAlert();
 
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/reportEducation/2/"
-    );
-    console.log("amjilttai", listItems.data);
-    loadData(listItems?.data);
-  }, [props]);
-  useEffect(async () => {
-    if (department.check !== true) {
+  useEffect(() => {
+    async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportEducation/2/" +
-          department.DEPARTMENT_ID
+        "http://hr.audit.mn/hr/api/v1/reportEducation/2/"
       );
-      if (listItems.data !== undefined && listItems.data.length === 0)
-        alert.show("өгөгдөл байхгүй байна");
-      else loadData(listItems?.data);
+      console.log("amjilttai", listItems.data);
+      loadData(listItems?.data);
     }
+    fetchData();
+  }, [props]);
+  useEffect(() => {
+    async function fetchData() {
+      if (department.check !== true) {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportEducation/2/" +
+            department.DEPARTMENT_ID
+        );
+        if (listItems.data !== undefined && listItems.data.length === 0)
+          alert.show("өгөгдөл байхгүй байна");
+        else loadData(listItems?.data);
+      }
+    }
+    fetchData();
   }, [department]);
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -1404,23 +1458,30 @@ function MergeshliinBeltgel(props) {
   });
   const alert = useAlert();
 
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/reportProfession/"
-    );
-    console.log("amjilttai", listItems.data);
-    loadData(listItems?.data);
-  }, [props]);
-  useEffect(async () => {
-    if (department.check !== true) {
+  useEffect(() => {
+    async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportProfession/" +
-          department.DEPARTMENT_ID
+        "http://hr.audit.mn/hr/api/v1/reportProfession/"
       );
-      if (listItems.data !== undefined && listItems.data.length === 0)
-        alert.show("өгөгдөл байхгүй байна");
-      else loadData(listItems?.data);
+      console.log("amjilttai", listItems.data);
+      loadData(listItems?.data);
     }
+    fetchData();
+  }, [props]);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (department.check !== true) {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportProfession/" +
+            department.DEPARTMENT_ID
+        );
+        if (listItems.data !== undefined && listItems.data.length === 0)
+          alert.show("өгөгдөл байхгүй байна");
+        else loadData(listItems?.data);
+      }
+    }
+    fetchData();
   }, [department]);
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -1569,20 +1630,26 @@ function ErdmiinTsol(props) {
     check: true,
   });
   const alert = useAlert();
-  useEffect(async () => {
-    let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportFame/");
-    console.log("amjilttai", listItems.data);
-    loadData(listItems?.data);
-  }, [props]);
-  useEffect(async () => {
-    if (department.check !== true) {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportFame/" + department.DEPARTMENT_ID
-      );
-      if (listItems.data !== undefined && listItems.data.length === 0)
-        alert.show("өгөгдөл байхгүй байна");
-      else loadData(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportFame/");
+      console.log("amjilttai", listItems.data);
+      loadData(listItems?.data);
     }
+    fetchData();
+  }, [props]);
+  useEffect(() => {
+    async function fetchData() {
+      if (department.check !== true) {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportFame/" + department.DEPARTMENT_ID
+        );
+        if (listItems.data !== undefined && listItems.data.length === 0)
+          alert.show("өгөгдөл байхгүй байна");
+        else loadData(listItems?.data);
+      }
+    }
+    fetchData();
   }, [department]);
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -1703,20 +1770,26 @@ function TsergiinAlba(props) {
     check: true,
   });
   const alert = useAlert();
-  useEffect(async () => {
-    let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportForce/");
-    console.log("amjilttai", listItems.data);
-    loadData(listItems?.data);
-  }, [props]);
-  useEffect(async () => {
-    if (department.check !== true) {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportForce/" + department.DEPARTMENT_ID
-      );
-      if (listItems.data !== undefined && listItems.data.length === 0)
-        alert.show("өгөгдөл байхгүй байна");
-      else loadData(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportForce/");
+      console.log("amjilttai", listItems.data);
+      loadData(listItems?.data);
     }
+    fetchData();
+  }, [props]);
+  useEffect(() => {
+    async function fetchData() {
+      if (department.check !== true) {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportForce/" + department.DEPARTMENT_ID
+        );
+        if (listItems.data !== undefined && listItems.data.length === 0)
+          alert.show("өгөгдөл байхгүй байна");
+        else loadData(listItems?.data);
+      }
+    }
+    fetchData();
   }, [department]);
   let listItems;
 
@@ -1836,20 +1909,26 @@ function ShagnaliinTalaarhMedeelel(props) {
     check: true,
   });
   const alert = useAlert();
-  useEffect(async () => {
-    let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportAward/");
-    console.log("amjilttai", listItems.data);
-    loadData(listItems?.data);
-  }, [props]);
-  useEffect(async () => {
-    if (department.check !== true) {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportAward/" + department.DEPARTMENT_ID
-      );
-      if (listItems.data !== undefined && listItems.data.length === 0)
-        alert.show("өгөгдөл байхгүй байна");
-      else loadData(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportAward/");
+      console.log("amjilttai", listItems.data);
+      loadData(listItems?.data);
     }
+    fetchData();
+  }, [props]);
+  useEffect(() => {
+    async function fetchData() {
+      if (department.check !== true) {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportAward/" + department.DEPARTMENT_ID
+        );
+        if (listItems.data !== undefined && listItems.data.length === 0)
+          alert.show("өгөгдөл байхгүй байна");
+        else loadData(listItems?.data);
+      }
+    }
+    fetchData();
   }, [department]);
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -1982,23 +2061,29 @@ function TurshlagiinTalaarhMedeelel(props) {
     check: true,
   });
   const alert = useAlert();
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/reportExperience/"
-    );
-    console.log("amjilttai", listItems.data);
-    loadData(listItems?.data);
-  }, [props]);
-  useEffect(async () => {
-    if (department.check !== true) {
+  useEffect(() => {
+    async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportExperience/" +
-          department.DEPARTMENT_ID
+        "http://hr.audit.mn/hr/api/v1/reportExperience/"
       );
-      if (listItems.data !== undefined && listItems.data.length === 0)
-        alert.show("өгөгдөл байхгүй байна");
-      else loadData(listItems?.data);
+      console.log("amjilttai", listItems.data);
+      loadData(listItems?.data);
     }
+    fetchData();
+  }, [props]);
+  useEffect(() => {
+    async function fetchData() {
+      if (department.check !== true) {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportExperience/" +
+            department.DEPARTMENT_ID
+        );
+        if (listItems.data !== undefined && listItems.data.length === 0)
+          alert.show("өгөгдөл байхгүй байна");
+        else loadData(listItems?.data);
+      }
+    }
+    fetchData();
   }, [department]);
 
   let listItems;
@@ -2147,23 +2232,29 @@ function BvteeliinJagsaalt(props) {
   });
   const alert = useAlert();
 
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/reportLiterature/"
-    );
-    console.log("amjilttai", listItems.data);
-    loadData(listItems?.data);
-  }, [props]);
-  useEffect(async () => {
-    if (department.check !== true) {
+  useEffect(() => {
+    async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportLiterature/" +
-          department.DEPARTMENT_ID
+        "http://hr.audit.mn/hr/api/v1/reportLiterature/"
       );
-      if (listItems.data !== undefined && listItems.data.length === 0)
-        alert.show("өгөгдөл байхгүй байна");
-      else loadData(listItems?.data);
+      console.log("amjilttai", listItems.data);
+      loadData(listItems?.data);
     }
+    fetchData();
+  }, [props]);
+  useEffect(() => {
+    async function fetchData() {
+      if (department.check !== true) {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportLiterature/" +
+            department.DEPARTMENT_ID
+        );
+        if (listItems.data !== undefined && listItems.data.length === 0)
+          alert.show("өгөгдөл байхгүй байна");
+        else loadData(listItems?.data);
+      }
+    }
+    fetchData();
   }, [department]);
   let listItems;
   if (data !== undefined && data.length > 0) {

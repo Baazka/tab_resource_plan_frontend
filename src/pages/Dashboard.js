@@ -20,8 +20,7 @@ const Dashboard = (props) => {
       <div
         style={{
           backgroundColor: "white",
-
-          overflow: "hidden",
+          overflow: "scroll",
         }}
       >
         <Iframe

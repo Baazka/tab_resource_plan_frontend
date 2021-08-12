@@ -115,55 +115,62 @@ function AnketNeg(props) {
     return returnValue;
   }
 
-  useEffect(async () => {
-    if (localStorage.getItem("personDetail")?.includes("person_id")) {
-      if (JSON.parse(localStorage.getItem("personDetail")).person_id === "0") {
-        loadData({
-          PERSON_REGISTER_NO: "",
-          PERSON_LASTNAME: "",
-          PERSON_FIRSTNAME: "",
-          PERSON_BORNDATE: dateFormat(new Date(), "yyyy-mm-dd"),
-          PERSON_GENDER: 1,
-          PERSON_PHONE: "",
-          PERSON_NATIONAL_ID: 1,
-          PERSON_EMAIL: "",
-          NATIONAL_ID: 1,
-          DYNASTY_ID: 1,
-          BIRTH_OFFICE_ID: 1,
-          BIRTH_SUBOFFICE_ID: 1,
-          SURNAME: "",
-          BIRTH_PLACE: "",
-          IS_MARRIED: 0,
-          IS_ACTIVE: 1,
-          CREATED_BY: userDetils?.USER_ID,
-          CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-          PERSON_ID: 0,
-        });
-        setLoading(false);
-      } else {
+  useEffect(() => {
+    async function fetchData() {
+      if (localStorage.getItem("personDetail")?.includes("person_id")) {
         if (
-          JSON.parse(localStorage.getItem("personDetail")).type === "employ"
+          JSON.parse(localStorage.getItem("personDetail")).person_id === "0"
         ) {
-          let listItems = await axios(
-            "http://hr.audit.mn/hr/api/v1/person/0/" +
-              JSON.parse(localStorage.getItem("personDetail")).person_id
-          );
-          console.log("amjilttai", listItems.data);
-          loadData(listItems?.data);
+          loadData({
+            PERSON_REGISTER_NO: "",
+            PERSON_LASTNAME: "",
+            PERSON_FIRSTNAME: "",
+            PERSON_BORNDATE: dateFormat(new Date(), "yyyy-mm-dd"),
+            PERSON_GENDER: 1,
+            PERSON_PHONE: "",
+            PERSON_NATIONAL_ID: 1,
+            PERSON_EMAIL: "",
+            NATIONAL_ID: 1,
+            DYNASTY_ID: 1,
+            BIRTH_OFFICE_ID: 1,
+            BIRTH_SUBOFFICE_ID: 1,
+            SURNAME: "",
+            BIRTH_PLACE: "",
+            IS_MARRIED: 0,
+            IS_ACTIVE: 1,
+            CREATED_BY: userDetils?.USER_ID,
+            CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            PERSON_ID: 0,
+          });
           setLoading(false);
-        } else if (
-          JSON.parse(localStorage.getItem("personDetail")).type === "newPerson"
-        ) {
-          let listItems = await axios(
-            "http://hr.audit.mn/hr/api/v1/person/1/" +
-              JSON.parse(localStorage.getItem("personDetail")).person_id
-          );
-          console.log("amjilttai", listItems.data);
-          loadData(listItems?.data);
-          setLoading(false);
+        } else {
+          if (
+            JSON.parse(localStorage.getItem("personDetail")).type === "employ"
+          ) {
+            let listItems = await axios(
+              "http://hr.audit.mn/hr/api/v1/person/0/" +
+                JSON.parse(localStorage.getItem("personDetail")).person_id
+            );
+            console.log("amjilttai", listItems.data);
+            loadData(listItems?.data);
+            setLoading(false);
+          } else if (
+            JSON.parse(localStorage.getItem("personDetail")).type ===
+            "newPerson"
+          ) {
+            let listItems = await axios(
+              "http://hr.audit.mn/hr/api/v1/person/1/" +
+                JSON.parse(localStorage.getItem("personDetail")).person_id
+            );
+            console.log("amjilttai", listItems.data);
+            loadData(listItems?.data);
+            setLoading(false);
+          }
         }
       }
     }
+
+    fetchData();
   }, [props]);
 
   function khadgalakhYo() {
@@ -668,11 +675,11 @@ function Yrunkhii(props) {
         zIndex: "-1",
       }}
     >
-      <div className="columns ">
-        <div className="column is-11">
+      <div className="columns">
+        <div className="column is-11 is-narrow-tablet">
           <span className="headerTextBold">Ерөнхий мэдээлэл</span>
         </div>
-        <div className="column is-1">
+        <div className="column is-1 is-narrow-tablet">
           <button
             className="buttonTsenkher"
             onClick={() => props.setEdit(!props.edit)}
@@ -682,11 +689,11 @@ function Yrunkhii(props) {
         </div>
       </div>
       <div className="columns" style={{ marginBottom: "0px" }}>
-        <div className="column is-3 has-text-right ">
+        <div className="column is-3 has-text-right is-narrow-tablet">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Эцэг эхийн нэр</span>
         </div>
-        <div className="column is-3">
+        <div className="column is-3 is-narrow-tablet">
           <input
             placeholder="утгаа оруулна уу"
             disabled={props.edit}
@@ -701,11 +708,11 @@ function Yrunkhii(props) {
             }
           />
         </div>
-        <div className="column is-3 has-text-right ">
+        <div className="column is-3 has-text-right is-narrow-tablet">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Хүйс</span>
         </div>
-        <div className="column is-3">
+        <div className="column is-3 is-narrow-tablet">
           <select
             disabled={props.edit}
             className="anketInput"
@@ -723,11 +730,11 @@ function Yrunkhii(props) {
         </div>
       </div>
       <div className="columns" style={{ marginBottom: "0px" }}>
-        <div className="column is-3  has-text-right">
+        <div className="column is-3  has-text-right is-narrow-tablet">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Өөрийн нэр</span>
         </div>
-        <div className="column is-3">
+        <div className="column is-3 is-narrow-tablet">
           <input
             placeholder="утгаа оруулна уу"
             disabled={props.edit}
@@ -741,11 +748,11 @@ function Yrunkhii(props) {
             }
           />
         </div>
-        <div className="column is-3 has-text-right">
+        <div className="column is-3 has-text-right is-narrow-tablet">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Төрсөн он,сар,өдөр</span>
         </div>
-        <div className="column is-3">
+        <div className="column is-3 is-narrow-tablet">
           <input
             type="date"
             disabled={props.edit}
@@ -763,11 +770,11 @@ function Yrunkhii(props) {
         </div>
       </div>
       <div className="columns" style={{ marginBottom: "0px" }}>
-        <div className="column is-3 has-text-right">
+        <div className="column is-3 has-text-right is-narrow-tablet">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Регистерийн дугаар</span>
         </div>
-        <div className="column is-3">
+        <div className="column is-3 is-narrow-tablet">
           <input
             placeholder="утгаа оруулна уу"
             disabled={props.edit}
@@ -785,7 +792,7 @@ function Yrunkhii(props) {
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Төрсөн аймаг,хот</span>
         </div>
-        <div className="column is-3">
+        <div className="column is-3 is-narrow-tablet">
           <Office
             personChild={props.data}
             setPersonChild={props.loadData}
@@ -795,7 +802,7 @@ function Yrunkhii(props) {
         </div>
       </div>
       <div className="columns " style={{ marginBottom: "0px" }}>
-        <div className="column is-3 has-text-right">
+        <div className="column is-3 has-text-right is-narrow-tablet">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Иргэншил</span>
         </div>
@@ -806,11 +813,11 @@ function Yrunkhii(props) {
             edit={props.edit}
           />
         </div>
-        <div className="column is-3 has-text-right">
+        <div className="column is-3 has-text-right is-narrow-tablet">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Төрсөн сум,дүүрэг</span>
         </div>
-        <div className="column is-3">
+        <div className="column is-3 is-narrow-tablet">
           <Suboffice
             personChild={props.data}
             setPersonChild={props.loadData}
@@ -820,22 +827,22 @@ function Yrunkhii(props) {
         </div>
       </div>
       <div className="columns" style={{ marginBottom: "0px" }}>
-        <div className="column is-3 has-text-right">
+        <div className="column is-3 has-text-right is-narrow-tablet">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Ургийн овог</span>
         </div>
-        <div className="column is-3">
+        <div className="column is-3 is-narrow-tablet">
           <Subnational
             personChild={props.data}
             setPersonChild={props.loadData}
             edit={props.edit}
           />
         </div>
-        <div className="column is-3 has-text-right">
+        <div className="column is-3 has-text-right is-narrow-tablet">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Төрсөн газар</span>
         </div>
-        <div className="column is-3">
+        <div className="column is-3 is-narrow-tablet">
           <input
             disabled={props.edit}
             placeholder="утгаа оруулна уу"
@@ -851,22 +858,22 @@ function Yrunkhii(props) {
         </div>
       </div>
       <div className="columns " style={{ marginBottom: "0px" }}>
-        <div className="column is-3 has-text-right">
+        <div className="column is-3 has-text-right is-narrow-tablet">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Үндэс угсаа</span>
         </div>
-        <div className="column is-3">
+        <div className="column is-3 is-narrow-tablet">
           <Dynasty
             personChild={props.data}
             setPersonChild={props.loadData}
             edit={props.edit}
           />
         </div>
-        <div className="column is-3 has-text-right">
+        <div className="column is-3 has-text-right is-narrow-tablet">
           <span style={{ color: "red" }}>*</span>
           <span className="textSaaral">Гэрлэсэн эсэх</span>
         </div>
-        <div className="column is-3">
+        <div className="column is-3 is-narrow-tablet">
           <select
             disabled={props.edit}
             className="anketInput"
@@ -887,10 +894,10 @@ function Yrunkhii(props) {
       </div>
 
       <div className="columns">
-        <div className="column is-11"></div>
+        <div className="column is-11 is-narrow-tablet"></div>
 
         {!props.edit ? (
-          <div className="column is-1 ">
+          <div className="column is-1 is-narrow-tablet">
             {/* <button
               className="buttonTsenkher"
               style={{ marginRight: "0.4rem" }}
@@ -912,26 +919,31 @@ function Kayag(props) {
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
 
-  useEffect(async () => {
-    if (localStorage.getItem("personDetail")?.includes("person_id")) {
-      if (JSON.parse(localStorage.getItem("personDetail")).type === "employ") {
-        let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/person/0/" +
-            JSON.parse(localStorage.getItem("personDetail")).person_id
-        );
-        console.log("amjilttai", listItems.data);
-        setPerson(listItems?.data);
-      } else if (
-        JSON.parse(localStorage.getItem("personDetail")).type === "newPerson"
-      ) {
-        let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/person/1/" +
-            JSON.parse(localStorage.getItem("personDetail")).person_id
-        );
-        console.log("amjilttai", listItems.data);
-        setPerson(listItems?.data);
+  useEffect(() => {
+    async function fetchData() {
+      if (localStorage.getItem("personDetail")?.includes("person_id")) {
+        if (
+          JSON.parse(localStorage.getItem("personDetail")).type === "employ"
+        ) {
+          let listItems = await axios(
+            "http://hr.audit.mn/hr/api/v1/person/0/" +
+              JSON.parse(localStorage.getItem("personDetail")).person_id
+          );
+          console.log("amjilttai", listItems.data);
+          setPerson(listItems?.data);
+        } else if (
+          JSON.parse(localStorage.getItem("personDetail")).type === "newPerson"
+        ) {
+          let listItems = await axios(
+            "http://hr.audit.mn/hr/api/v1/person/1/" +
+              JSON.parse(localStorage.getItem("personDetail")).person_id
+          );
+          console.log("amjilttai", listItems.data);
+          setPerson(listItems?.data);
+        }
       }
     }
+    fetchData();
   }, [props]);
   function setOfficeID(value) {
     setPerson({
@@ -1221,12 +1233,15 @@ function HolbooBarikhHun(props) {
 
   const alert = useAlert();
 
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/emergency/" + props.person_id
-    );
-    console.log("emergency", listItems?.data?.Emergency);
-    setEmergency(listItems?.data?.Emergency);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/emergency/" + props.person_id
+      );
+      console.log("emergency", listItems?.data?.Emergency);
+      setEmergency(listItems?.data?.Emergency);
+    }
+    fetchData();
   }, [props]);
 
   useEffect(() => {
@@ -1455,6 +1470,9 @@ function HolbooBarikhHun(props) {
                         height="30px"
                         onClick={() => addRowKholbooBarikh()}
                       />
+                      <input
+                        style={{ width: "40px", visibility: "hidden" }}
+                      ></input>
                     </td>
                   ) : null}
                 </tr>
@@ -1541,6 +1559,9 @@ function HolbooBarikhHun(props) {
                           height="30px"
                           onClick={() => removeEmergency(index, value)}
                         />
+                        <input
+                          style={{ width: "30px", visibility: "hidden" }}
+                        ></input>
                       </td>
                     ) : null}
                   </tr>
@@ -1583,12 +1604,15 @@ function GerBul(props) {
   const [family, setFamily] = useState([]);
   const [family2, setFamily2] = useState([]);
 
-  useEffect(async () => {
-    let listItems = await axios(
-      "http://hr.audit.mn/hr/api/v1/family/" + props.person_id
-    );
-    console.log(listItems, "family");
-    loadData(listItems?.data.Family);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/family/" + props.person_id
+      );
+      console.log(listItems, "family");
+      loadData(listItems?.data.Family);
+    }
+    fetchData();
   }, [props]);
 
   function requiredField(value) {
@@ -1949,14 +1973,19 @@ function GerBul(props) {
                     <span className="textSaaral">Одоо эрхэлэж буй ажил</span>
                   </td>
                   {!edit ? (
-                    <td rowspan="2" style={{ border: "none", width: "60px" }}>
+                    <td
+                      rowspan="2"
+                      style={{ border: "none", width: "80px", paddingLeft: 0 }}
+                    >
                       <img
                         src={Add}
-                        width="`40px"
-                        height="40px"
+                        width="`30px"
+                        height="30px"
                         onClick={() => addRowFamily()}
-                        style={{ marginLeft: "-13px" }}
                       />
+                      <input
+                        style={{ width: "40px", visibility: "hidden" }}
+                      ></input>
                     </td>
                   ) : null}
                 </tr>
@@ -2105,14 +2134,18 @@ function GerBul(props) {
                         style={{
                           paddingLeft: "0px",
                           borderColor: "transparent",
+                          width: "70px",
                         }}
                       >
                         <img
                           src={Delete}
-                          width="30px"
-                          height="30px"
+                          width="40px"
+                          height="40px"
                           onClick={() => removeFamily(index, value)}
                         />
+                        <input
+                          style={{ width: "30px", visibility: "hidden" }}
+                        ></input>
                       </td>
                     ) : null}
                   </tr>
@@ -2175,10 +2208,13 @@ function GerBul(props) {
                     >
                       <img
                         src={Add}
-                        width="`50px"
-                        height="50px"
+                        width="`30px"
+                        height="30px"
                         onClick={() => addRowFamily2()}
                       />
+                      <input
+                        style={{ width: "40px", visibility: "hidden" }}
+                      ></input>
                     </td>
                   ) : null}
                 </tr>
@@ -2330,10 +2366,13 @@ function GerBul(props) {
                       >
                         <img
                           src={Delete}
-                          width="30px"
-                          height="30px"
+                          width="40px"
+                          height="40px"
                           onClick={() => removeFamily2(index, value)}
                         />
+                        <input
+                          style={{ width: "30px", visibility: "hidden" }}
+                        ></input>
                       </td>
                     ) : null}
                   </tr>
