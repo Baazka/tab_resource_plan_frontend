@@ -330,7 +330,7 @@ const AlbanTushaal = (props) => {
               </span>
             </button>
 
-            <button
+            {/* <button
               class="text"
               style={{
                 marginLeft: "1%",
@@ -344,7 +344,7 @@ const AlbanTushaal = (props) => {
               <span style={{ display: "flex", paddingRight: "22px" }}>
                 <img src={Excel} width="20px" height="20px "></img>Excel
               </span>
-            </button>
+            </button> */}
             <button
               class="text"
               style={{
