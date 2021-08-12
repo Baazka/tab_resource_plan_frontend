@@ -216,7 +216,7 @@ function YurunkhiiMedeelel(props) {
       if (props?.positionId !== "undefined" && props?.positionId != null) {
         console.log("bolohgui bn bod", props?.positionId);
         let listItems = await axios(
-          "http://172.16.24.103:3002/api/v1/position/" + props?.positionId
+          "http://hr.audit.mn/hr/api/v1/position/" + props?.positionId
         );
         console.log(listItems, "position");
         loadData(listItems?.data);
@@ -261,7 +261,7 @@ function YurunkhiiMedeelel(props) {
       props.setLoading(true);
       if (props?.positionId !== "undefined" && props?.positionId != null) {
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/position/",
+          url: "http://hr.audit.mn/hr/api/v1/position/",
           method: "PUT",
           data: data,
         })
@@ -288,7 +288,7 @@ function YurunkhiiMedeelel(props) {
           });
       } else {
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/position/",
+          url: "http://hr.audit.mn/hr/api/v1/position/",
           method: "POST",
           data: data,
         })
@@ -546,7 +546,7 @@ function TavigdahTusgai(props) {
       console.log("POSITION_ID", props?.POSITION_ID);
       if (props?.POSITION_ID !== "undefined" && props?.POSITION_ID != null) {
         let listItems = await axios(
-          "http://172.16.24.103:3002/api/v1/requirement/" + props?.POSITION_ID
+          "http://hr.audit.mn/hr/api/v1/requirement/" + props?.POSITION_ID
         );
         console.log(listItems?.data, "requirement");
         loadData(listItems?.data);
@@ -579,7 +579,7 @@ function TavigdahTusgai(props) {
       console.log("postRequirment1", data);
       if (data?.REQUIREMENT_ID !== 0 && data?.REQUIREMENT_ID !== undefined) {
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/requirement/",
+          url: "http://hr.audit.mn/hr/api/v1/requirement/",
           method: "PUT",
           data: data,
         })
@@ -606,7 +606,7 @@ function TavigdahTusgai(props) {
       } else {
         console.log("postRequirment", data);
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/requirement/",
+          url: "http://hr.audit.mn/hr/api/v1/requirement/",
           method: "post",
           data: data,
         })

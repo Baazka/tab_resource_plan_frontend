@@ -1382,7 +1382,7 @@ function TushaalKharakh(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://172.16.24.103:3002/api/v1/decision/" +
+        "http://hr.audit.mn/hr/api/v1/decision/" +
           props.tushaalKharakh?.decision_ID
       );
 
