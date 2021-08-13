@@ -166,13 +166,14 @@ function Home(props) {
   }
 
   async function anketANew() {
-    if (localStorage.get("person_id") !== undefined) {
+    if (localStorage?.getItem("person_id") != undefined) {
       localStorage.removeItem("person_id");
-      localStorage.setItem(
-        "personDetail",
-        JSON.stringify({ person_id: "0", type: "newPerson" })
-      );
     }
+    localStorage.setItem(
+      "personDetail",
+      JSON.stringify({ person_id: "0", type: "newPerson" })
+    );
+
     history.push("/web/anketA/1");
   }
 

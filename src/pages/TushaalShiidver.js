@@ -100,7 +100,7 @@ const customStyles = {
     },
   },
 };
-const ButtonsColumn = ({ row, setJagsaalt, jagsaalt, setTushaalKharakh }) => {
+const ButtonsColumn = ({ row, setJagsaalt, jagsaalt, setTushaal }) => {
   const alert = useAlert();
   function deleteDecision() {
     DataRequest({
@@ -134,8 +134,15 @@ const ButtonsColumn = ({ row, setJagsaalt, jagsaalt, setTushaalKharakh }) => {
         alert.show("aldaa");
       });
   }
+  function tushaalUstgakh() {
+    setTushaal({
+      tushaalKharakh: false,
+      decision_ID: row.DECISION_ID,
+      tushaalUstgakh: true,
+    });
+  }
   function tushaalKharuulakh() {
-    setTushaalKharakh({
+    setTushaal({
       tushaalKharakh: true,
       decision_ID: row.DECISION_ID,
     });
@@ -146,7 +153,7 @@ const ButtonsColumn = ({ row, setJagsaalt, jagsaalt, setTushaalKharakh }) => {
         src={Delete}
         width="30px"
         height="30px"
-        onClick={deleteDecision}
+        onClick={() => tushaalUstgakh()}
         style={{ cursor: "pointer" }}
       />
       <img
@@ -171,9 +178,10 @@ const Home = (props) => {
     type: 0,
   });
   const [deleteList, setDeleteList] = useState();
-  const [tushaalKharakh, setTushaalKharakh] = useState({
+  const [tushaal, setTushaal] = useState({
     tushaalKharakh: false,
     decision_ID: 0,
+    tushaalUstgakh: false,
   });
   const alert = useAlert();
 
@@ -337,8 +345,8 @@ const Home = (props) => {
           row={row}
           setJagsaalt={setJagsaalt}
           jagsaalt={jagsaalt}
-          tushaalKharakh={tushaalKharakh}
-          setTushaalKharakh={setTushaalKharakh}
+          tushaal={tushaal}
+          setTushaal={setTushaal}
         />
       ),
     },
@@ -449,10 +457,17 @@ const Home = (props) => {
             />
           </div>
         ) : null}
-        {tushaalKharakh?.tushaalKharakh ? (
+        {tushaal?.tushaalKharakh ? (
           <TushaalKharakh
-            tushaalKharakh={tushaalKharakh}
-            setTushaalKharakh={setTushaalKharakh}
+            tushaal={tushaal}
+            setTushaal={setTushaal}
+            edit={false}
+          />
+        ) : null}
+        {tushaal?.tushaalUstgakh ? (
+          <UstgakhTsonkh
+            tushaal={tushaal}
+            setTushaal={setTushaal}
             edit={false}
           />
         ) : null}
@@ -997,7 +1012,7 @@ function Salary(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/salary/" + props.EMPLOYEE_ID
+        "http://hr.audit.mn/hr/api/v1/salary/" + props?.EMPLOYEE_ID
       );
       console.log(listItems, "EMPLOYEE_ID");
       loadData(listItems?.data);
@@ -1382,8 +1397,7 @@ function TushaalKharakh(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/decision/" +
-          props.tushaalKharakh?.decision_ID
+        "http://hr.audit.mn/hr/api/v1/decision/" + props.tushaal?.decision_ID
       );
 
       loadData(listItems?.data);
@@ -1421,7 +1435,7 @@ function TushaalKharakh(props) {
                 cursor: " -webkit-grab",
                 cursor: "grab",
               }}
-              onClick={() => props.setTushaalKharakh({ tushaalKharakh: false })}
+              onClick={() => props.setTushaal({ tushaalKharakh: false })}
             >
               X
             </span>
@@ -2027,6 +2041,196 @@ function SalaryKaruulakh(props) {
   } else {
     listItems = <p>ачаалж байна...</p>;
   }
+  return listItems;
+}
+function UstgakhTsonkh(props) {
+  const [data, loadData] = useState({
+    DECISION_ID: 0,
+    REASON_ID: 1,
+    REASON_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+    REASON_DESC: "",
+    UPDATED_BY: userDetils?.USER_ID,
+    UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+  });
+  const alert = useAlert();
+  function deleteDecision() {
+    console.log("alert", {
+      DECISION_ID: props.tushaal?.decision_ID,
+      REASON_ID: data.REASON_ID,
+      REASON_DATE: data.REASON_DATE,
+      REASON_DESC: data.REASON_DESC,
+      UPDATED_BY: userDetils?.USER_ID,
+      UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+    });
+    DataRequest({
+      url: "http://hr.audit.mn/hr/api/v1/decisionDelete/",
+      method: "POST",
+      data: {
+        DECISION_ID: props.tushaal?.decision_ID,
+        REASON_ID: data.REASON_ID,
+        REASON_DATE: data.REASON_DATE,
+        REASON_DESC: data.REASON_DESC,
+        UPDATED_BY: userDetils?.USER_ID,
+        UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+      },
+    })
+      .then(function (response) {
+        console.log("gegewgwegwegw", response);
+
+        if (response?.data?.message === "success") {
+          props.setJagsaalt(
+            props.jagsaalt?.filter(
+              (element, index) =>
+                element.DECISION_ID !== parseInt(props.tushaal?.decision_ID)
+            )
+          );
+          props.setTushaal({ tushaalKharakh: false, tushaalUstgakh: false });
+          // alert.show("амжилттай устлаа");
+        }
+      })
+      .catch(function (error) {
+        //alert(error.response.data.error.message);
+        console.log(error.response);
+        alert.show("aldaa");
+      });
+  }
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     let listItems = await axios(
+  //       "http://hr.audit.mn/hr/api/v1/decision/" +
+  //         props.tushaalKharakh?.decision_ID
+  //     );
+
+  //     loadData(listItems?.data);
+  //   }
+  //   fetchData();
+  // }, [props]);
+
+  let listItems;
+
+  listItems = (
+    <div
+      style={{
+        position: "absolute",
+        width: "35%",
+        height: "auto",
+        left: "35%",
+        top: "10%",
+        borderRadius: "6px",
+        backgroundColor: "white",
+        boxShadow:
+          "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+        zIndex: "1",
+        padding: "15px 15px 35px 15px",
+      }}
+    >
+      <div className="columns">
+        <div className="column is-4">Тушаал устгах уу?</div>
+
+        <div className="column is-6"></div>
+        <div className="column is-2 has-text-right">
+          <span
+            style={{
+              fontWeight: "bold",
+              cursor: " -webkit-grab",
+              cursor: "grab",
+            }}
+            onClick={() =>
+              props.setTushaal({ tushaalKharakh: false, tushaalUstgakh: false })
+            }
+          >
+            X
+          </span>
+        </div>
+      </div>
+
+      <div>
+        <div className="columns  ">
+          <div className="column is-3">
+            <h1>Шалтгаан</h1>
+            <select
+              className="anketInput"
+              value={data.REASON_ID}
+              onChange={(text) =>
+                loadData({
+                  ...data,
+                  ...{ REASON_ID: text.target.value },
+                })
+              }
+            >
+              <option value={1}>"алдаатай шивсэн"</option>
+              <option value={2}>"хугацаа дууссан"</option>
+            </select>
+          </div>
+
+          <div className="column is-6">
+            <h1> Огноо</h1>
+            <input
+              class="input  is-size-7"
+              type="date"
+              disabled
+              value={dateFormat(data?.REASON_DATE, "yyyy-mm-dd")}
+              onChange={(e) => {
+                loadData({
+                  ...data,
+                  ...{
+                    REASON_DATE: e.target.value,
+                  },
+                });
+              }}
+            />
+          </div>
+        </div>
+
+        <div>
+          <div className="columns">
+            <div className="column is-6">
+              <h1> Тайлбар</h1>
+              <input
+                class="input  is-size-7"
+                value={data?.REASON_DESC}
+                onChange={(e) => {
+                  loadData({
+                    ...data,
+                    ...{
+                      REASON_DESC: e.target.value,
+                    },
+                  });
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="columns">
+          <div className="column is-1 ">
+            {/* <button
+              className="buttonTsenkher"
+              style={{ marginRight: "0.4rem" }}
+            >
+              Хэвлэх
+            </button> */}
+            <button className="buttonTsenkher" onClick={() => deleteDecision()}>
+              Тийм
+            </button>
+          </div>
+          <div className="column is-2">
+            <button
+              className="buttonTsenkher"
+              onClick={() =>
+                props.setTushaal({
+                  tushaalKharakh: false,
+                  tushaalUstgakh: false,
+                })
+              }
+            >
+              Үгүй
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
   return listItems;
 }
 export default Home;

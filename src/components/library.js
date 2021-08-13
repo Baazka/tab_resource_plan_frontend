@@ -747,19 +747,19 @@ function Compartment(props) {
 function Position(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
-    console.log(props, "Position");
+    console.log("positionT", props);
     async function fetchData() {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/library/position"
       );
-      console.log(listItems, "PositionlistItems");
+
       if (
-        props.personChild.SUB_DEPARTMENT_ID != "null" &&
-        props.personChild.SUB_DEPARTMENT_ID != "" &&
-        props.personChild.DEPARTMENT_ID != "null" &&
-        props.personChild.DEPARTMENT_ID != "" &&
-        props.personChild.COMPARTMENT_ID != "null" &&
-        props.personChild.COMPARTMENT_ID != ""
+        props.personChild?.SUB_DEPARTMENT_ID != "null" &&
+        props.personChild?.SUB_DEPARTMENT_ID != "" &&
+        props.personChild?.DEPARTMENT_ID != "null" &&
+        props.personChild?.DEPARTMENT_ID != "" &&
+        props.personChild?.COMPARTMENT_ID != "null" &&
+        props.personChild?.COMPARTMENT_ID != ""
       ) {
         loadData(
           listItems.data?.filter(
@@ -799,6 +799,7 @@ function Position(props) {
           )
         );
       } else {
+        console.log("positionEnd", props);
         loadData(
           listItems.data?.filter(
             (a) =>
