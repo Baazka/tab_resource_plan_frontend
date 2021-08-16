@@ -14,7 +14,7 @@ function Buteeliin(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/Literature/" + props.person_id
+        "http://172.16.24.101:3002/api/v1/Literature/" + props.person_id
       );
       console.log(listItems, "Tangarag");
       loadData(listItems?.data);
@@ -51,11 +51,10 @@ function Buteeliin(props) {
           value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
       );
       let message = 0;
-
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/literature/",
+          url: "http://172.16.24.101:3002/api/v1/literature/",
           method: "POST",
           data: { literature: newRow },
         })
@@ -84,7 +83,7 @@ function Buteeliin(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/literature/",
+          url: "http://172.16.24.101:3002/api/v1/literature/",
           method: "PUT",
           data: { literature: oldRow },
         })
@@ -159,10 +158,9 @@ function Buteeliin(props) {
     await loadData({ Literature: value });
   }
   function removeRow(indexParam, value) {
-    console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/literatureDelete",
+        url: "http://172.16.24.101:3002/api/v1/literatureDelete",
         method: "POST",
         data: {
           literature: {

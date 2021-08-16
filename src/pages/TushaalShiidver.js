@@ -104,7 +104,7 @@ const ButtonsColumn = ({ row, setJagsaalt, jagsaalt, setTushaal }) => {
   const alert = useAlert();
   function deleteDecision() {
     DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/decisionDelete/",
+      url: "http://172.16.24.101:3002/api/v1/decisionDelete/",
       method: "POST",
       data: {
         DECISION_ID: row?.DECISION_ID,
@@ -188,7 +188,7 @@ const Home = (props) => {
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/decision",
+        url: "http://172.16.24.101:3002/api/v1/decision",
         method: "GET",
         data: {},
       });
@@ -243,7 +243,7 @@ const Home = (props) => {
       deleteList?.DECISION_ID !== null
     ) {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/decisionDelete/",
+        url: "http://172.16.24.101:3002/api/v1/decisionDelete/",
 
         method: "POST",
         data: {
@@ -314,15 +314,17 @@ const Home = (props) => {
       name: "Тушаалын төрөл",
       selector: "DECISION_TYPE_NAME",
       sortable: true,
+      center: true,
     },
     {
       name: "Тушаалын дугаар",
       selector: "DECISION_NO",
       sortable: true,
+      center: true,
     },
     {
       name: "Хэрэгжих огноо",
-
+      center: true,
       selector: (row, index) => {
         return dateFormat(row.START_DATE, "yyyy-mm-dd");
       },
@@ -330,7 +332,8 @@ const Home = (props) => {
     },
     {
       name: "Бүртгэсэн огноо",
-
+      center: true,
+      width: "100px",
       selector: (row, index) => {
         return dateFormat(row.REGISTER_DATE, "yyyy-mm-dd");
       },
@@ -338,8 +341,8 @@ const Home = (props) => {
     },
     {
       name: "",
-      maxWidth: "600px",
 
+      right: true,
       cell: (row) => (
         <ButtonsColumn
           row={row}
@@ -530,7 +533,7 @@ function TushaalAjiltan(props) {
 
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios("http://hr.audit.mn/hr/api/v1/personall");
+      let listItems = await axios("http://172.16.24.101:3002/api/v1/personall");
 
       setJagsaalt(listItems?.data);
     }
@@ -708,7 +711,7 @@ function Khoyor(props) {
   }, [data]);
   function saveToDB() {
     DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/decision",
+      url: "http://172.16.24.101:3002/api/v1/decision",
       method: "POST",
       data: data,
     })
@@ -1012,7 +1015,7 @@ function Salary(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/salary/" + props?.EMPLOYEE_ID
+        "http://172.16.24.101:3002/api/v1/salary/" + props?.EMPLOYEE_ID
       );
       console.log(listItems, "EMPLOYEE_ID");
       loadData(listItems?.data);
@@ -1054,7 +1057,7 @@ function Salary(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/salary/",
+          url: "http://172.16.24.101:3002/api/v1/salary/",
           method: "POST",
           data: { salary: newRow },
         })
@@ -1083,7 +1086,7 @@ function Salary(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/salary/",
+          url: "http://172.16.24.101:3002/api/v1/salary/",
           method: "PUT",
           data: { salary: oldRow },
         })
@@ -1148,7 +1151,7 @@ function Salary(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/salaryDelete",
+        url: "http://172.16.24.101:3002/api/v1/salaryDelete",
         method: "POST",
         data: {
           salary: {
@@ -1397,9 +1400,10 @@ function TushaalKharakh(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/decision/" + props.tushaal?.decision_ID
+        "http://172.16.24.101:3002/api/v1/decision/" +
+          props.tushaal?.decision_ID
       );
-
+      console.log("TushaalKharakh", listItems);
       loadData(listItems?.data);
     }
     fetchData();
@@ -1485,10 +1489,10 @@ function TushaalKharakh(props) {
             <div className="columns">
               <div className="column is-6">
                 <h1>Байгууллага нэр</h1>
-                <DepartmentID
-                  personChild={data}
-                  setPersonChild={loadData}
-                  edit={true}
+                <input
+                  disabled
+                  className="Borderless"
+                  value={data.DEPARTMENT_NAME}
                 />
               </div>
               <div className="column is-6">
@@ -1516,10 +1520,10 @@ function TushaalKharakh(props) {
             <div className="columns">
               <div className="column is-6">
                 <h1>Газар нэгж</h1>
-                <Subdepartment
-                  personChild={data}
-                  setPersonChild={loadData}
-                  edit={true}
+                <input
+                  disabled
+                  className="Borderless"
+                  value={data.EMP_SUBDEPARTMENT_NAME}
                 />
               </div>
               <div className="column is-6">
@@ -1547,10 +1551,10 @@ function TushaalKharakh(props) {
             <div className="columns">
               <div className="column is-6">
                 <h1>Албан хэлтэс</h1>
-                <Compartment
-                  personChild={data}
-                  setPersonChild={loadData}
-                  edit={true}
+                <input
+                  disabled
+                  className="Borderless"
+                  value={data.COMPARTMENT_NAME}
                 />
               </div>
 
@@ -1649,10 +1653,10 @@ function TushaalKharakh(props) {
                   {" "}
                   <span style={{ color: "red" }}>*</span>Албан тушаал
                 </h1>
-                <Position
-                  personChild={data}
-                  setPersonChild={loadData}
-                  edit={true}
+                <input
+                  disabled
+                  className="Borderless"
+                  value={data.POSITION_NAME}
                 />
               </div>
             </div>
@@ -1674,173 +1678,13 @@ function SalaryKaruulakh(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/salary/" + props.EMPLOYEE_ID
+        "http://172.16.24.101:3002/api/v1/salary/" + props.EMPLOYEE_ID
       );
-      console.log(listItems, "EMPLOYEE_ID");
+      console.log(listItems, "SalaryKaruulakh");
       loadData(listItems?.data);
     }
     fetchData();
   }, [props]);
-
-  useEffect(() => {
-    console.log("userSalary", userDetils);
-    if (data?.salary === undefined || data?.salary.length === 0)
-      loadData({
-        salary: [
-          {
-            SALARY_TYPE_ID: 1,
-            SALARY_SUPPLEMENT: "",
-            SALARY_MOTIVE: "",
-            SALARY_DESC: "",
-            SALARY_AMOUNT: 0,
-            TOTAL: 0,
-            EMPLOYEE_ID: props.EMPLOYEE_ID,
-            IS_ACTIVE: 1,
-            CREATED_BY: userDetils?.USER_ID,
-            CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-            ROWTYPE: "NEW",
-          },
-        ],
-      });
-  }, [data]);
-
-  function saveToDB() {
-    if (requiredField(data) === true) {
-      let newRow = data?.salary?.filter((value) => value.ROWTYPE === "NEW");
-      let oldRow = data?.salary?.filter(
-        (value) =>
-          value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
-      );
-      let message = 0;
-
-      if (newRow?.length > 0) {
-        console.log("insert", JSON.stringify(newRow));
-        DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/salary/",
-          method: "POST",
-          data: { salary: newRow },
-        })
-          .then(function (response) {
-            console.log("UpdateResponse", response);
-            if (response?.data?.message === "success") {
-              message = 1;
-              if (message !== 2) {
-                alert.show("амжилттай хадгаллаа");
-                setEdit(!edit);
-                props.close(false);
-              }
-            } else {
-              alert.show("амжилтгүй алдаа");
-              setEdit(!edit);
-            }
-            //history.push('/sample')
-          })
-          .catch(function (error) {
-            //alert(error.response.data.error.message);
-            console.log(error.response);
-            alert.show("амжилтгүй алдаа");
-            setEdit(!edit);
-          });
-      }
-      if (oldRow?.length > 0) {
-        console.log("update", JSON.stringify(oldRow));
-        DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/salary/",
-          method: "PUT",
-          data: { salary: oldRow },
-        })
-          .then(function (response) {
-            console.log("UpdateResponse", response);
-            if (response?.data?.message === "success") {
-              message = 2;
-              //history.push('/sample')
-              if (message !== 1) {
-                alert.show("амжилттай хадгаллаа");
-                setEdit(!edit);
-                props.close(false);
-              }
-            } else {
-              alert.show("амжилтгүй алдаа");
-              setEdit(!edit);
-            }
-          })
-          .catch(function (error) {
-            //alert(error.response.data.error.message);
-            console.log(error.response);
-            alert.show("амжилтгүй алдаа");
-            setEdit(!edit);
-          });
-      }
-    }
-  }
-
-  function requiredField() {
-    for (let i = 0; i < data.salary.length; i++) {
-      if (
-        data.salary[i].POSITION_SALARY === null ||
-        data.salary[i].POSITION_SALARY === ""
-      ) {
-        alert.show("албан тушаалын оруулан уу");
-        return false;
-      } else if (i === data.salary.length - 1) {
-        return true;
-      }
-    }
-  }
-
-  async function addRow() {
-    let value = data.salary;
-    value.push({
-      SALARY_TYPE_ID: 1,
-      SALARY_SUPPLEMENT: "",
-      SALARY_MOTIVE: "",
-      SALARY_DESC: "",
-      EMPLOYEE_ID: props.EMPLOYEE_ID,
-      SALARY_AMOUNT: 0,
-      TOTAL: 0,
-      IS_ACTIVE: "1",
-      CREATED_BY: userDetils?.USER_ID,
-      CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-      ROWTYPE: "NEW",
-    });
-
-    await loadData({ salary: value });
-  }
-  function removeRow(indexParam, value) {
-    console.log(indexParam, "index");
-    if (value?.ROWTYPE !== "NEW") {
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/salaryDelete",
-        method: "POST",
-        data: {
-          salary: {
-            ...value,
-            ...{
-              IS_ACTIVE: 1,
-              UPDATED_BY: userDetils?.USER_ID,
-              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-            },
-          },
-        },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          //history.push('/sample')
-          if (response?.data?.message === "success") {
-            alert.show("амжилттай устлаа");
-            setEdit(!edit);
-          }
-        })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-          alert.show("aldaa");
-        });
-    }
-    loadData({
-      salary: data?.salary.filter((element, index) => index !== indexParam),
-    }); //splice(indexParam, 0)
-  }
 
   let listItems;
   if (data?.salary !== undefined || data?.salary.length !== 0) {
@@ -1887,24 +1731,6 @@ function SalaryKaruulakh(props) {
                       Тайлбар
                     </span>
                   </td>
-
-                  {!edit ? (
-                    <td
-                      style={{
-                        borderColor: "transparent",
-                        border: "none",
-                        paddingLeft: "0px",
-                        width: "50px",
-                      }}
-                    >
-                      <img
-                        src={Add}
-                        width="30px"
-                        height="30px"
-                        onClick={() => addRow()}
-                      />
-                    </td>
-                  ) : null}
                 </tr>
               </thead>
               <tbody>
@@ -1914,9 +1740,10 @@ function SalaryKaruulakh(props) {
                       <span className="textSaaral">{index + 1}</span>
                     </td>
                     <td>
-                      <Salarytype
-                        personChild={data}
-                        setPersonChild={loadData}
+                      <input
+                        disabled
+                        value={data.salary[index].SALARY_TYPE_NAME}
+                        className="Borderless"
                       />
                     </td>
 
@@ -1995,23 +1822,6 @@ function SalaryKaruulakh(props) {
                         }}
                       />
                     </td>
-
-                    {!edit ? (
-                      <td
-                        style={{
-                          paddingLeft: "0px",
-                          borderColor: "transparent",
-                          width: "50px",
-                        }}
-                      >
-                        <img
-                          src={Delete}
-                          width="30px"
-                          height="30px"
-                          onClick={() => removeRow(index, value)}
-                        />
-                      </td>
-                    ) : null}
                   </tr>
                 ))}
               </tbody>
@@ -2021,20 +1831,6 @@ function SalaryKaruulakh(props) {
 
         <div className="columns">
           <div className="column is-11"></div>
-
-          {!edit ? (
-            <div className="column is-1 ">
-              {/* <button
-              className="buttonTsenkher"
-              style={{ marginRight: "0.4rem" }}
-            >
-              Хэвлэх
-            </button> */}
-              <button className="buttonTsenkher" onClick={saveToDB}>
-                Хадгалах
-              </button>
-            </div>
-          ) : null}
         </div>
       </div>
     );
@@ -2063,7 +1859,7 @@ function UstgakhTsonkh(props) {
       UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
     });
     DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/decisionDelete/",
+      url: "http://172.16.24.101:3002/api/v1/decisionDelete/",
       method: "POST",
       data: {
         DECISION_ID: props.tushaal?.decision_ID,
@@ -2097,7 +1893,7 @@ function UstgakhTsonkh(props) {
   // useEffect(() => {
   //   async function fetchData() {
   //     let listItems = await axios(
-  //       "http://hr.audit.mn/hr/api/v1/decision/" +
+  //       "http://172.16.24.101:3002/api/v1/decision/" +
   //         props.tushaalKharakh?.decision_ID
   //     );
 
@@ -2186,7 +1982,7 @@ function UstgakhTsonkh(props) {
           <div className="columns">
             <div className="column is-6">
               <h1> Тайлбар</h1>
-              <input
+              <textarea
                 class="input  is-size-7"
                 value={data?.REASON_DESC}
                 onChange={(e) => {

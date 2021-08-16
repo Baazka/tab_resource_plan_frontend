@@ -534,7 +534,7 @@ function EmployExcel(props) {
         <img src={Excel} height="30px" width="30px" />
         <div style={{ display: "none" }}>
           <ReactHTMLTableToExcel
-            id="test-table-xls-button"
+            id="emergencyXLS"
             className="download-table-xls-button"
             table="table-to-xls"
             filename="tablexls"

@@ -64,6 +64,7 @@ import BDolooB from "../images/icons/BDolooB.png";
 import BDoloo from "../images/icons/BDoloo.png";
 import BNaimB from "../images/icons/BNaimB.png";
 import BNaim from "../images/icons/BNaim.png";
+import Edit from "../images/icons/edit.png";
 
 export {
   LeftArrow,
@@ -128,4 +129,5 @@ export {
   BNaimB,
   BNaim,
   Eye,
+  Edit,
 };

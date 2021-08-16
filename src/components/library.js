@@ -25,7 +25,11 @@ function National(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ PERSON_NATIONAL_ID: text.target.value },
+            ...{
+              PERSON_NATIONAL_ID: text.target.value,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           })
         }
       >
@@ -83,7 +87,11 @@ function Subnational(props) {
           onChange={(text) =>
             props.setPersonChild({
               ...props.personChild,
-              ...{ SURNAME: text.target.value },
+              ...{
+                SURNAME: text.target.value,
+                UPDATED_BY: userDetils?.USER_ID,
+                UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+              },
             })
           }
         />
@@ -121,7 +129,11 @@ function Dynasty(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ DYNASTY_ID: text.target.value },
+            ...{
+              DYNASTY_ID: text.target.value,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           })
         }
       >
@@ -158,7 +170,12 @@ function Office(props) {
         onChange={(text) => {
           props.setPersonChild({
             ...props.personChild,
-            ...{ OFFICE_ID: text.target.value, index: props.index },
+            ...{
+              OFFICE_ID: text.target.value,
+              index: props.index,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           });
           // props.forceUpdate();
         }}
@@ -202,7 +219,12 @@ function Suboffice(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ SUB_OFFICE_ID: text.target.value, index: props.index },
+            ...{
+              SUB_OFFICE_ID: text.target.value,
+              index: props.index,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           })
         }
       >
@@ -239,7 +261,12 @@ function Edutype(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ EDUCATION_TYPE_ID: text.target.value, index: props.index },
+            ...{
+              EDUCATION_TYPE_ID: text.target.value,
+              index: props.index,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           })
         }
       >
@@ -321,7 +348,11 @@ function Examtype(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ EXAM_TYPE_ID: text.target.value },
+            ...{
+              EXAM_TYPE_ID: text.target.value,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           })
         }
       >
@@ -360,7 +391,11 @@ function Fametype(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ FAME_TYPE_ID: text.target.value },
+            ...{
+              FAME_TYPE_ID: text.target.value,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           })
         }
       >
@@ -397,7 +432,11 @@ function Subfametype(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ SUBFAME_TYPE_ID: text.target.value },
+            ...{
+              SUBFAME_TYPE_ID: text.target.value,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           })
         }
       >
@@ -435,7 +474,11 @@ function Forcetype(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ FORCE_TYPE_ID: text.target.value },
+            ...{
+              FORCE_TYPE_ID: text.target.value,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           })
         }
       >
@@ -461,6 +504,7 @@ function Language(props) {
       );
       loadData(listItems.data);
     }
+    fetchData();
   }, [props]);
   let listItems;
   if (data !== undefined) {
@@ -476,6 +520,8 @@ function Language(props) {
               LANGUAGE_ID: text.target.value,
               index: props.index,
               type: props.type,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
             },
           })
         }
@@ -516,6 +562,8 @@ function Languagetype(props) {
             ...{
               [props.type]: text.target.value,
               index: props.index,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
             },
           })
         }
@@ -555,7 +603,11 @@ function Literaturetype(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ LITERATURE_TYPE_ID: text.target.value },
+            ...{
+              LITERATURE_TYPE_ID: text.target.value,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           })
         }
       >
@@ -598,6 +650,8 @@ function DepartmentID(props) {
               check: false,
               SUB_DEPARTMENT_ID: "null",
               COMPARTMENT_ID: "null",
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
             },
           })
         }
@@ -649,7 +703,12 @@ function Subdepartment(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ SUB_DEPARTMENT_ID: text.target.value, check: false },
+            ...{
+              SUB_DEPARTMENT_ID: text.target.value,
+              check: false,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           })
         }
       >
@@ -727,7 +786,12 @@ function Compartment(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ COMPARTMENT_ID: text.target.value, check: false },
+            ...{
+              COMPARTMENT_ID: text.target.value,
+              check: false,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           })
         }
       >
@@ -823,7 +887,12 @@ function Position(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ POSITION_ID: text.target.value, check: false },
+            ...{
+              POSITION_ID: text.target.value,
+              check: false,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           })
         }
       >
@@ -861,7 +930,12 @@ function Salarytype(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ SALARY_TYPE_ID: text.target.value, check: false },
+            ...{
+              SALARY_TYPE_ID: text.target.value,
+              check: false,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           })
         }
       >
@@ -900,7 +974,12 @@ function Decisiontype(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ DECISION_TYPE_ID: text.target.value, check: false },
+            ...{
+              DECISION_TYPE_ID: text.target.value,
+              check: false,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           })
         }
       >
@@ -940,7 +1019,12 @@ function Positionlevel(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ POSITION_LEVEL_ID: text.target.value, check: false },
+            ...{
+              POSITION_LEVEL_ID: text.target.value,
+              check: false,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           })
         }
       >
@@ -980,7 +1064,12 @@ function Positioncategorytype(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ POSITION_CATEGORY_TYPE_ID: text.target.value, check: false },
+            ...{
+              POSITION_CATEGORY_TYPE_ID: text.target.value,
+              check: false,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           })
         }
       >
@@ -1031,7 +1120,12 @@ function Positioncategory(props) {
         onChange={(text) =>
           props.setPersonChild({
             ...props.personChild,
-            ...{ POSITION_CATEGORY_ID: text.target.value, check: false },
+            ...{
+              POSITION_CATEGORY_ID: text.target.value,
+              check: false,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
           })
         }
       >

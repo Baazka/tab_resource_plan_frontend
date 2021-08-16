@@ -5,7 +5,15 @@ import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import dateFormat from "dateformat";
-import { Search, Filter, Add, AddBlue, Excel } from "../assets/images/zurag";
+import {
+  Search,
+  Filter,
+  Add,
+  AddBlue,
+  Excel,
+  Delete,
+  Edit,
+} from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 var rowNumber = 1;
@@ -36,27 +44,85 @@ createTheme("solarized", {
 const customStyles = {
   rows: {
     style: {
-      minHeight: "50px", // override the row height
+      minHeight: "35px", // override the row height
     },
   },
   headCells: {
     style: {
-      paddingLeft: "8px", // override the cell padding for head cells
-      paddingRight: "4px",
+      paddingLeft: "2px", // override the cell padding for head cells
+      paddingRight: "2px",
       fontWeight: "bold",
-      fontSize: "15px",
+      fontSize: "13px",
       borderColor: "white",
     },
   },
   cells: {
     style: {
-      paddingLeft: "5px", // override the cell padding for data cells
-      paddingRight: "5px",
+      paddingLeft: "2px", // override the cell padding for data cells
+      paddingRight: "2px",
       webkitBoxShadow: "0px 0px 3px 1px rgb(255 0 0)",
       borderColor: "grey",
       borderBottom: "0.5px solid",
     },
   },
+};
+
+const ButtonsColumn = ({ row, setJagsaalt, jagsaalt, setTushaal }) => {
+  const alert = useAlert();
+  const history = useHistory();
+  function deleteAlbanTushaal() {
+    console.log("row", row);
+    DataRequest({
+      url: "http://http://172.16.24.101:3002/api/v1/positionDelete/",
+      method: "POST",
+      data: {
+        POSITION_ID: row?.POSITION_ID,
+        REASON_ID: 1,
+        REASON_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+        REASON_DESC: "",
+        UPDATED_BY: userDetils?.USER_ID,
+        UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+      },
+    })
+      .then(function (response) {
+        console.log("deleteAlbanTushaalresponse", response);
+        if (response?.data?.message === "success") {
+          setJagsaalt(
+            jagsaalt?.filter(
+              (element, index) => element.POSITION_ID !== row?.POSITION_ID
+            )
+          );
+          alert.show("амжилттай устлаа");
+        }
+      })
+      .catch(function (error) {
+        //alert(error.response.data.error.message);
+        console.log(error.response);
+        alert.show("aldaa");
+      });
+  }
+
+  function tushaalKharuulakh() {
+    history.push("/web/AlbanTushaalBurtgel/" + row?.POSITION_ID.toString());
+  }
+  return (
+    <div>
+      <img
+        src={Delete}
+        width="30px"
+        height="30px"
+        onClick={() => deleteAlbanTushaal()}
+        style={{ cursor: "pointer" }}
+      />
+      <img
+        src={Edit}
+        width="20px"
+        height="20px"
+        style={{ marginLeft: "10px", cursor: "pointer", marginBottom: "8px" }}
+        onClick={() => tushaalKharuulakh()}
+      />
+    </div>
+  );
 };
 
 const AlbanTushaal = (props) => {
@@ -93,40 +159,8 @@ const AlbanTushaal = (props) => {
       setData(state?.selectedRows[0]);
     }
   };
-  async function AlbanTushaal() {
-    console.log("data?.POSITION_ID", data?.POSITION_ID);
+  function AlbanTushaal() {
     history.push("/web/AlbanTushaalBurtgel/" + data?.POSITION_ID.toString());
-  }
-  function deleteAlbanTushaal() {
-    DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/positionDelete/",
-      method: "POST",
-      data: {
-        POSITION_ID: data?.POSITION_ID,
-        REASON_ID: 1,
-        REASON_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-        REASON_DESC: "",
-        UPDATED_BY: userDetils?.USER_ID,
-        UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-      },
-    })
-      .then(function (response) {
-        console.log("UpdateResponse", response);
-
-        if (response?.data?.message === "success") {
-          setJagsaalt(
-            jagsaalt?.filter(
-              (element, index) => element.POSITION_ID !== data?.POSITION_ID
-            )
-          );
-          alert.show("амжилттай устлаа");
-        }
-      })
-      .catch(function (error) {
-        //alert(error.response.data.error.message);
-        console.log(error.response);
-        alert.show("aldaa");
-      });
   }
   function makeSearch(value) {
     setSearch(value);
@@ -162,7 +196,7 @@ const AlbanTushaal = (props) => {
         return index + 1;
       },
       sortable: true,
-      width: "40px",
+      width: "30px",
     },
     // {
     //   name: "Код",
@@ -186,6 +220,7 @@ const AlbanTushaal = (props) => {
       name: "Албан тушаалын түвшин",
       selector: "POSITION_LEVEL_NAME",
       sortable: true,
+      width: "100px",
     },
     {
       name: "Албан тушаалын нэр",
@@ -196,36 +231,55 @@ const AlbanTushaal = (props) => {
       name: "Албан тушаалын төрөл",
       selector: "",
       sortable: true,
+      width: "75px",
     },
     {
       name: "Албан тушаалын ангилал",
       selector: "",
       sortable: true,
+      width: "75px",
     },
     {
       name: "Албан тушаалын зэрэглэл",
       selector: "",
       sortable: true,
+      width: "75px",
     },
     {
       name: "Батлагдсан орон тоо",
       selector: "CONFIRMED_COUNT",
       sortable: true,
+      center: true,
+      width: "75px",
     },
     {
       name: "Ажилтны тоо",
       selector: "",
       sortable: true,
+      width: "75px",
     },
     {
       name: "Эзгүй орон тоо",
       selector: "",
       sortable: true,
+      width: "75px",
     },
     {
       name: "Сул орон тоо",
       selector: "",
       sortable: true,
+      width: "75px",
+    },
+    {
+      name: "",
+
+      cell: (row) => (
+        <ButtonsColumn
+          row={row}
+          setJagsaalt={setJagsaalt}
+          jagsaalt={jagsaalt}
+        />
+      ),
     },
   ];
 
@@ -345,7 +399,7 @@ const AlbanTushaal = (props) => {
                 <img src={Excel} width="20px" height="20px "></img>Excel
               </span>
             </button> */}
-            <button
+            {/* <button
               class="text"
               style={{
                 marginLeft: "1%",
@@ -358,21 +412,8 @@ const AlbanTushaal = (props) => {
               onClick={() => AlbanTushaal()}
             >
               Засах
-            </button>
-            <button
-              class="text"
-              style={{
-                marginLeft: "1%",
-                borderRadius: "5px",
+            </button> */}
 
-                color: "red",
-                border: "1px solid",
-                padding: "0 10px",
-              }}
-              onClick={() => deleteAlbanTushaal()}
-            >
-              Устгах
-            </button>
             <EmployExcel />
           </div>
         </div>

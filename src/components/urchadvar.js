@@ -17,8 +17,9 @@ function UrChadvar(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/exam/" + props.person_id
+        "http://172.16.24.101:3002/api/v1/exam/" + props.person_id
       );
+
       if (
         listItems.data?.Exam !== undefined &&
         listItems.data?.Exam.length > 0
@@ -30,7 +31,7 @@ function UrChadvar(props) {
                 PERSON_ID: props.person_id,
                 EXAM_TYPE_ID: 2,
                 EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-                IS_EXAM: "",
+                IS_EXAM: 0,
                 OFFICE_ID: "1",
                 EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
                 EXAM_POINT: "",
@@ -46,7 +47,7 @@ function UrChadvar(props) {
                 PERSON_ID: props.person_id,
                 EXAM_TYPE_ID: 3,
                 EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-                IS_EXAM: "",
+                IS_EXAM: 0,
                 OFFICE_ID: "1",
                 EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
                 EXAM_POINT: "",
@@ -68,7 +69,7 @@ function UrChadvar(props) {
               PERSON_ID: props.person_id,
               EXAM_TYPE_ID: 3,
               EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-              IS_EXAM: "",
+              IS_EXAM: 0,
               OFFICE_ID: "1",
               EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
               EXAM_POINT: "",
@@ -89,7 +90,7 @@ function UrChadvar(props) {
               PERSON_ID: props.person_id,
               EXAM_TYPE_ID: 1,
               EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-              IS_EXAM: 1,
+              IS_EXAM: 0,
               OFFICE_ID: "1",
               EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
               EXAM_POINT: "0",
@@ -105,7 +106,7 @@ function UrChadvar(props) {
               PERSON_ID: props.person_id,
               EXAM_TYPE_ID: 2,
               EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-              IS_EXAM: "",
+              IS_EXAM: 0,
               OFFICE_ID: "1",
               EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
               EXAM_POINT: "0",
@@ -121,7 +122,7 @@ function UrChadvar(props) {
               PERSON_ID: props.person_id,
               EXAM_TYPE_ID: 3,
               EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-              IS_EXAM: "",
+              IS_EXAM: 0,
               OFFICE_ID: "1",
               EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
               EXAM_POINT: "0",
@@ -148,11 +149,13 @@ function UrChadvar(props) {
         value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
     );
     let message = 0;
+    console.log("oldRow", oldRow);
+    console.log("oldRowdata", data);
 
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/exam/",
+        url: "http://172.16.24.101:3002/api/v1/exam/",
         method: "POST",
         data: { exam: newRow },
       })
@@ -162,6 +165,7 @@ function UrChadvar(props) {
             message = 1;
             if (message !== 2) alert.show("амжилттай хадгаллаа");
             setEdit(!edit);
+            props.loading(false);
           } else {
             alert.show("амжилтгүй алдаа");
             setEdit(!edit);
@@ -180,7 +184,7 @@ function UrChadvar(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/exam/",
+        url: "http://172.16.24.101:3002/api/v1/exam/",
         method: "PUT",
         data: { exam: oldRow },
       })
@@ -191,6 +195,7 @@ function UrChadvar(props) {
             //history.push('/sample')
             if (message !== 1) alert.show("амжилттай хадгаллаа");
             setEdit(!edit);
+            props.loading(false);
           } else {
             alert.show("амжилтгүй алдаа");
             setEdit(!edit);
@@ -265,7 +270,7 @@ function UrChadvar(props) {
                     <select
                       disabled={edit}
                       className="Borderless"
-                      value={data?.Exam[0].IS_EXAM}
+                      value={parseInt(data?.Exam[0].IS_EXAM)}
                       onChange={(text) => {
                         let value = [...data?.Exam];
                         value[0].IS_EXAM = text.target.value;
@@ -278,7 +283,7 @@ function UrChadvar(props) {
                       }}
                     >
                       <option value={1}>Өгсөн</option>
-                      <option value={""}>Өгөөгүй</option>
+                      <option value={0}>Өгөөгүй</option>
                     </select>
                   </td>
                   <td>
@@ -344,6 +349,11 @@ function UrChadvar(props) {
                       onChange={(text) => {
                         let value = [...data?.Exam];
                         value[0].DECISION_NO = text.target.value;
+                        value[0].UPDATED_BY = userDetils?.USER_ID;
+                        value[0].UPDATED_DATE = dateFormat(
+                          new Date(),
+                          "dd-mmm-yy"
+                        );
                         loadData({ Exam: value });
                       }}
                     />
@@ -411,7 +421,7 @@ function UrChadvar(props) {
                       }}
                     >
                       <option value={2}>Өгсөн</option>
-                      <option value={""}>Өгөөгүй</option>
+                      <option value={0}>Өгөөгүй</option>
                     </select>
                   </td>
                   <td>
@@ -548,7 +558,7 @@ function UrChadvar(props) {
                     }}
                   >
                     <option value={3}>Өгсөн</option>
-                    <option value={""}>Өгөөгүй</option>
+                    <option value={0}>Өгөөгүй</option>
                   </select>
                 </td>
                 <td>
@@ -698,7 +708,7 @@ function TangaragBurtgel(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/oath/" + props.person_id
+        "http://172.16.24.101:3002/api/v1/oath/" + props.person_id
       );
       console.log(listItems, "Tangarag");
       loadData(listItems?.data);
@@ -719,7 +729,7 @@ function TangaragBurtgel(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/oath/",
+          url: "http://172.16.24.101:3002/api/v1/oath/",
           method: "POST",
           data: { oath: newRow },
         })
@@ -748,7 +758,7 @@ function TangaragBurtgel(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/oath/",
+          url: "http://172.16.24.101:3002/api/v1/oath/",
           method: "PUT",
           data: { oath: oldRow },
         })
@@ -838,7 +848,7 @@ function TangaragBurtgel(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/oathDelete",
+        url: "http://172.16.24.101:3002/api/v1/oathDelete",
         method: "POST",
         data: {
           oath: {
@@ -1083,7 +1093,7 @@ function GadaadKhel(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/language/" + props.person_id
+        "http://172.16.24.101:3002/api/v1/language/" + props.person_id
       );
       console.log(listItems, "Tangarag");
       loadData(listItems?.data);
@@ -1092,6 +1102,7 @@ function GadaadKhel(props) {
   }, [props]);
   function saveToDB() {
     props.loading(true);
+    console.log("data", data);
     if (requiredField(data) === true) {
       let newRow = data?.Language?.filter((value) => value.ROWTYPE === "NEW");
       let oldRow = data?.Language?.filter(
@@ -1103,7 +1114,7 @@ function GadaadKhel(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Language/",
+          url: "http://172.16.24.101:3002/api/v1/Language/",
           method: "POST",
           data: { language: newRow, PERSON_ID: props.person_id },
         })
@@ -1132,7 +1143,7 @@ function GadaadKhel(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Language/",
+          url: "http://172.16.24.101:3002/api/v1/Language/",
           method: "PUT",
           data: { language: oldRow, PERSON_ID: props.person_id },
         })
@@ -1236,7 +1247,7 @@ function GadaadKhel(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/languageDelete",
+        url: "http://172.16.24.101:3002/api/v1/languageDelete",
         method: "POST",
         data: {
           language: {
