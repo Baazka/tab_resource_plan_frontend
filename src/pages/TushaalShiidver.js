@@ -104,7 +104,7 @@ const ButtonsColumn = ({ row, setJagsaalt, jagsaalt, setTushaal }) => {
   const alert = useAlert();
   function deleteDecision() {
     DataRequest({
-      url: "http://172.16.24.101:3002/api/v1/decisionDelete/",
+      url: "http://hr.audit.mn/hr/api/v1/decisionDelete/",
       method: "POST",
       data: {
         DECISION_ID: row?.DECISION_ID,
@@ -188,7 +188,7 @@ const Home = (props) => {
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url: "http://172.16.24.101:3002/api/v1/decision",
+        url: "http://hr.audit.mn/hr/api/v1/decision",
         method: "GET",
         data: {},
       });
@@ -243,7 +243,7 @@ const Home = (props) => {
       deleteList?.DECISION_ID !== null
     ) {
       DataRequest({
-        url: "http://172.16.24.101:3002/api/v1/decisionDelete/",
+        url: "http://hr.audit.mn/hr/api/v1/decisionDelete/",
 
         method: "POST",
         data: {
@@ -471,6 +471,8 @@ const Home = (props) => {
           <UstgakhTsonkh
             tushaal={tushaal}
             setTushaal={setTushaal}
+            jagsaalt={jagsaalt}
+            setJagsaalt={setJagsaalt}
             edit={false}
           />
         ) : null}
@@ -533,7 +535,7 @@ function TushaalAjiltan(props) {
 
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios("http://172.16.24.101:3002/api/v1/personall");
+      let listItems = await axios("http://hr.audit.mn/hr/api/v1/personall");
 
       setJagsaalt(listItems?.data);
     }
@@ -711,7 +713,7 @@ function Khoyor(props) {
   }, [data]);
   function saveToDB() {
     DataRequest({
-      url: "http://172.16.24.101:3002/api/v1/decision",
+      url: "http://hr.audit.mn/hr/api/v1/decision",
       method: "POST",
       data: data,
     })
@@ -1015,7 +1017,7 @@ function Salary(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://172.16.24.101:3002/api/v1/salary/" + props?.EMPLOYEE_ID
+        "http://hr.audit.mn/hr/api/v1/salary/" + props?.EMPLOYEE_ID
       );
       console.log(listItems, "EMPLOYEE_ID");
       loadData(listItems?.data);
@@ -1057,7 +1059,7 @@ function Salary(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://172.16.24.101:3002/api/v1/salary/",
+          url: "http://hr.audit.mn/hr/api/v1/salary/",
           method: "POST",
           data: { salary: newRow },
         })
@@ -1086,7 +1088,7 @@ function Salary(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://172.16.24.101:3002/api/v1/salary/",
+          url: "http://hr.audit.mn/hr/api/v1/salary/",
           method: "PUT",
           data: { salary: oldRow },
         })
@@ -1151,7 +1153,7 @@ function Salary(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://172.16.24.101:3002/api/v1/salaryDelete",
+        url: "http://hr.audit.mn/hr/api/v1/salaryDelete",
         method: "POST",
         data: {
           salary: {
@@ -1400,8 +1402,7 @@ function TushaalKharakh(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://172.16.24.101:3002/api/v1/decision/" +
-          props.tushaal?.decision_ID
+        "http://hr.audit.mn/hr/api/v1/decision/" + props.tushaal?.decision_ID
       );
       console.log("TushaalKharakh", listItems);
       loadData(listItems?.data);
@@ -1678,7 +1679,7 @@ function SalaryKaruulakh(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://172.16.24.101:3002/api/v1/salary/" + props.EMPLOYEE_ID
+        "http://hr.audit.mn/hr/api/v1/salary/" + props.EMPLOYEE_ID
       );
       console.log(listItems, "SalaryKaruulakh");
       loadData(listItems?.data);
@@ -1859,7 +1860,7 @@ function UstgakhTsonkh(props) {
       UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
     });
     DataRequest({
-      url: "http://172.16.24.101:3002/api/v1/decisionDelete/",
+      url: "http://hr.audit.mn/hr/api/v1/decisionDelete/",
       method: "POST",
       data: {
         DECISION_ID: props.tushaal?.decision_ID,
@@ -1873,7 +1874,7 @@ function UstgakhTsonkh(props) {
       .then(function (response) {
         console.log("gegewgwegwegw", response);
 
-        if (response?.data?.message === "success") {
+        if (response?.data?.message == "success") {
           props.setJagsaalt(
             props.jagsaalt?.filter(
               (element, index) =>
@@ -1881,7 +1882,7 @@ function UstgakhTsonkh(props) {
             )
           );
           props.setTushaal({ tushaalKharakh: false, tushaalUstgakh: false });
-          // alert.show("амжилттай устлаа");
+          alert.show("амжилттай устлаа");
         }
       })
       .catch(function (error) {
@@ -1893,7 +1894,7 @@ function UstgakhTsonkh(props) {
   // useEffect(() => {
   //   async function fetchData() {
   //     let listItems = await axios(
-  //       "http://172.16.24.101:3002/api/v1/decision/" +
+  //       "http://hr.audit.mn/hr/api/v1/decision/" +
   //         props.tushaalKharakh?.decision_ID
   //     );
 

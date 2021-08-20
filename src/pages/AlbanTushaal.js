@@ -71,9 +71,8 @@ const ButtonsColumn = ({ row, setJagsaalt, jagsaalt, setTushaal }) => {
   const alert = useAlert();
   const history = useHistory();
   function deleteAlbanTushaal() {
-    console.log("row", row);
     DataRequest({
-      url: "http://http://172.16.24.101:3002/api/v1/positionDelete/",
+      url: "http://http://hr.audit.mn/hr/api/v1/positionDelete/",
       method: "POST",
       data: {
         POSITION_ID: row?.POSITION_ID,

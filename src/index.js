@@ -17,7 +17,7 @@ const store = createStore(reducer);
 const options = {
   // you can also just use 'bottom center'
   position: positions.TOP_CENTER,
-  timeout: 1000,
+  timeout: 2000,
   offset: "30px",
   containerStyle: { color: "#233772" },
 

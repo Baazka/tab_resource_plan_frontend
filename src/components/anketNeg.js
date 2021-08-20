@@ -14,6 +14,7 @@ import TsergiinAlba from "./anketAtserge";
 import Shagnaliin from "./anketAshagnal";
 import Turshlgin from "./anketAturshlaga";
 import Buteeliin from "./anketAbuteeliin";
+import FormData from "form-data";
 import {
   AvatarB,
   Face,
@@ -66,10 +67,49 @@ function AnketNeg(props) {
   const alert = useAlert();
   const [loading, setLoading] = useState(true);
 
+  function getFormUrlEncoded(toConvert) {
+    const formBody = [];
+    for (const property in toConvert) {
+      const encodedKey = encodeURIComponent(property);
+      const encodedValue = encodeURIComponent(toConvert[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+    return formBody.join("&");
+  }
   function saveAvatar(file) {
-    const fd = new FormData();
-    fd.append("image", file.target.files[0], file.target.files[0].name);
-    console.log("zurag===============>", file.target.files[0]);
+    if (
+      localStorage.getItem("personDetail")?.includes("person_id") &&
+      JSON.parse(localStorage.getItem("personDetail")).person_id !== "0"
+    ) {
+      // "person_id",JSON.parse(localStorage.getItem("personDetail")).person_id, file.target.files[0].name
+      console.log("imageName", file.target.files[0].name);
+      const formData = new FormData();
+      formData.append("image", file.target.files[0], file.target.files[0].name);
+      // axios({
+      //   method: "post",
+      //   url: "http://hr.audit.mn/hr/api/v1/avatar/",
+      //   data: formData,
+      //   headers: { "Content-Type": "multipart/form-data" },
+      // })
+      //   .then(function (response) {
+      //     //handle success
+      //     console.log(response);
+      //   })
+      //   .catch(function (response) {
+      //     //handle error
+      //     console.log(response);
+      //   });
+      fetch("http://hr.audit.mn/hr/api/v1/avatar/", {
+        mode: "no-cors",
+        method: "POST",
+
+        body: formData,
+      }).then(function (res) {
+        console.log(res);
+      });
+    } else {
+      alert.show("Ерөнхий мэдээлэл бөгөлнө үү");
+    }
   }
 
   function requiredField(param) {
@@ -238,7 +278,9 @@ function AnketNeg(props) {
       }
     }
   }
-
+  function onInputClick(event) {
+    event.target.value = "";
+  }
   let listItems;
   if (data !== undefined && data !== null) {
     listItems = (
@@ -287,31 +329,38 @@ function AnketNeg(props) {
           </div>
 
           <div
+            className="container"
             style={{
-              display: "flex",
               justifyContent: "center",
               marginTop: "-0.4rem",
             }}
           >
-            <div>
+            <div style={{ visibility: "hidden" }}>
               <input
                 ref={refContainer}
                 class="file-input"
                 accept="image/*"
                 type="file"
+                onClick={onInputClick}
                 onChange={(file) => saveAvatar(file)}
-                style={{ display: "none" }}
               />
             </div>
             <img
               src={Face}
               width="40px"
               height="40px"
+              style={{ cursor: "pointer" }}
               onClick={() => refContainer.current.click()}
             />
 
             <img src={Trush} width="40px" height="40px" />
-            <img src={Warning} width="40px" height="40px" />
+            <img
+              src={Warning}
+              style={{ cursor: "pointer" }}
+              width="40px"
+              height="40px"
+              onClick={() => alert.show("test")}
+            />
           </div>
           <div style={{ marginTop: "1.5rem" }}>
             <span
