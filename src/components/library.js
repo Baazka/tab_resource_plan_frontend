@@ -256,7 +256,7 @@ function Edutype(props) {
     listItems = (
       <select
         disabled={props.edit}
-        className="anketInput"
+        className="anketInputWidth"
         value={props.personChild?.EDUCATION_TYPE_ID}
         onChange={(text) =>
           props.setPersonChild({
