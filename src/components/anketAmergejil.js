@@ -112,7 +112,7 @@ function Mergeshliin(props) {
         data.Profession[i].PROFESSION_COUNTRY === null ||
         data.Profession[i].PROFESSION_COUNTRY === ""
       ) {
-        alert.show("Хаана. дотоод. гадаадын ямар байгууллагад оруулан уу");
+        alert.show("Хаана, дотоод. гадаадын ямар байгууллагад оруулан уу");
         return false;
       } else if (
         data.Profession[i].PROFESSION_NAME === null ||
@@ -239,6 +239,7 @@ function Mergeshliin(props) {
                 4. Мэргэшлийн талаарх мэдээлэл
               </span>
             </div>
+
             <div className="column is-1">
               <button
                 className="buttonTsenkher"
@@ -250,6 +251,15 @@ function Mergeshliin(props) {
               </button>
             </div>
           </div>
+          <div class="columns">
+            <div class="column is-12">
+              <em className="has-text-link	">
+                4.1. Мэргэшлийн бэлтгэл (Мэргэжлээрээ болон бусад чиглэлээр
+                нарийн мэргэшүүлэх багц сургалтад хамрагдсан байдлыг бичнэ)
+              </em>
+            </div>
+          </div>
+
           <div className="table-container">
             <div className="columns">
               <div className="column is-12">
@@ -266,12 +276,12 @@ function Mergeshliin(props) {
                       </td>
                       <td>
                         <span className="textSaaral">
-                          Хаана. дотоод. гадаадын ямар байгууллагад
+                          Хаана, дотоод, гадаадын ямар байгууллагад
                         </span>
                       </td>
                       <td>
                         <span className="textSaaral">
-                          Мэргэшүүлэх Сургуулын нэр
+                          Мэргэшүүлэх сургуулийн нэр
                         </span>
                       </td>
                       <td>
@@ -679,7 +689,7 @@ function ZeregTsol(props) {
   function requiredField() {
     for (let i = 0; i < data.Fame.length; i++) {
       if (data.Fame[i].FAME_ORG === null || data.Fame[i].FAME_ORG === "") {
-        alert.show("Цол олгосон байгуулага оруулан уу");
+        alert.show("Цол олгосон байгууллага оруулан уу");
         return false;
       } else if (data.Fame[i].FAME_NO === null || data.Fame[i].FAME_NO === "") {
         alert.show("Гэрчилгээ дипломын дугаар оруулан уу");
@@ -763,7 +773,7 @@ function ZeregTsol(props) {
           <div className="column is-11">
             <span className="headerTextBold">
               {" "}
-              4.2 Эрдмийн цол/дэд профессор, академийн гишүүнийг оролцуулан/
+              4.2 Эрдмийн цол (дэд профессор, академийн гишүүнийг оролцуулна)
             </span>
           </div>
           <div className="column is-1">
@@ -792,7 +802,7 @@ function ZeregTsol(props) {
                     <span className="textSaaral">Цол</span>
                   </td>
                   <td>
-                    <span className="textSaaral">Цол олгосон байгуулага</span>
+                    <span className="textSaaral">Цол олгосон байгууллага</span>
                   </td>
                   <td>
                     <span className="textSaaral">Огноо</span>

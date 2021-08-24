@@ -208,7 +208,7 @@ const Home = (props) => {
                 marginTop: "-10px",
               }}
             >
-              Тангарагын бүртгэл
+              Тангаргийн бүртгэл
             </div>
           </div>
         ) : null}

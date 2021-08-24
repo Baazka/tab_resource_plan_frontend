@@ -238,7 +238,7 @@ function UrChadvar(props) {
           <div className="columns">
             <div className="column is-11">
               <span className="headerTextBold">
-                1.Төрийн жинхэн албаны шалгалтын талаарх мэдээлэл
+                1.Төрийн жинхэнэ албаны шалгалтын талаарх мэдээлэл
               </span>
             </div>
             <div className="column is -1">
@@ -540,7 +540,7 @@ function UrChadvar(props) {
                   </td>
                 </tr>
                 <td>3</td>
-                <td>Тусгай шалгалт өгсөн хэсэх</td>
+                <td>Тусгай шалгалт өгсөн эсэх</td>
                 <td>
                   <select
                     disabled={edit}
@@ -793,13 +793,13 @@ function TangaragBurtgel(props) {
     console.log("testestsetsetsetsetsetse", data.Oath);
     for (let i = 0; i < data.Oath.length; i++) {
       if (data.Oath[i].OATH_TYPE === null || data.Oath[i].OATH_TYPE === "") {
-        alert.show("Тангарагын төрөл оруулан уу");
+        alert.show("тангаргийн төрөл оруулан уу");
         return false;
       } else if (
         data.Oath[i].DECISION_NO === null ||
         data.Oath[i].DECISION_NO === ""
       ) {
-        alert.show("Тангарагын шийдвэрийн дугаар оруулан уу");
+        alert.show("тангаргийн шийдвэрийн дугаар оруулан уу");
         return false;
       } else if (i === data.Oath.length - 1) {
         return true;
@@ -894,7 +894,7 @@ function TangaragBurtgel(props) {
       >
         <div className="columns">
           <div className="column is-11">
-            <span className="headerTextBold">2.Тангарагын бүртгэл</span>
+            <span className="headerTextBold">2.Тангаргийн бүртгэл</span>
           </div>
           <div className="column is-1">
             <button
@@ -916,19 +916,19 @@ function TangaragBurtgel(props) {
                     <span className="textSaaral">№</span>
                   </td>
                   <td style={{ width: "300px" }}>
-                    <span className="textSaaral">Тангарагын төрөл</span>
+                    <span className="textSaaral">Тангаргийн төрөл</span>
                   </td>
                   <td style={{ width: "250px" }}>
                     <span className="textSaaral">Тангараг өргөсөн огноо</span>
                   </td>
                   <td>
                     <span className="textSaaral">
-                      Тангарагын шийдвэрийн дугаар
+                      Тангаргийн шийдвэрийн дугаар
                     </span>
                   </td>
                   <td>
                     <span className="textSaaral">
-                      Тангарагын шийдвэрийн огноо
+                      Тангаргийн шийдвэрийн огноо
                     </span>
                   </td>
                   {!edit ? (
@@ -1331,7 +1331,7 @@ function GadaadKhel(props) {
                     <span className="textSaaral">Бичих</span>
                   </td>
                   <td>
-                    <span className="textSaaral">Шалгалтын Нэр</span>
+                    <span className="textSaaral">Шалгалтын нэр</span>
                   </td>
                   <td>
                     <span className="textSaaral">Дүнгийн мэдээлэл</span>

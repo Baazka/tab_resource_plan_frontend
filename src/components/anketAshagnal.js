@@ -313,7 +313,7 @@ function Shagnaliin(props) {
                     <span className="textSaaral">Шагналын нэр</span>
                   </td>
                   <td>
-                    <span className="textSaaral">Шийдэрийн нэр, дугаар</span>
+                    <span className="textSaaral">Шийдвэрийн нэр, дугаар</span>
                   </td>
                   <td>
                     <span className="textSaaral">Огноо</span>

@@ -474,7 +474,7 @@ function AnketNeg(props) {
               }}
               onClick={() => setMenu(4)}
             >
-              IV. МЭРГЭЖЛИЙН <br />
+              IV. МЭРГЭШЛИЙН <br />
               ТАЛААРХ МЭДЭЭЛЭЛ
             </button>
           </div>
@@ -1479,7 +1479,7 @@ function HolbooBarikhHun(props) {
         <div className="columns">
           <div className="column is-11">
             <span className="headerTextBold">
-              Зайлшгүй шаардлагатай үед холбоо барих хүн
+              Зайлшгүй шаардлагатай үед холбоо барих хүний мэдээлэл
             </span>
           </div>
           <div className="column is-1">
@@ -1679,7 +1679,7 @@ function GerBul(props) {
         alert.show("Нэр оруулан уу");
         return false;
       } else if (value[i].MEMBER_ORG === null || value[i].MEMBER_ORG === "") {
-        alert.show("Байгуулагын Нэр оруулан уу");
+        alert.show("Байгууллагын нэр оруулан уу");
         return false;
       } else if (
         value[i].MEMBER_POSITION === null ||
@@ -1977,7 +1977,8 @@ function GerBul(props) {
       <div className="columns">
         <div className="column is-11 ">
           <span className="headerTextBold">
-            Гэр бүлийн байдал(зөвхөн гэр бүлийн бүртгэлд байгаа хүмүүсийг бичнэ)
+            Гэр бүлийн байдал (зөвхөн гэр бүлийн бүртгэлд байгаа хүмүүсийг
+            бичнэ)
           </span>
         </div>
         <div className="column is-1">
@@ -2019,7 +2020,7 @@ function GerBul(props) {
                     <span className="textSaaral">Төрсөн сум, дүүрэг</span>
                   </td>
                   <td colspan="2">
-                    <span className="textSaaral">Одоо эрхэлэж буй ажил</span>
+                    <span className="textSaaral">Одоо эрхэлж буй ажил</span>
                   </td>
                   {!edit ? (
                     <td
@@ -2040,7 +2041,7 @@ function GerBul(props) {
                 </tr>
                 <tr>
                   <td>
-                    <span className="textSaaral">Байгуулагын Нэр</span>
+                    <span className="textSaaral">Байгууллагын нэр</span>
                   </td>
                   <td>
                     <span className="textSaaral">Албан тушаал</span>
@@ -2244,7 +2245,7 @@ function GerBul(props) {
                     <span className="textSaaral">Төрсөн сум, дүүрэг</span>
                   </td>
                   <td colspan="2">
-                    <span className="textSaaral">Одоо эрхэлэж буй ажил</span>
+                    <span className="textSaaral">Одоо эрхэлж буй ажил</span>
                   </td>
                   {!edit ? (
                     <td
@@ -2269,7 +2270,7 @@ function GerBul(props) {
                 </tr>
                 <tr>
                   <td>
-                    <span className="textSaaral">Байгуулагын Нэр</span>
+                    <span className="textSaaral">Байгууллагын нэр</span>
                   </td>
                   <td>
                     <span className="textSaaral">Албан тушаал</span>

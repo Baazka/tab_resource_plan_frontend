@@ -355,25 +355,27 @@ function Home(props) {
             Шинэ
           </button>
           <div style={{ position: "absolute", right: "3rem" }}>
-            <button
-              className="button is-focused"
-              style={{
-                backgroundColor: "#418ee6",
-                color: "white",
-                borderColor: "#418ee6",
-                borderStyle: "solid",
-                border: "2px",
-                borderRadius: "5px",
-                width: "12rem",
-                height: "2.1rem",
-                fontFamily: "RalewaySemiBold",
-                fontSize: "1rem",
-              }}
-              onClick={anketA}
-            >
-              АНКЕТ А ХЭСЭГ
-            </button>
-            {buttonValue === 1 ? (
+            {buttonValue !== 2 ? (
+              <button
+                className="button is-focused"
+                style={{
+                  backgroundColor: "#418ee6",
+                  color: "white",
+                  borderColor: "#418ee6",
+                  borderStyle: "solid",
+                  border: "2px",
+                  borderRadius: "5px",
+                  width: "12rem",
+                  height: "2.1rem",
+                  fontFamily: "RalewaySemiBold",
+                  fontSize: "1rem",
+                }}
+                onClick={anketA}
+              >
+                АНКЕТ А ХЭСЭГ
+              </button>
+            ) : null}
+            {buttonValue === 1 || buttonValue === 2 ? (
               <button
                 className="button is-focused"
                 style={{

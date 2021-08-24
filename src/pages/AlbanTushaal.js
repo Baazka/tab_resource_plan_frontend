@@ -204,7 +204,7 @@ const AlbanTushaal = (props) => {
     //   width: "40px",
     // },
     {
-      name: "Төрийн аудиты байгууллага",
+      name: "Төрийн аудитын байгууллага",
       selector: "DEPARTMENT_NAME",
     },
     {
@@ -212,7 +212,7 @@ const AlbanTushaal = (props) => {
       selector: "SUB_DEPARTMENT_NAME",
     },
     {
-      name: "Дотооод бүтцийн нэгж",
+      name: "Дотоод бүтцийн нэгж",
       selector: "COMPARTMENT_NAME",
     },
     {

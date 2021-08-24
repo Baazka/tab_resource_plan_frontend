@@ -345,7 +345,7 @@ function AlbanTushaal(props) {
                 value={data[data?.length - 1].DEPARTMENT_NAME}
               ></input>
             </div>
-            <div className="column is-3 has-text-right">Газар нэгжийн нэр</div>
+            <div className="column is-3 has-text-right">Газар, нэгжийн нэр</div>
             <div className="column is-4 ">
               <input
                 style={{ border: "2px solid silver", width: "15rem" }}
@@ -354,7 +354,9 @@ function AlbanTushaal(props) {
             </div>
           </div>
           <div className="columns">
-            <div className="column is-3  has-text-right">Албан хэлтэс </div>
+            <div className="column is-3  has-text-right">
+              Алба, хэлтэсийн нэр{" "}
+            </div>
             <div className="column is-2">
               <input
                 style={{ border: "2px solid silver", width: "15rem" }}
@@ -474,8 +476,8 @@ function AlbanTushaal(props) {
                   <tr>
                     <td>№</td>
                     <td>Байгууллага нэр</td>
-                    <td>Газар нэгж нэр</td>
-                    <td>Албан хэлтэс нэр</td>
+                    <td>Газар, нэгжийн нэр</td>
+                    <td>Алба, хэлтэсийн нэр</td>
                     <td>Албан тушаалын түвшин</td>
                     <td>Албан тушаал</td>
                     <td>Тушаалын дугаар</td>
@@ -669,8 +671,10 @@ function TsalinHuls(props) {
       >
         <div className="columns">
           <div className="column is-11">
-            <span style={{ color: "#418ee6" }}>Гурав.</span>
-            <span>Цалин хөлсний талаарх мэдээлэл</span>
+            <span style={{ color: "#418ee6", fontWeight: "bold" }}>Гурав.</span>
+            <span style={{ fontWeight: "bold" }}>
+              Цалин хөлсний талаарх мэдээлэл
+            </span>
           </div>
           <div className="column is-1">
             {/* <button
@@ -1108,7 +1112,7 @@ function Uramshuulal(props) {
         data.Promotion[i].DECISION_NO === null ||
         data.Promotion[i].DECISION_NO === ""
       ) {
-        alert.show("Шийдэрийн дугаар оруулан уу");
+        alert.show("Шийдвэрийн дугаар оруулан уу");
         return false;
       } else if (
         data.Promotion[i].PROMOTION_MOTIVE === null ||
@@ -1136,8 +1140,12 @@ function Uramshuulal(props) {
       >
         <div className="columns">
           <div className="column is-11">
-            <span style={{ color: "#418ee6" }}>Дөрөв. </span>
-            <span>Урамшууллын талаарх мэдээлэл</span>
+            <span style={{ color: "#418ee6", fontWeight: "bold" }}>
+              Дөрөв.{" "}
+            </span>
+            <span style={{ fontWeight: "bold" }}>
+              Урамшууллын талаарх мэдээлэл
+            </span>
           </div>
           <div className="column is-1">
             <button
@@ -1154,7 +1162,7 @@ function Uramshuulal(props) {
             <article className="message is-info ">
               <div className="message-body">
                 <strong style={{ color: "black" }}>
-                  (Төрийн албаны тухай хуулийн 51 дугаар зүйлийн 51.1,51,4-т
+                  (Төрийн албаны тухай хуулийн 51 дугаар зүйлийн 51.1-51.4-т
                   заасан урамшууллыг бичнэ)
                 </strong>
               </div>
@@ -1170,9 +1178,9 @@ function Uramshuulal(props) {
               <th>Урамшууллын нэр </th>
               <th>Урамшууллын мөнгөн дүн /мян.төг/</th>
               <th>Шийдвэрийн нэр</th>
-              <th>Шийдвэр огно</th>
-              <th>Шийдэрийн дугаар </th>
-              <th>Урамшуулал үндэслэл</th>
+              <th>Шийдвэрийн огноо</th>
+              <th>Шийдвэрийн дугаар </th>
+              <th>Урамшуулсан үндэслэл</th>
               <th>Тайлбар</th>
               {!zasakhTowch ? (
                 <th
@@ -1571,7 +1579,7 @@ function NuhuhMulbur(props) {
         data.Amends[i].DECISION_NO === null ||
         data.Amends[i].DECISION_NO === ""
       ) {
-        alert.show("Шийдэрийн дугаар оруулан уу");
+        alert.show("Шийдвэрийн дугаар оруулан уу");
         return false;
       } else if (
         data.Amends[i].AMENDS_DESC === null ||
@@ -1599,8 +1607,10 @@ function NuhuhMulbur(props) {
       >
         <div className="columns">
           <div className="column is-11">
-            <span style={{ color: "#418ee6" }}>Тав.</span>
-            <span>Урамшууллын талаарх мэдээлэл</span>
+            <span style={{ color: "#418ee6", fontWeight: "bold" }}>Тав.</span>
+            <span style={{ fontWeight: "bold" }}>
+              Нөхөх төлбөрийн талаарх мэдээлэл
+            </span>
           </div>
           <div className="column is-1">
             <button
@@ -1616,8 +1626,8 @@ function NuhuhMulbur(props) {
             <article className="message is-info ">
               <div className="message-body">
                 <strong style={{ color: "black" }}>
-                  (Төрийн албаны тухай хуулийн 51 дугаар зүйлийн 51.1,51,4-т
-                  заасан урамшууллыг бичнэ)
+                  Төрийн албаны тухай хуулийн 59 дүгээр зүйлийн 59.1-59.8-д
+                  заасан нөхөх төлбөрийг бичнэ)
                 </strong>
               </div>
             </article>
@@ -1633,7 +1643,7 @@ function NuhuhMulbur(props) {
               <th>Нөхөх төлбөрийн мөнгөн дүн/мян.төг/</th>
               <th>Шийдвэрийн нэр</th>
               <th>Шийдвэрийн огноо</th>
-              <th>Шийдэрийн дугаар </th>
+              <th>Шийдвэрийн дугаар </th>
               <th>Нөхөх төлбөр олгосон үндэслэл</th>
               <th>Тайлбар</th>
               {!zasakhTowch ? (
@@ -2032,7 +2042,7 @@ function Tuslamj(props) {
         data.Aid[i].DECISION_NO === null ||
         data.Aid[i].DECISION_NO === ""
       ) {
-        alert.show("Шийдэрийн дугаар оруулан уу");
+        alert.show("Шийдвэрийн дугаар оруулан уу");
         return false;
       } else if (
         data.Aid[i].AID_MOTIVE === null ||
@@ -2063,8 +2073,12 @@ function Tuslamj(props) {
       >
         <div className="columns">
           <div className="column is-11">
-            <span style={{ color: "#418ee6" }}>Зургаа.</span>
-            <span>Тусламжийн талаарх мэдээлэл</span>
+            <span style={{ color: "#418ee6", fontWeight: "bold" }}>
+              Зургаа.
+            </span>
+            <span style={{ fontWeight: "bold" }}>
+              Тусламжийн талаарх мэдээлэл
+            </span>
           </div>
           <div className="column is-1">
             <button
@@ -2082,7 +2096,7 @@ function Tuslamj(props) {
                 <strong style={{ color: "black" }}>
                   (Төрийн албаны тухай хуулийн 60 дугаар зүйл, байгууллагын
                   хөдөлмөрийн дотоод журмыг үндэслэн албан хаагчид олгосон
-                  Тусламжийг бичнэ)
+                  тусламжийг бичнэ)
                 </strong>
               </div>
             </article>
@@ -2098,7 +2112,7 @@ function Tuslamj(props) {
               <th>Тусламжийн мөнгөн дүн /мян.мөг/</th>
               <th>Шийдвэрийн нэр</th>
               <th>Шийдвэрийн огноо</th>
-              <th>Шийдэрийн дугаар </th>
+              <th>Шийдвэрийн дугаар </th>
               <th>Тусламж олгосон үндэслэл</th>
               <th>Тайлбар</th>
               {!zasakhTowch ? (
@@ -2530,8 +2544,10 @@ function Surgalt(props) {
       >
         <div className="columns">
           <div className="column is-11">
-            <span style={{ color: "#418ee6" }}>Долоо.</span>
-            <span>Сургалтанд хамрагдсан талаарх мэдээлэл</span>
+            <span style={{ color: "#418ee6", fontWeight: "bold" }}>Долоо.</span>
+            <span style={{ fontWeight: "bold" }}>
+              Сургалтанд хамрагдсан талаарх мэдээлэл
+            </span>
           </div>
           <div className="column is-1">
             <button
@@ -2547,7 +2563,7 @@ function Surgalt(props) {
             <article className="message is-info ">
               <div className="message-body">
                 <strong style={{ color: "black" }}>
-                  Байгууллагын хөдөлмөрийн дотоод журам, бусад хөтөлбөр эх
+                  Байгууллагын хөдөлмөрийн дотоод журам, бусад хөтөлбөр, эх
                   үүсвэрээс албан хаагчийн хамрагдсан сургалтыг бүртгэнэ.
                 </strong>
               </div>
@@ -2562,7 +2578,7 @@ function Surgalt(props) {
               </th>
               <th>Хөтөлбөрийн эх үүсвэр</th>
               <th>Мэргэшүүлэх сургалтанд хамрагдсан газар</th>
-              <th>Хаана, дотоод гадаадын ямар байгууллагад</th>
+              <th>Хаана, дотоод, гадаадын ямар байгууллагад</th>
               <th>Мэргэшүүлэх сургалтын нэр</th>
               <th>Эхэлсэн он,сар,өдөр </th>
               <th>Дууссан он,сар,өдөр</th>
@@ -2993,8 +3009,10 @@ function Shiitgel(props) {
       >
         <div className="columns">
           <div className="column is-11">
-            <span style={{ color: "#418ee6" }}>Найм.</span>
-            <span>Цалин хөлсний талаарх мэдээлэл</span>
+            <span style={{ color: "#418ee6", fontWeight: "bold" }}>Найм.</span>
+            <span style={{ fontWeight: "bold" }}>
+              Шийтгэлийн талаарх мэдээлэл
+            </span>
           </div>
           <div className="column is-1">
             <button
@@ -3010,11 +3028,11 @@ function Shiitgel(props) {
             <article className="message is-info ">
               <div className="message-body">
                 <strong style={{ color: "black" }}>
-                  ( Төрийн албаны тухай хуулийн 48 дугаар зүйлийн 48.1 буюу уг
-                  хуулийн 37 , 39 дүгээр зүйлд заасныг болон 40 дүгээр зүйлийн
-                  40.1 , 40.2 - т заасны дагуу эрх бүхий байгууллагаас тогтоосон
+                  (Төрийн албаны тухай хуулийн 48 дугаар зүйлийн 48.1 буюу уг
+                  хуулийн 37, 39 дүгээр зүйлд заасныг болон 40 дүгээр зүйлийн
+                  40.1, 40.2-т заасны дагуу эрх бүхий байгууллагаас тогтоосон
                   төрийн албан хаагчийн ёс зүйн хэм хэмжээг зөрчсөний улмаас
-                  ногдуулсан сахилгын шийтгэлийг бичнэ.)
+                  ногдуулсан сахилгын шийтгэлийг бичнэ)
                 </strong>
               </div>
             </article>
@@ -3025,9 +3043,9 @@ function Shiitgel(props) {
             <article className="message is-info">
               <div className="message-body">
                 <strong style={{ color: "black" }}>
-                  ('Төрийн албаны тухай хуулийн 48 дугаар зүйлийн 48.6-д заасныг
+                  (*Төрийн албаны тухай хуулийн 48 дугаар зүйлийн 48.6-д заасныг
                   үндэслэн сахилгын шийтгэлгүйд тооцсон тухай энэ хэсэгт бичиж
-                  болно.)
+                  болно)
                 </strong>
               </div>
             </article>
@@ -3433,8 +3451,8 @@ function HuwiinHereg(props) {
       >
         <div className="columns">
           <div className="column is-11">
-            <span style={{ color: "#418ee6" }}>Ёс.</span>
-            <span>
+            <span style={{ color: "#418ee6", fontWeight: "bold" }}>Ес.</span>
+            <span style={{ fontWeight: "bold" }}>
               Хувийн хэргийн мэдээллийг хянасан, баяжуулсан тухай бүртгэл
             </span>
           </div>

@@ -137,7 +137,7 @@ function Turshlgin(props) {
         data.Experience[i].EXPERIENCE_ORG === null ||
         data.Experience[i].EXPERIENCE_ORG === ""
       ) {
-        alert.show("Ажилласан Байгуулагын Нэр оруулан уу");
+        alert.show("Ажилласан байгууллагынНэр оруулан уу");
         return false;
       } else if (
         data.Experience[i].EXPERIENCE_POSITION === null ||
@@ -259,11 +259,12 @@ function Turshlgin(props) {
             </button>
           </div>
         </div>
-        <div className="columns">
-          <em style={{ marginLeft: "10px", color: "#418ee6" }}>
-            (Төрийн дээд шагнал,Засгийн газрын шагнал болон салбарын бусад
-            шагналыг бичнэ.)
-          </em>
+        <div class="columns">
+          <div class="column">
+            <em className="has-text-link">
+              7.1. Ажилласан байдал (*Байгууллагын нэрийг бүтнээр бичнэ)
+            </em>
+          </div>
         </div>
         <div className="columns">
           <div class="table-container">
@@ -280,12 +281,12 @@ function Turshlgin(props) {
                     <span className="textSaaral">Ажилласан сум, дүүрэг</span>
                   </td>
                   <td>
-                    <span className="textSaaral">Газар хэлтэс, алба</span>
+                    <span className="textSaaral">
+                      Ажилласан байгууллагын нэр
+                    </span>
                   </td>
                   <td>
-                    <span className="textSaaral">
-                      Ажилласан Байгуулагын Нэр
-                    </span>
+                    <span className="textSaaral">Газар хэлтэс, алба</span>
                   </td>
                   <td>
                     <span className="textSaaral">Эрхэлсэн албан тушаал</span>
@@ -310,7 +311,7 @@ function Turshlgin(props) {
                   </td>
                   <td>
                     <span className="textSaaral">
-                      Ажилаас чөлөөлөгдсөн тушаалын дугаар
+                      Ажлаас чөлөөлөгдсөн тушаалын дугаар
                     </span>
                   </td>
                   {!edit ? (
@@ -361,11 +362,10 @@ function Turshlgin(props) {
                         disabled={edit}
                         className="Borderless"
                         style={{ width: "100px" }}
-                        value={data.Experience[index]?.EXPERIENCE_DEPARTMENT}
+                        value={data.Experience[index]?.EXPERIENCE_ORG}
                         onChange={(text) => {
                           let value = [...data?.Experience];
-                          value[index].EXPERIENCE_DEPARTMENT =
-                            text.target.value;
+                          value[index].EXPERIENCE_ORG = text.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
@@ -381,10 +381,11 @@ function Turshlgin(props) {
                         disabled={edit}
                         className="Borderless"
                         style={{ width: "100px" }}
-                        value={data.Experience[index]?.EXPERIENCE_ORG}
+                        value={data.Experience[index]?.EXPERIENCE_DEPARTMENT}
                         onChange={(text) => {
                           let value = [...data?.Experience];
-                          value[index].EXPERIENCE_ORG = text.target.value;
+                          value[index].EXPERIENCE_DEPARTMENT =
+                            text.target.value;
                           value[index].UPDATED_BY = userDetils?.USER_ID;
                           value[index].UPDATED_DATE = dateFormat(
                             new Date(),
