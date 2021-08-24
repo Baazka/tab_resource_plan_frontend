@@ -7,6 +7,8 @@ import {
   Positioncategorytype,
   Positioncategory,
   Positionorder,
+  Edutype,
+  Profession,
 } from "../components/library";
 import Header from "../components/header";
 import { DataRequest } from "../functions/DataApi";
@@ -264,7 +266,7 @@ function YurunkhiiMedeelel(props) {
       props.setLoading(true);
       if (props?.positionId !== "undefined" && props?.positionId != null) {
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/position/",
+          url: "http://hr.audit.mn/hr/api/v1/position/",
           method: "PUT",
           data: data,
         })
@@ -291,7 +293,7 @@ function YurunkhiiMedeelel(props) {
           });
       } else {
         DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/position/",
+          url: "http://hr.audit.mn/hr/api/v1/position/",
           method: "POST",
           data: data,
         })
@@ -554,8 +556,8 @@ function TavigdahTusgai(props) {
       console.log(data?.REQUIREMENT_ID, "orsooon");
       loadData({
         REQUIREMENT_ID: 0,
-        REQUIREMENT_EDUCATION: "",
-        REQUIREMENT_PROFESSION: "",
+        EDUCATION_TYPE_ID: 1,
+        PROFESSION_ID: 1,
         REQUIREMENT_QUALIFICATION: "",
         REQUIREMENT_EXPERIENCE: "",
         REQUIREMENT_SKILL: "",
@@ -697,7 +699,7 @@ function TavigdahTusgai(props) {
           <div className="columns">
             <div className="column is-5  has-text-right">Боловсрол</div>
             <div className="column is-3">
-              <input
+              {/* <input
                 disabled={edit}
                 className="Borderless"
                 placeholder="утгаа оруулна уу"
@@ -712,27 +714,21 @@ function TavigdahTusgai(props) {
                     },
                   });
                 }}
+              /> */}
+              <Edutype
+                personChild={data}
+                setPersonChild={loadData}
+                edit={edit}
               />
             </div>
           </div>
           <div className="columns">
             <div className="column is-5  has-text-right">Мэргэжил</div>
             <div className="column is-3">
-              <input
-                disabled={edit}
-                className="Borderless"
-                placeholder="утгаа оруулна уу"
-                value={data?.REQUIREMENT_PROFESSION}
-                onChange={(text) => {
-                  loadData({
-                    ...data,
-                    ...{
-                      REQUIREMENT_PROFESSION: text.target.value,
-                      UPDATED_BY: userDetils?.USER_ID,
-                      UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-                    },
-                  });
-                }}
+              <Profession
+                personChild={data}
+                setPersonChild={loadData}
+                edit={edit}
               />
             </div>
           </div>

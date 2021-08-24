@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useReducer } from "react";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
-import { Edutype } from "./library";
 import { Add, Delete } from "../assets/images/zurag";
-import { Office, Suboffice } from "./library";
+import { Office, Suboffice, Positioncategorytype } from "./library";
 
 const axios = require("axios");
 var dateFormat = require("dateformat");
@@ -29,12 +28,12 @@ function Turshlgin(props) {
       loadData({
         Experience: [
           {
-            OFFICE_ID: "",
-            SUB_OFFICE_ID: "",
+            OFFICE_ID: 1,
+            SUB_OFFICE_ID: 1,
             EXPERIENCE_DEPARTMENT: "",
             EXPERIENCE_ORG: "",
             EXPERIENCE_POSITION: "",
-            EXPERIENCE_POSITION_TYPE: null,
+            POSITION_CATEGORY_TYPE_ID: 1,
             ENTERED_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
             ENTERED_NO: "",
             EXPIRED_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
@@ -146,8 +145,8 @@ function Turshlgin(props) {
         alert.show("Эрхэлсэн албан тушаал оруулан уу");
         return false;
       } else if (
-        data.Experience[i].EXPERIENCE_POSITION_TYPE === null ||
-        data.Experience[i].EXPERIENCE_POSITION_TYPE === ""
+        data.Experience[i].POSITION_CATEGORY_TYPE_ID === null ||
+        data.Experience[i].POSITION_CATEGORY_TYPE_ID === ""
       ) {
         alert.show("Албан тушаалын төрөл оруулан уу");
         return false;
@@ -159,12 +158,12 @@ function Turshlgin(props) {
   async function addRow() {
     let value = data.Experience;
     value.push({
-      OFFICE_ID: "",
-      SUB_OFFICE_ID: "",
+      OFFICE_ID: 1,
+      SUB_OFFICE_ID: 1,
       EXPERIENCE_DEPARTMENT: "",
       EXPERIENCE_ORG: "",
       EXPERIENCE_POSITION: "",
-      EXPERIENCE_POSITION_TYPE: null,
+      POSITION_CATEGORY_TYPE_ID: 1,
       ENTERED_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
       ENTERED_NO: "",
       EXPIRED_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
@@ -225,6 +224,14 @@ function Turshlgin(props) {
   function setSubOfficeId(value) {
     let temp = [...data?.Experience];
     temp[value.index].SUB_OFFICE_ID = value.SUB_OFFICE_ID;
+    temp[value.index].UPDATED_BY = userDetils?.USER_ID;
+    temp[value.index].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
+    loadData({ Experience: temp });
+  }
+  function setPositioncategorytype(value) {
+    let temp = [...data?.Experience];
+    temp[value.index].POSITION_CATEGORY_TYPE_ID =
+      value.POSITION_CATEGORY_TYPE_ID;
     temp[value.index].UPDATED_BY = userDetils?.USER_ID;
     temp[value.index].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
     loadData({ Experience: temp });
@@ -416,7 +423,7 @@ function Turshlgin(props) {
                     </td>
 
                     <td>
-                      <input
+                      {/* <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="Borderless"
@@ -433,6 +440,13 @@ function Turshlgin(props) {
                           );
                           loadData({ Experience: value });
                         }}
+                      /> */}
+                      <Positioncategorytype
+                        personChild={data.Experience[index]}
+                        setPersonChild={setPositioncategorytype}
+                        fullWidth={true}
+                        index={index}
+                        edit={edit}
                       />
                     </td>
                     <td>

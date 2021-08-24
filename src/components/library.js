@@ -1068,6 +1068,7 @@ function Positioncategorytype(props) {
             ...{
               POSITION_CATEGORY_TYPE_ID: text.target.value,
               check: false,
+              index: props.index,
               UPDATED_BY: userDetils?.USER_ID,
               UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
             },
@@ -1217,7 +1218,7 @@ function Positionorder(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://172.16.24.103:3002/api/v1/library/positionorder"
+        "http://hr.audit.mn/hr/api/v1/library/positionorder"
       );
       loadData(listItems.data);
     }
@@ -1256,7 +1257,50 @@ function Positionorder(props) {
   }
   return listItems;
 }
-
+function Profession(props) {
+  const [data, loadData] = useState(null);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/profession"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
+  let listItems;
+  if (data !== undefined) {
+    listItems = (
+      <select
+        disabled={props.edit}
+        className="anketInput"
+        style={{ width: "-webkit-fill-available" }}
+        value={props.personChild?.PROFESSION_ID}
+        onChange={(text) =>
+          props.setPersonChild({
+            ...props.personChild,
+            ...{
+              PROFESSION_ID: text.target.value,
+              index: props.index,
+              check: false,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
+          })
+        }
+      >
+        {data?.map((nation, index) => (
+          <option key={index} value={nation.PROFESSION_ID}>
+            {nation.PROFESSION_NAME}
+          </option>
+        ))}
+      </select>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+}
 export {
   National,
   Subnational,
@@ -1284,4 +1328,5 @@ export {
   Positioncategorytype,
   Positioncategory,
   Positionorder,
+  Profession,
 };
