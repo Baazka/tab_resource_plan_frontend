@@ -392,7 +392,7 @@ function GerBvl(props) {
 
                       <tr>
                         <td style={{ backgroundColor: "#f1f1f1" }}>
-                          <span>Байгуулагын Нэр</span>
+                          <span>байгууллагын нэр</span>
                         </td>
                         <td style={{ backgroundColor: "#f1f1f1" }}>
                           <span>Албан тушаал</span>
@@ -592,7 +592,7 @@ function Sadan(props) {
                         <span>Төрсөн сум, дүүрэг</span>
                       </td>
                       <td colspan="2" style={{ backgroundColor: "#f1f1f1" }}>
-                        <span>Одоо эрхэлэж буй ажил</span>
+                        <span>Одоо эрхэлж буй ажил</span>
                       </td>
                       <td
                         rowspan="2"
@@ -602,7 +602,7 @@ function Sadan(props) {
 
                     <tr>
                       <td style={{ backgroundColor: "#f1f1f1" }}>
-                        <span>Байгуулагын Нэр</span>
+                        <span>байгууллагын нэр</span>
                       </td>
                       <td style={{ backgroundColor: "#f1f1f1" }}>
                         <span>Албан тушаал</span>
@@ -762,8 +762,8 @@ function ShalgaltiinTalaarkhMedeelel(props) {
                       <td>Шалгалт өгсөн байршил /Аймаг,хот/</td>
                       <td>Огноо</td>
                       <td>Шалгалтын оноо</td>
-                      <td>Шийдэрийн дугаар</td>
-                      <td>Шийдэрийн Огноо</td>
+                      <td>Шийдвэрийн дугаар</td>
+                      <td>Шийдвэрийн Огноо</td>
                       <td>Тайлбар</td>
                     </tr>
                   </thead>
@@ -864,7 +864,7 @@ function TangaragiinBvrtgel(props) {
               marginBottom: "3rem",
             }}
           >
-            Тангарагын бүртгэл
+            Тангаргийн бүртгэл
           </span>
           <div className="columns">
             <div className="column is-3 ml-6" style={{ fontSize: "0.7rem" }}>
@@ -918,10 +918,10 @@ function TangaragiinBvrtgel(props) {
                     <tr>
                       <td>№</td>
                       <td>Ажилтны нэр</td>
-                      <td>Тангарагын төрөл</td>
+                      <td>Тангаргийн төрөл</td>
                       <td>Тангараг өргөсөн огноо</td>
-                      <td>Тангарагын шийдвэрийн дугаар</td>
-                      <td>Тангарагын шийдвэрийн огноо</td>
+                      <td>Тангаргийн шийдвэрийн дугаар</td>
+                      <td>Тангаргийн шийдвэрийн огноо</td>
                     </tr>
                   </thead>
                   <tbody>
@@ -1556,7 +1556,7 @@ function MergeshliinBeltgel(props) {
                     <td>№</td>
                     <td>Ажилтны Нэр</td>
                     <td>Мэргэшүүлэх сургалтанд хамгаалсан газар</td>
-                    <td>Хаана. дотоод. гадаадын ямар байгууллагад</td>
+                    <td>Хаана, дотоод, гадаадын ямар байгууллагад</td>
                     <td>Мэргэшүүлэх Сургуулын нэр</td>
                     <td>Эхэлсэн он, сар, өдөр</td>
                     <td>Дууссан он,сар,өдөр</td>
@@ -1723,7 +1723,7 @@ function ErdmiinTsol(props) {
                       <td>Ажилтны Нэр</td>
                       <td>Цолны төрөл</td>
                       <td>Цол</td>
-                      <td>Цол олгосон байгуулага</td>
+                      <td>Цол олгосон байгууллага</td>
                       <td>Огноо</td>
                       <td>Гэрчилгээ дипломын дугаар</td>
                     </tr>
@@ -2007,7 +2007,7 @@ function ShagnaliinTalaarhMedeelel(props) {
                       <td>Ажилтны нэр</td>
                       <td>Шагнагдсан огноо</td>
                       <td>Шагналын нэр</td>
-                      <td>Шийдэрийн нэр, дугаар</td>
+                      <td>Шийдвэрийн нэр, дугаар</td>
                       <td>Огноо</td>
                       <td>Шагнуулсан үндэслэл</td>
                     </tr>
@@ -2166,7 +2166,7 @@ function TurshlagiinTalaarhMedeelel(props) {
                       <td>Ажилласан аймаг, хот</td>
                       <td>Ажилласан сум, дүүрэг</td>
                       <td>Газар хэлтэс, алба</td>
-                      <td>Ажилласан Байгуулагын Нэр</td>
+                      <td>Ажилласан байгууллагын нэр</td>
                       <td>Эрхэлсэн албан тушаал</td>
                       <td>Албан тушаалын төрөл</td>
                       <td>Ажилд орсон он, сар, өдөр</td>

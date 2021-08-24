@@ -316,9 +316,9 @@ function Bolowsrol(props) {
         </div>
         <div class="columns">
           <div class="column is-12">
-            <em className="m-3 has-text-link	">
-              3.1.Боловсрол (суурь Боловсрол. дипломын дээд
-              боловсрол,бакалавр,магистрын зэргийг оролуулан)
+            <em className="has-text-link	">
+              3.1.Боловсрол (суурь боловсрол, дипломын дээд боловсрол, бакалавр,
+              магистрын зэргийг оролцуулна)
             </em>
           </div>
         </div>
@@ -344,7 +344,7 @@ function Bolowsrol(props) {
                       <span className="textSaaral">Сургуулийн нэр</span>
                     </td>
                     <td>
-                      <span className="textSaaral">Орсон он,сар</span>
+                      <span className="textSaaral">Элссэн он,сар</span>
                     </td>
                     <td>
                       <span className="textSaaral">Төгссөн он,сар</span>
@@ -354,7 +354,7 @@ function Bolowsrol(props) {
                     </td>
                     <td>
                       <span className="textSaaral">
-                        Гэрчилгээ дипломын дугаар
+                        Гэрчилгээ, дипломын дугаар
                       </span>
                     </td>
                     <td>
@@ -586,7 +586,7 @@ function Bolowsrol(props) {
           </div>
           <div class="columns ">
             <div class="column is-12">
-              <em className="TABLE m-3 has-text-link">
+              <em className="has-text-link">
                 3.2. Боловсролын болон шинжлэх ухааны докторын зэрэг
               </em>
             </div>
