@@ -170,7 +170,7 @@ function Mergeshliin(props) {
             PROFESSION_NAME: "",
             START_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
             END_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            DURATION_DAY: 5,
+            DURATION_DAY: 0,
             PROFESSION_DIRECTION: "",
             DIPLOM_NO: "",
             DIPLOM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),

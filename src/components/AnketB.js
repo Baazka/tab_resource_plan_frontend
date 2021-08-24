@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import SideBar from "../components/sidebar";
 import Header from "../components/header";
 import { DataRequest } from "../functions/DataApi";
 import {
@@ -29,6 +28,7 @@ import { useAlert } from "react-alert";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import override from "../css/override";
 import { useHistory } from "react-router-dom";
+import { Salarytype } from "./library";
 const axios = require("axios");
 
 var dateFormat = require("dateformat");
@@ -691,35 +691,34 @@ function TsalinHuls(props) {
             <thead>
               <tr>
                 <td>
-                  <span className="textSaaral">№</span>
-                </td>
-                <td>
-                  <span className="textSaaral">Албан тушаалын</span>
-                </td>
-                <td>
-                  <span className="textSaaral">
-                    Албан ажлын онцгой нөхцөлийн
+                  <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                    №
                   </span>
                 </td>
                 <td>
-                  <span className="textSaaral">
-                    Төрийн алба хаасан хугацааны
+                  <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                    Цалингийн төрөл
                   </span>
                 </td>
                 <td>
-                  <span className="textSaaral">Зэрэг дэвийн</span>
+                  <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                    Цалин хөлс нэмэгдлийн нэр
+                  </span>
                 </td>
                 <td>
-                  <span className="textSaaral">Цол</span>
+                  <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                    Цалин хөлс өөрчилсөн үндэслэл
+                  </span>
                 </td>
                 <td>
-                  <span className="textSaaral">Бусад</span>
+                  <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                    Дүн
+                  </span>
                 </td>
                 <td>
-                  <span className="textSaaral">Тайлбар</span>
-                </td>
-                <td>
-                  <span className="textSaaral">Нийт</span>
+                  <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                    Тайлбар
+                  </span>
                 </td>
               </tr>
             </thead>
@@ -730,13 +729,23 @@ function TsalinHuls(props) {
                     <span className="textSaaral">{index + 1}</span>
                   </td>
                   <td>
+                    <Salarytype
+                      edit={true}
+                      personChild={value}
+                      setPersonChild={loadData}
+                      index={index}
+                    />
+                  </td>
+
+                  <td>
                     <input
                       disabled={edit}
                       className="Borderless"
-                      value={data.salary[index]?.POSITION_SALARY}
+                      placeholder="утгаа оруулна уу"
+                      value={data.salary[index]?.SALARY_SUPPLEMENT}
                       onChange={(text) => {
                         let value = [...data?.salary];
-                        value[index].POSITION_SALARY = text.target.value;
+                        value[index].SALARY_SUPPLEMENT = text.target.value;
                         value[index].UPDATED_BY = userDetils?.USER_ID;
                         value[index].UPDATED_DATE = dateFormat(
                           new Date(),
@@ -750,12 +759,31 @@ function TsalinHuls(props) {
                   <td>
                     <input
                       disabled={edit}
-                      style={{ width: "80px" }}
                       className="Borderless"
-                      value={data.salary[index]?.EMERGENCY_SALARY}
+                      placeholder="утгаа оруулна уу"
+                      value={data.salary[index]?.SALARY_MOTIVE}
                       onChange={(text) => {
                         let value = [...data?.salary];
-                        value[index].EMERGENCY_SALARY = text.target.value;
+                        value[index].SALARY_MOTIVE = text.target.value;
+                        value[index].UPDATED_BY = userDetils?.USER_ID;
+                        value[index].UPDATED_DATE = dateFormat(
+                          new Date(),
+                          "dd-mmm-yy"
+                        );
+                        loadData({ salary: value });
+                      }}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      disabled={edit}
+                      type="number"
+                      className="Borderless"
+                      placeholder="утгаа оруулна уу"
+                      value={data.salary[index]?.SALARY_AMOUNT}
+                      onChange={(text) => {
+                        let value = [...data?.salary];
+                        value[index].SALARY_AMOUNT = text.target.value;
                         value[index].UPDATED_BY = userDetils?.USER_ID;
                         value[index].UPDATED_DATE = dateFormat(
                           new Date(),
@@ -769,80 +797,8 @@ function TsalinHuls(props) {
                   <td>
                     <input
                       disabled={edit}
-                      style={{ width: "80px" }}
                       className="Borderless"
-                      value={data.salary[index]?.CIVIL_SALARY}
-                      onChange={(text) => {
-                        let value = [...data?.salary];
-                        value[index].CIVIL_SALARY = text.target.value;
-                        value[index].UPDATED_BY = userDetils?.USER_ID;
-                        value[index].UPDATED_DATE = dateFormat(
-                          new Date(),
-                          "dd-mmm-yy"
-                        );
-                        loadData({ salary: value });
-                      }}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      disabled={edit}
-                      className="Borderless"
-                      style={{ width: "80px" }}
-                      value={data.salary[index]?.DEGREE_SALARY}
-                      onChange={(text) => {
-                        let value = [...data?.salary];
-                        value[index].DEGREE_SALARY = text.target.value;
-                        value[index].UPDATED_BY = userDetils?.USER_ID;
-                        value[index].UPDATED_DATE = dateFormat(
-                          new Date(),
-                          "dd-mmm-yy"
-                        );
-                        loadData({ salary: value });
-                      }}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      disabled={edit}
-                      className="Borderless"
-                      style={{ width: "80px" }}
-                      value={data.salary[index]?.FAME_SALARY}
-                      onChange={(text) => {
-                        let value = [...data?.salary];
-                        value[index].FAME_SALARY = text.target.value;
-                        value[index].UPDATED_BY = userDetils?.USER_ID;
-                        value[index].UPDATED_DATE = dateFormat(
-                          new Date(),
-                          "dd-mmm-yy"
-                        );
-                        loadData({ salary: value });
-                      }}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      disabled={edit}
-                      className="Borderless"
-                      style={{ width: "80px" }}
-                      value={data.salary[index]?.OTHER_SALARY}
-                      onChange={(text) => {
-                        let value = [...data?.salary];
-                        value[index].OTHER_SALARY = text.target.value;
-                        value[index].UPDATED_BY = userDetils?.USER_ID;
-                        value[index].UPDATED_DATE = dateFormat(
-                          new Date(),
-                          "dd-mmm-yy"
-                        );
-                        loadData({ salary: value });
-                      }}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      disabled={edit}
-                      className="Borderless"
-                      style={{ width: "80px" }}
+                      placeholder="утгаа оруулна уу"
                       value={data.salary[index]?.SALARY_DESC}
                       onChange={(text) => {
                         let value = [...data?.salary];
@@ -854,32 +810,6 @@ function TsalinHuls(props) {
                         );
                         loadData({ salary: value });
                       }}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      disabled={edit}
-                      className="Borderless"
-                      style={{ width: "80px" }}
-                      value={
-                        parseFloat(data.salary[index]?.POSITION_SALARY) +
-                        parseFloat(data.salary[index]?.EMERGENCY_SALARY) +
-                        parseFloat(data.salary[index]?.CIVIL_SALARY) +
-                        parseFloat(data.salary[index]?.DEGREE_SALARY) +
-                        parseFloat(data.salary[index]?.FAME_SALARY) +
-                        parseFloat(data.salary[index]?.OTHER_SALARY)
-                      }
-                      onChange={(text) => {
-                        let value = [...data?.salary];
-                        value[index].TOTAL = text.target.value;
-                        value[index].UPDATED_BY = userDetils?.USER_ID;
-                        value[index].UPDATED_DATE = dateFormat(
-                          new Date(),
-                          "dd-mmm-yy"
-                        );
-                        loadData({ salary: value });
-                      }}
-                      disabled
                     />
                   </td>
                 </tr>

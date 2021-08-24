@@ -16,17 +16,20 @@ function UrChadvar(props) {
 
   useEffect(() => {
     async function fetchData() {
+      let temp;
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/exam/" + props.person_id
       );
-
+      console.log("urchadavarlistItemlength", listItems.data?.Exam.length);
+      console.log("urchadavarlistItem", listItems.data?.Exam);
       if (
         listItems.data?.Exam !== undefined &&
         listItems.data?.Exam.length > 0
       ) {
         if (listItems.data?.Exam.length === 1) {
+          temp = listItems.data?.Exam;
           loadData({
-            Exam: listItems.data?.Exam.concat([
+            Exam: temp.concat([
               {
                 PERSON_ID: props.person_id,
                 EXAM_TYPE_ID: 2,
@@ -35,9 +38,9 @@ function UrChadvar(props) {
                 OFFICE_ID: "1",
                 EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
                 EXAM_POINT: "",
-                DECISION_NO: "A/12",
+                DECISION_NO: "",
                 DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-                DECISION_DESC: "tailbar",
+                DECISION_DESC: "",
                 CREATED_BY: userDetils?.USER_ID,
                 CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
                 ROWTYPE: "NEW",
@@ -51,9 +54,9 @@ function UrChadvar(props) {
                 OFFICE_ID: "1",
                 EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
                 EXAM_POINT: "",
-                DECISION_NO: "A/12",
+                DECISION_NO: "",
                 DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-                DECISION_DESC: "tailbar",
+                DECISION_DESC: "",
                 CREATED_BY: userDetils?.USER_ID,
                 CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
                 ROWTYPE: "NEW",
@@ -61,11 +64,13 @@ function UrChadvar(props) {
               },
             ]),
           });
-        } else if (listItems.data?.Exam.length === 3) {
+        } else if (listItems.data?.Exam.length == 3) {
           loadData(listItems.data);
         } else {
+          temp = [...listItems.data?.Exam];
+
           loadData({
-            Exam: listItems.data?.Exam.push({
+            Exam: temp.concat({
               PERSON_ID: props.person_id,
               EXAM_TYPE_ID: 3,
               EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
@@ -270,7 +275,7 @@ function UrChadvar(props) {
                     <select
                       disabled={edit}
                       className="Borderless"
-                      value={parseInt(data?.Exam[0].IS_EXAM)}
+                      value={data?.Exam[0].IS_EXAM}
                       onChange={(text) => {
                         let value = [...data?.Exam];
                         value[0].IS_EXAM = text.target.value;
@@ -420,7 +425,7 @@ function UrChadvar(props) {
                         loadData({ Exam: value });
                       }}
                     >
-                      <option value={2}>Өгсөн</option>
+                      <option value={1}>Өгсөн</option>
                       <option value={0}>Өгөөгүй</option>
                     </select>
                   </td>
@@ -557,7 +562,7 @@ function UrChadvar(props) {
                       loadData({ Exam: value });
                     }}
                   >
-                    <option value={3}>Өгсөн</option>
+                    <option value={1}>Өгсөн</option>
                     <option value={0}>Өгөөгүй</option>
                   </select>
                 </td>

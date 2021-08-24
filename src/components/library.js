@@ -932,6 +932,7 @@ function Salarytype(props) {
             ...props.personChild,
             ...{
               SALARY_TYPE_ID: text.target.value,
+              index: props.index,
               check: false,
               UPDATED_BY: userDetils?.USER_ID,
               UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
@@ -1210,6 +1211,52 @@ function DateInputArray(props) {
   }
   return listItems;
 }
+
+function Positionorder(props) {
+  const [data, loadData] = useState(null);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://172.16.24.103:3002/api/v1/library/positionorder"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
+  let listItems;
+  if (data !== undefined) {
+    listItems = (
+      <select
+        disabled={props.edit}
+        className="anketInput"
+        style={{ width: "-webkit-fill-available" }}
+        value={props.personChild?.POSITION_ORDER_ID}
+        onChange={(text) =>
+          props.setPersonChild({
+            ...props.personChild,
+            ...{
+              POSITION_ORDER_ID: text.target.value,
+              index: props.index,
+              check: false,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
+          })
+        }
+      >
+        {data?.map((nation, index) => (
+          <option key={index} value={nation.POSITION_ORDER_ID}>
+            {nation.POSITION_ORDER_NAME}
+          </option>
+        ))}
+      </select>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+}
+
 export {
   National,
   Subnational,
@@ -1236,4 +1283,5 @@ export {
   Salarytype,
   Positioncategorytype,
   Positioncategory,
+  Positionorder,
 };

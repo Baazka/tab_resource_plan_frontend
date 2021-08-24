@@ -6,6 +6,7 @@ import {
   Positionlevel,
   Positioncategorytype,
   Positioncategory,
+  Positionorder,
 } from "../components/library";
 import Header from "../components/header";
 import { DataRequest } from "../functions/DataApi";
@@ -213,41 +214,43 @@ function YurunkhiiMedeelel(props) {
 
   useEffect(() => {
     async function fetchData() {
-      if (props?.positionId !== "undefined" && props?.positionId != null) {
-        console.log("bolohgui bn bod", props?.positionId);
-        let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/position/" + props?.positionId
-        );
-        console.log(listItems, "position");
-        loadData(listItems?.data);
-        props.setPOSITION_ID(props?.positionId);
-      } else if (data === "undefined" || data === null) {
-        console.log("boljil bn bod");
-        loadData({
-          COMPARTMENT_ID: "null",
-          COMPARTMENT_NAME: "",
-          COMPARTMENT_SHORT_NAME: "",
-          CONFIRMED_COUNT: 1,
-          DEPARTMENT_ID: 1,
-          DEPARTMENT_NAME: "",
-          DEPARTMENT_SHORT_NAME: "",
-          POSITION_CATEGORY_ID: 1,
-          POSITION_CATEGORY_NAME: "",
-          POSITION_CATEGORY_TYPE_ID: 1,
-          POSITION_CATEGORY_TYPE_NAME: "",
-          POSITION_ID: 0,
-          POSITION_LEVEL_ID: 1,
-          POSITION_LEVEL_NAME: "",
-          POSITION_NAME: "",
-          SUB_DEPARTMENT_ID: "null",
-          SUB_DEPARTMENT_NAME: "",
-          SUB_DEPARTMENT_SHORT_NAME: "",
-          IS_ACTIVE: 1,
-          CREATED_BY: userDetils?.USER_ID,
-          CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-          PERSON_ID: 0,
-        });
-      }
+      if (data == null || data == undefined)
+        if (props?.positionId !== "undefined" && props?.positionId != null) {
+          console.log("bolohgui bn bod", props?.positionId);
+          let listItems = await axios(
+            "http://hr.audit.mn/hr/api/v1/position/" + props?.positionId
+          );
+          console.log(listItems, "position");
+          loadData(listItems?.data);
+          props.setPOSITION_ID(props?.positionId);
+        } else if (data === "undefined" || data === null) {
+          console.log("boljil bn bod");
+          loadData({
+            COMPARTMENT_ID: "null",
+            COMPARTMENT_NAME: "",
+            COMPARTMENT_SHORT_NAME: "",
+            POSITION_ORDER_ID: 1,
+            CONFIRMED_COUNT: 1,
+            DEPARTMENT_ID: 1,
+            DEPARTMENT_NAME: "",
+            DEPARTMENT_SHORT_NAME: "",
+            POSITION_CATEGORY_ID: 1,
+            POSITION_CATEGORY_NAME: "",
+            POSITION_CATEGORY_TYPE_ID: 1,
+            POSITION_CATEGORY_TYPE_NAME: "",
+            POSITION_ID: 0,
+            POSITION_LEVEL_ID: 1,
+            POSITION_LEVEL_NAME: "",
+            POSITION_NAME: "",
+            SUB_DEPARTMENT_ID: "null",
+            SUB_DEPARTMENT_NAME: "",
+            SUB_DEPARTMENT_SHORT_NAME: "",
+            IS_ACTIVE: 1,
+            CREATED_BY: userDetils?.USER_ID,
+            CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            PERSON_ID: 0,
+          });
+        }
     }
     fetchData();
   }, [props]);
@@ -261,7 +264,7 @@ function YurunkhiiMedeelel(props) {
       props.setLoading(true);
       if (props?.positionId !== "undefined" && props?.positionId != null) {
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/position/",
+          url: "http://172.16.24.103:3002/api/v1/position/",
           method: "PUT",
           data: data,
         })
@@ -288,7 +291,7 @@ function YurunkhiiMedeelel(props) {
           });
       } else {
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/position/",
+          url: "http://172.16.24.103:3002/api/v1/position/",
           method: "POST",
           data: data,
         })
@@ -366,6 +369,29 @@ function YurunkhiiMedeelel(props) {
                 edit={edit}
               />
             </div>
+
+            <div className="column is-3 has-text-right">
+              <span style={{ color: "red" }}>*</span>Албан тушаалын ангилал
+            </div>
+            <div className="column is-4 ">
+              <Positionorder
+                personChild={data}
+                setPersonChild={loadData}
+                edit={edit}
+              />
+            </div>
+          </div>
+          <div className="columns">
+            <div className="column is-3  has-text-right">
+              <span style={{ color: "red" }}>*</span>Газар нэгжийн нэр
+            </div>
+            <div className="column is-2">
+              <Subdepartment
+                personChild={data}
+                setPersonChild={loadData}
+                edit={edit}
+              />
+            </div>
             <div className="column is-3 has-text-right">
               <span style={{ color: "red" }}>*</span>Албан тушаалын төрөл
             </div>
@@ -381,12 +407,13 @@ function YurunkhiiMedeelel(props) {
               ></input> */}
             </div>
           </div>
+
           <div className="columns">
             <div className="column is-3  has-text-right">
-              <span style={{ color: "red" }}>*</span>Газар нэгжийн нэр
+              <span style={{ color: "red" }}>*</span>Албан хэлтэсийн нэр
             </div>
             <div className="column is-2">
-              <Subdepartment
+              <Compartment
                 personChild={data}
                 setPersonChild={loadData}
                 edit={edit}
@@ -406,10 +433,10 @@ function YurunkhiiMedeelel(props) {
 
           <div className="columns">
             <div className="column is-3  has-text-right">
-              <span style={{ color: "red" }}>*</span>Албан хэлтэсийн нэр
+              <span style={{ color: "red" }}>*</span>Албан тушаалын түвшин
             </div>
             <div className="column is-2">
-              <Compartment
+              <Positionlevel
                 personChild={data}
                 setPersonChild={loadData}
                 edit={edit}
@@ -436,38 +463,6 @@ function YurunkhiiMedeelel(props) {
                   });
                 }}
               />
-            </div>
-          </div>
-
-          <div className="columns">
-            <div className="column is-3  has-text-right">
-              <span style={{ color: "red" }}>*</span>Албан тушаалын түвшин
-            </div>
-            <div className="column is-2">
-              <Positionlevel
-                personChild={data}
-                setPersonChild={loadData}
-                edit={edit}
-              />
-            </div>
-            <div className="column is-3 has-text-right">
-              {/* <span style={{ color: "red" }}>*</span>Албан тушаалын тодорхойлолт */}
-            </div>
-            <div className="column is-4 ">
-              {/* <input
-                disabled={edit}
-                type="number"
-                className="Borderless"
-                placeholder="утгаа оруулна уу"
-                value={data?.CONFIRMED_COUNT}
-                onChange={(text) => {
-                  let value = data;
-                  value.CONFIRMED_COUNT = text.target.value;
-                  value.UPDATED_BY = userDetils?.USER_ID;
-                  value.UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
-                  loadData(value);
-                }}
-              /> */}
             </div>
           </div>
 

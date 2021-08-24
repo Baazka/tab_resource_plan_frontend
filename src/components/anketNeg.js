@@ -1860,6 +1860,7 @@ function GerBul(props) {
     forceRender();
   }
   function khadgalakhYo() {
+    console.log("family2", family2);
     let combine = family.concat(family2);
     props.loading(true);
     if (requiredField(combine) === true) {
@@ -2336,6 +2337,7 @@ function GerBul(props) {
                         type="date"
                         style={{ width: "120px" }}
                         disabled={edit}
+                        min="01-02-1920"
                         className="anketInput"
                         value={dateFormat(value.MEMBER_BIRTHDATE, "yyyy-mm-dd")}
                         onChange={(e) => {

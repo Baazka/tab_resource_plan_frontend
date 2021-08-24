@@ -173,29 +173,29 @@ function Bolowsrol(props) {
     loadDataSecond({ Education: arr });
   }
   function requiredField(value) {
-    for (let i = 0; i < value.length; i++) {
-      if (value[i].SCHOOL_NAME === null || value[i].SCHOOL_NAME === "") {
-        alert.show("Сургуулийн нэр оруулан уу");
-        return false;
-      } else if (
-        value[i].PROFESSION_NAME === null ||
-        value[i].PROFESSION_NAME === ""
-      ) {
-        alert.show("Эзэмшсэн мэргэжил оруулан уу");
-        return false;
-      } else if (value[i].DIPLOM_NO === null || value[i].DIPLOM_NO === "") {
-        alert.show("Гэрчилгээ дипломын дугаар оруулан уу");
-        return false;
-      } else if (
-        value[i].DIPLOM_SUBJECT === null ||
-        value[i].DIPLOM_SUBJECT === ""
-      ) {
-        alert.show("Гэрчилгээ дипломын дугаар оруулан уу");
-        return false;
-      } else if (i === value.length - 1) {
-        return true;
-      }
-    }
+    // for (let i = 0; i < value.length; i++) {
+    //   if (value[i].SCHOOL_NAME === null || value[i].SCHOOL_NAME === "") {
+    //     alert.show("Сургуулийн нэр оруулан уу");
+    //     return false;
+    //   } else if (
+    //     value[i].PROFESSION_NAME === null ||
+    //     value[i].PROFESSION_NAME === ""
+    //   ) {
+    //     alert.show("Эзэмшсэн мэргэжил оруулан уу");
+    //     return false;
+    //   } else if (value[i].DIPLOM_NO === null || value[i].DIPLOM_NO === "") {
+    //     alert.show("Гэрчилгээ дипломын дугаар оруулан уу");
+    //     return false;
+    //   } else if (
+    //     value[i].DIPLOM_SUBJECT === null ||
+    //     value[i].DIPLOM_SUBJECT === ""
+    //   ) {
+    //     alert.show("Гэрчилгээ дипломын дугаар оруулан уу");
+    //     return false;
+    //   } else if (i === value.length - 1) {
+    return true;
+    //   }
+    // }
   }
   async function addRow() {
     let value = data.Education;
@@ -608,29 +608,29 @@ function Bolowsrol(props) {
                         Боловсрол эзэмшсэн газар
                       </span>
                     </td>
-                    <td>
+                    {/* <td>
                       <span style={{ color: "red" }}>*</span>
                       <span className="textSaaral">Сургуулийн нэр</span>
-                    </td>
+                    </td> */}
                     <td>
                       <span className="textSaaral">Орсон он,сар</span>
                     </td>
                     <td>
                       <span className="textSaaral">Төгссөн он,сар</span>
                     </td>
-                    <td>
+                    {/* <td>
                       <span className="textSaaral">Эзэмшсэн мэргэжил</span>
-                    </td>
+                    </td> */}
                     <td>
                       <span className="textSaaral">
                         Гэрчилгээ дипломын дугаар
                       </span>
                     </td>
-                    <td>
+                    {/* <td>
                       <span className="textSaaral">
                         Сургуулийн холбоо барих мэдээлэл
                       </span>
-                    </td>
+                    </td> */}
                     <td>
                       <span className="textSaaral">
                         Диплом хамгаалсан сэдэв
@@ -691,7 +691,7 @@ function Bolowsrol(props) {
                           }}
                         />
                       </td>
-                      <td>
+                      {/* <td>
                         <input
                           style={{ width: "100px" }}
                           disabled={edit}
@@ -709,7 +709,7 @@ function Bolowsrol(props) {
                             loadDataSecond({ Education: value });
                           }}
                         />
-                      </td>
+                      </td> */}
                       <td>
                         <input
                           type="date"
@@ -752,7 +752,7 @@ function Bolowsrol(props) {
                           }}
                         />
                       </td>
-                      <td>
+                      {/* <td>
                         <input
                           style={{ width: "100px" }}
                           disabled={edit}
@@ -770,7 +770,7 @@ function Bolowsrol(props) {
                             loadDataSecond({ Education: value });
                           }}
                         />
-                      </td>
+                      </td> */}
                       <td>
                         <input
                           style={{ width: "80px" }}
@@ -790,7 +790,7 @@ function Bolowsrol(props) {
                           }}
                         />
                       </td>
-                      <td>
+                      {/* <td>
                         <input
                           style={{ width: "80px" }}
                           disabled={edit}
@@ -808,7 +808,7 @@ function Bolowsrol(props) {
                             loadDataSecond({ Education: value });
                           }}
                         />
-                      </td>
+                      </td> */}
                       <td>
                         <input
                           style={{ width: "90px" }}

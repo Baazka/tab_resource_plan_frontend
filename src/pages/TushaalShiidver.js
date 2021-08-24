@@ -1240,7 +1240,13 @@ function Salary(props) {
       salary: data?.salary.filter((element, index) => index !== indexParam),
     }); //splice(indexParam, 0)
   }
-
+  function salaryType(Pvalue) {
+    let value = [...data?.salary];
+    value[Pvalue.index].SALARY_TYPE_ID = Pvalue.SALARY_TYPE_ID;
+    value[Pvalue.index].UPDATED_BY = userDetils?.USER_ID;
+    value[Pvalue.index].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
+    loadData({ salary: value });
+  }
   let listItems;
   if (data?.salary !== undefined || data?.salary.length !== 0) {
     listItems = (
@@ -1323,8 +1329,9 @@ function Salary(props) {
                     </td>
                     <td>
                       <Salarytype
-                        personChild={data}
-                        setPersonChild={loadData}
+                        personChild={value}
+                        setPersonChild={salaryType}
+                        index={index}
                       />
                     </td>
 
