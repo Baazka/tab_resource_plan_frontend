@@ -367,7 +367,7 @@ function YurunkhiiMedeelel(props) {
               />
             </div>
             <div className="column is-3 has-text-right">
-              <span style={{ color: "red" }}>*</span>Албан тушаалын ангилал
+              <span style={{ color: "red" }}>*</span>Албан тушаалын төрөл
             </div>
             <div className="column is-4 ">
               <Positioncategorytype

@@ -183,12 +183,13 @@ const Home = (props) => {
     decision_ID: 0,
     tushaalUstgakh: false,
   });
+  const [buttonValue, setButtonValue] = useState(1);
   const alert = useAlert();
 
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/decision",
+        url: "http://hr.audit.mn/hr/api/v1/decision/1",
         method: "GET",
         data: {},
       });
@@ -197,6 +198,24 @@ const Home = (props) => {
     }
     test();
   }, [props]);
+  async function unActive() {
+    let jagsaalts = await DataRequest({
+      url: "http://hr.audit.mn/hr/api/v1/decision/0",
+      method: "GET",
+      data: {},
+    });
+    setJagsaalt(jagsaalts?.data);
+    setButtonValue(2);
+  }
+  async function Active() {
+    let jagsaalts = await DataRequest({
+      url: "http://hr.audit.mn/hr/api/v1/decision/1",
+      method: "GET",
+      data: {},
+    });
+    setJagsaalt(jagsaalts?.data);
+    setButtonValue(1);
+  }
 
   const handleChange = (state) => {
     console.log("Selected Rows: ", state.selectedRows);
@@ -383,7 +402,44 @@ const Home = (props) => {
             padding: "0.5rem",
             marginRight: "-10px",
           }}
-        ></div>
+        >
+          <button
+            className="button is-focused"
+            style={{
+              backgroundColor: "#418ee6",
+              color: "white",
+              borderColor: "#418ee6",
+              borderStyle: "solid",
+              border: "2px",
+              borderRadius: "5px",
+              width: "12rem",
+              height: "2.1rem",
+              fontFamily: "RalewaySemiBold",
+              fontSize: "1rem",
+            }}
+            onClick={() => Active()}
+          >
+            Идэвхтэй
+          </button>
+          <button
+            className="button is-focused"
+            style={{
+              backgroundColor: "transparent",
+              borderColor: "#418ee6",
+              color: "black",
+              borderStyle: "solid",
+              borderRadius: "5px",
+              width: "12rem",
+              height: "2.1rem",
+              fontFamily: "RalewaySemiBold",
+              fontSize: "1rem",
+              marginLeft: "0.5rem",
+            }}
+            onClick={() => unActive()}
+          >
+            Идэвхгүй
+          </button>
+        </div>
         <div
           style={{
             width: "20rem",
