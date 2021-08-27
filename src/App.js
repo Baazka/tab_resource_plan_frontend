@@ -62,11 +62,15 @@ function App() {
         <Route path="/web/anketB/:id" component={AnketB} exact />
         <Route path="/web/dashboard/" component={Dashboard} exact />
         <Route path="/web/Baiguullaga/" component={Baiguullaga} exact />
-        <Route path="/web/AlbanTushaal/" component={AlbanTushaal} exact />
+        <Route
+          path="/web/AlbanTushaal/:search"
+          component={AlbanTushaal}
+          exact
+        />
         <Route path="/web/TushaalShiidver/" component={TushaalShiidver} exact />
         <Route path="/web/Tailan/" component={Tailan} exact />
         <Route
-          path="/web/AlbanTushaalBurtgel/:positionid"
+          path="/web/AlbanTushaalBurtgel/:positionid/:search"
           component={AlbanTushaalBurtgel}
           exact
         />

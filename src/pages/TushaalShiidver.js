@@ -23,7 +23,9 @@ import {
   Positionlevel,
   Position,
   Decisiontype,
+  Reasonsposition,
   Salarytype,
+  Reasonsdecision,
 } from "../components/library";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
@@ -100,7 +102,13 @@ const customStyles = {
     },
   },
 };
-const ButtonsColumn = ({ row, setJagsaalt, jagsaalt, setTushaal }) => {
+const ButtonsColumn = ({
+  row,
+  setJagsaalt,
+  jagsaalt,
+  setTushaal,
+  buttonValue,
+}) => {
   const alert = useAlert();
   function deleteDecision() {
     DataRequest({
@@ -149,13 +157,15 @@ const ButtonsColumn = ({ row, setJagsaalt, jagsaalt, setTushaal }) => {
   }
   return (
     <div>
-      <img
-        src={Delete}
-        width="30px"
-        height="30px"
-        onClick={() => tushaalUstgakh()}
-        style={{ cursor: "pointer" }}
-      />
+      {buttonValue === 1 ? (
+        <img
+          src={Delete}
+          width="30px"
+          height="30px"
+          onClick={() => tushaalUstgakh()}
+          style={{ cursor: "pointer" }}
+        />
+      ) : null}
       <img
         src={Eye}
         width="20px"
@@ -198,6 +208,7 @@ const Home = (props) => {
     }
     test();
   }, [props]);
+
   async function unActive() {
     let jagsaalts = await DataRequest({
       url: "http://hr.audit.mn/hr/api/v1/decision/0",
@@ -295,84 +306,171 @@ const Home = (props) => {
       alert.show("устгах өгөгдлөө сонгон уу?");
     }
   }
-  const columns = [
-    {
-      name: "№",
-      selector: (row, index) => {
-        return index + 1;
-      },
-      sortable: true,
-      width: "40px",
-    },
-    {
-      name: "Ажилтны нэр",
-      selector: "PERSON_FIRSTNAME",
-      sortable: true,
-    },
-    {
-      name: "Ажилтны овог",
-      selector: "PERSON_LASTNAME",
-      sortable: true,
-    },
-    {
-      name: "Газар нэгж",
-      selector: "DEPARTMENT_NAME",
-      sortable: true,
-    },
-    // {
-    //   name: "Алба, хэлтэс",
-    //   selector: "",
-    //   sortable: true,
-    // },
-    {
-      name: "Албан тушаал",
-      selector: "POSITION_NAME",
-      sortable: true,
-    },
-    {
-      name: "Тушаалын төрөл",
-      selector: "DECISION_TYPE_NAME",
-      sortable: true,
-      center: true,
-    },
-    {
-      name: "Тушаалын дугаар",
-      selector: "DECISION_NO",
-      sortable: true,
-      center: true,
-    },
-    {
-      name: "Хэрэгжих огноо",
-      center: true,
-      selector: (row, index) => {
-        return dateFormat(row.START_DATE, "yyyy-mm-dd");
-      },
-      sortable: true,
-    },
-    {
-      name: "Бүртгэсэн огноо",
-      center: true,
-      width: "100px",
-      selector: (row, index) => {
-        return dateFormat(row.REGISTER_DATE, "yyyy-mm-dd");
-      },
-      sortable: true,
-    },
-    {
-      name: "",
+  const columns =
+    buttonValue === 1
+      ? [
+          {
+            name: "№",
+            selector: (row, index) => {
+              return index + 1;
+            },
+            sortable: true,
+            width: "40px",
+          },
+          {
+            name: "Ажилтны нэр",
+            selector: "PERSON_FIRSTNAME",
+            sortable: true,
+          },
+          {
+            name: "Ажилтны овог",
+            selector: "PERSON_LASTNAME",
+            sortable: true,
+          },
+          {
+            name: "Газар нэгж",
+            selector: "DEPARTMENT_NAME",
+            sortable: true,
+          },
+          // {
+          //   name: "Алба, хэлтэс",
+          //   selector: "",
+          //   sortable: true,
+          // },
+          {
+            name: "Албан тушаал",
+            selector: "POSITION_NAME",
+            sortable: true,
+          },
+          {
+            name: "Тушаалын төрөл",
+            selector: "DECISION_TYPE_NAME",
+            sortable: true,
+            center: true,
+          },
+          {
+            name: "Тушаалын дугаар",
+            selector: "DECISION_NO",
+            sortable: true,
+            center: true,
+          },
 
-      right: true,
-      cell: (row) => (
-        <ButtonsColumn
-          row={row}
-          setJagsaalt={setJagsaalt}
-          jagsaalt={jagsaalt}
-          tushaal={tushaal}
-          setTushaal={setTushaal}
-        />
-      ),
-    },
-  ];
+          {
+            name: "Хэрэгжих огноо",
+            center: true,
+            selector: (row, index) => {
+              return dateFormat(row.START_DATE, "yyyy-mm-dd");
+            },
+            sortable: true,
+          },
+          {
+            name: "Бүртгэсэн огноо",
+            center: true,
+            width: "100px",
+            selector: (row, index) => {
+              return dateFormat(row.REGISTER_DATE, "yyyy-mm-dd");
+            },
+            sortable: true,
+          },
+          {
+            name: "",
+
+            right: true,
+            cell: (row) => (
+              <ButtonsColumn
+                row={row}
+                setJagsaalt={setJagsaalt}
+                jagsaalt={jagsaalt}
+                tushaal={tushaal}
+                setTushaal={setTushaal}
+                buttonValue={buttonValue}
+              />
+            ),
+          },
+        ]
+      : [
+          {
+            name: "№",
+            selector: (row, index) => {
+              return index + 1;
+            },
+            sortable: true,
+            width: "40px",
+          },
+          {
+            name: "Ажилтны нэр",
+            selector: "PERSON_FIRSTNAME",
+            sortable: true,
+          },
+          {
+            name: "Ажилтны овог",
+            selector: "PERSON_LASTNAME",
+            sortable: true,
+          },
+          {
+            name: "Газар нэгж",
+            selector: "DEPARTMENT_NAME",
+            sortable: true,
+          },
+          // {
+          //   name: "Алба, хэлтэс",
+          //   selector: "",
+          //   sortable: true,
+          // },
+          {
+            name: "Албан тушаал",
+            selector: "POSITION_NAME",
+            sortable: true,
+          },
+          {
+            name: "Тушаалын төрөл",
+            selector: "DECISION_TYPE_NAME",
+            sortable: true,
+            center: true,
+          },
+          {
+            name: "Тушаалын дугаар",
+            selector: "DECISION_NO",
+            sortable: true,
+            center: true,
+          },
+
+          {
+            name: "Шалтгаан",
+            center: true,
+            selector: "REASONS_DECISION_CHANGE_NAME",
+            sortable: true,
+          },
+          {
+            name: "Устгасан огноо",
+            center: true,
+            width: "100px",
+            selector: (row, index) => {
+              return dateFormat(row.REASON_DATE, "yyyy-mm-dd");
+            },
+            sortable: true,
+          },
+          {
+            name: "Тайлбар",
+            center: true,
+            width: "100px",
+            selector: "REASON_DESC",
+            sortable: true,
+          },
+          {
+            name: "",
+            right: true,
+            cell: (row) => (
+              <ButtonsColumn
+                row={row}
+                setJagsaalt={setJagsaalt}
+                jagsaalt={jagsaalt}
+                tushaal={tushaal}
+                setTushaal={setTushaal}
+              />
+            ),
+          },
+        ];
 
   return (
     <div
@@ -521,6 +619,7 @@ const Home = (props) => {
             tushaal={tushaal}
             setTushaal={setTushaal}
             edit={false}
+            buttonValue={buttonValue === 1 ? 1 : 0}
           />
         ) : null}
         {tushaal?.tushaalUstgakh ? (
@@ -1464,8 +1563,12 @@ function TushaalKharakh(props) {
 
   useEffect(() => {
     async function fetchData() {
+      console.log("TushaalKharakh", props.tushaal?.decision_ID);
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/decision/" + props.tushaal?.decision_ID
+        "http://hr.audit.mn/hr/api/v1/decision/" +
+          props.buttonValue +
+          "/" +
+          props.tushaal?.decision_ID
       );
       console.log("TushaalKharakh", listItems);
       loadData(listItems?.data);
@@ -1536,12 +1639,12 @@ function TushaalKharakh(props) {
               <input
                 class="input  is-size-7"
                 disabled
-                value={data?.DECISION_TYPE_ID === 1 ? "Томилох" : "Чөлөөлөх"}
+                value={data?.DECISION_TYPE_NAME}
                 onChange={(e) => {
                   loadData({
                     ...data,
                     ...{
-                      DECISION_TYPE_ID: e.target.value,
+                      DECISION_TYPE_NAME: e.target.value,
                     },
                   });
                 }}
@@ -1741,6 +1844,7 @@ function SalaryKaruulakh(props) {
   const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
+      console.log("salaryKharakh", props.EMPLOYEE_ID);
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/salary/" + props.EMPLOYEE_ID
       );
@@ -1906,7 +2010,7 @@ function SalaryKaruulakh(props) {
 function UstgakhTsonkh(props) {
   const [data, loadData] = useState({
     DECISION_ID: 0,
-    REASON_ID: 1,
+    REASONS_DECISION_CHANGE_ID: 1,
     REASON_DATE: dateFormat(new Date(), "dd-mmm-yy"),
     REASON_DESC: "",
     UPDATED_BY: userDetils?.USER_ID,
@@ -1916,7 +2020,7 @@ function UstgakhTsonkh(props) {
   function deleteDecision() {
     console.log("alert", {
       DECISION_ID: props.tushaal?.decision_ID,
-      REASON_ID: data.REASON_ID,
+      REASONS_DECISION_CHANGE_ID: data.REASONS_DECISION_CHANGE_ID,
       REASON_DATE: data.REASON_DATE,
       REASON_DESC: data.REASON_DESC,
       UPDATED_BY: userDetils?.USER_ID,
@@ -1927,7 +2031,7 @@ function UstgakhTsonkh(props) {
       method: "POST",
       data: {
         DECISION_ID: props.tushaal?.decision_ID,
-        REASON_ID: data.REASON_ID,
+        REASONS_DECISION_CHANGE_ID: data.REASONS_DECISION_CHANGE_ID,
         REASON_DATE: data.REASON_DATE,
         REASON_DESC: data.REASON_DESC,
         UPDATED_BY: userDetils?.USER_ID,
@@ -2006,24 +2110,26 @@ function UstgakhTsonkh(props) {
 
       <div>
         <div className="columns  ">
-          <div className="column is-3">
+          <div className="column is-1"></div>
+          <div className="column is-5">
             <h1>Шалтгаан</h1>
-            <select
-              className="anketInput"
-              value={data.REASON_ID}
-              onChange={(text) =>
-                loadData({
-                  ...data,
-                  ...{ REASON_ID: text.target.value },
-                })
-              }
-            >
-              <option value={1}>"алдаатай шивсэн"</option>
-              <option value={2}>"хугацаа дууссан"</option>
-            </select>
+            {/* <select
+      className="anketInput"
+      value={data.REASON_ID}
+      onChange={(text) =>
+        loadData({
+          ...data,
+          ...{ REASON_ID: text.target.value },
+        })
+      }
+    >
+      <option value={1}>"алдаатай шивсэн"</option>
+      <option value={2}>"хугацаа дууссан"</option>
+    </select> */}
+            <Reasonsdecision personChild={data} setPersonChild={loadData} />
           </div>
 
-          <div className="column is-6">
+          <div className="column is-5">
             <h1> Огноо</h1>
             <input
               class="input  is-size-7"
@@ -2044,31 +2150,36 @@ function UstgakhTsonkh(props) {
 
         <div>
           <div className="columns">
+            <div className="column is-1"></div>
             <div className="column is-6">
               <h1> Тайлбар</h1>
-              <textarea
-                class="input  is-size-7"
-                value={data?.REASON_DESC}
-                onChange={(e) => {
-                  loadData({
-                    ...data,
-                    ...{
-                      REASON_DESC: e.target.value,
-                    },
-                  });
-                }}
-              />
+              <div class="control">
+                <textarea
+                  class="textarea is-small"
+                  placeholder="Тайлбар"
+                  value={data?.REASON_DESC}
+                  onChange={(e) => {
+                    loadData({
+                      ...data,
+                      ...{
+                        REASON_DESC: e.target.value,
+                      },
+                    });
+                  }}
+                ></textarea>
+              </div>
             </div>
           </div>
         </div>
         <div className="columns">
+          <div className="column is-1"></div>
           <div className="column is-1 ">
             {/* <button
-              className="buttonTsenkher"
-              style={{ marginRight: "0.4rem" }}
-            >
-              Хэвлэх
-            </button> */}
+      className="buttonTsenkher"
+      style={{ marginRight: "0.4rem" }}
+    >
+      Хэвлэх
+    </button> */}
             <button className="buttonTsenkher" onClick={() => deleteDecision()}>
               Тийм
             </button>

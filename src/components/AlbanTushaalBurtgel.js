@@ -89,7 +89,11 @@ function AlbanTushaalBurtgel(props) {
               pointerEvents: "initial",
               textDecoration: "underline",
             }}
-            onClick={() => history.push("/web/AlbanTushaal", { back: true })}
+            onClick={() =>
+              history.push("/web/AlbanTushaal/" + props.match.params.search, {
+                back: true,
+              })
+            }
           >
             {"<Буцах"}
           </button>
@@ -551,6 +555,7 @@ function TavigdahTusgai(props) {
     }
     fetchData();
   }, [props]);
+
   useEffect(() => {
     if (data?.REQUIREMENT_ID === undefined) {
       console.log(data?.REQUIREMENT_ID, "orsooon");

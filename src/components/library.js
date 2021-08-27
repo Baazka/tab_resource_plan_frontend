@@ -1301,6 +1301,96 @@ function Profession(props) {
   }
   return listItems;
 }
+
+function Reasonsposition(props) {
+  const [data, loadData] = useState(null);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/reasonsposition"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
+  let listItems;
+  if (data !== undefined) {
+    listItems = (
+      <select
+        disabled={props.edit}
+        className="anketInput"
+        style={{ width: "-webkit-fill-available" }}
+        value={props.personChild?.REASONS_POSITION_CHANGE_ID}
+        onChange={(text) =>
+          props.setPersonChild({
+            ...props.personChild,
+            ...{
+              REASONS_POSITION_CHANGE_ID: text.target.value,
+              index: props.index,
+              check: false,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
+          })
+        }
+      >
+        {data?.map((nation, index) => (
+          <option key={index} value={nation.REASONS_POSITION_CHANGE_ID}>
+            {nation.REASONS_POSITION_CHANGE_NAME}
+          </option>
+        ))}
+      </select>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+}
+function Reasonsdecision(props) {
+  const [data, loadData] = useState(null);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/library/reasonsdecision"
+      );
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
+  let listItems;
+  if (data !== undefined) {
+    listItems = (
+      <select
+        disabled={props.edit}
+        className="anketInput"
+        style={{ width: "-webkit-fill-available" }}
+        value={props.personChild?.REASONS_DECISION_CHANGE_ID}
+        onChange={(text) =>
+          props.setPersonChild({
+            ...props.personChild,
+            ...{
+              REASONS_DECISION_CHANGE_ID: text.target.value,
+              index: props.index,
+              check: false,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
+          })
+        }
+      >
+        {data?.map((nation, index) => (
+          <option key={index} value={nation.REASONS_DECISION_CHANGE_ID}>
+            {nation.REASONS_DECISION_CHANGE_NAME}
+          </option>
+        ))}
+      </select>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+}
+
 export {
   National,
   Subnational,
@@ -1329,4 +1419,6 @@ export {
   Positioncategory,
   Positionorder,
   Profession,
+  Reasonsposition,
+  Reasonsdecision,
 };

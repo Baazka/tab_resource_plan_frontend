@@ -16,6 +16,7 @@ import {
 } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
+import { Reasonsposition } from "../components/library";
 var rowNumber = 1;
 const axios = require("axios");
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
@@ -67,52 +68,65 @@ const customStyles = {
   },
 };
 
-const ButtonsColumn = ({ row, setJagsaalt, jagsaalt, setTushaal }) => {
+const ButtonsColumn = ({
+  row,
+  setJagsaalt,
+  jagsaalt,
+  setTushaal,
+  search,
+  setTsonkh,
+  buttonValue,
+}) => {
   const alert = useAlert();
   const history = useHistory();
   function deleteAlbanTushaal() {
-    DataRequest({
-      url: "http://http://hr.audit.mn/hr/api/v1/positionDelete/",
-      method: "POST",
-      data: {
-        POSITION_ID: row?.POSITION_ID,
-        REASON_ID: 1,
-        REASON_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-        REASON_DESC: "",
-        UPDATED_BY: userDetils?.USER_ID,
-        UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-      },
-    })
-      .then(function (response) {
-        console.log("deleteAlbanTushaalresponse", response);
-        if (response?.data?.message === "success") {
-          setJagsaalt(
-            jagsaalt?.filter(
-              (element, index) => element.POSITION_ID !== row?.POSITION_ID
-            )
-          );
-          alert.show("амжилттай устлаа");
-        }
-      })
-      .catch(function (error) {
-        //alert(error.response.data.error.message);
-        console.log(error.response);
-        alert.show("aldaa");
-      });
+    setTsonkh({ ustgakh: true, POSITION_ID: row?.POSITION_ID });
+    // DataRequest({
+    //   url: "http://http://hr.audit.mn/hr/api/v1/positionDelete/",
+    //   method: "POST",
+    //   data: {
+    //     POSITION_ID: row?.POSITION_ID,
+    //     REASON_ID: 1,
+    //     REASON_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+    //     REASON_DESC: "",
+    //     UPDATED_BY: userDetils?.USER_ID,
+    //     UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+    //   },
+    // })
+    //   .then(function (response) {
+    //     console.log("deleteAlbanTushaalresponse", response);
+    //     if (response?.data?.message === "success") {
+    //       setJagsaalt(
+    //         jagsaalt?.filter(
+    //           (element, index) => element.POSITION_ID !== row?.POSITION_ID
+    //         )
+    //       );
+    //       alert.show("амжилттай устлаа");
+    //     }
+    //   })
+    //   .catch(function (error) {
+    //     //alert(error.response.data.error.message);
+    //     console.log(error.response);
+    //     alert.show("aldaa");
+    //   });
   }
 
   function tushaalKharuulakh() {
-    history.push("/web/AlbanTushaalBurtgel/" + row?.POSITION_ID.toString());
+    history.push(
+      "/web/AlbanTushaalBurtgel/" + row?.POSITION_ID.toString() + "/" + search
+    );
   }
   return (
     <div>
-      <img
-        src={Delete}
-        width="30px"
-        height="30px"
-        onClick={() => deleteAlbanTushaal()}
-        style={{ cursor: "pointer" }}
-      />
+      {buttonValue == 1 ? (
+        <img
+          src={Delete}
+          width="30px"
+          height="30px"
+          onClick={() => deleteAlbanTushaal()}
+          style={{ cursor: "pointer" }}
+        />
+      ) : null}
       <img
         src={Edit}
         width="20px"
@@ -132,20 +146,70 @@ const AlbanTushaal = (props) => {
   const [search, setSearch] = useState("");
   const [data, setData] = useState();
   const alert = useAlert();
+  const [tsonkh, setTsonkh] = useState({
+    ustgakh: false,
+    POSITION_ID: null,
+  });
+  const [buttonValue, setButtonValue] = useState(1);
 
   useEffect(() => {
     async function test() {
-      let jagsaalts = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/position",
-        method: "GET",
-        data: {},
-      });
-      setJagsaalt(jagsaalts?.data);
-      console.log(jagsaalts);
+      if (JSON.parse(props.match.params.search)?.buttonValue === 1) {
+        let jagsaalts = await DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/position/1/",
+          method: "GET",
+          data: {},
+        });
+        setJagsaalt(jagsaalts?.data);
+        if (
+          props.match.params.search != undefined &&
+          props.match.params.search != "null"
+        ) {
+          let ob = JSON.parse(props.match.params.search);
+          setSearchType(ob.searchType);
+          makeSearch(ob.search, jagsaalts?.data, ob.searchType);
+        }
+        console.log(jagsaalts);
+      } else {
+        let jagsaalts = await DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/position/0/",
+          method: "GET",
+          data: {},
+        });
+        setJagsaalt(jagsaalts?.data);
+        setButtonValue(2);
+        if (
+          props.match.params.search != undefined &&
+          props.match.params.search != "null"
+        ) {
+          let ob = JSON.parse(props.match.params.search);
+          setSearchType(ob.searchType);
+          makeSearch(ob.search, jagsaalts?.data, ob.searchType);
+        }
+        console.log(jagsaalts);
+      }
     }
     test();
     console.log("jagsaalt", jagsaalt);
   }, [props]);
+  async function unActive() {
+    let jagsaalts = await DataRequest({
+      url: "http://hr.audit.mn/hr/api/v1/position/0/",
+      method: "GET",
+      data: {},
+    });
+    setJagsaalt(jagsaalts?.data);
+    setButtonValue(2);
+  }
+  async function Active() {
+    let jagsaalts = await DataRequest({
+      url: "http://hr.audit.mn/hr/api/v1/position/1/",
+      method: "GET",
+      data: {},
+    });
+    setJagsaalt(jagsaalts?.data);
+    setButtonValue(1);
+  }
 
   const handleChange = (state) => {
     // You can use setState or dispatch with something like Redux so we can use the retrieved data
@@ -161,10 +225,16 @@ const AlbanTushaal = (props) => {
   function AlbanTushaal() {
     history.push("/web/AlbanTushaalBurtgel/" + data?.POSITION_ID.toString());
   }
-  function makeSearch(value) {
+  function makeSearch(value, list, stype) {
     setSearch(value);
 
-    let found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
+    let found;
+    if (jagsaalt != undefined) {
+      found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
+    } else {
+      console.log("searchjagsaalt", searchType);
+      found = list?.filter((obj) => equalStr(obj[stype], value));
+    }
     console.log(found);
     if (found != undefined && found.length > 0) setFound(found);
     else setFound([]);
@@ -188,99 +258,211 @@ const AlbanTushaal = (props) => {
       } else if (value1.includes(value2)) return true;
     return false;
   }
-  const columns = [
-    {
-      name: "№",
-      selector: (row, index) => {
-        return index + 1;
-      },
-      sortable: true,
-      width: "30px",
-    },
-    // {
-    //   name: "Код",
-    //   selector: "DEPARTMENT_ID",
-    //   sortable: true,
-    //   width: "40px",
-    // },
-    {
-      name: "Төрийн аудитын байгууллага",
-      selector: "DEPARTMENT_NAME",
-    },
-    {
-      name: "Харъяа газар",
-      selector: "SUB_DEPARTMENT_NAME",
-    },
-    {
-      name: "Дотоод бүтцийн нэгж",
-      selector: "COMPARTMENT_NAME",
-    },
-    {
-      name: "Албан тушаалын түвшин",
-      selector: "POSITION_LEVEL_NAME",
-      sortable: true,
-      width: "100px",
-    },
-    {
-      name: "Албан тушаалын нэр",
-      selector: "POSITION_NAME",
-      sortable: true,
-    },
-    {
-      name: "Албан тушаалын төрөл",
-      selector: "",
-      sortable: true,
-      width: "75px",
-    },
-    {
-      name: "Албан тушаалын ангилал",
-      selector: "",
-      sortable: true,
-      width: "75px",
-    },
-    {
-      name: "Албан тушаалын зэрэглэл",
-      selector: "",
-      sortable: true,
-      width: "75px",
-    },
-    {
-      name: "Батлагдсан орон тоо",
-      selector: "CONFIRMED_COUNT",
-      sortable: true,
-      center: true,
-      width: "75px",
-    },
-    {
-      name: "Ажилтны тоо",
-      selector: "",
-      sortable: true,
-      width: "75px",
-    },
-    {
-      name: "Эзгүй орон тоо",
-      selector: "",
-      sortable: true,
-      width: "75px",
-    },
-    {
-      name: "Сул орон тоо",
-      selector: "",
-      sortable: true,
-      width: "75px",
-    },
-    {
-      name: "",
+  const columns =
+    buttonValue === 1
+      ? [
+          {
+            name: "№",
+            selector: (row, index) => {
+              return index + 1;
+            },
+            sortable: true,
+            width: "30px",
+          },
+          // {
+          //   name: "Код",
+          //   selector: "DEPARTMENT_ID",
+          //   sortable: true,
+          //   width: "40px",
+          // },
+          {
+            name: "Төрийн аудитын байгууллага",
+            selector: "DEPARTMENT_NAME",
+          },
+          {
+            name: "Харъяа газар",
+            selector: "SUB_DEPARTMENT_NAME",
+          },
+          {
+            name: "Дотоод бүтцийн нэгж",
+            selector: "COMPARTMENT_NAME",
+          },
+          {
+            name: "Албан тушаалын түвшин",
+            selector: "POSITION_LEVEL_NAME",
+            sortable: true,
+            width: "100px",
+          },
+          {
+            name: "Албан тушаалын нэр",
+            selector: "POSITION_NAME",
+            sortable: true,
+          },
+          {
+            name: "Албан тушаалын төрөл",
+            selector: "",
+            sortable: true,
+            width: "75px",
+          },
+          {
+            name: "Албан тушаалын ангилал",
+            selector: "",
+            sortable: true,
+            width: "75px",
+          },
+          {
+            name: "Албан тушаалын зэрэглэл",
+            selector: "",
+            sortable: true,
+            width: "75px",
+          },
+          {
+            name: "Батлагдсан орон тоо",
+            selector: "CONFIRMED_COUNT",
+            sortable: true,
+            center: true,
+            width: "75px",
+          },
+          {
+            name: "Ажилтны тоо",
+            selector: "",
+            sortable: true,
+            width: "75px",
+          },
+          {
+            name: "Эзгүй орон тоо",
+            selector: "",
+            sortable: true,
+            width: "75px",
+          },
+          {
+            name: "Сул орон тоо",
+            selector: "",
+            sortable: true,
+            width: "75px",
+          },
+          {
+            name: "",
 
-      cell: (row) => (
-        <ButtonsColumn
-          row={row}
-          setJagsaalt={setJagsaalt}
-          jagsaalt={jagsaalt}
-        />
-      ),
-    },
-  ];
+            cell: (row) => (
+              <ButtonsColumn
+                row={row}
+                setJagsaalt={setJagsaalt}
+                jagsaalt={jagsaalt}
+                search={JSON.stringify({
+                  search: search,
+                  searchType: searchType,
+                  buttonValue: buttonValue,
+                })}
+                setTsonkh={setTsonkh}
+                buttonValue={buttonValue}
+              />
+            ),
+          },
+        ]
+      : [
+          {
+            name: "№",
+            selector: (row, index) => {
+              return index + 1;
+            },
+            sortable: true,
+            width: "30px",
+          },
+          // {
+          //   name: "Код",
+          //   selector: "DEPARTMENT_ID",
+          //   sortable: true,
+          //   width: "40px",
+          // },
+          {
+            name: "Төрийн аудитын байгууллага",
+            selector: "DEPARTMENT_NAME",
+          },
+          {
+            name: "Харъяа газар",
+            selector: "SUB_DEPARTMENT_NAME",
+          },
+          {
+            name: "Дотоод бүтцийн нэгж",
+            selector: "COMPARTMENT_NAME",
+          },
+          {
+            name: "Албан тушаалын түвшин",
+            selector: "POSITION_LEVEL_NAME",
+            sortable: true,
+            width: "100px",
+          },
+          {
+            name: "Албан тушаалын нэр",
+            selector: "POSITION_NAME",
+            sortable: true,
+          },
+          {
+            name: "Албан тушаалын төрөл",
+            selector: "",
+            sortable: true,
+            width: "75px",
+          },
+          {
+            name: "Албан тушаалын ангилал",
+            selector: "",
+            sortable: true,
+            width: "75px",
+          },
+          {
+            name: "Албан тушаалын зэрэглэл",
+            selector: "",
+            sortable: true,
+            width: "75px",
+          },
+          {
+            name: "Батлагдсан орон тоо",
+            selector: "CONFIRMED_COUNT",
+            sortable: true,
+            center: true,
+            width: "75px",
+          },
+          {
+            name: "Шалтгаан",
+            center: true,
+            selector: "REASONS_POSITION_CHANGE_NAME",
+            sortable: true,
+          },
+          {
+            name: "Устгасан огноо",
+            center: true,
+            width: "100px",
+            selector: (row, index) => {
+              return dateFormat(row.REASON_DATE, "yyyy-mm-dd");
+            },
+            sortable: true,
+          },
+          {
+            name: "Тайлбар",
+            center: true,
+            width: "100px",
+            selector: "REASON_DESC",
+            sortable: true,
+          },
+          {
+            name: "",
+
+            cell: (row) => (
+              <ButtonsColumn
+                row={row}
+                setJagsaalt={setJagsaalt}
+                jagsaalt={jagsaalt}
+                search={JSON.stringify({
+                  search: search,
+                  searchType: searchType,
+                })}
+                setTsonkh={setTsonkh}
+                buttonValue={buttonValue}
+              />
+            ),
+          },
+        ];
 
   return (
     <div
@@ -310,7 +492,44 @@ const AlbanTushaal = (props) => {
             padding: "0.5rem",
             marginRight: "-10px",
           }}
-        ></div>
+        >
+          <button
+            className="button is-focused"
+            style={{
+              backgroundColor: "#418ee6",
+              color: "white",
+              borderColor: "#418ee6",
+              borderStyle: "solid",
+              border: "2px",
+              borderRadius: "5px",
+              width: "12rem",
+              height: "2.1rem",
+              fontFamily: "RalewaySemiBold",
+              fontSize: "1rem",
+            }}
+            onClick={() => Active()}
+          >
+            Идэвхтэй
+          </button>
+          <button
+            className="button is-focused"
+            style={{
+              backgroundColor: "transparent",
+              borderColor: "#418ee6",
+              color: "black",
+              borderStyle: "solid",
+              borderRadius: "5px",
+              width: "12rem",
+              height: "2.1rem",
+              fontFamily: "RalewaySemiBold",
+              fontSize: "1rem",
+              marginLeft: "0.5rem",
+            }}
+            onClick={() => unActive()}
+          >
+            Идэвхгүй
+          </button>
+        </div>
         <div
           style={{
             width: "20rem",
@@ -416,14 +635,20 @@ const AlbanTushaal = (props) => {
             <EmployExcel />
           </div>
         </div>
+        {tsonkh.ustgakh ? (
+          <UstgakhTsonkh
+            tsonkh={tsonkh}
+            setTsonkh={setTsonkh}
+            jagsaalt={jagsaalt}
+            setJagsaalt={setJagsaalt}
+          />
+        ) : null}
         <DataTable
           columns={columns}
           data={search === "" ? jagsaalt : found}
           theme="solarized"
           customStyles={customStyles}
           noDataComponent="мэдээлэл байхгүй байна"
-          pagination={false}
-          paginationPerPage={10}
           selectableRows // add for checkbox selection
           Clicked
           onSelectedRowsChange={handleChange}
@@ -431,6 +656,15 @@ const AlbanTushaal = (props) => {
           fixedHeader={true}
           overflowY={true}
           overflowYOffset={"390px"}
+          pagination={true}
+          paginationPerPage={20}
+          paginationComponentOptions={{
+            rowsPerPageText: "Хуудас:",
+            rangeSeparatorText: "of",
+            noRowsPerPage: false,
+            selectAllRowsItem: false,
+            selectAllRowsItemText: "All",
+          }}
         />
       </div>
       <Footer />
@@ -524,4 +758,199 @@ function EmployExcel(props) {
   }
   return listItems;
 }
+function UstgakhTsonkh(props) {
+  const [data, loadData] = useState({
+    DECISION_ID: 0,
+    REASONS_POSITION_CHANGE_ID: 1,
+    REASON_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+    REASON_DESC: "",
+    UPDATED_BY: userDetils?.USER_ID,
+    UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+  });
+  const alert = useAlert();
+  function deleteDecision() {
+    console.log("alert", {
+      DECISION_ID: props.tsonkh?.POSITION_ID,
+      REASONS_POSITION_CHANGE_ID: data.REASONS_POSITION_CHANGE_ID,
+      REASON_DATE: data.REASON_DATE,
+      REASON_DESC: data.REASON_DESC,
+      UPDATED_BY: userDetils?.USER_ID,
+      UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+    });
+    DataRequest({
+      url: "http://hr.audit.mn/hr/api/v1/positionDelete/",
+      method: "POST",
+      data: {
+        POSITION_ID: props.tsonkh?.POSITION_ID,
+        REASONS_POSITION_CHANGE_ID: data.REASONS_POSITION_CHANGE_ID,
+        REASON_DATE: data.REASON_DATE,
+        REASON_DESC: data.REASON_DESC,
+        UPDATED_BY: userDetils?.USER_ID,
+        UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+      },
+    })
+      .then(function (response) {
+        console.log("gegewgwegwegw", response);
+
+        if (response?.data?.message == "success") {
+          props.setJagsaalt(
+            props.jagsaalt?.filter(
+              (element, index) =>
+                element.POSITION_ID !== parseInt(props.tsonkh?.POSITION_ID)
+            )
+          );
+          props.setTsonkh({ ustgakh: false, POSITION_ID: null });
+          alert.show("амжилттай устлаа");
+        }
+      })
+      .catch(function (error) {
+        //alert(error.response.data.error.message);
+        console.log(error.response);
+        alert.show("aldaa");
+      });
+  }
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     let listItems = await axios(
+  //       "http://hr.audit.mn/hr/api/v1/decision/" +
+  //         props.tushaalKharakh?.decision_ID
+  //     );
+
+  //     loadData(listItems?.data);
+  //   }
+  //   fetchData();
+  // }, [props]);
+
+  let listItems;
+
+  listItems = (
+    <div
+      style={{
+        position: "absolute",
+        width: "35%",
+        height: "auto",
+        left: "35%",
+        top: "10%",
+        borderRadius: "6px",
+        backgroundColor: "white",
+        boxShadow:
+          "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+        zIndex: "1",
+        padding: "15px 15px 35px 15px",
+      }}
+    >
+      <div className="columns">
+        <div className="column is-4">Тушаал устгах уу?</div>
+
+        <div className="column is-6"></div>
+        <div className="column is-2 has-text-right">
+          <span
+            style={{
+              fontWeight: "bold",
+              cursor: " -webkit-grab",
+              cursor: "grab",
+            }}
+            onClick={() =>
+              props.setTsonkh({ ustgakh: false, POSITION_ID: null })
+            }
+          >
+            X
+          </span>
+        </div>
+      </div>
+
+      <div>
+        <div className="columns  ">
+          <div className="column is-1"></div>
+          <div className="column is-5">
+            <h1>Шалтгаан</h1>
+            {/* <select
+              className="anketInput"
+              value={data.REASON_ID}
+              onChange={(text) =>
+                loadData({
+                  ...data,
+                  ...{ REASON_ID: text.target.value },
+                })
+              }
+            >
+              <option value={1}>"алдаатай шивсэн"</option>
+              <option value={2}>"хугацаа дууссан"</option>
+            </select> */}
+            <Reasonsposition personChild={data} setPersonChild={loadData} />
+          </div>
+
+          <div className="column is-5">
+            <h1> Огноо</h1>
+            <input
+              class="input  is-size-7"
+              type="date"
+              disabled
+              value={dateFormat(data?.REASON_DATE, "yyyy-mm-dd")}
+              onChange={(e) => {
+                loadData({
+                  ...data,
+                  ...{
+                    REASON_DATE: e.target.value,
+                  },
+                });
+              }}
+            />
+          </div>
+        </div>
+
+        <div>
+          <div className="columns">
+            <div className="column is-1"></div>
+            <div className="column is-6">
+              <h1> Тайлбар</h1>
+              <div class="control">
+                <textarea
+                  class="textarea is-small"
+                  placeholder="Тайлбар"
+                  value={data?.REASON_DESC}
+                  onChange={(e) => {
+                    loadData({
+                      ...data,
+                      ...{
+                        REASON_DESC: e.target.value,
+                      },
+                    });
+                  }}
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="columns">
+          <div className="column is-1"></div>
+          <div className="column is-1 ">
+            {/* <button
+              className="buttonTsenkher"
+              style={{ marginRight: "0.4rem" }}
+            >
+              Хэвлэх
+            </button> */}
+            <button className="buttonTsenkher" onClick={() => deleteDecision()}>
+              Тийм
+            </button>
+          </div>
+          <div className="column is-2">
+            <button
+              className="buttonTsenkher"
+              onClick={() =>
+                props.setTsonkh({ ustgakh: false, POSITION_ID: null })
+              }
+            >
+              Үгүй
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  return listItems;
+}
+
 export default AlbanTushaal;

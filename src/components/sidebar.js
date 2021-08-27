@@ -68,7 +68,7 @@ const SideBar = (props) => {
       history.push("/web/Baiguullaga");
       setMenuCollapse(true);
     } else if (value?.menu3) {
-      history.push("/web/AlbanTushaal");
+      history.push("/web/AlbanTushaal/null");
       setMenuCollapse(true);
     } else if (value?.menu4) {
       history.push("/web/TushaalShiidver");
