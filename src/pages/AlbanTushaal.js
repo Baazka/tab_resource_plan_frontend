@@ -154,13 +154,14 @@ const AlbanTushaal = (props) => {
 
   useEffect(() => {
     async function test() {
-      if (JSON.parse(props.match.params.search)?.buttonValue === 1) {
+      if (JSON.parse(props.match.params.search)?.buttonValue === 2) {
         let jagsaalts = await DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/position/1/",
+          url: "http://hr.audit.mn/hr/api/v1/position/0/",
           method: "GET",
           data: {},
         });
         setJagsaalt(jagsaalts?.data);
+        setButtonValue(2);
         if (
           props.match.params.search != undefined &&
           props.match.params.search != "null"
@@ -172,12 +173,11 @@ const AlbanTushaal = (props) => {
         console.log(jagsaalts);
       } else {
         let jagsaalts = await DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/position/0/",
+          url: "http://hr.audit.mn/hr/api/v1/position/1/",
           method: "GET",
           data: {},
         });
         setJagsaalt(jagsaalts?.data);
-        setButtonValue(2);
         if (
           props.match.params.search != undefined &&
           props.match.params.search != "null"
@@ -456,6 +456,7 @@ const AlbanTushaal = (props) => {
                 search={JSON.stringify({
                   search: search,
                   searchType: searchType,
+                  buttonValue: buttonValue,
                 })}
                 setTsonkh={setTsonkh}
                 buttonValue={buttonValue}
@@ -496,8 +497,8 @@ const AlbanTushaal = (props) => {
           <button
             className="button is-focused"
             style={{
-              backgroundColor: "#418ee6",
-              color: "white",
+              backgroundColor: buttonValue === 1 ? "#418ee6" : "white",
+              color: buttonValue === 1 ? "white" : "black",
               borderColor: "#418ee6",
               borderStyle: "solid",
               border: "2px",
@@ -514,9 +515,9 @@ const AlbanTushaal = (props) => {
           <button
             className="button is-focused"
             style={{
-              backgroundColor: "transparent",
+              backgroundColor: buttonValue === 2 ? "#418ee6" : "white",
+              color: buttonValue === 2 ? "white" : "black",
               borderColor: "#418ee6",
-              color: "black",
               borderStyle: "solid",
               borderRadius: "5px",
               width: "12rem",

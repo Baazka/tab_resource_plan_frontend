@@ -91,6 +91,7 @@ function Home(props) {
     setJagsaalt(jagsaalts?.data);
     setLoading(false);
     setButtonValue(2);
+    setSearch("");
   }
   async function Active() {
     setLoading(true);
@@ -102,6 +103,7 @@ function Home(props) {
     setJagsaalt(jagsaalts?.data);
     setLoading(false);
     setButtonValue(1);
+    setSearch("");
   }
   async function newPeople() {
     setLoading(true);
@@ -113,20 +115,86 @@ function Home(props) {
     setJagsaalt(jagsaalts?.data);
     setLoading(false);
     setButtonValue(3);
+    setSearch("");
   }
 
   useEffect(() => {
     async function test() {
-      let jagsaalts = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/employees/1",
-        method: "GET",
-        data: {},
-      });
-      setJagsaalt(jagsaalts?.data);
-      setLoading(false);
+      // let jagsaalts = await DataRequest({
+      //   url: "http://hr.audit.mn/hr/api/v1/employees/1",
+      //   method: "GET",
+      //   data: {},
+      // });
+      // setJagsaalt(jagsaalts?.data);
+      // setLoading(false);
+
+      if (
+        props.match?.params != undefined &&
+        JSON.parse(props.match?.params?.search)?.buttonValue === 2
+      ) {
+        let jagsaalts = await DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/employees/0",
+          method: "GET",
+          data: {},
+        });
+        setJagsaalt(jagsaalts?.data);
+        setLoading(false);
+        setButtonValue(2);
+        if (
+          props.match.params.search != undefined &&
+          props.match.params.search != "null"
+        ) {
+          let ob = JSON.parse(props.match.params.search);
+
+          setSearchType(ob.searchType);
+          makeSearch(ob.search, jagsaalts?.data, ob.searchType);
+        }
+        console.log(jagsaalts);
+      } else if (
+        props.match?.params != undefined &&
+        JSON.parse(props.match?.params?.search)?.buttonValue === 3
+      ) {
+        let jagsaalts = await DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/person/1/",
+          method: "GET",
+          data: {},
+        });
+        setJagsaalt(jagsaalts?.data);
+        setLoading(false);
+        setButtonValue(3);
+        if (
+          props.match.params.search != undefined &&
+          props.match.params.search != "null"
+        ) {
+          let ob = JSON.parse(props.match?.params.search);
+
+          setSearchType(ob.searchType);
+          makeSearch(ob.search, jagsaalts?.data, ob.searchType);
+        }
+        console.log(jagsaalts);
+      } else {
+        console.log("gooooooooooooooooood");
+        let jagsaalts = await DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/employees/1",
+          method: "GET",
+          data: {},
+        });
+        setLoading(false);
+        setJagsaalt(jagsaalts?.data);
+        console.log("ob", props);
+        if (
+          props.match?.params.search != undefined &&
+          props.match?.params.search != "null"
+        ) {
+          let ob = JSON.parse(props.match.params.search);
+
+          setSearchType(ob.searchType);
+          makeSearch(ob.search, jagsaalts?.data, ob.searchType);
+        }
+      }
     }
+
     test();
-    console.log("jagsaalt", jagsaalt);
   }, [props]);
 
   const handleChange = (state) => {
@@ -157,11 +225,27 @@ function Home(props) {
   };
 
   async function anketA() {
-    if (data?.checked === true) history.push("/web/anketA/1");
+    if (data?.checked === true)
+      history.push(
+        "/web/anketA/" +
+          JSON.stringify({
+            search: search,
+            searchType: searchType,
+            buttonValue: buttonValue,
+          })
+      );
     else alert.show("Албан тушаалтан сонго");
   }
   async function anketB() {
-    if (data?.checked === true) history.push("/web/anketB/1");
+    if (data?.checked === true)
+      history.push(
+        "/web/anketB/" +
+          JSON.stringify({
+            search: search,
+            searchType: searchType,
+            buttonValue: buttonValue,
+          })
+      );
     else alert.show("Албан тушаалтан сонго");
   }
 
@@ -177,10 +261,16 @@ function Home(props) {
     history.push("/web/anketA/1");
   }
 
-  function makeSearch(value) {
+  function makeSearch(value, list, stype) {
     setSearch(value);
 
-    let found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
+    let found;
+    if (jagsaalt != undefined) {
+      found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
+    } else {
+      console.log("searchjagsaalt", searchType);
+      found = list?.filter((obj) => equalStr(obj[stype], value));
+    }
     console.log(found);
     if (found != undefined && found.length > 0) setFound(found);
     else setFound([]);
@@ -303,8 +393,8 @@ function Home(props) {
           <button
             className="button is-focused"
             style={{
-              backgroundColor: "#418ee6",
-              color: "white",
+              backgroundColor: buttonValue === 1 ? "#418ee6" : "white",
+              color: buttonValue === 1 ? "white" : "black",
               borderColor: "#418ee6",
               borderStyle: "solid",
               border: "2px",
@@ -321,9 +411,9 @@ function Home(props) {
           <button
             className="button is-focused"
             style={{
-              backgroundColor: "transparent",
+              backgroundColor: buttonValue === 2 ? "#418ee6" : "white",
+              color: buttonValue === 2 ? "white" : "black",
               borderColor: "#418ee6",
-              color: "black",
               borderStyle: "solid",
               borderRadius: "5px",
               width: "12rem",
@@ -339,9 +429,9 @@ function Home(props) {
           <button
             className="button is-focused"
             style={{
-              backgroundColor: "transparent",
+              backgroundColor: buttonValue === 3 ? "#418ee6" : "white",
+              color: buttonValue === 3 ? "white" : "black",
               borderColor: "#418ee6",
-              color: "black",
               borderStyle: "solid",
               borderRadius: "5px",
               width: "12rem",

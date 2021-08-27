@@ -504,8 +504,8 @@ const Home = (props) => {
           <button
             className="button is-focused"
             style={{
-              backgroundColor: "#418ee6",
-              color: "white",
+              backgroundColor: buttonValue === 1 ? "#418ee6" : "white",
+              color: buttonValue === 1 ? "white" : "black",
               borderColor: "#418ee6",
               borderStyle: "solid",
               border: "2px",
@@ -522,9 +522,9 @@ const Home = (props) => {
           <button
             className="button is-focused"
             style={{
-              backgroundColor: "transparent",
+              backgroundColor: buttonValue === 2 ? "#418ee6" : "white",
+              color: buttonValue === 2 ? "white" : "black",
               borderColor: "#418ee6",
-              color: "black",
               borderStyle: "solid",
               borderRadius: "5px",
               width: "12rem",
@@ -1690,7 +1690,7 @@ function TushaalKharakh(props) {
                 <input
                   disabled
                   className="Borderless"
-                  value={data.EMP_SUBDEPARTMENT_NAME}
+                  value={data.SUB_DEPARTMENT_NAME}
                 />
               </div>
               <div className="column is-6">

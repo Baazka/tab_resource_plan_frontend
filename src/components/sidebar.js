@@ -62,7 +62,7 @@ const SideBar = (props) => {
       history.push("/web/dashboard");
       setMenuCollapse(true);
     } else if (value?.menu1) {
-      history.push("/web/workerList");
+      history.push("/web/workerList/null");
       setMenuCollapse(true);
     } else if (value?.menu2) {
       history.push("/web/Baiguullaga");

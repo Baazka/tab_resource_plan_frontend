@@ -90,9 +90,7 @@ function AlbanTushaalBurtgel(props) {
               textDecoration: "underline",
             }}
             onClick={() =>
-              history.push("/web/AlbanTushaal/" + props.match.params.search, {
-                back: true,
-              })
+              history.push("/web/AlbanTushaal/" + props.match.params.search)
             }
           >
             {"<Буцах"}

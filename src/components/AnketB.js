@@ -76,7 +76,9 @@ function AnketB(props) {
               pointerEvents: "initial",
               textDecoration: "underline",
             }}
-            onClick={() => history.push("/web/workerlist", { back: true })}
+            onClick={() =>
+              history.push("/web/workerlist/" + props.match.params.search)
+            }
           >
             {"<  Буцах"}
           </button>
