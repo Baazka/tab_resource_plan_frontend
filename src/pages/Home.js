@@ -362,20 +362,14 @@ function Home(props) {
             // cell: (row) => (
             //   <button
             //     onClick={() => {
-            //       // var content = document.getElementById("anketAPrint");
-            //       // var pri =
-            //       //   document.getElementById("ifmcontentstoprint").contentWindow;
-            //       // pri.document.open();
-            //       // pri.document.write(content.innerHTML);
-            //       // pri.document.close();
-            //       // pri.focus();
-            //       // pri.print();
-            //       var printContents =
-            //         document.getElementById("anketAPrint").innerHTML;
-            //       var originalContents = document.body.innerHTML;
-            //       document.body.innerHTML = printContents;
-            //       window.print();
-            //       document.body.innerHTML = originalContents;
+            //       var content = document.getElementById("anketAPrint");
+            //       var pri =
+            //         document.getElementById("ifmcontentstoprint").contentWindow;
+            //       pri.document.open();
+            //       pri.document.write(content.innerHTML);
+            //       pri.document.close();
+            //       pri.focus();
+            //       pri.print();
             //     }}
             //   >
             //     Хэвлэх
@@ -763,17 +757,12 @@ function Home(props) {
           </div>
         </div>
         <AnketAPrint />
-        <iframe
-          id="ifmcontentstoprint"
-          style={{ height: "0px", width: "0px" }}
-        ></iframe>
+
         <DataTable
           columns={columns}
           data={search === "" ? jagsaalt : found}
           theme="solarized"
           customStyles={customStyles}
-          pagination={true}
-          paginationPerPage={10}
           noDataComponent="мэдээлэл байхгүй байна"
           selectableRows // add for checkbox selection
           Clicked
@@ -783,9 +772,11 @@ function Home(props) {
           responsive={true}
           overflowY={true}
           overflowYOffset={"390px"}
+          pagination={true}
+          paginationPerPage={10}
           paginationComponentOptions={{
             rowsPerPageText: "Хуудас:",
-            rangeSeparatorText: "of",
+            rangeSeparatorText: "нийт:",
             noRowsPerPage: false,
             selectAllRowsItem: false,
             selectAllRowsItemText: "All",

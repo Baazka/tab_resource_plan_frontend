@@ -135,31 +135,31 @@ const Baiguullaga = (props) => {
       name: "Дотоод бүтцийн нэгж",
       selector: "COMPARTMENT_NAME",
     },
-    {
-      name: "Албан тушаалын код",
-      selector: "",
-      sortable: true,
-    },
-    {
-      name: "Албан тушаалын нэр",
-      selector: "",
-      sortable: true,
-    },
-    {
-      name: "Албан тушаалын төрөл",
-      selector: "",
-      sortable: true,
-    },
-    {
-      name: "Албан тушаалын ангилал",
-      selector: "",
-      sortable: true,
-    },
-    {
-      name: "Албан тушаалын зэрэглэл",
-      selector: "",
-      sortable: true,
-    },
+    // {
+    //   name: "Албан тушаалын код",
+    //   selector: "",
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Албан тушаалын нэр",
+    //   selector: "",
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Албан тушаалын төрөл",
+    //   selector: "",
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Албан тушаалын ангилал",
+    //   selector: "",
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Албан тушаалын зэрэглэл",
+    //   selector: "",
+    //   sortable: true,
+    // },
     // {
     //   name: "Батлагдсан орон тоо",
     //   selector: "CONFIRMED_COUNT",
@@ -224,7 +224,7 @@ const Baiguullaga = (props) => {
                 onChange={(text) => setSearchType(text.target.value)}
               >
                 <option value={"DEPARTMENT_NAME"}>
-                  Төрийн аудиты байгууллага
+                  Төрийн аудитын байгууллага
                 </option>
                 <option value={"SUB_DEPARTMENT_NAME"}>Харъяа газар</option>
                 <option value={"COMPARTMENT_NAME"}>Дотооод бүтцийн нэгж</option>

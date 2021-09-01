@@ -26,44 +26,46 @@ function AnketAPrint(props) {
   //   );
 
   return (
-    <div
-      id="anketAPrint"
-      style={{ marginLeft: "0%", marginRight: "0%", display: "none" }}
-    >
-      <div style={{}}>
-        <Yrunkhii />
-        <Gerbul />
+    <iframe id="ifmcontentstoprint" style={{ height: "0px", width: "0px" }}>
+      <div
+        id="anketAPrint"
+        style={{ marginLeft: "0%", marginRight: "0%", display: "none" }}
+      >
+        <div style={{}}>
+          <Yrunkhii />
+          <Gerbul />
+        </div>
+        <Sadan />
+        <UrChadvar />
+        <Bolowsrol />
+        <Medeelel />
+        <TsolDew />
+        <TsergiinAlba />
+        <Shalgagdahch />
+        {/* <Tushaal /> */}
+        <BvteeliinJagsaalt />
+
+        <p>
+          state:{data} <br /> huvisagch:{huvisagch}
+        </p>
+
+        <button
+          onClick={() => buttonNemeh("haha")}
+          className="button"
+          style={{ width: "30px", height: "30px", cursor: "pointer" }}
+        >
+          +
+        </button>
+
+        <button
+          className="button"
+          onClick={() => buttonhasah()}
+          style={{ width: "30px", height: "30px", cursor: "pointer" }}
+        >
+          -
+        </button>
       </div>
-      <Sadan />
-      <UrChadvar />
-      <Bolowsrol />
-      <Medeelel />
-      <TsolDew />
-      <TsergiinAlba />
-      <Shalgagdahch />
-      {/* <Tushaal /> */}
-      <BvteeliinJagsaalt />
-
-      <p>
-        state:{data} <br /> huvisagch:{huvisagch}
-      </p>
-
-      <button
-        onClick={() => buttonNemeh("haha")}
-        className="button"
-        style={{ width: "30px", height: "30px", cursor: "pointer" }}
-      >
-        +
-      </button>
-
-      <button
-        className="button"
-        onClick={() => buttonhasah()}
-        style={{ width: "30px", height: "30px", cursor: "pointer" }}
-      >
-        -
-      </button>
-    </div>
+    </iframe>
   );
 }
 

@@ -321,16 +321,19 @@ const Home = (props) => {
             name: "Ажилтны нэр",
             selector: "PERSON_FIRSTNAME",
             sortable: true,
+            expandableRows: true,
           },
           {
             name: "Ажилтны овог",
             selector: "PERSON_LASTNAME",
             sortable: true,
+            expandableRows: true,
           },
           {
             name: "Газар нэгж",
             selector: "DEPARTMENT_NAME",
             sortable: true,
+            expandableRows: true,
           },
           // {
           //   name: "Алба, хэлтэс",
@@ -341,6 +344,7 @@ const Home = (props) => {
             name: "Албан тушаал",
             selector: "POSITION_NAME",
             sortable: true,
+            expandableRows: true,
           },
           {
             name: "Тушаалын төрөл",
@@ -480,7 +484,7 @@ const Home = (props) => {
         maxHeight: "100vh !important",
       }}
     >
-      <Header title="ШИЙДВЭРИЙН ТУШААЛЫН БҮРТГЭЛ" />
+      <Header title="ШИЙДВЭР, ТУШААЛЫН БҮРТГЭЛ" />
       <div
         style={{
           backgroundColor: "white",
@@ -641,6 +645,7 @@ const Home = (props) => {
           selectableRows
           // add for checkbox selection
           Clicked
+          pointerOnHover={true}
           selectableRowsSingle={true}
           onSelectedRowsChange={handleChange}
           noHeader={true}
@@ -813,8 +818,6 @@ function TushaalAjiltan(props) {
                 theme="solarized"
                 customStyles={customStylesTable}
                 noDataComponent="мэдээлэл байхгүй байна"
-                pagination={false}
-                paginationPerPage={10}
                 selectableRows // add for checkbox selection
                 Clicked
                 onSelectedRowsChange={handleChange}
@@ -822,6 +825,15 @@ function TushaalAjiltan(props) {
                 fixedHeader={true}
                 overflowY={true}
                 overflowYOffset={"390px"}
+                pagination={true}
+                paginationPerPage={10}
+                paginationComponentOptions={{
+                  rowsPerPageText: "Хуудас:",
+                  rangeSeparatorText: "нийт:",
+                  noRowsPerPage: false,
+                  selectAllRowsItem: false,
+                  selectAllRowsItemText: "All",
+                }}
               />
             </div>
           ) : tsonkhnuud === 2 ? (
@@ -1154,9 +1166,10 @@ function Khoyor(props) {
         </div>
       ) : (
         <div
-          style={{
-            padding: "15px 10px 25px 10px",
-          }}
+          // style={{
+          //   padding: "15px 10px 25px 10px",
+          // }}
+          className="p-6"
         >
           <Salary EMPLOYEE_ID={EMPLOYEE_ID} close={props.close} />
         </div>
@@ -1365,171 +1378,173 @@ function Salary(props) {
             </button>
           </div>
         </div>
-        <div className="columns">
-          <div className="column is-12">
-            <table className="table is-bordered ">
-              <thead>
-                <tr>
-                  <td>
-                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      №
-                    </span>
-                  </td>
-                  <td>
-                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      Цалингийн төрөл
-                    </span>
-                  </td>
-                  <td>
-                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      Цалин хөлс нэмэгдлийн нэр
-                    </span>
-                  </td>
-                  <td>
-                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      Цалин хөлс өөрчилсөн үндэслэл
-                    </span>
-                  </td>
-                  <td>
-                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      Дүн
-                    </span>
-                  </td>
-                  <td>
-                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      Тайлбар
-                    </span>
-                  </td>
-
-                  {!edit ? (
-                    <td
-                      style={{
-                        borderColor: "transparent",
-                        border: "none",
-                        paddingLeft: "0px",
-                        width: "50px",
-                      }}
-                    >
-                      <img
-                        src={Add}
-                        width="30px"
-                        height="30px"
-                        onClick={() => addRow()}
-                      />
-                    </td>
-                  ) : null}
-                </tr>
-              </thead>
-              <tbody>
-                {data?.salary?.map((value, index) => (
+        <div className="table-container">
+          <div className="columns">
+            <div className="column is-12">
+              <table className="table is-bordered ">
+                <thead>
                   <tr>
                     <td>
-                      <span className="textSaaral">{index + 1}</span>
+                      <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                        №
+                      </span>
                     </td>
                     <td>
-                      <Salarytype
-                        personChild={value}
-                        setPersonChild={salaryType}
-                        index={index}
-                      />
-                    </td>
-
-                    <td>
-                      <input
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={data.salary[index]?.SALARY_SUPPLEMENT}
-                        onChange={(text) => {
-                          let value = [...data?.salary];
-                          value[index].SALARY_SUPPLEMENT = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ salary: value });
-                        }}
-                      />
-                    </td>
-
-                    <td>
-                      <input
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={data.salary[index]?.SALARY_MOTIVE}
-                        onChange={(text) => {
-                          let value = [...data?.salary];
-                          value[index].SALARY_MOTIVE = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ salary: value });
-                        }}
-                      />
+                      <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                        Цалингийн төрөл
+                      </span>
                     </td>
                     <td>
-                      <input
-                        disabled={edit}
-                        type="number"
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={data.salary[index]?.SALARY_AMOUNT}
-                        onChange={(text) => {
-                          let value = [...data?.salary];
-                          value[index].SALARY_AMOUNT = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ salary: value });
-                        }}
-                      />
+                      <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                        Цалин хөлс нэмэгдлийн нэр
+                      </span>
                     </td>
-
                     <td>
-                      <input
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={data.salary[index]?.SALARY_DESC}
-                        onChange={(text) => {
-                          let value = [...data?.salary];
-                          value[index].SALARY_DESC = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ salary: value });
-                        }}
-                      />
+                      <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                        Цалин хөлс өөрчилсөн үндэслэл
+                      </span>
+                    </td>
+                    <td>
+                      <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                        Дүн
+                      </span>
+                    </td>
+                    <td>
+                      <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                        Тайлбар
+                      </span>
                     </td>
 
                     {!edit ? (
                       <td
                         style={{
-                          paddingLeft: "0px",
                           borderColor: "transparent",
+                          border: "none",
+                          paddingLeft: "0px",
                           width: "50px",
                         }}
                       >
                         <img
-                          src={Delete}
+                          src={Add}
                           width="30px"
                           height="30px"
-                          onClick={() => removeRow(index, value)}
+                          onClick={() => addRow()}
                         />
                       </td>
                     ) : null}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {data?.salary?.map((value, index) => (
+                    <tr>
+                      <td>
+                        <span className="textSaaral">{index + 1}</span>
+                      </td>
+                      <td>
+                        <Salarytype
+                          personChild={value}
+                          setPersonChild={salaryType}
+                          index={index}
+                        />
+                      </td>
+
+                      <td>
+                        <input
+                          disabled={edit}
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={data.salary[index]?.SALARY_SUPPLEMENT}
+                          onChange={(text) => {
+                            let value = [...data?.salary];
+                            value[index].SALARY_SUPPLEMENT = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData({ salary: value });
+                          }}
+                        />
+                      </td>
+
+                      <td>
+                        <input
+                          disabled={edit}
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={data.salary[index]?.SALARY_MOTIVE}
+                          onChange={(text) => {
+                            let value = [...data?.salary];
+                            value[index].SALARY_MOTIVE = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData({ salary: value });
+                          }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          disabled={edit}
+                          type="number"
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={data.salary[index]?.SALARY_AMOUNT}
+                          onChange={(text) => {
+                            let value = [...data?.salary];
+                            value[index].SALARY_AMOUNT = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData({ salary: value });
+                          }}
+                        />
+                      </td>
+
+                      <td>
+                        <input
+                          disabled={edit}
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={data.salary[index]?.SALARY_DESC}
+                          onChange={(text) => {
+                            let value = [...data?.salary];
+                            value[index].SALARY_DESC = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData({ salary: value });
+                          }}
+                        />
+                      </td>
+
+                      {!edit ? (
+                        <td
+                          style={{
+                            paddingLeft: "0px",
+                            borderColor: "transparent",
+                            width: "50px",
+                          }}
+                        >
+                          <img
+                            src={Delete}
+                            width="30px"
+                            height="30px"
+                            onClick={() => removeRow(index, value)}
+                          />
+                        </td>
+                      ) : null}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
