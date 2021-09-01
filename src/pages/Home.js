@@ -235,7 +235,7 @@ function Home(props) {
             buttonValue: buttonValue,
           })
       );
-    else alert.show("Албан тушаалтан сонго");
+    else alert.show("Ажилтан сонгон уу");
   }
   async function anketB() {
     if (data?.checked === true)
@@ -247,7 +247,7 @@ function Home(props) {
             buttonValue: buttonValue,
           })
       );
-    else alert.show("Албан тушаалтан сонго");
+    else alert.show("Ажилтан сонгон уу");
   }
 
   async function anketANew() {
@@ -303,70 +303,236 @@ function Home(props) {
     return false;
   }
 
-  const columns = [
-    {
-      name: "№",
-      selector: (row, index) => {
-        return index + 1;
-      },
-      sortable: true,
-      width: "40px",
-    },
-    {
-      name: "Газар нэгж",
-      selector: "EMP_DEPARTMENT_NAME",
-      sortable: true,
-      width: "200px",
-    },
-    {
-      name: "Хэлтэс",
-      selector: "EMP_SUBDEPARTMENT_NAME",
-      sortable: true,
-      width: "290px",
-    },
-    {
-      name: "Албан тушаал",
-      selector: "EMP_ROLE_NAME",
-      sortable: true,
-    },
-    {
-      name: "Ажилтны нэр",
-      selector: "PERSON_FIRSTNAME",
-      sortable: true,
-    },
-    {
-      name: "Ажилтны овог",
-      selector: "PERSON_LASTNAME",
-      sortable: true,
-    },
-    {
-      name: "Ажилтны төрөл",
-      selector: "EMP_COMPARTMENT_NAME",
-      sortable: true,
-    },
-    {
-      name: "Утасны дугаар",
-      selector: "PERSON_PHONE",
-      sortable: true,
-    },
-    {
-      name: "Имэйл",
-      selector: "PERSON_EMAIL",
-      sortable: true,
-    },
-    {
-      name: "Анкет А",
-      selector: "4",
-      sortable: true,
-      center: true,
-    },
-    {
-      name: "Анкет Б",
-      selector: "6",
-      sortable: true,
-      center: true,
-    },
-  ];
+  const columns =
+    buttonValue === 1
+      ? [
+          {
+            name: "№",
+            selector: (row, index) => {
+              return index + 1;
+            },
+            sortable: true,
+            width: "40px",
+          },
+          {
+            name: "Төрийн аудитын байгууллага",
+            selector: "DEPARTMENT_NAME",
+            sortable: true,
+            width: "200px",
+          },
+          {
+            name: "Харъяа газар",
+            selector: "SUB_DEPARTMENT_NAME",
+            sortable: true,
+            width: "290px",
+          },
+          {
+            name: "Дотоод бүтцийн нэгж",
+            selector: "COMPARTMENT_NAME",
+            sortable: true,
+          },
+          {
+            name: "Албан тушаалын нэр",
+            selector: "POSITION_NAME",
+            sortable: true,
+          },
+          {
+            name: "Ажилтны нэр",
+            selector: "PERSON_FIRSTNAME",
+            sortable: true,
+          },
+          {
+            name: "Ажилтны овог",
+            selector: "PERSON_LASTNAME",
+            sortable: true,
+          },
+          {
+            name: "Утасны дугаар",
+            selector: "PERSON_PHONE",
+            sortable: true,
+          },
+          {
+            name: "Имэйл",
+            selector: "PERSON_EMAIL",
+            sortable: true,
+          },
+          {
+            name: "Анкет А",
+            selector: "4",
+            cell: (row) => (
+              <button
+                onClick={() => {
+                  // var content = document.getElementById("anketAPrint");
+                  // var pri =
+                  //   document.getElementById("ifmcontentstoprint").contentWindow;
+                  // pri.document.open();
+                  // pri.document.write(content.innerHTML);
+                  // pri.document.close();
+                  // pri.focus();
+                  // pri.print();
+                  var printContents =
+                    document.getElementById("anketAPrint").innerHTML;
+                  var originalContents = document.body.innerHTML;
+                  document.body.innerHTML = printContents;
+                  window.print();
+                  document.body.innerHTML = originalContents;
+                }}
+              >
+                Хэвлэх
+              </button>
+            ),
+
+            center: true,
+          },
+          {
+            name: "Анкет Б",
+            selector: "6",
+            sortable: true,
+            center: true,
+          },
+        ]
+      : buttonValue === 2
+      ? [
+          {
+            name: "№",
+            selector: (row, index) => {
+              return index + 1;
+            },
+            sortable: true,
+            width: "40px",
+          },
+          {
+            name: "Төрийн аудитын байгууллага",
+            selector: "DEPARTMENT_NAME",
+            sortable: true,
+            width: "200px",
+          },
+          {
+            name: "Харъяа газар",
+            selector: "SUB_DEPARTMENT_NAME",
+            sortable: true,
+            width: "290px",
+          },
+          {
+            name: "Дотоод бүтцийн нэгж",
+            selector: "COMPARTMENT_NAME",
+            sortable: true,
+          },
+          {
+            name: "Албан тушаалын нэр",
+            selector: "POSITION_NAME",
+            sortable: true,
+          },
+          {
+            name: "Ажилтны нэр",
+            selector: "PERSON_FIRSTNAME",
+            sortable: true,
+          },
+          {
+            name: "Ажилтны овог",
+            selector: "PERSON_LASTNAME",
+            sortable: true,
+          },
+          {
+            name: "Төлөв",
+            selector: "STATUS_NAME",
+            sortable: true,
+          },
+
+          {
+            name: "Анкет А",
+            selector: "4",
+            cell: (row) => (
+              <button
+                onClick={() => {
+                  // var content = document.getElementById("anketAPrint");
+                  // var pri =
+                  //   document.getElementById("ifmcontentstoprint").contentWindow;
+                  // pri.document.open();
+                  // pri.document.write(content.innerHTML);
+                  // pri.document.close();
+                  // pri.focus();
+                  // pri.print();
+                  var printContents =
+                    document.getElementById("anketAPrint").innerHTML;
+                  var originalContents = document.body.innerHTML;
+                  document.body.innerHTML = printContents;
+                  window.print();
+                  document.body.innerHTML = originalContents;
+                }}
+              >
+                Хэвлэх
+              </button>
+            ),
+
+            center: true,
+          },
+          {
+            name: "Анкет Б",
+            selector: "6",
+            sortable: true,
+            center: true,
+          },
+        ]
+      : [
+          {
+            name: "№",
+            selector: (row, index) => {
+              return index + 1;
+            },
+            sortable: true,
+            width: "40px",
+          },
+
+          {
+            name: "Ажилтны нэр",
+            selector: "PERSON_FIRSTNAME",
+            sortable: true,
+          },
+          {
+            name: "Ажилтны овог",
+            selector: "PERSON_LASTNAME",
+            sortable: true,
+          },
+          {
+            name: "Утасны дугаар",
+            selector: "PERSON_PHONE",
+            sortable: true,
+          },
+          {
+            name: "Имэйл",
+            selector: "PERSON_EMAIL",
+            sortable: true,
+          },
+          {
+            name: "Анкет А",
+            selector: "4",
+            cell: (row) => (
+              <button
+                onClick={() => {
+                  // var content = document.getElementById("anketAPrint");
+                  // var pri =
+                  //   document.getElementById("ifmcontentstoprint").contentWindow;
+                  // pri.document.open();
+                  // pri.document.write(content.innerHTML);
+                  // pri.document.close();
+                  // pri.focus();
+                  // pri.print();
+                  var printContents =
+                    document.getElementById("anketAPrint").innerHTML;
+                  var originalContents = document.body.innerHTML;
+                  document.body.innerHTML = printContents;
+                  window.print();
+                  document.body.innerHTML = originalContents;
+                }}
+              >
+                Хэвлэх
+              </button>
+            ),
+
+            center: true,
+          },
+        ];
 
   return (
     <div
@@ -507,14 +673,33 @@ function Home(props) {
                 value={searchType}
                 onChange={(text) => setSearchType(text.target.value)}
               >
-                <option value={"EMP_DEPARTMENT_NAME"}>Газар нэгж</option>
-                <option value={"EMP_SUBDEPARTMENT_NAME"}>Хэлтэс</option>
-                <option value={"EMP_ROLE_NAME"}>Албан тушаал</option>
+                {" "}
+                {buttonValue !== 3 ? (
+                  <option value={"DEPARTMENT_NAME"}>
+                    Төрийн аудитын байгууллага
+                  </option>
+                ) : null}
+                {buttonValue !== 3 ? (
+                  <option value={"SUB_DEPARTMENT_NAME"}>Харъяа газар</option>
+                ) : null}
+                {buttonValue !== 3 ? (
+                  <option value={"COMPARTMENT_NAME"}>
+                    Дотоод бүтцийн нэгж
+                  </option>
+                ) : null}
+                {buttonValue !== 3 ? (
+                  <option value={"POSITION_NAME"}>Албан тушаалын нэр</option>
+                ) : null}
                 <option value={"PERSON_FIRSTNAME"}>Ажилтны нэр</option>
                 <option value={"PERSON_LASTNAME"}>Ажилтны овог</option>
-                <option value={"EMP_COMPARTMENT_NAME"}>Ажилтны төрөл</option>
-                <option value={"PERSON_PHONE"}>Утасны дугаар</option>
-                <option value={"PERSON_EMAIL"}>Имэйл</option>
+                {buttonValue === 2 ? (
+                  <option value={"STATUS_NAME"}>Төлөв</option>
+                ) : (
+                  <option value={"PERSON_PHONE"}>Утасны дугаар</option>
+                )}
+                {buttonValue === 2 ? null : (
+                  <option value={"PERSON_EMAIL"}>Имэйл</option>
+                )}
               </select>
               {/* 
               <span class="icon is-small is-right">
@@ -578,6 +763,10 @@ function Home(props) {
           </div>
         </div>
         <AnketAPrint />
+        <iframe
+          id="ifmcontentstoprint"
+          style={{ height: "0px", width: "0px" }}
+        ></iframe>
         <DataTable
           columns={columns}
           data={search === "" ? jagsaalt : found}
