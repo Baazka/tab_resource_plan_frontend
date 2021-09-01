@@ -359,28 +359,28 @@ function Home(props) {
           {
             name: "Анкет А",
             selector: "4",
-            cell: (row) => (
-              <button
-                onClick={() => {
-                  // var content = document.getElementById("anketAPrint");
-                  // var pri =
-                  //   document.getElementById("ifmcontentstoprint").contentWindow;
-                  // pri.document.open();
-                  // pri.document.write(content.innerHTML);
-                  // pri.document.close();
-                  // pri.focus();
-                  // pri.print();
-                  var printContents =
-                    document.getElementById("anketAPrint").innerHTML;
-                  var originalContents = document.body.innerHTML;
-                  document.body.innerHTML = printContents;
-                  window.print();
-                  document.body.innerHTML = originalContents;
-                }}
-              >
-                Хэвлэх
-              </button>
-            ),
+            // cell: (row) => (
+            //   <button
+            //     onClick={() => {
+            //       // var content = document.getElementById("anketAPrint");
+            //       // var pri =
+            //       //   document.getElementById("ifmcontentstoprint").contentWindow;
+            //       // pri.document.open();
+            //       // pri.document.write(content.innerHTML);
+            //       // pri.document.close();
+            //       // pri.focus();
+            //       // pri.print();
+            //       var printContents =
+            //         document.getElementById("anketAPrint").innerHTML;
+            //       var originalContents = document.body.innerHTML;
+            //       document.body.innerHTML = printContents;
+            //       window.print();
+            //       document.body.innerHTML = originalContents;
+            //     }}
+            //   >
+            //     Хэвлэх
+            //   </button>
+            // ),
 
             center: true,
           },
@@ -442,28 +442,28 @@ function Home(props) {
           {
             name: "Анкет А",
             selector: "4",
-            cell: (row) => (
-              <button
-                onClick={() => {
-                  // var content = document.getElementById("anketAPrint");
-                  // var pri =
-                  //   document.getElementById("ifmcontentstoprint").contentWindow;
-                  // pri.document.open();
-                  // pri.document.write(content.innerHTML);
-                  // pri.document.close();
-                  // pri.focus();
-                  // pri.print();
-                  var printContents =
-                    document.getElementById("anketAPrint").innerHTML;
-                  var originalContents = document.body.innerHTML;
-                  document.body.innerHTML = printContents;
-                  window.print();
-                  document.body.innerHTML = originalContents;
-                }}
-              >
-                Хэвлэх
-              </button>
-            ),
+            // cell: (row) => (
+            //   <button
+            //     onClick={() => {
+            //       // var content = document.getElementById("anketAPrint");
+            //       // var pri =
+            //       //   document.getElementById("ifmcontentstoprint").contentWindow;
+            //       // pri.document.open();
+            //       // pri.document.write(content.innerHTML);
+            //       // pri.document.close();
+            //       // pri.focus();
+            //       // pri.print();
+            //       var printContents =
+            //         document.getElementById("anketAPrint").innerHTML;
+            //       var originalContents = document.body.innerHTML;
+            //       document.body.innerHTML = printContents;
+            //       window.print();
+            //       document.body.innerHTML = originalContents;
+            //     }}
+            //   >
+            //     Хэвлэх
+            //   </button>
+            // ),
 
             center: true,
           },
@@ -507,28 +507,28 @@ function Home(props) {
           {
             name: "Анкет А",
             selector: "4",
-            cell: (row) => (
-              <button
-                onClick={() => {
-                  // var content = document.getElementById("anketAPrint");
-                  // var pri =
-                  //   document.getElementById("ifmcontentstoprint").contentWindow;
-                  // pri.document.open();
-                  // pri.document.write(content.innerHTML);
-                  // pri.document.close();
-                  // pri.focus();
-                  // pri.print();
-                  var printContents =
-                    document.getElementById("anketAPrint").innerHTML;
-                  var originalContents = document.body.innerHTML;
-                  document.body.innerHTML = printContents;
-                  window.print();
-                  document.body.innerHTML = originalContents;
-                }}
-              >
-                Хэвлэх
-              </button>
-            ),
+            // cell: (row) => (
+            //   <button
+            //     onClick={() => {
+            //       // var content = document.getElementById("anketAPrint");
+            //       // var pri =
+            //       //   document.getElementById("ifmcontentstoprint").contentWindow;
+            //       // pri.document.open();
+            //       // pri.document.write(content.innerHTML);
+            //       // pri.document.close();
+            //       // pri.focus();
+            //       // pri.print();
+            //       var printContents =
+            //         document.getElementById("anketAPrint").innerHTML;
+            //       var originalContents = document.body.innerHTML;
+            //       document.body.innerHTML = printContents;
+            //       window.print();
+            //       document.body.innerHTML = originalContents;
+            //     }}
+            //   >
+            //     Хэвлэх
+            //   </button>
+            // ),
 
             center: true,
           },
