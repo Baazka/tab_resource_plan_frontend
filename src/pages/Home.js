@@ -10,6 +10,7 @@ import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import dateFormat from "dateformat";
 import { css } from "@emotion/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import AnketAPrint from "./AnketAPrint";
 
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 const axios = require("axios");
@@ -258,7 +259,14 @@ function Home(props) {
       JSON.stringify({ person_id: "0", type: "newPerson" })
     );
 
-    history.push("/web/anketA/1");
+    history.push(
+      "/web/anketA/" +
+        JSON.stringify({
+          search: search,
+          searchType: searchType,
+          buttonValue: buttonValue,
+        })
+    );
   }
 
   function makeSearch(value, list, stype) {
@@ -569,6 +577,7 @@ function Home(props) {
             <EmployExcel />
           </div>
         </div>
+        <AnketAPrint />
         <DataTable
           columns={columns}
           data={search === "" ? jagsaalt : found}
@@ -582,6 +591,7 @@ function Home(props) {
           onSelectedRowsChange={handleChange}
           noHeader={true}
           fixedHeader={true}
+          responsive={true}
           overflowY={true}
           overflowYOffset={"390px"}
           paginationComponentOptions={{
@@ -693,4 +703,5 @@ function EmployExcel(props) {
   }
   return listItems;
 }
+
 export default Home;

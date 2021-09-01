@@ -187,6 +187,7 @@ function AlbanTushaalBurtgel(props) {
               <YurunkhiiMedeelel
                 setLoading={setLoading}
                 positionId={props.match?.params?.positionid}
+                search={props.match?.params?.search}
                 setPOSITION_ID={setPOSITION_ID}
               />
             ) : null}
@@ -221,9 +222,19 @@ function YurunkhiiMedeelel(props) {
       if (data == null || data == undefined)
         if (props?.positionId !== "undefined" && props?.positionId != null) {
           console.log("bolohgui bn bod", props?.positionId);
-          let listItems = await axios(
-            "http://hr.audit.mn/hr/api/v1/position/" + props?.positionId
-          );
+          let listItems;
+          console.log("searchsearch", props);
+          if (
+            props.search != undefined &&
+            JSON.parse(props.search)?.buttonValue === 2
+          )
+            listItems = await axios(
+              "http://hr.audit.mn/hr/api/v1/position/0/" + props?.positionId
+            );
+          else
+            listItems = await axios(
+              "http://hr.audit.mn/hr/api/v1/position/1/" + props?.positionId
+            );
           console.log(listItems, "position");
           loadData(listItems?.data);
           props.setPOSITION_ID(props?.positionId);

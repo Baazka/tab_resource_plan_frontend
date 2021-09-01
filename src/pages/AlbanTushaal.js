@@ -223,7 +223,16 @@ const AlbanTushaal = (props) => {
     }
   };
   function AlbanTushaal() {
-    history.push("/web/AlbanTushaalBurtgel/" + data?.POSITION_ID.toString());
+    history.push(
+      "/web/AlbanTushaalBurtgel/" +
+        data?.POSITION_ID.toString() +
+        "/" +
+        JSON.stringify({
+          search: search,
+          searchType: searchType,
+          buttonValue: buttonValue,
+        })
+    );
   }
   function makeSearch(value, list, stype) {
     setSearch(value);
