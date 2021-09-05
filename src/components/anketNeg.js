@@ -298,6 +298,7 @@ function AnketNeg(props) {
             textAlign: "center",
             borderRight: "1px solid #ececec",
             height: "100hv",
+            overflow: "scroll",
           }}
         >
           <div
@@ -408,172 +409,179 @@ function AnketNeg(props) {
               ТАЛААРХ МЭДЭЭЛЭЛ
             </button>
           </div>
-          <div className="AnketList">
-            <img
-              src={menu === 2 ? BlueKhoyor : BlackKhoyor}
-              width="45px"
-              height="45px"
-            />
-            <button
-              className="button"
-              style={{
-                color: `${menu === 2 ? "#418ee6" : "#5d5d5d"}`,
-                border: "none",
-                width: "17rem",
-                fontFamily: "RalewayRegular",
-                fontWeight: "bold",
-                whiteSpace: "nowrap",
-                marginTop: "3px",
-                fontSize: "1rem",
-              }}
-              onClick={() => setMenu(2)}
-            >
-              II. УР ЧАДВАРЫН <br />
-              ТАЛААРХ МЭДЭЭЛЭЛ
-            </button>
-          </div>
-          <div className="AnketList">
-            <img
-              src={menu === 3 ? BlueGurav : BlackGurav}
-              width="45px"
-              height="45px"
-            />
-            <button
-              className="button"
-              style={{
-                color: `${menu === 3 ? "#418ee6" : "#5d5d5d"}`,
-                border: "none",
-                width: "17rem",
-                fontFamily: "RalewayRegular",
-                fontWeight: "bold",
-                whiteSpace: "nowrap",
-                marginTop: "3px",
-                fontSize: "1rem",
-              }}
-              onClick={() => setMenu(3)}
-            >
-              III. БОЛОВСРОЛЫН <br />
-              ТАЛААРХ МЭДЭЭЛЭЛ
-            </button>
-          </div>
-          <div className="AnketList">
-            <img
-              src={menu === 4 ? BlueDuruv : BlackDuruv}
-              width="45px"
-              height="45px"
-            />
-            <button
-              className="button"
-              style={{
-                color: `${menu === 4 ? "#418ee6" : "#5d5d5d"}`,
-                border: "none",
-                width: "17rem",
-                fontFamily: "RalewayRegular",
-                fontWeight: "bold",
-                whiteSpace: "nowrap",
-                marginTop: "3px",
-                fontSize: "1rem",
-              }}
-              onClick={() => setMenu(4)}
-            >
-              IV. МЭРГЭШЛИЙН <br />
-              ТАЛААРХ МЭДЭЭЛЭЛ
-            </button>
-          </div>
-          <div className="AnketList">
-            <img
-              src={menu === 5 ? BlueTav : BlackTav}
-              width="45px"
-              height="45px"
-            />
-            <button
-              className="button"
-              style={{
-                color: `${menu === 5 ? "#418ee6" : "#5d5d5d"}`,
-                border: "none",
-                width: "17rem",
-                fontFamily: "RalewayRegular",
-                fontWeight: "bold",
-                whiteSpace: "nowrap",
-                marginTop: "3px",
-                fontSize: "1rem",
-              }}
-              onClick={() => setMenu(5)}
-            >
-              V. ЦЭРГИЙН АЛБА <br /> ХААСАН ЭСЭХ
-            </button>
-          </div>
-          <div className="AnketList">
-            <img
-              src={menu === 6 ? BlueZurgaa : BlackZurgaa}
-              width="45px"
-              height="45px"
-            />
-            <button
-              className="button"
-              style={{
-                color: `${menu === 6 ? "#418ee6" : "#5d5d5d"}`,
-                border: "none",
-                width: "17rem",
-                fontFamily: "RalewayRegular",
-                fontWeight: "bold",
-                whiteSpace: "nowrap",
-                marginTop: "3px",
-                fontSize: "1rem",
-              }}
-              onClick={() => setMenu(6)}
-            >
-              VI. ШАГНАЛЫН <br />
-              ТАЛААРХ МЭДЭЭЛЭЛ
-            </button>
-          </div>
-          <div className="AnketList">
-            <img
-              src={menu === 7 ? BlueDoloo : BlackDoloo}
-              width="45px"
-              height="45px"
-            />
-            <button
-              className="button"
-              style={{
-                color: `${menu === 7 ? "#418ee6" : "#5d5d5d"}`,
-                border: "none",
-                width: "17rem",
-                fontFamily: "RalewayRegular",
-                fontWeight: "bold",
-                whiteSpace: "nowrap",
-                marginTop: "3px",
-                fontSize: "1rem",
-              }}
-              onClick={() => setMenu(7)}
-            >
-              VII. ТУРШЛАГЫН <br />
-              ТАЛААРХ МЭДЭЭЛЭЛ
-            </button>
-          </div>
-          <div className="AnketList">
-            <img
-              src={menu === 8 ? BlueNaim : BlackNaim}
-              width="45px"
-              height="45px"
-            />
-            <button
-              className="button"
-              style={{
-                color: `${menu === 8 ? "#418ee6" : "#5d5d5d"}`,
-                border: "none",
-                width: "17rem",
-                fontFamily: "RalewayRegular",
-                fontWeight: "bold",
-                whiteSpace: "nowrap",
-                marginTop: "3px",
-                fontSize: "1rem",
-              }}
-              onClick={() => setMenu(8)}
-            >
-              VIII. БҮТЭЭЛИЙН <br /> ЖАГСААЛТ
-            </button>
-          </div>
+          {localStorage.getItem("personDetail")?.includes("person_id") ? (
+            JSON.parse(localStorage.getItem("personDetail")).person_id ===
+            "0" ? null : (
+              <div>
+                <div className="AnketList">
+                  <img
+                    src={menu === 2 ? BlueKhoyor : BlackKhoyor}
+                    width="45px"
+                    height="45px"
+                  />
+                  <button
+                    className="button"
+                    style={{
+                      color: `${menu === 2 ? "#418ee6" : "#5d5d5d"}`,
+                      border: "none",
+                      width: "17rem",
+                      fontFamily: "RalewayRegular",
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      marginTop: "3px",
+                      fontSize: "1rem",
+                    }}
+                    onClick={() => setMenu(2)}
+                  >
+                    II. УР ЧАДВАРЫН <br />
+                    ТАЛААРХ МЭДЭЭЛЭЛ
+                  </button>
+                </div>
+                <div className="AnketList">
+                  <img
+                    src={menu === 3 ? BlueGurav : BlackGurav}
+                    width="45px"
+                    height="45px"
+                  />
+                  <button
+                    className="button"
+                    style={{
+                      color: `${menu === 3 ? "#418ee6" : "#5d5d5d"}`,
+                      border: "none",
+                      width: "17rem",
+                      fontFamily: "RalewayRegular",
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      marginTop: "3px",
+                      fontSize: "1rem",
+                    }}
+                    onClick={() => setMenu(3)}
+                  >
+                    III. БОЛОВСРОЛЫН <br />
+                    ТАЛААРХ МЭДЭЭЛЭЛ
+                  </button>
+                </div>
+                <div className="AnketList">
+                  <img
+                    src={menu === 4 ? BlueDuruv : BlackDuruv}
+                    width="45px"
+                    height="45px"
+                  />
+                  <button
+                    className="button"
+                    style={{
+                      color: `${menu === 4 ? "#418ee6" : "#5d5d5d"}`,
+                      border: "none",
+                      width: "17rem",
+                      fontFamily: "RalewayRegular",
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      marginTop: "3px",
+                      fontSize: "1rem",
+                    }}
+                    onClick={() => setMenu(4)}
+                  >
+                    IV. МЭРГЭШЛИЙН <br />
+                    ТАЛААРХ МЭДЭЭЛЭЛ
+                  </button>
+                </div>
+                <div className="AnketList">
+                  <img
+                    src={menu === 5 ? BlueTav : BlackTav}
+                    width="45px"
+                    height="45px"
+                  />
+                  <button
+                    className="button"
+                    style={{
+                      color: `${menu === 5 ? "#418ee6" : "#5d5d5d"}`,
+                      border: "none",
+                      width: "17rem",
+                      fontFamily: "RalewayRegular",
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      marginTop: "3px",
+                      fontSize: "1rem",
+                    }}
+                    onClick={() => setMenu(5)}
+                  >
+                    V. ЦЭРГИЙН АЛБА <br /> ХААСАН ЭСЭХ
+                  </button>
+                </div>
+                <div className="AnketList">
+                  <img
+                    src={menu === 6 ? BlueZurgaa : BlackZurgaa}
+                    width="45px"
+                    height="45px"
+                  />
+                  <button
+                    className="button"
+                    style={{
+                      color: `${menu === 6 ? "#418ee6" : "#5d5d5d"}`,
+                      border: "none",
+                      width: "17rem",
+                      fontFamily: "RalewayRegular",
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      marginTop: "3px",
+                      fontSize: "1rem",
+                    }}
+                    onClick={() => setMenu(6)}
+                  >
+                    VI. ШАГНАЛЫН <br />
+                    ТАЛААРХ МЭДЭЭЛЭЛ
+                  </button>
+                </div>
+                <div className="AnketList">
+                  <img
+                    src={menu === 7 ? BlueDoloo : BlackDoloo}
+                    width="45px"
+                    height="45px"
+                  />
+                  <button
+                    className="button"
+                    style={{
+                      color: `${menu === 7 ? "#418ee6" : "#5d5d5d"}`,
+                      border: "none",
+                      width: "17rem",
+                      fontFamily: "RalewayRegular",
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      marginTop: "3px",
+                      fontSize: "1rem",
+                    }}
+                    onClick={() => setMenu(7)}
+                  >
+                    VII. ТУРШЛАГЫН <br />
+                    ТАЛААРХ МЭДЭЭЛЭЛ
+                  </button>
+                </div>
+                <div className="AnketList">
+                  <img
+                    src={menu === 8 ? BlueNaim : BlackNaim}
+                    width="45px"
+                    height="45px"
+                  />
+                  <button
+                    className="button"
+                    style={{
+                      color: `${menu === 8 ? "#418ee6" : "#5d5d5d"}`,
+                      border: "none",
+                      width: "17rem",
+                      fontFamily: "RalewayRegular",
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      marginTop: "3px",
+                      fontSize: "1rem",
+                    }}
+                    onClick={() => setMenu(8)}
+                  >
+                    VIII. БҮТЭЭЛИЙН <br /> ЖАГСААЛТ
+                  </button>
+                </div>
+              </div>
+            )
+          ) : null}
         </div>
         <div
           style={{
