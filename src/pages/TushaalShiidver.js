@@ -863,7 +863,7 @@ function Khoyor(props) {
     DEPARTMENT_ID: 1,
     SUB_DEPARTMENT_ID: "null",
     COMPARTMENT_ID: "null",
-    POSITION_ID: 1,
+    POSITION_ID: "null",
     IS_ACTIVE: 1,
     CREATED_BY: 1,
     CREATED_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
@@ -879,6 +879,7 @@ function Khoyor(props) {
     forceRender();
   }, [data]);
   function saveToDB() {
+    console.log("tushaalshiidverData", data);
     DataRequest({
       url: "http://hr.audit.mn/hr/api/v1/decision",
       method: "POST",
@@ -1578,7 +1579,17 @@ function TushaalKharakh(props) {
 
   useEffect(() => {
     async function fetchData() {
-      console.log("TushaalKharakh", props.tushaal?.decision_ID);
+      console.log(
+        "TushaalKharakh",
+        props.buttonValue + props.tushaal?.decision_ID
+      );
+      console.log(
+        "testtttttttttttttttttttttt",
+        "http://hr.audit.mn/hr/api/v1/decision/" +
+          props.buttonValue +
+          "/" +
+          props.tushaal?.decision_ID
+      );
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/decision/" +
           props.buttonValue +

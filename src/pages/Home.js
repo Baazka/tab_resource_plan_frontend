@@ -11,6 +11,8 @@ import dateFormat from "dateformat";
 import { css } from "@emotion/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import AnketAPrint from "./AnketAPrint";
+import ReactToPrint from "react-to-print";
+import { useTable } from "react-table";
 
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 const axios = require("axios");
@@ -61,6 +63,15 @@ const customStyles = {
     },
   },
 };
+class ComponentToPrint extends React.PureComponent {
+  render() {
+    return (
+      <div>
+        <AnketAPrint />
+      </div>
+    );
+  }
+}
 
 function Home(props) {
   const history = useHistory();
@@ -72,6 +83,7 @@ function Home(props) {
   const alert = useAlert();
   const [loading, setLoading] = useState(true);
   const [buttonValue, setButtonValue] = useState(1);
+  const componentRef = useRef(null);
 
   const override = css`
     display: block;
@@ -174,7 +186,6 @@ function Home(props) {
         }
         console.log(jagsaalts);
       } else {
-        console.log("gooooooooooooooooood");
         let jagsaalts = await DataRequest({
           url: "http://hr.audit.mn/hr/api/v1/employees/1",
           method: "GET",
@@ -360,20 +371,10 @@ function Home(props) {
             name: "Анкет А",
             selector: "4",
             // cell: (row) => (
-            //   <button
-            //     onClick={() => {
-            //       var content = document.getElementById("anketAPrint");
-            //       var pri =
-            //         document.getElementById("ifmcontentstoprint").contentWindow;
-            //       pri.document.open();
-            //       pri.document.write(content.innerHTML);
-            //       pri.document.close();
-            //       pri.focus();
-            //       pri.print();
-            //     }}
-            //   >
-            //     Хэвлэх
-            //   </button>
+            //   <ReactToPrint
+            //     trigger={() => <button>Хэвлэх</button>}
+            //     content={() => componentRef.current}
+            //   />
             // ),
 
             center: true,
@@ -528,6 +529,44 @@ function Home(props) {
           },
         ];
 
+  const columnsReactTable = React.useMemo(() => [
+    {
+      Header: "Төрийн аудитын байгууллага",
+      accessor: "DEPARTMENT_NAME",
+    },
+    {
+      Header: "Харъяа газар",
+      accessor: "SUB_DEPARTMENT_NAME",
+    },
+    {
+      Header: "Дотоод бүтцийн нэгж",
+      accessor: "COMPARTMENT_NAME",
+    },
+    {
+      Header: "Албан тушаалын нэр",
+      accessor: "POSITION_NAME",
+    },
+    {
+      Header: "Ажилтны нэр",
+      accessor: "PERSON_FIRSTNAME",
+    },
+    {
+      Header: "Ажилтны овог",
+      accessor: "PERSON_LASTNAME",
+    },
+    {
+      Header: "Утасны дугаар",
+      accessor: "PERSON_PHONE",
+    },
+    {
+      Header: "Имэйл",
+      accessor: "PERSON_EMAIL",
+    },
+  ]);
+
+  // const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+  //   useTable({ columns, jagsaalt });
+
   return (
     <div
       style={{
@@ -576,6 +615,18 @@ function Home(props) {
           >
             Идэвхтэй
           </button>
+          <div>
+            <div
+              style={{
+                display: "none",
+                width: 0,
+                height: 0,
+                position: "absolute",
+              }}
+            >
+              <ComponentToPrint ref={componentRef} />
+            </div>
+          </div>
           <button
             className="button is-focused"
             style={{
@@ -756,7 +807,6 @@ function Home(props) {
             <EmployExcel />
           </div>
         </div>
-        <AnketAPrint />
 
         <DataTable
           columns={columns}
@@ -782,6 +832,50 @@ function Home(props) {
             selectAllRowsItemText: "All",
           }}
         />
+        {/* <table {...getTableProps()} style={{ border: "solid 1px blue" }}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th
+                    {...column.getHeaderProps()}
+                    style={{
+                      borderBottom: "solid 3px red",
+                      background: "aliceblue",
+                      color: "black",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {column.render("Header")}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td
+                        {...cell.getCellProps()}
+                        style={{
+                          padding: "10px",
+                          border: "solid 1px gray",
+                          background: "papayawhip",
+                        }}
+                      >
+                        {cell.render("Cell")}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table> */}
       </div>
       <div className="sweet-loading">
         <ScaleLoader
