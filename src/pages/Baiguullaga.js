@@ -8,8 +8,16 @@ import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import dateFormat from "dateformat";
-import { Search, Filter, Add, Excel, AddBlue } from "../assets/images/zurag";
+import {
+  Search,
+  Filter,
+  Add,
+  Excel,
+  AddBlue,
+  DownArrow,
+} from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
+import { Suboffice } from "../components/library";
 
 const axios = require("axios");
 
@@ -60,18 +68,114 @@ const customStyles = {
     },
   },
 };
-
-const Baiguullaga = (props) => {
-  const history = useHistory();
-  const [jagsaalt, setJagsaalt] = useState();
-  const [searchType, setSearchType] = useState("DEPARTMENT_NAME");
-  const [search, setSearch] = useState("");
-  const [found, setFound] = useState();
+function Subdepartment(props) {
+  const [data, loadData] = useState([]);
+  const [subDepId, setSubDepId] = useState(null);
+  const [show, setShow] = useState(false);
+  const [type, setType] = useState("Sub_Department");
 
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/organization",
+        url:
+          "http://hr.audit.mn/hr/api/v1/subdepartment/" + props?.deparment_ID,
+        method: "GET",
+        data: {},
+      });
+
+      loadData(jagsaalts?.data);
+    }
+    test();
+  }, [props]);
+
+  return (
+    <div>
+      {props?.show == true && props?.deparment_ID === props.depId ? (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            marginLeft: "5%",
+          }}
+        >
+          {data.map((value, index) => (
+            <div>
+              <button
+                className="button"
+                style={{}}
+                onClick={() => {
+                  setSubDepId(value.SUB_DEPARTMENT_ID);
+                  setShow(!show);
+                }}
+              >
+                {index + 1}.{value.SUB_DEPARTMENT_NAME}
+              </button>
+              <Compartment
+                show={show}
+                deparment_ID={value.SUB_DEPARTMENT_ID}
+                subDepId={subDepId}
+              />
+            </div>
+          ))}
+          {data.length === 0 ? (
+            <Compartment
+              show={show}
+              deparment_ID={props?.deparment_ID}
+              subDepId={props?.deparment_ID}
+            />
+          ) : null}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+function Compartment(props) {
+  const [data, loadData] = useState([]);
+
+  useEffect(() => {
+    async function test() {
+      let jagsaalts = await DataRequest({
+        url: "http://hr.audit.mn/hr/api/v1/compartment/" + props?.deparment_ID,
+        method: "GET",
+        data: {},
+      });
+      loadData(jagsaalts?.data);
+    }
+    test();
+  }, [props]);
+
+  return (
+    <div>
+      {props?.show == true && props?.deparment_ID === props.subDepId ? (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            marginLeft: "10%",
+          }}
+        >
+          {data.map((value, index) => (
+            <button className="button" style={{}}>
+              {index + 1}.{value.COMPARTMENT_NAME}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
+const Baiguullaga = (props) => {
+  const [jagsaalt, setJagsaalt] = useState([]);
+  const [depId, setDepId] = useState(null);
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    async function test() {
+      let jagsaalts = await DataRequest({
+        url: "http://hr.audit.mn/hr/api/v1/department/",
         method: "GET",
         data: {},
       });
@@ -81,106 +185,6 @@ const Baiguullaga = (props) => {
     test();
     console.log("jagsaalt", jagsaalt);
   }, [props]);
-
-  const handleChange = (state) => {
-    // You can use setState or dispatch with something like Redux so we can use the retrieved data
-    console.log("Selected Rows: ", state.selectedRows);
-  };
-
-  function makeSearch(value) {
-    setSearch(value);
-    console.log("khailtttttttttttttt", searchType);
-    let found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
-    console.log(found);
-    if (found != undefined && found.length > 0) setFound(found);
-    else setFound([]);
-  }
-  function equalStr(value1, value2) {
-    if (
-      value1 !== undefined &&
-      value1 !== "" &&
-      value2 !== undefined &&
-      value2 !== "" &&
-      value1 !== null &&
-      value2 !== null
-    )
-      if (value1.includes(value2)) return true;
-    return false;
-  }
-
-  const columns = [
-    {
-      name: "№",
-      selector: (row, index) => {
-        return index + 1;
-      },
-      sortable: true,
-      width: "40px",
-    },
-    // {
-    //   name: "Код",
-    //   selector: "DEPARTMENT_ID",
-
-    //   width: "50px",
-    // },
-    {
-      name: "Төрийн аудитын байгууллага",
-      selector: "DEPARTMENT_NAME",
-    },
-    {
-      name: "Харъяа газар",
-      selector: "SUB_DEPARTMENT_NAME",
-    },
-    {
-      name: "Дотоод бүтцийн нэгж",
-      selector: "COMPARTMENT_NAME",
-    },
-    // {
-    //   name: "Албан тушаалын код",
-    //   selector: "",
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Албан тушаалын нэр",
-    //   selector: "",
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Албан тушаалын төрөл",
-    //   selector: "",
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Албан тушаалын ангилал",
-    //   selector: "",
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Албан тушаалын зэрэглэл",
-    //   selector: "",
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Батлагдсан орон тоо",
-    //   selector: "CONFIRMED_COUNT",
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Ажилтны тоо",
-    //   selector: "",
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Эзгүй орон тоо",
-    //   selector: "",
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Сул орон тоо",
-    //   selector: "",
-    //   sortable: true,
-    // },
-  ];
 
   return (
     <div
@@ -195,87 +199,65 @@ const Baiguullaga = (props) => {
         style={{
           backgroundColor: "white",
           width: "91%",
+          height: "90%",
           marginTop: "80px",
           marginLeft: "7.5rem",
-          overflow: "hidden",
+          overflow: "scroll",
         }}
       >
         <div
           style={{
             marginTop: "10px",
-            display: "flex",
-            borderColor: "gray",
-            borderBottom: "1px solid",
-            width: "100%",
-            padding: "0.5rem",
-            marginRight: "-10px",
-          }}
-        ></div>
-        <div
-          style={{
-            width: "20rem",
-            marginTop: "1rem",
+            borderRadius: "8px",
+            backgroundColor: "rgb(184, 217, 255,0.3)",
+            padding: "5px",
           }}
         >
-          <div style={{ display: "flex" }}>
-            <div className="select is-small" style={{ marginRight: "10px" }}>
-              <select
-                value={searchType}
-                onChange={(text) => setSearchType(text.target.value)}
-              >
-                <option value={"DEPARTMENT_NAME"}>
-                  Төрийн аудитын байгууллага
-                </option>
-                <option value={"SUB_DEPARTMENT_NAME"}>Харъяа газар</option>
-                <option value={"COMPARTMENT_NAME"}>Дотооод бүтцийн нэгж</option>
-                {/* <option value={"PERSON_FIRSTNAME"}>Албан тушаалын код</option>
-                <option value={"PERSON_LASTNAME"}>Албан тушаалын нэр</option>
-                <option value={"EMP_COMPARTMENT_NAME"}>
-                  Албан тушаалын төрөл
-                </option>
-                <option value={"PERSON_PHONE"}>Албан тушаалын ангилал</option>
-                <option value={"PERSON_EMAIL"}>Албан тушаалын зэрэглэл</option> */}
-              </select>
-              {/* 
-              <span class="icon is-small is-right">
-                <img src={Filter} />
-              </span> */}
-            </div>
-            <div class="control has-icons-left has-icons-right">
-              <input
-                class="input is-small is-gray"
-                type="email"
-                placeholder="хайлт хийх утгаа оруулна уу"
-                value={search}
-                onChange={(e) => makeSearch(e.target.value)}
+          <div className="columns">
+            <div className="column is-4">
+              <img src={DownArrow} width="15px" style={{ marginLeft: "5px" }} />
+              <span
                 style={{
-                  borderRadius: "5px",
-                  width: "18rem",
+                  color: "grey",
+                  fontWeight: "bold",
+                  fontSize: "1.1rem",
+                  marginLeft: "5px",
                 }}
-              />
-
-              <span class="icon is-small is-right">
-                <img src={Search} />
+              >
+                Байгууллагын нэр
               </span>
-              <span class="icon is-small is-right"></span>
+              <span
+                style={{
+                  marginLeft: "20px",
+                }}
+              >
+                {jagsaalt.length}
+              </span>
             </div>
+            <div className="column is-2 has-text-right"></div>
           </div>
         </div>
-        <DataTable
-          columns={columns}
-          data={search === "" ? jagsaalt : found}
-          theme="solarized"
-          customStyles={customStyles}
-          pagination={false}
-          paginationPerPage={10}
-          selectableRows // add for checkbox selection
-          Clicked
-          onSelectedRowsChange={handleChange}
-          noHeader={true}
-          fixedHeader={true}
-          overflowY={true}
-          overflowYOffset={"390px"}
-        />
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {jagsaalt.map((value, index) => (
+            <div>
+              <button
+                className="button"
+                style={{ width: "20%" }}
+                onClick={() => {
+                  setDepId(value.DEPARTMENT_ID);
+                  setShow(!show);
+                }}
+              >
+                {index + 1}.{value.DEPARTMENT_NAME}
+              </button>
+              <Subdepartment
+                show={show}
+                deparment_ID={value.DEPARTMENT_ID}
+                depId={depId}
+              />
+            </div>
+          ))}
+        </div>
       </div>
       <Footer />
     </div>

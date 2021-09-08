@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useReducer } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Search, Filter, AddBlue, Excel } from "../assets/images/zurag";
+import { Search, Filter, AddBlue, Excel, Print } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
@@ -11,12 +11,17 @@ import dateFormat from "dateformat";
 import { css } from "@emotion/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import AnketAPrint from "./AnketAPrint";
-import ReactToPrint from "react-to-print";
-import { useTable } from "react-table";
+
+import { useReactToPrint } from "react-to-print";
 
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 const axios = require("axios");
 
+class ComponentToPrint extends React.PureComponent {
+  render() {
+    return <div style={{ padding: "20px" }}>{this.props?.print}</div>;
+  }
+}
 createTheme("solarized", {
   text: {
     primary: "gray",
@@ -63,15 +68,6 @@ const customStyles = {
     },
   },
 };
-class ComponentToPrint extends React.PureComponent {
-  render() {
-    return (
-      <div>
-        <AnketAPrint />
-      </div>
-    );
-  }
-}
 
 function Home(props) {
   const history = useHistory();
@@ -84,7 +80,17 @@ function Home(props) {
   const [loading, setLoading] = useState(true);
   const [buttonValue, setButtonValue] = useState(1);
   const componentRef = useRef(null);
-
+  const [, forceRender] = useReducer((s) => s + 1, 0);
+  const [print, setPrint] = useState({
+    print: 0,
+    person_ID: null,
+    emp_ID: null,
+    buttonValue: 1,
+  });
+  const [draw, setDraw] = useState();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
   const override = css`
     display: block;
     margin: 0 auto;
@@ -133,14 +139,6 @@ function Home(props) {
 
   useEffect(() => {
     async function test() {
-      // let jagsaalts = await DataRequest({
-      //   url: "http://hr.audit.mn/hr/api/v1/employees/1",
-      //   method: "GET",
-      //   data: {},
-      // });
-      // setJagsaalt(jagsaalts?.data);
-      // setLoading(false);
-
       if (
         props.match?.params != undefined &&
         JSON.parse(props.match?.params?.search)?.buttonValue === 2
@@ -313,6 +311,12 @@ function Home(props) {
       } else if (value1.includes(value2)) return true;
     return false;
   }
+  useEffect(() => {
+    if (draw !== undefined) {
+      window.setTimeout(handlePrint(), 5000);
+      console.log("itworket", print);
+    }
+  }, [draw]);
 
   const columns =
     buttonValue === 1
@@ -370,21 +374,59 @@ function Home(props) {
           {
             name: "Анкет А",
             selector: "4",
-            // cell: (row) => (
-            //   <ReactToPrint
-            //     trigger={() => <button>Хэвлэх</button>}
-            //     content={() => componentRef.current}
-            //   />
-            // ),
+            width: "60px",
+            cell: (row) => (
+              <div>
+                <img
+                  src={Print}
+                  width="20px"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setDraw(
+                      <div>
+                        <AnketAPrint
+                          print={{
+                            print: 1,
+                            person_ID:
+                              row?.EMP_PERSON_ID != undefined &&
+                              row?.EMP_PERSON_ID !== null
+                                ? row?.EMP_PERSON_ID
+                                : row?.PERSON_ID,
+                            emp_ID: row?.EMP_ID,
+                            buttonValue: buttonValue,
+                          }}
+                        />
+                      </div>
+                    );
+                    forceRender();
+                  }}
+                />
+              </div>
+            ),
 
             center: true,
           },
-          {
-            name: "Анкет Б",
-            selector: "6",
-            sortable: true,
-            center: true,
-          },
+          // {
+          //   name: "Анкет Б",
+          //   width: "60px",
+          //   cell: (row) => (
+          //     <div>
+          //       <button
+          //         onClick={() => {
+          //           setPrint({
+          //             print: 1,
+          //             person_ID: row.PERSON_ID,
+          //             emp_ID: row?.EMP_ID,
+          //           });
+          //         }}
+          //       >
+          //         hide
+          //       </button>
+          //     </div>
+          //   ),
+          //   sortable: true,
+          //   center: true,
+          // },
         ]
       : buttonValue === 2
       ? [
@@ -437,28 +479,6 @@ function Home(props) {
           {
             name: "Анкет А",
             selector: "4",
-            // cell: (row) => (
-            //   <button
-            //     onClick={() => {
-            //       // var content = document.getElementById("anketAPrint");
-            //       // var pri =
-            //       //   document.getElementById("ifmcontentstoprint").contentWindow;
-            //       // pri.document.open();
-            //       // pri.document.write(content.innerHTML);
-            //       // pri.document.close();
-            //       // pri.focus();
-            //       // pri.print();
-            //       var printContents =
-            //         document.getElementById("anketAPrint").innerHTML;
-            //       var originalContents = document.body.innerHTML;
-            //       document.body.innerHTML = printContents;
-            //       window.print();
-            //       document.body.innerHTML = originalContents;
-            //     }}
-            //   >
-            //     Хэвлэх
-            //   </button>
-            // ),
 
             center: true,
           },
@@ -502,28 +522,6 @@ function Home(props) {
           {
             name: "Анкет А",
             selector: "4",
-            // cell: (row) => (
-            //   <button
-            //     onClick={() => {
-            //       // var content = document.getElementById("anketAPrint");
-            //       // var pri =
-            //       //   document.getElementById("ifmcontentstoprint").contentWindow;
-            //       // pri.document.open();
-            //       // pri.document.write(content.innerHTML);
-            //       // pri.document.close();
-            //       // pri.focus();
-            //       // pri.print();
-            //       var printContents =
-            //         document.getElementById("anketAPrint").innerHTML;
-            //       var originalContents = document.body.innerHTML;
-            //       document.body.innerHTML = printContents;
-            //       window.print();
-            //       document.body.innerHTML = originalContents;
-            //     }}
-            //   >
-            //     Хэвлэх
-            //   </button>
-            // ),
 
             center: true,
           },
@@ -588,6 +586,16 @@ function Home(props) {
       >
         <div
           style={{
+            display: "none",
+            width: 0,
+            height: 0,
+            position: "absolute",
+          }}
+        >
+          <ComponentToPrint ref={componentRef} print={draw} />
+        </div>
+        <div
+          style={{
             marginTop: "10px",
             display: "flex",
             borderColor: "gray",
@@ -615,18 +623,7 @@ function Home(props) {
           >
             Идэвхтэй
           </button>
-          <div>
-            <div
-              style={{
-                display: "none",
-                width: 0,
-                height: 0,
-                position: "absolute",
-              }}
-            >
-              <ComponentToPrint ref={componentRef} />
-            </div>
-          </div>
+
           <button
             className="button is-focused"
             style={{
@@ -807,7 +804,14 @@ function Home(props) {
             <EmployExcel />
           </div>
         </div>
-
+        <iframe
+          id="ifmcontentstoprint"
+          style={{
+            height: "0px",
+            width: "0px",
+            position: "absolute",
+          }}
+        ></iframe>
         <DataTable
           columns={columns}
           data={search === "" ? jagsaalt : found}

@@ -4,26 +4,20 @@ const axios = require("axios");
 
 function AnketAPrint(props) {
   const [data, loadData] = useState(1);
-  let listItems;
-  let huvisagch = 1;
-  function buttonNemeh() {
-    loadData(data);
-
-    console.log("huvisagch", huvisagch + 1);
-  }
-  function buttonhasah() {
-    loadData(data - 1);
-
-    console.log("huvisagch", huvisagch - 1);
-  }
-
-  //   listItems = (
-
-  //   );
+  useEffect(() => {
+    console.log("anketAprintProps", props);
+  }, [props]);
 
   return (
     <div style={{ padding: "20px" }}>
-      <Yrunkhii />
+      <Yrunkhii
+        person_ID={
+          props.print.person_ID == undefined
+            ? props.print.emp_ID
+            : props.print.person_ID
+        }
+        buttonValue={props.print.buttonValue === 1 ? 0 : 1}
+      />
       <Gerbul />
       <Sadan />
       <UrChadvar />
@@ -42,14 +36,20 @@ function Yrunkhii(props) {
   const [data, loadData] = useState();
   useEffect(() => {
     async function fetchdata() {
-      let listItems = await axios("http://hr.audit.mn/hr/api/v1/person/0/9269");
-      console.log("listItems", listItems.data.person);
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/person/" +
+          props.buttonValue +
+          "/" +
+          props.person_ID +
+          "/"
+      );
+      console.log("Yrunkhii", listItems.data);
       loadData(listItems?.data);
     }
     fetchdata();
   }, [props]);
   let listItems;
-  if (data !== undefined && data?.length !== 0 && data !== null) {
+  if (data != undefined && data !== null) {
     listItems = (
       <div>
         <span className="level-right has-text-right">
@@ -101,10 +101,7 @@ function Yrunkhii(props) {
               {data.PERSON_LASTNAME}
             </h1>
 
-            <h1>
-              1.4. Өөрийн нэр:{data.PERSON_FIRSTNAME}
-              1.5. Хүйс:{" "}
-            </h1>
+            <h1>1.4. Өөрийн нэр:{data.PERSON_FIRSTNAME} &nbsp; 1.5. Хүйс: </h1>
             <h1>
               1.5. Төрсөн: {dateFormat(data.PERSON_BORNDATE, "yyyy-mm-dd")}
             </h1>
@@ -123,6 +120,7 @@ function Yrunkhii(props) {
                 marginLeft: "60%",
                 marginRight: "10%",
                 height: "70%",
+                padding: "3rem",
               }}
             >
               Цээж зураг
