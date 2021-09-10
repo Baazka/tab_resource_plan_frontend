@@ -404,27 +404,27 @@ function Home(props) {
 
             center: true,
           },
-          {
-            name: "Анкет Б",
-            width: "60px",
-            cell: (row) => (
-              <div>
-                <button
-                  onClick={() => {
-                    setPrint({
-                      print: 1,
-                      person_ID: row.PERSON_ID,
-                      emp_ID: row?.EMP_ID,
-                    });
-                  }}
-                >
-                  hide
-                </button>
-              </div>
-            ),
-            sortable: true,
-            center: true,
-          },
+          // {
+          //   name: "Анкет Б",
+          //   width: "60px",
+          //   cell: (row) => (
+          //     <div>
+          //       <button
+          //         onClick={() => {
+          //           setPrint({
+          //             print: 1,
+          //             person_ID: row.PERSON_ID,
+          //             emp_ID: row?.EMP_ID,
+          //           });
+          //         }}
+          //       >
+          //         hide
+          //       </button>
+          //     </div>
+          //   ),
+          //   sortable: true,
+          //   center: true,
+          // },
         ]
       : buttonValue === 2
       ? [
@@ -520,7 +520,28 @@ function Home(props) {
           {
             name: "Анкет А",
             selector: "4",
-
+            cell: (row) => (
+              <div>
+                <img
+                  src={Print}
+                  width="20px"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setPrint({
+                      print: 1,
+                      person_ID:
+                        row?.EMP_PERSON_ID != undefined &&
+                        row?.EMP_PERSON_ID !== null
+                          ? row?.EMP_PERSON_ID
+                          : row?.PERSON_ID,
+                      emp_ID: row?.EMP_ID,
+                      buttonValue: buttonValue,
+                    });
+                    forceRender();
+                  }}
+                />
+              </div>
+            ),
             center: true,
           },
         ];
