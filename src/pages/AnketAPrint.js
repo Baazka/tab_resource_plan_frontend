@@ -3,7 +3,6 @@ var dateFormat = require("dateformat");
 const axios = require("axios");
 
 function AnketAPrint(props) {
-  const [data, loadData] = useState(1);
   useEffect(() => {
     console.log("anketAprintProps", props);
   }, [props]);
@@ -18,22 +17,13 @@ function AnketAPrint(props) {
         }
         buttonValue={props.print.buttonValue === 1 ? 0 : 1}
       />
-      <Gerbul />
-      <Sadan />
-      <UrChadvar />
-      <Bolowsrol />
-      <Medeelel />
-      <TsolDew />
-      <TsergiinAlba />
-      <Shalgagdahch />
-      {/* <Tushaal /> */}
-      <BvteeliinJagsaalt />
     </div>
   );
 }
 
 function Yrunkhii(props) {
   const [data, loadData] = useState();
+  let listItems;
   useEffect(() => {
     async function fetchdata() {
       let listItems = await axios(
@@ -48,7 +38,7 @@ function Yrunkhii(props) {
     }
     fetchdata();
   }, [props]);
-  let listItems;
+
   if (data != undefined && data !== null) {
     listItems = (
       <div>
@@ -129,6 +119,16 @@ function Yrunkhii(props) {
             </div>
           </div>
         </div>
+        <Gerbul person_ID={data?.PERSON_ID} />
+        <Sadan person_ID={data?.PERSON_ID} />
+        <UrChadvar person_ID={data?.PERSON_ID} />
+        <Bolowsrol person_ID={data?.PERSON_ID} />
+        <Medeelel person_ID={data?.PERSON_ID} />
+        <TsolDew person_ID={data?.PERSON_ID} />
+        <TsergiinAlba person_ID={data?.PERSON_ID} />
+        <Shalgagdahch person_ID={data?.PERSON_ID} />
+        <Tushaal person_ID={data?.PERSON_ID} />
+        <BvteeliinJagsaalt person_ID={data?.PERSON_ID} />
       </div>
     );
   } else {
@@ -185,10 +185,12 @@ function Yrunkhii(props) {
   return listItems;
 }
 function Gerbul(props) {
-  const [data, loadData] = useState();
+  const [data, loadData] = useState([]);
   useEffect(() => {
     async function fetchdata() {
-      let listItems = await axios("http://hr.audit.mn/hr/api/v1/family/9269");
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/family/" + props.person_ID
+      );
       console.log("Family", listItems.data);
       loadData(listItems?.data.Family);
     }
@@ -267,7 +269,9 @@ function Sadan(props) {
   const [data, loadData] = useState();
   useEffect(() => {
     async function fetchdata() {
-      let listItems = await axios("http://hr.audit.mn/hr/api/v1/family/9269");
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/family/" + props.person_ID
+      );
       console.log("Family", listItems.data);
       loadData(listItems?.data.Family);
     }
@@ -362,7 +366,9 @@ function UrChadvar(props) {
 
   useEffect(() => {
     async function fetchdata() {
-      let listItems = await axios("http://hr.audit.mn/hr/api/v1/exam/9269");
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/exam/" + props.person_ID
+      );
       console.log("Exam", listItems.data);
       loadData(listItems?.data.Exam);
     }
@@ -438,7 +444,7 @@ function Bolowsrol(props) {
   useEffect(() => {
     async function fetchdata() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/education/9269"
+        "http://hr.audit.mn/hr/api/v1/education/" + props.person_ID
       );
       console.log("Education", listItems.data);
       loadData(
@@ -590,7 +596,7 @@ function Medeelel(props) {
   useEffect(() => {
     async function fetchdata() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/profession/9269"
+        "http://hr.audit.mn/hr/api/v1/profession/" + props.person_ID
       );
       console.log("Profession", listItems.data);
       loadData(listItems?.data.Profession);
@@ -675,7 +681,9 @@ function TsolDew(props) {
   const [data, loadData] = useState();
   useEffect(() => {
     async function fetchdata() {
-      let listItems = await axios(" http://hr.audit.mn/hr/api/v1/fame/9269");
+      let listItems = await axios(
+        " http://hr.audit.mn/hr/api/v1/fame/" + props.person_ID
+      );
       console.log("Fame", listItems.data);
       loadData(listItems?.data.Fame);
     }
@@ -748,7 +756,9 @@ function TsergiinAlba(props) {
   const [data, loadData] = useState();
   useEffect(() => {
     async function fetchdata() {
-      let listItems = await axios("http://hr.audit.mn/hr/api/v1/force/9269");
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/force/" + props.person_ID
+      );
       console.log("Force", listItems.data);
       loadData(listItems?.data.Force);
     }
@@ -846,7 +856,9 @@ function Shalgagdahch(props) {
   const [data, loadData] = useState();
   useEffect(() => {
     async function fetchdata() {
-      let listItems = await axios("http://hr.audit.mn/hr/api/v1/Award/9269");
+      let listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/Award/" + props.person_ID
+      );
       console.log("Award", listItems.data);
       loadData(listItems?.data.Award);
     }
@@ -923,7 +935,7 @@ function Tushaal(props) {
   useEffect(() => {
     async function fetchdata() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/experience/9269"
+        "http://hr.audit.mn/hr/api/v1/experience/" + props.person_ID
       );
       console.log("Experience", listItems.data);
       loadData(listItems?.data.Experience);
@@ -1015,7 +1027,7 @@ function BvteeliinJagsaalt(props) {
   useEffect(() => {
     async function fetchdata() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/Literature/9269"
+        "http://hr.audit.mn/hr/api/v1/Literature/" + props.person_ID
       );
       console.log("Literature", listItems.data);
       loadData(listItems?.data.Literature);

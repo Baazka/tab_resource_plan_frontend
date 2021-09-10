@@ -19,7 +19,11 @@ const axios = require("axios");
 
 class ComponentToPrint extends React.PureComponent {
   render() {
-    return <div style={{ padding: "20px" }}>{this.props?.print}</div>;
+    return (
+      <div>
+        <AnketAPrint print={this.props.print} />
+      </div>
+    );
   }
 }
 createTheme("solarized", {
@@ -312,11 +316,11 @@ function Home(props) {
     return false;
   }
   useEffect(() => {
-    if (draw !== undefined) {
-      window.setTimeout(handlePrint(), 5000);
+    if (print.print !== 0) {
+      window.setTimeout(handlePrint(), 3000);
       console.log("itworket", print);
     }
-  }, [draw]);
+  }, [print]);
 
   const columns =
     buttonValue === 1
@@ -382,22 +386,16 @@ function Home(props) {
                   width="20px"
                   style={{ cursor: "pointer" }}
                   onClick={() => {
-                    setDraw(
-                      <div>
-                        <AnketAPrint
-                          print={{
-                            print: 1,
-                            person_ID:
-                              row?.EMP_PERSON_ID != undefined &&
-                              row?.EMP_PERSON_ID !== null
-                                ? row?.EMP_PERSON_ID
-                                : row?.PERSON_ID,
-                            emp_ID: row?.EMP_ID,
-                            buttonValue: buttonValue,
-                          }}
-                        />
-                      </div>
-                    );
+                    setPrint({
+                      print: 1,
+                      person_ID:
+                        row?.EMP_PERSON_ID != undefined &&
+                        row?.EMP_PERSON_ID !== null
+                          ? row?.EMP_PERSON_ID
+                          : row?.PERSON_ID,
+                      emp_ID: row?.EMP_ID,
+                      buttonValue: buttonValue,
+                    });
                     forceRender();
                   }}
                 />
@@ -406,27 +404,27 @@ function Home(props) {
 
             center: true,
           },
-          // {
-          //   name: "Анкет Б",
-          //   width: "60px",
-          //   cell: (row) => (
-          //     <div>
-          //       <button
-          //         onClick={() => {
-          //           setPrint({
-          //             print: 1,
-          //             person_ID: row.PERSON_ID,
-          //             emp_ID: row?.EMP_ID,
-          //           });
-          //         }}
-          //       >
-          //         hide
-          //       </button>
-          //     </div>
-          //   ),
-          //   sortable: true,
-          //   center: true,
-          // },
+          {
+            name: "Анкет Б",
+            width: "60px",
+            cell: (row) => (
+              <div>
+                <button
+                  onClick={() => {
+                    setPrint({
+                      print: 1,
+                      person_ID: row.PERSON_ID,
+                      emp_ID: row?.EMP_ID,
+                    });
+                  }}
+                >
+                  hide
+                </button>
+              </div>
+            ),
+            sortable: true,
+            center: true,
+          },
         ]
       : buttonValue === 2
       ? [
@@ -592,7 +590,7 @@ function Home(props) {
             position: "absolute",
           }}
         >
-          <ComponentToPrint ref={componentRef} print={draw} />
+          <ComponentToPrint ref={componentRef} print={print} />
         </div>
         <div
           style={{

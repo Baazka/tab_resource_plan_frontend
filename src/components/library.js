@@ -180,6 +180,7 @@ function Office(props) {
           // props.forceUpdate();
         }}
       >
+        <option value={0}>Гадаад</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.OFFICE_ID}>
             {nation.OFFICE_NAME}

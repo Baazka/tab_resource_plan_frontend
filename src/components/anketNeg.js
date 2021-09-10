@@ -1668,8 +1668,13 @@ function GerBul(props) {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/family/" + props.person_id
       );
-      console.log(listItems, "family");
-      loadData(listItems?.data.Family);
+
+      listItems.data.Family?.map((value, index) => {
+        listItems.data.Family[index].MEMBER_BIRTHDATE = new Date(
+          value.MEMBER_BIRTHDATE
+        ).getFullYear();
+        loadData(listItems?.data.Family);
+      });
     }
     fetchData();
   }, [props]);
@@ -1697,7 +1702,20 @@ function GerBul(props) {
       ) {
         alert.show("Албан тушаал оруулан уу");
         return false;
-      } else if (i === value.length - 1) {
+      } else if (
+        value[i].MEMBER_BIRTHDATE === null ||
+        value[i].MEMBER_BIRTHDATE === ""
+      ) {
+        alert.show("огноо оруулан уу");
+        return false;
+      }
+      if (
+        value[i].MEMBER_BIRTHDATE !== null &&
+        value[i].MEMBER_BIRTHDATE !== ""
+      ) {
+        value[i].MEMBER_BIRTHDATE = value[i].MEMBER_BIRTHDATE + "-01-01";
+      }
+      if (i === value.length - 1) {
         return true;
       }
     }
@@ -1714,7 +1732,7 @@ function GerBul(props) {
               MEMBER_ID: 1,
               MEMBER_LASTNAME: "",
               MEMBER_FIRSTNAME: "",
-              MEMBER_BIRTHDATE: dateFormat(new Date(), "yyyy-mm-dd"),
+              MEMBER_BIRTHDATE: "",
               OFFICE_ID: "1",
               SUB_OFFICE_ID: "1",
               MEMBER_ORG: "",
@@ -1737,7 +1755,7 @@ function GerBul(props) {
               MEMBER_TYPE: 2,
               MEMBER_LASTNAME: "",
               MEMBER_FIRSTNAME: "",
-              MEMBER_BIRTHDATE: dateFormat(new Date(), "yyyy-mm-dd"),
+              MEMBER_BIRTHDATE: "",
               OFFICE_ID: "1",
               SUB_OFFICE_ID: "1",
               MEMBER_ORG: "",
@@ -1762,7 +1780,7 @@ function GerBul(props) {
       MEMBER_ID: 1,
       MEMBER_LASTNAME: "",
       MEMBER_FIRSTNAME: "",
-      MEMBER_BIRTHDATE: dateFormat(new Date(), "yyyy-mm-dd"),
+      MEMBER_BIRTHDATE: "",
       OFFICE_ID: "1",
       SUB_OFFICE_ID: "1",
       MEMBER_ORG: "",
@@ -1786,7 +1804,7 @@ function GerBul(props) {
       MEMBER_ID: 1,
       MEMBER_LASTNAME: "",
       MEMBER_FIRSTNAME: "",
-      MEMBER_BIRTHDATE: dateFormat(new Date(), "yyyy-mm-dd"),
+      MEMBER_BIRTHDATE: "",
       OFFICE_ID: "1",
       SUB_OFFICE_ID: "1",
       MEMBER_ORG: "",
@@ -1911,7 +1929,7 @@ function GerBul(props) {
           });
       }
       if (oldRow?.length > 0) {
-        console.log("update", JSON.stringify(oldRow));
+        console.log("updateGerBul.", JSON.stringify(oldRow));
         DataRequest({
           url: "http://hr.audit.mn/hr/api/v1/family/",
           method: "PUT",
@@ -2022,7 +2040,7 @@ function GerBul(props) {
                     <span className="textSaaral">Гэр бүлийн гишүүний нэр</span>
                   </td>
                   <td rowspan="2">
-                    <span className="textSaaral">Төрсөн он, сар, өдөр</span>
+                    <span className="textSaaral">Төрсөн он</span>
                   </td>
                   <td rowspan="2">
                     <span className="textSaaral">Төрсөн аймаг, хот</span>
@@ -2116,21 +2134,35 @@ function GerBul(props) {
                     <td>
                       {" "}
                       <input
-                        placeholder="утгаа оруулна уу"
-                        type="date"
+                        type="number"
+                        pattern="[0-9]{4}"
                         style={{ width: "120px" }}
                         disabled={edit}
                         className="anketInput"
-                        value={dateFormat(value.MEMBER_BIRTHDATE, "yyyy-mm-dd")}
+                        value={value.MEMBER_BIRTHDATE}
                         onChange={(e) => {
-                          family[index].MEMBER_BIRTHDATE = e.target.value;
-                          family[index].UPDATED_BY = userDetils?.USER_ID;
-                          family[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          setFamily(family);
-                          forceRender();
+                          if (e.target.value != "") {
+                            console.log("testInput", e.target.value);
+                            if (parseInt(e.target.value) <= parseInt(2100)) {
+                              family[index].MEMBER_BIRTHDATE = e.target.value;
+                              family[index].UPDATED_BY = userDetils?.USER_ID;
+                              family[index].UPDATED_DATE = dateFormat(
+                                new Date(),
+                                "dd-mmm-yy"
+                              );
+                              setFamily(family);
+                              forceRender();
+                            }
+                          } else {
+                            family[index].MEMBER_BIRTHDATE = e.target.value;
+                            family[index].UPDATED_BY = userDetils?.USER_ID;
+                            family[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            setFamily(family);
+                            forceRender();
+                          }
                         }}
                       />
                     </td>
@@ -2344,21 +2376,34 @@ function GerBul(props) {
                     <td>
                       {" "}
                       <input
-                        type="date"
+                        type="number"
+                        pattern="[0-9]{4}"
                         style={{ width: "120px" }}
                         disabled={edit}
-                        min="01-02-1920"
                         className="anketInput"
-                        value={dateFormat(value.MEMBER_BIRTHDATE, "yyyy-mm-dd")}
+                        value={value.MEMBER_BIRTHDATE}
                         onChange={(e) => {
-                          family2[index].MEMBER_BIRTHDATE = e.target.value;
-                          family2[index].UPDATED_BY = userDetils?.USER_ID;
-                          family2[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          setFamily2(family2);
-                          forceRender();
+                          if (e.target.value != "") {
+                            if (parseInt(e.target.value) <= parseInt(2100)) {
+                              family2[index].MEMBER_BIRTHDATE = e.target.value;
+                              family2[index].UPDATED_BY = userDetils?.USER_ID;
+                              family2[index].UPDATED_DATE = dateFormat(
+                                new Date(),
+                                "dd-mmm-yy"
+                              );
+                              setFamily2(family2);
+                              forceRender();
+                            }
+                          } else {
+                            family2[index].MEMBER_BIRTHDATE = e.target.value;
+                            family2[index].UPDATED_BY = userDetils?.USER_ID;
+                            family2[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            setFamily2(family2);
+                            forceRender();
+                          }
                         }}
                       />
                     </td>
