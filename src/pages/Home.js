@@ -535,6 +535,7 @@ function Home(props) {
                           ? row?.EMP_PERSON_ID
                           : row?.PERSON_ID,
                       emp_ID: row?.EMP_ID,
+
                       buttonValue: buttonValue,
                     });
                     forceRender();

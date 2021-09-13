@@ -1668,13 +1668,9 @@ function GerBul(props) {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/family/" + props.person_id
       );
-
-      listItems.data.Family?.map((value, index) => {
-        listItems.data.Family[index].MEMBER_BIRTHDATE = new Date(
-          value.MEMBER_BIRTHDATE
-        ).getFullYear();
-        loadData(listItems?.data.Family);
-      });
+      console.log("listItems.data.Family?", listItems.data.Family);
+      z;
+      loadData(listItems?.data.Family);
     }
     fetchData();
   }, [props]);
@@ -2019,7 +2015,7 @@ function GerBul(props) {
       <div className="columns">
         <div className="column is-12">
           <div className="table-container">
-            <table className="table is-bordered is-flex-wrap-wrap">
+            <table className="table is-bordered ">
               <tbody>
                 <tr>
                   <td rowspan="2">
@@ -2052,19 +2048,15 @@ function GerBul(props) {
                     <span className="textSaaral">Одоо эрхэлж буй ажил</span>
                   </td>
                   {!edit ? (
-                    <td
-                      rowspan="2"
-                      style={{ border: "none", width: "80px", paddingLeft: 0 }}
-                    >
-                      <img
-                        src={Add}
-                        width="`30px"
-                        height="30px"
-                        onClick={() => addRowFamily()}
-                      />
-                      <input
-                        style={{ width: "40px", visibility: "hidden" }}
-                      ></input>
+                    <td rowspan="2" style={{ border: "none", paddingLeft: 0 }}>
+                      <div style={{ width: "35px", height: "35px" }}>
+                        <img
+                          src={Add}
+                          width="`15px"
+                          height="15px"
+                          onClick={() => addRowFamily()}
+                        />
+                      </div>
                     </td>
                   ) : null}
                 </tr>
@@ -2097,8 +2089,7 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
-                        style={{ width: "100px" }}
-                        className="anketInput"
+                        className="anketInputWidth"
                         value={value.MEMBER_LASTNAME}
                         onChange={(e) => {
                           family[index].MEMBER_LASTNAME = e.target.value;
@@ -2116,8 +2107,7 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
-                        className="anketInput"
-                        style={{ width: "110px" }}
+                        className="anketInputWidth"
                         value={value.MEMBER_FIRSTNAME}
                         onChange={(e) => {
                           family[index].MEMBER_FIRSTNAME = e.target.value;
@@ -2136,9 +2126,8 @@ function GerBul(props) {
                       <input
                         type="number"
                         pattern="[0-9]{4}"
-                        style={{ width: "120px" }}
                         disabled={edit}
-                        className="anketInput"
+                        className="anketInputWidth"
                         value={value.MEMBER_BIRTHDATE}
                         onChange={(e) => {
                           if (e.target.value != "") {
@@ -2190,7 +2179,7 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
-                        className="anketInput"
+                        className="anketInputWidth"
                         value={value.MEMBER_ORG}
                         onChange={(e) => {
                           family[index].MEMBER_ORG = e.target.value;
@@ -2208,7 +2197,7 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
-                        className="anketInput"
+                        className="anketInputWidth"
                         value={value.MEMBER_POSITION}
                         onChange={(e) => {
                           family[index].MEMBER_POSITION = e.target.value;
@@ -2227,13 +2216,12 @@ function GerBul(props) {
                         style={{
                           paddingLeft: "0px",
                           borderColor: "transparent",
-                          width: "70px",
                         }}
                       >
                         <img
                           src={Delete}
-                          width="40px"
-                          height="40px"
+                          width="30px"
+                          height="30px"
                           onClick={() => removeFamily(index, value)}
                         />
                         <input
@@ -2295,19 +2283,17 @@ function GerBul(props) {
                       rowspan="2"
                       style={{
                         border: "none",
-                        width: "50px",
                         paddingLeft: "0px",
                       }}
                     >
-                      <img
-                        src={Add}
-                        width="`30px"
-                        height="30px"
-                        onClick={() => addRowFamily2()}
-                      />
-                      <input
-                        style={{ width: "40px", visibility: "hidden" }}
-                      ></input>
+                      <div style={{ width: "35px", height: "35px" }}>
+                        <img
+                          src={Add}
+                          width="`30px"
+                          height="30px"
+                          onClick={() => addRowFamily2()}
+                        />
+                      </div>
                     </td>
                   ) : null}
                 </tr>
@@ -2340,7 +2326,7 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
-                        className="anketInput"
+                        className="anketInputWidth"
                         value={value.MEMBER_LASTNAME}
                         onChange={(e) => {
                           family2[index].MEMBER_LASTNAME = e.target.value;
@@ -2358,7 +2344,7 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
-                        className="anketInput"
+                        className="anketInputWidth"
                         style={{ width: "110px" }}
                         value={value.MEMBER_FIRSTNAME}
                         onChange={(e) => {
@@ -2380,7 +2366,7 @@ function GerBul(props) {
                         pattern="[0-9]{4}"
                         style={{ width: "120px" }}
                         disabled={edit}
-                        className="anketInput"
+                        className="anketInputWidth"
                         value={value.MEMBER_BIRTHDATE}
                         onChange={(e) => {
                           if (e.target.value != "") {
@@ -2431,7 +2417,7 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
-                        className="anketInput"
+                        className="anketInputWidth"
                         value={value.MEMBER_ORG}
                         onChange={(e) => {
                           family2[index].MEMBER_ORG = e.target.value;
@@ -2449,7 +2435,7 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
-                        className="anketInput"
+                        className="anketInputWidth"
                         style={{ width: "110px" }}
                         value={value.MEMBER_POSITION}
                         onChange={(e) => {
@@ -2477,9 +2463,6 @@ function GerBul(props) {
                           height="40px"
                           onClick={() => removeFamily2(index, value)}
                         />
-                        <input
-                          style={{ width: "30px", visibility: "hidden" }}
-                        ></input>
                       </td>
                     ) : null}
                   </tr>
