@@ -860,10 +860,10 @@ function Khoyor(props) {
   const [EMPLOYEE_ID, setEMPLOYEE_ID] = useState();
   const [data, loadData] = useState({
     PERSON_ID: props.worker.PERSON_ID,
-    DEPARTMENT_ID: 1,
+    DEPARTMENT_ID: "",
     SUB_DEPARTMENT_ID: "null",
     COMPARTMENT_ID: "null",
-    POSITION_ID: "null",
+    POSITION_ID: "",
     IS_ACTIVE: 1,
     CREATED_BY: 1,
     CREATED_DATE: dateFormat(new Date(), "yyyy-mm-dd"),

@@ -1669,7 +1669,11 @@ function GerBul(props) {
         "http://hr.audit.mn/hr/api/v1/family/" + props.person_id
       );
       console.log("listItems.data.Family?", listItems.data.Family);
-      z;
+      listItems.data.Family?.map((value, index) => {
+        listItems.data.Family[index].MEMBER_BIRTHDATE = new Date(
+          value.MEMBER_BIRTHDATE
+        ).getFullYear();
+      });
       loadData(listItems?.data.Family);
     }
     fetchData();
