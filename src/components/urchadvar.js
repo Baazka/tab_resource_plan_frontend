@@ -68,24 +68,54 @@ function UrChadvar(props) {
           loadData(listItems.data);
         } else {
           temp = [...listItems.data?.Exam];
-
+          let examtype;
+          temp.map((a) => {
+            if (a.EXAM_TYPE_ID === 2) examtype = 3;
+            else if (a.EXAM_TYPE_ID === 3) examtype = 2;
+          });
+          console.log("examtypeId", {
+            Exam: temp
+              .concat({
+                PERSON_ID: props.person_id,
+                EXAM_TYPE_ID: examtype,
+                EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
+                IS_EXAM: 0,
+                OFFICE_ID: "1",
+                EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+                EXAM_POINT: "",
+                DECISION_NO: "",
+                DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+                DECISION_DESC: "",
+                CREATED_BY: userDetils?.USER_ID,
+                CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+                ROWTYPE: "NEW",
+                IS_ACTIVE: "1",
+              })
+              .sort(function (a, b) {
+                return a.EXAM_TYPE_ID - b.EXAM_TYPE_ID;
+              }),
+          });
           loadData({
-            Exam: temp.concat({
-              PERSON_ID: props.person_id,
-              EXAM_TYPE_ID: 3,
-              EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-              IS_EXAM: 0,
-              OFFICE_ID: "1",
-              EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-              EXAM_POINT: "",
-              DECISION_NO: "",
-              DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-              DECISION_DESC: "",
-              CREATED_BY: userDetils?.USER_ID,
-              CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-              ROWTYPE: "NEW",
-              IS_ACTIVE: "1",
-            }),
+            Exam: temp
+              .concat({
+                PERSON_ID: props.person_id,
+                EXAM_TYPE_ID: examtype,
+                EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
+                IS_EXAM: 0,
+                OFFICE_ID: "1",
+                EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+                EXAM_POINT: "",
+                DECISION_NO: "",
+                DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+                DECISION_DESC: "",
+                CREATED_BY: userDetils?.USER_ID,
+                CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+                ROWTYPE: "NEW",
+                IS_ACTIVE: "1",
+              })
+              .sort(function (a, b) {
+                return a.EXAM_TYPE_ID - b.EXAM_TYPE_ID;
+              }),
           });
         }
       } else {

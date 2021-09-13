@@ -15,7 +15,7 @@ function Turshlgin(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://localhost:3002/api/v1/Experience/" + props.person_id
+        "http://hr.audit.mn/hr/api/v1/Experience/" + props.person_id
       );
       console.log(listItems, "Tangarag");
       loadData(listItems?.data);
@@ -60,7 +60,7 @@ function Turshlgin(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://localhost:3002/api/v1/experience/",
+          url: "http://hr.audit.mn/hr/api/v1/experience/",
           method: "POST",
           data: { experience: newRow },
         })
@@ -89,7 +89,7 @@ function Turshlgin(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://localhost:3002/api/v1/experience/",
+          url: "http://hr.audit.mn/hr/api/v1/experience/",
           method: "PUT",
           data: { experience: oldRow },
         })
@@ -181,7 +181,7 @@ function Turshlgin(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://localhost:3002/api/v1/experienceDelete",
+        url: "http://hr.audit.mn/hr/api/v1/experienceDelete",
         method: "POST",
         data: {
           experience: {
