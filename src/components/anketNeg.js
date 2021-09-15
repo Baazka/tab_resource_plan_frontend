@@ -1669,11 +1669,11 @@ function GerBul(props) {
         "http://hr.audit.mn/hr/api/v1/family/" + props.person_id
       );
       console.log("listItems.data.Family?", listItems.data.Family);
-      listItems.data.Family?.map((value, index) => {
-        listItems.data.Family[index].MEMBER_BIRTHDATE = new Date(
-          value.MEMBER_BIRTHDATE
-        ).getFullYear();
-      });
+      // listItems.data.Family?.map((value, index) => {
+      //   listItems.data.Family[index].MEMBER_BIRTHDATE = new Date(
+      //     value.MEMBER_BIRTHDATE
+      //   ).getFullYear();
+      // });
       loadData(listItems?.data.Family);
     }
     fetchData();
@@ -1709,12 +1709,12 @@ function GerBul(props) {
         alert.show("огноо оруулан уу");
         return false;
       }
-      if (
-        value[i].MEMBER_BIRTHDATE !== null &&
-        value[i].MEMBER_BIRTHDATE !== ""
-      ) {
-        value[i].MEMBER_BIRTHDATE = value[i].MEMBER_BIRTHDATE + "-01-01";
-      }
+      // if (
+      //   value[i].MEMBER_BIRTHDATE !== null &&
+      //   value[i].MEMBER_BIRTHDATE !== ""
+      // ) {
+      //   value[i].MEMBER_BIRTHDATE = value[i].MEMBER_BIRTHDATE + "-01-01";
+      // }
       if (i === value.length - 1) {
         return true;
       }

@@ -40,38 +40,92 @@ function Subdepartment(props) {
   return (
     <div>
       {props?.show == true && props?.deparment_ID === props.depId ? (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            marginLeft: "5%",
-          }}
-        >
-          {data.map((value, index) => (
-            <div>
-              <button
-                className="button"
-                style={{}}
-                onClick={() => {
-                  setSubDepId(value.SUB_DEPARTMENT_ID);
-                  setShow(!show);
-                }}
-              >
-                {index + 1}.{value.SUB_DEPARTMENT_NAME}
-              </button>
-              <Compartment
-                show={show}
-                deparment_ID={value.SUB_DEPARTMENT_ID}
-                subDepId={subDepId}
-              />
+        <div style={{ marginLeft: "2%" }}>
+          <div
+            style={{
+              borderRadius: "8px",
+              backgroundColor: "rgb(184, 217, 255,0.3)",
+              padding: "5px",
+              height: "40px",
+            }}
+          >
+            <div className="columns">
+              <div className="column is-4">
+                <span
+                  style={{
+                    color: "grey",
+                    fontWeight: "bold",
+                    fontSize: "1.1rem",
+                    marginLeft: "5px",
+                  }}
+                >
+                  Газар нэгж
+                </span>
+                <span
+                  style={{
+                    marginLeft: "20px",
+                    color: "white",
+                    height: "25px",
+                    width: "25px",
+                    backgroundColor: "#418ee6",
+                    borderRadius: "50%",
+                    display: "inline-block",
+                    textAlign: "center",
+                  }}
+                >
+                  {data.length}
+                </span>
+              </div>
+              <div className="column is-4"></div>
+              <div className="column is-4 has-text-right">
+                <img
+                  src={Add}
+                  width="30px"
+                  height="25px"
+                  onClick={() =>
+                    props.setAdd({ type: 2, id: props?.deparment_ID })
+                  }
+                />
+              </div>
             </div>
-          ))}
+          </div>
+          <div
+            style={{
+              marginLeft: "5%",
+            }}
+          >
+            {data.map((value, index) => (
+              <div style={{ width: "100%" }}>
+                <button
+                  className="button"
+                  style={{
+                    width: "-webkit-fill-available",
+                    justifyContent: "flex-start",
+                  }}
+                  onClick={() => {
+                    setSubDepId(value.SUB_DEPARTMENT_ID);
+                    setShow(!show);
+                  }}
+                >
+                  {index + 1}.{value.SUB_DEPARTMENT_NAME}
+                </button>
+                <Compartment
+                  show={show}
+                  deparment_ID={value.SUB_DEPARTMENT_ID}
+                  subDepId={subDepId}
+                  setAdd={props.setAdd}
+                  subType={0}
+                />
+              </div>
+            ))}
+          </div>
           {data.length === 0 ? (
             <Compartment
-              show={show}
+              show={props?.show}
               deparment_ID={props?.deparment_ID}
               subDepId={props?.deparment_ID}
+              setAdd={props.setAdd}
+              subType={1}
             />
           ) : null}
         </div>
@@ -97,19 +151,81 @@ function Compartment(props) {
   return (
     <div>
       {props?.show == true && props?.deparment_ID === props.subDepId ? (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            marginLeft: "10%",
-          }}
-        >
-          {data.map((value, index) => (
-            <button className="button" style={{}}>
-              {index + 1}.{value.COMPARTMENT_NAME}
-            </button>
-          ))}
+        <div style={{ marginLeft: "2%" }}>
+          <div
+            style={{
+              borderRadius: "8px",
+              backgroundColor: "rgb(184, 217, 255,0.3)",
+              padding: "5px",
+              height: "40px",
+            }}
+          >
+            <div className="columns">
+              <div className="column is-4">
+                {/* <img
+                  src={DownArrow}
+                  width="15px"
+                  style={{ marginLeft: "5px" }}
+                /> */}
+                <span
+                  style={{
+                    color: "grey",
+                    fontWeight: "bold",
+                    fontSize: "1.1rem",
+                    marginLeft: "5px",
+                  }}
+                >
+                  Албан хэлтэс
+                </span>
+                <span
+                  style={{
+                    marginLeft: "20px",
+                    color: "white",
+                    height: "25px",
+                    width: "25px",
+                    backgroundColor: "#418ee6",
+                    borderRadius: "50%",
+                    display: "inline-block",
+                    textAlign: "center",
+                  }}
+                >
+                  {data.length}
+                </span>
+              </div>
+              <div className="column is-4"></div>
+              <div className="column is-4 has-text-right">
+                <img
+                  src={Add}
+                  width="30px"
+                  height="25px"
+                  onClick={() =>
+                    props.setAdd({
+                      type: 3,
+                      id: props?.deparment_ID,
+                      subType: props.subType,
+                    })
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              marginLeft: "5%",
+            }}
+          >
+            {data.map((value, index) => (
+              <button
+                className="button"
+                style={{ width: "100%", justifyContent: "flex-start" }}
+              >
+                {index + 1}.{value.COMPARTMENT_NAME}
+              </button>
+            ))}
+          </div>
         </div>
       ) : null}
     </div>
@@ -120,7 +236,7 @@ const Baiguullaga = (props) => {
   const [jagsaalt, setJagsaalt] = useState([]);
   const [depId, setDepId] = useState(null);
   const [show, setShow] = useState(false);
-  const [add, setAdd] = useState(0);
+  const [add, setAdd] = useState({ type: 0, id: 0, subid: 0 });
 
   useEffect(() => {
     async function test() {
@@ -139,7 +255,7 @@ const Baiguullaga = (props) => {
   return (
     <div
       style={{
-        height: "100vh",
+        height: "90vh",
         display: "flex",
         maxHeight: "100vh !important",
       }}
@@ -157,15 +273,15 @@ const Baiguullaga = (props) => {
       >
         <div
           style={{
-            marginTop: "10px",
             borderRadius: "8px",
             backgroundColor: "rgb(184, 217, 255,0.3)",
             padding: "5px",
+            height: "40px",
           }}
         >
           <div className="columns">
             <div className="column is-4">
-              <img src={DownArrow} width="15px" style={{ marginLeft: "5px" }} />
+              {/* <img src={DownArrow} width="15px" style={{ marginLeft: "5px" }} /> */}
               <span
                 style={{
                   color: "grey",
@@ -195,20 +311,23 @@ const Baiguullaga = (props) => {
             <div className="column is-4 has-text-right">
               <img
                 src={Add}
-                width="40px"
-                height="30px"
-                onClick={() => setAdd(1)}
+                width="30px"
+                height="25px"
+                onClick={() => setAdd({ type: 1, id: 0 })}
               />
             </div>
           </div>
         </div>
-        {add === 1 ? <AddDialog /> : null}
+        {add?.type != 0 ? <AddDialog setAdd={setAdd} add={add} /> : null}
         <div style={{ display: "flex", flexDirection: "column" }}>
           {jagsaalt.map((value, index) => (
-            <div>
+            <div style={{ marginLeft: "2%" }}>
               <button
                 className="button"
-                style={{ width: "20%" }}
+                style={{
+                  width: "100%",
+                  justifyContent: "flex-start",
+                }}
                 onClick={() => {
                   setDepId(value.DEPARTMENT_ID);
                   setShow(!show);
@@ -220,6 +339,8 @@ const Baiguullaga = (props) => {
                 show={show}
                 deparment_ID={value.DEPARTMENT_ID}
                 depId={depId}
+                setAdd={setAdd}
+                setShow={setShow}
               />
             </div>
           ))}
@@ -235,23 +356,11 @@ function AddDialog(props) {
   const alert = useAlert();
   const [button, setbutton] = useState(1);
   const [EMPLOYEE_ID, setEMPLOYEE_ID] = useState();
-  const [data, loadData] = useState({
-    PERSON_ID: props.worker.PERSON_ID,
-    DEPARTMENT_ID: 1,
-    SUB_DEPARTMENT_ID: "null",
-    COMPARTMENT_ID: "null",
-    POSITION_ID: "null",
-    IS_ACTIVE: 1,
-    CREATED_BY: 1,
-    CREATED_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-    DECISION_TYPE_ID: props.type,
-    DECISION_NO: "",
-    DECISION_DESC: "",
-    START_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-    REGISTER_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-    SHEET_NO: 0,
-  });
+  const [data, loadData] = useState({});
   const [, forceRender] = useReducer((s) => s + 1, 0);
+  useEffect(() => {
+    console.log("addIDprops", props.add);
+  }, [props]);
   // useEffect(() => {
   //   forceRender();
   // }, [data]);
@@ -292,138 +401,165 @@ function AddDialog(props) {
   // }
   return (
     <div>
-      <div className="columns">
-        <div className="column is-4">
-          <button
-            style={{
-              border: "none",
-              borderRadius: "4px",
-              backgroundColor: "#418ee6",
-              color: "white",
-              justifyContent: "center",
-            }}
-            onClick={() => setbutton(1)}
-          >
-            ҮНДСЭН МЭДЭЭЛЭЛ
-          </button>
-        </div>
-
-        <div className="column is-6"></div>
-        <div className="column is-2 has-text-right"></div>
-      </div>
-      <div>
-        <div className="columns  ">
-          <div className="column is-3">
-            <h1>Код:</h1>
-            <input
-              class="input  is-size-7"
-              //value={props.worker.PERSON_LASTNAME}
-              disabled={true}
-            />
+      <div
+        style={{
+          position: "absolute",
+          width: "60%",
+          height: "auto",
+          left: "25%",
+          top: "10%",
+          borderRadius: "6px",
+          backgroundColor: "white",
+          boxShadow:
+            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+          zIndex: "1",
+        }}
+      >
+        <div
+          style={{
+            height: "auto",
+            backgroundColor: "#418ee6",
+            padding: "18px 10px 18px 10px",
+            color: "white",
+            marginBottom: "10px",
+            borderTopLeftRadius: "6px",
+            borderTopRightRadius: "6px",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>{/* <span>ТУШААЛЫН БҮРТГЭЛ</span> */}</div>
+          <div>
+            <span
+              style={{
+                fontWeight: "bold",
+                cursor: " -webkit-grab",
+                cursor: "grab",
+              }}
+              onClick={() => props.setAdd({ type: 0, id: 0 })}
+            >
+              X
+            </span>
           </div>
-          <div className="column is-3">
-            <h1>Аймаг/хот:</h1>
-            <Office personChild={data} setPersonChild={loadData} />
-          </div>
         </div>
-
-        <div className="columns">
-          <div className="column is-6">
-            <h1>Товч нэр:</h1>
-            <input
-              class="input  is-size-7"
-              //value={props.worker.PERSON_LASTNAME}
-              disabled={true}
-            />
-            <div className="columns">
+        <div style={{ padding: "15px 15px 35px 15px" }}>
+          <div>
+            <div className="columns  ">
               <div className="column is-6">
-                <h1>Байгууллагын нэр:</h1>
+                <h1>Код:</h1>
                 <input
-                  class="input  is-size-7"
+                  class="input "
                   //value={props.worker.PERSON_LASTNAME}
-                  disabled={true}
+                />
+              </div>
+              <div className="column is-6">
+                <h1>Аймаг/хот:</h1>
+                <Office
+                  personChild={data}
+                  setPersonChild={loadData}
+                  width={true}
                 />
               </div>
             </div>
-          </div>
-          <div className="column is-6">
-            <h1>Хаяг:</h1>
-            <textarea
-              class="input  is-size-7"
-              // value={data?.DECISION_NO}
-              // onChange={(e) => {
-              //   loadData({
-              //     ...data,
-              //     ...{
-              //       DECISION_NO: e.target.value,
-              //     },
-              //   });
-              // }}
-            />
-          </div>
-        </div>
 
-        <div>
-          <div className="columns">
-            <div className="column is-6">
-              <h1>Хэрэгжих огноо:</h1>
-              <input
-                type="date"
-                disabled={props.edit}
-                className="anketInput"
-                // value={dateFormat(data?.START_DATE, "yyyy-mm-dd")}
-                // onChange={(e) => {
-                //   loadData({
-                //     ...data,
-                //     ...{
-                //       START_DATE: e.target.value,
-                //     },
-                //   });
-                // }}
-              ></input>
+            <div className="columns">
+              <div className="column is-6">
+                <h1>Товч нэр:</h1>
+                <input
+                  class="input"
+                  //value={props.worker.PERSON_LASTNAME}
+                />
+                <div className="columns">
+                  <div className="column is-12">
+                    <h1>Байгууллагын нэр:</h1>
+                    <input
+                      class="input"
+                      //value={props.worker.PERSON_LASTNAME}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="column is-6">
+                <h1>Хаяг:</h1>
+                <textarea
+                  class="input"
+                  // value={data?.DECISION_NO}
+                  // onChange={(e) => {
+                  //   loadData({
+                  //     ...data,
+                  //     ...{
+                  //       DECISION_NO: e.target.value,
+                  //     },
+                  //   });
+                  // }}
+                />
+              </div>
             </div>
-            <div className="column is-6">
-              <h1>Утас:</h1>
-              <input
-                class="input  is-size-7"
-                // value={data?.DECISION_DESC}
-                // onChange={(e) => {
-                //   loadData({
-                //     ...data,
-                //     ...{
-                //       DECISION_DESC: e.target.value,
-                //     },
-                //   });
-                // }}
-              />
-            </div>
-          </div>
-        </div>
-        <div>
-          <div className="columns">
-            <div className="column is-6">
-              <h1>Эрэмбэ:</h1>
-              <input
-                class="input  is-size-7"
-                type="number"
-                //value={props.worker.PERSON_LASTNAME}
-                disabled={true}
-              />
-            </div>
-          </div>
-        </div>
 
-        <div className="columns">
-          <div className="column is-8"> </div>
-          <div className="column is-4 has-text-right">
-            <button
-              className="buttonTsenkher ml-1"
-              // onClick={() => {
-              //   saveToDB();
-              // }}
-            >
-              Хадгалах
-            </button>
+            <div>
+              <div className="columns">
+                <div className="column is-6">
+                  <h1>Хэрэгжих огноо:</h1>
+                  <input
+                    type="date"
+                    disabled={props.edit}
+                    className="input"
+                    // value={dateFormat(data?.START_DATE, "yyyy-mm-dd")}
+                    // onChange={(e) => {
+                    //   loadData({
+                    //     ...data,
+                    //     ...{
+                    //       START_DATE: e.target.value,
+                    //     },
+                    //   });
+                    // }}
+                  ></input>
+                </div>
+                <div className="column is-6">
+                  <h1>Утас:</h1>
+                  <input
+                    class="input  is-size-7"
+                    // value={data?.DECISION_DESC}
+                    // onChange={(e) => {
+                    //   loadData({
+                    //     ...data,
+                    //     ...{
+                    //       DECISION_DESC: e.target.value,
+                    //     },
+                    //   });
+                    // }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div>
+              <div className="columns">
+                <div className="column is-6">
+                  <h1>Эрэмбэ:</h1>
+                  <input
+                    class="input  is-size-7"
+                    type="number"
+                    //value={props.worker.PERSON_LASTNAME}
+                    disabled={true}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="columns">
+              <div className="column is-8"> </div>
+              <div className="column is-4 has-text-right">
+                <button
+                  className="buttonTsenkher ml-1"
+                  // onClick={() => {
+                  //   saveToDB();
+                  // }}
+                >
+                  Хадгалах
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
