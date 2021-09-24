@@ -23,8 +23,8 @@ function Turshlgin(props) {
           a,
           b
         ) {
-          var dateA = new Date(a.ENTERED_DATE).getFullYear();
-          var dateB = new Date(b.ENTERED_DATE).getFullYear();
+          var dateA = new Date(a.ENTERED_DATE).getTime();
+          var dateB = new Date(b.ENTERED_DATE).getTime();
           return dateA > dateB ? 1 : -1;
         }),
       });
@@ -293,9 +293,9 @@ function Turshlgin(props) {
                   <td>
                     <span className="textSaaral">Ажилласан аймаг, хот</span>
                   </td>
-                  <td>
+                  {/* <td>
                     <span className="textSaaral">Ажилласан сум, дүүрэг</span>
-                  </td>
+                  </td> */}
                   <td>
                     <span className="textSaaral">
                       Ажилласан байгууллагын нэр
@@ -363,7 +363,7 @@ function Turshlgin(props) {
                         edit={edit}
                       />
                     </td>
-                    <td>
+                    {/* <td>
                       <Suboffice
                         personChild={data.Experience[index]}
                         setPersonChild={setSubOfficeId}
@@ -371,7 +371,7 @@ function Turshlgin(props) {
                         index={index}
                         edit={edit}
                       />
-                    </td>
+                    </td> */}
                     <td>
                       <input
                         placeholder="утгаа оруулна уу"

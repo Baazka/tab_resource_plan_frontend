@@ -998,10 +998,12 @@ function Khoyor(props) {
 
           <div>
             <div className="columns">
-              <div className="column is-6">
-                <h1>Байгууллага нэр</h1>
-                <DepartmentID personChild={data} setPersonChild={loadData} />
-              </div>
+              {props.type === 1 ? (
+                <div className="column is-6">
+                  <h1>Байгууллага нэр</h1>
+                  <DepartmentID personChild={data} setPersonChild={loadData} />
+                </div>
+              ) : null}
               <div className="column is-6">
                 <h1>
                   {" "}
@@ -1024,10 +1026,12 @@ function Khoyor(props) {
           </div>
           <div>
             <div className="columns">
-              <div className="column is-6">
-                <h1>Газар нэгж</h1>
-                <Subdepartment personChild={data} setPersonChild={loadData} />
-              </div>
+              {props.type === 1 ? (
+                <div className="column is-6">
+                  <h1>Газар нэгж</h1>
+                  <Subdepartment personChild={data} setPersonChild={loadData} />
+                </div>
+              ) : null}
               <div className="column is-6">
                 <h1>
                   {" "}
@@ -1050,10 +1054,12 @@ function Khoyor(props) {
           </div>
           <div>
             <div className="columns">
-              <div className="column is-6">
-                <h1>Албан хэлтэс</h1>
-                <Compartment personChild={data} setPersonChild={loadData} />
-              </div>
+              {props.type === 1 ? (
+                <div className="column is-6">
+                  <h1>Албан хэлтэс</h1>
+                  <Compartment personChild={data} setPersonChild={loadData} />
+                </div>
+              ) : null}
 
               <div className="column is-3">
                 <h1>Хэрэгжих огноо</h1>
@@ -1094,13 +1100,15 @@ function Khoyor(props) {
           </div>
           <div>
             <div className="columns ">
-              <div className="column is-6">
-                <h1>
-                  {" "}
-                  <span style={{ color: "red" }}>*</span>Албан тушаалын түвшин{" "}
-                </h1>
-                <Positionlevel personChild={data} setPersonChild={loadData} />
-              </div>
+              {props.type === 1 ? (
+                <div className="column is-6">
+                  <h1>
+                    {" "}
+                    <span style={{ color: "red" }}>*</span>Албан тушаалын түвшин{" "}
+                  </h1>
+                  <Positionlevel personChild={data} setPersonChild={loadData} />
+                </div>
+              ) : null}
               {props.type === 2 ? (
                 <div className="column is-3">
                   <h1>
@@ -1140,13 +1148,15 @@ function Khoyor(props) {
           </div>
           <div>
             <div className="columns ">
-              <div className="column is-6  ">
-                <h1>
-                  {" "}
-                  <span style={{ color: "red" }}>*</span>Албан тушаал
-                </h1>
-                <Position personChild={data} setPersonChild={loadData} />
-              </div>
+              {props.type === 1 ? (
+                <div className="column is-6  ">
+                  <h1>
+                    {" "}
+                    <span style={{ color: "red" }}>*</span>Албан тушаал
+                  </h1>
+                  <Position personChild={data} setPersonChild={loadData} />
+                </div>
+              ) : null}
             </div>
           </div>
           {/* {tsalinKhuls ? ( */}
