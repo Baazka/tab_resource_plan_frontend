@@ -18,7 +18,16 @@ function Turshlgin(props) {
         "http://hr.audit.mn/hr/api/v1/Experience/" + props.person_id
       );
       console.log(listItems, "Tangarag");
-      loadData(listItems?.data);
+      loadData({
+        Experience: listItems?.data?.Experience.sort(function sortFunction(
+          a,
+          b
+        ) {
+          var dateA = new Date(a.ENTERED_DATE).getFullYear();
+          var dateB = new Date(b.ENTERED_DATE).getFullYear();
+          return dateA > dateB ? 1 : -1;
+        }),
+      });
     }
     fetchData();
   }, [props]);
@@ -436,7 +445,7 @@ function Turshlgin(props) {
                         type="date"
                         disabled={edit}
                         className="Borderless"
-                        style={{ width: "118px" }}
+                        style={{ width: "120px" }}
                         value={dateFormat(
                           data.Experience[index].ENTERED_DATE,
                           "yyyy-mm-dd"
@@ -477,7 +486,7 @@ function Turshlgin(props) {
                         type="date"
                         disabled={edit}
                         className="Borderless"
-                        style={{ width: "118px" }}
+                        style={{ width: "120px" }}
                         value={dateFormat(
                           data.Experience[index].EXPIRED_DATE,
                           "yyyy-mm-dd"
