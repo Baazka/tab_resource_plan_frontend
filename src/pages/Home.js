@@ -11,7 +11,7 @@ import dateFormat from "dateformat";
 import { css } from "@emotion/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import AnketAPrint from "./AnketAPrint";
-
+import Pdf from "react-to-pdf";
 import { useReactToPrint } from "react-to-print";
 
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
