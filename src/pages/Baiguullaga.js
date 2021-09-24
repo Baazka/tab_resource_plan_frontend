@@ -11,9 +11,12 @@ import {
   Excel,
   AddBlue,
   DownArrow,
+  Edit,
+  Delete,
 } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 import { Suboffice, Office } from "../components/library";
+const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
 const axios = require("axios");
 
@@ -83,7 +86,7 @@ function Subdepartment(props) {
                   width="30px"
                   height="25px"
                   onClick={() =>
-                    props.setAdd({ type: 2, id: props?.deparment_ID })
+                    props.setAdd({ type: 2, deparment_ID: props?.deparment_ID })
                   }
                 />
               </div>
@@ -95,23 +98,55 @@ function Subdepartment(props) {
             }}
           >
             {data.map((value, index) => (
-              <div style={{ width: "100%" }}>
-                <button
-                  className="button"
-                  style={{
-                    width: "-webkit-fill-available",
-                    justifyContent: "flex-start",
-                  }}
-                  onClick={() => {
-                    setSubDepId(value.SUB_DEPARTMENT_ID);
-                    setShow(!show);
-                  }}
-                >
-                  {index + 1}.{value.SUB_DEPARTMENT_NAME}
-                </button>
+              <div
+                style={{
+                  width: "100%",
+                  border: "1px solid rgb(184, 217, 255,0.3)",
+                }}
+              >
+                <div className="columns">
+                  <div className="column is-6">
+                    <button
+                      className="button"
+                      style={{
+                        justifyContent: "flex-start",
+                        border: "none",
+                      }}
+                      onClick={() => {
+                        setSubDepId(value.SUB_DEPARTMENT_ID);
+                        setShow(!show);
+                      }}
+                    >
+                      {index + 1}.{value.SUB_DEPARTMENT_NAME}
+                    </button>
+                  </div>
+                  <div className="column is-1">
+                    <span>Чиг үүрэг:</span>
+                  </div>
+                  <div className="column is-5">
+                    <ChigUureg
+                      deparment_id_path={
+                        props?.deparment_ID +
+                        "/" +
+                        value.SUB_DEPARTMENT_ID +
+                        "/null/"
+                      }
+                      SUB_DEPARTMENT_ID={value.SUB_DEPARTMENT_ID}
+                      COMPARTMENT_ID={props?.deparment_ID}
+                      COMPARTMENT_ID={props?.deparment_ID}
+                      DEPARTMENT_ID={null}
+                    />
+                  </div>
+                </div>
                 <Compartment
                   show={show}
                   deparment_ID={value.SUB_DEPARTMENT_ID}
+                  deparment_id_path={
+                    props?.deparment_ID +
+                    "/" +
+                    value.SUB_DEPARTMENT_ID +
+                    "/null"
+                  }
                   subDepId={subDepId}
                   setAdd={props.setAdd}
                   subType={0}
@@ -123,6 +158,7 @@ function Subdepartment(props) {
             <Compartment
               show={props?.show}
               deparment_ID={props?.deparment_ID}
+              deparment_id_path={props?.deparment_ID + "/null/null?"}
               subDepId={props?.deparment_ID}
               setAdd={props.setAdd}
               subType={1}
@@ -139,7 +175,9 @@ function Compartment(props) {
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/compartment/" + props?.deparment_ID,
+        url:
+          "http://hr.audit.mn/hr/api/v1/compartment/" +
+          props?.deparment_id_path,
         method: "GET",
         data: {},
       });
@@ -201,7 +239,7 @@ function Compartment(props) {
                   onClick={() =>
                     props.setAdd({
                       type: 3,
-                      id: props?.deparment_ID,
+                      deparment_ID: props?.deparment_ID,
                       subType: props.subType,
                     })
                   }
@@ -218,12 +256,43 @@ function Compartment(props) {
             }}
           >
             {data.map((value, index) => (
-              <button
-                className="button"
-                style={{ width: "100%", justifyContent: "flex-start" }}
+              <div
+                style={{
+                  width: "100%",
+                  border: "1px solid rgb(184, 217, 255,0.3)",
+                }}
               >
-                {index + 1}.{value.COMPARTMENT_NAME}
-              </button>
+                <div className="columns">
+                  <div className="column is-6">
+                    <button
+                      className="button"
+                      style={{
+                        justifyContent: "flex-start",
+                        border: "none",
+                      }}
+                    >
+                      {index + 1}.{value.COMPARTMENT_NAME}
+                    </button>
+                  </div>
+                  <div className="column is-1">
+                    <span>Чиг үүрэг:</span>
+                  </div>
+                  <div className="column is-5">
+                    <ChigUureg
+                      deparment_id_path={
+                        props?.deparment_ID +
+                        "/" +
+                        props.SUB_DEPARTMENT_ID +
+                        "/" +
+                        value.COMPARTMENT_ID
+                      }
+                      SUB_DEPARTMENT_ID={props.SUB_DEPARTMENT_ID}
+                      COMPARTMENT_ID={value.COMPARTMENT_ID}
+                      DEPARTMENT_ID={props?.deparment_ID}
+                    />
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -237,6 +306,7 @@ const Baiguullaga = (props) => {
   const [depId, setDepId] = useState(null);
   const [show, setShow] = useState(false);
   const [add, setAdd] = useState({ type: 0, id: 0, subid: 0 });
+  const alert = useAlert();
 
   useEffect(() => {
     async function test() {
@@ -313,7 +383,9 @@ const Baiguullaga = (props) => {
                 src={Add}
                 width="30px"
                 height="25px"
-                onClick={() => setAdd({ type: 1, id: 0 })}
+                onClick={() =>
+                  setAdd({ type: 1, deparment_ID: "new", path: "department/" })
+                }
               />
             </div>
           </div>
@@ -321,20 +393,53 @@ const Baiguullaga = (props) => {
         {add?.type != 0 ? <AddDialog setAdd={setAdd} add={add} /> : null}
         <div style={{ display: "flex", flexDirection: "column" }}>
           {jagsaalt.map((value, index) => (
-            <div style={{ marginLeft: "2%" }}>
-              <button
-                className="button"
-                style={{
-                  width: "100%",
-                  justifyContent: "flex-start",
-                }}
-                onClick={() => {
-                  setDepId(value.DEPARTMENT_ID);
-                  setShow(!show);
-                }}
-              >
-                {index + 1}.{value.DEPARTMENT_NAME}
-              </button>
+            <div
+              style={{
+                marginLeft: "2%",
+                border: "1px solid rgb(184, 217, 255,0.3)",
+              }}
+            >
+              <div className="columns">
+                <div className="column is-6">
+                  <button
+                    className="button"
+                    style={{
+                      justifyContent: "flex-start",
+                      border: "none",
+                    }}
+                    onClick={() => {
+                      setDepId(value.DEPARTMENT_ID);
+                      setShow(!show);
+                    }}
+                  >
+                    {index + 1}.{value.DEPARTMENT_NAME}
+                  </button>
+                  <img
+                    src={Edit}
+                    width="20px"
+                    height="20px"
+                    style={{ marginTop: "12px", cursor: "pointer" }}
+                    onClick={() =>
+                      setAdd({
+                        type: 1,
+                        id: value.DEPARTMENT_ID,
+                        path: "/department/" + value.DEPARTMENT_ID,
+                      })
+                    }
+                  />
+                </div>
+                <div className="column is-1">
+                  <span>Чиг үүрэг:</span>
+                </div>
+                <div className="column is-5">
+                  <ChigUureg
+                    deparment_id_path={value.DEPARTMENT_ID + "/null/null/"}
+                    SUB_DEPARTMENT_ID={null}
+                    COMPARTMENT_ID={null}
+                    DEPARTMENT_ID={null}
+                  />
+                </div>
+              </div>
               <Subdepartment
                 show={show}
                 deparment_ID={value.DEPARTMENT_ID}
@@ -352,217 +457,507 @@ const Baiguullaga = (props) => {
 };
 
 function AddDialog(props) {
-  const [tsalinKhuls, setTsalin] = useState(false);
   const alert = useAlert();
-  const [button, setbutton] = useState(1);
-  const [EMPLOYEE_ID, setEMPLOYEE_ID] = useState();
-  const [data, loadData] = useState({});
+  const [data, loadData] = useState();
   const [, forceRender] = useReducer((s) => s + 1, 0);
+
   useEffect(() => {
-    console.log("addIDprops", props.add);
+    console.log("jagsaaltBaaaaaaaaprops", props);
+    async function test() {
+      if (data == undefined || data == null) {
+        if (props.add.deparment_ID !== "new") {
+          let jagsaalts = await DataRequest({
+            url: "http://hr.audit.mn/hr/api/v1/" + props?.add.path,
+            method: "GET",
+            data: {},
+          });
+          console.log("jagsaaltBaaaaaaaa", jagsaalts);
+          if (jagsaalts.data !== undefined && jagsaalts.data.length !== 0)
+            loadData(jagsaalts?.data[0]);
+          else
+            loadData({
+              DEPARTMENT_ID: props.deparment_ID,
+              DEPARTMENT_CODE: "",
+              DEPARTMENT_SHORT_NAME: "",
+              DEPARTMENT_NAME: "",
+              ORDER_NO: "",
+              START_DATE: new Date(),
+              OFFICE_ID: 1,
+              OFFICE_ADDRESS: "",
+              OFFICE_PHONE: "",
+              IS_ACTIVE: 1,
+              CREATED_BY: userDetils?.USER_ID,
+              CREATED_DATE: dateFormat(new Date(), "dd-mmm-yyyy"),
+            });
+        } else {
+          loadData({
+            DEPARTMENT_ID: props.deparment_ID,
+            DEPARTMENT_CODE: "",
+            DEPARTMENT_SHORT_NAME: "",
+            DEPARTMENT_NAME: "",
+            ORDER_NO: "",
+            START_DATE: new Date(),
+            OFFICE_ID: 1,
+            OFFICE_ADDRESS: "",
+            OFFICE_PHONE: "",
+            IS_ACTIVE: 1,
+            CREATED_BY: userDetils?.USER_ID,
+            CREATED_DATE: dateFormat(new Date(), "dd-mmm-yyyy"),
+          });
+        }
+      }
+    }
+    test();
   }, [props]);
-  // useEffect(() => {
-  //   forceRender();
-  // }, [data]);
-  // function saveToDB() {
-  //   console.log("tushaalshiidverData", data);
-  //   DataRequest({
-  //     url: "http://hr.audit.mn/hr/api/v1/decision",
-  //     method: "POST",
-  //     data: data,
-  //   })
-  //     .then(function (response) {
-  //       console.log("tushaalResponse", response);
-  //       if (response?.data?.message === "success") {
-  //         setEMPLOYEE_ID(response?.data?.EMPLOYEE_ID);
-  //         alert.show("амжилттай хадгаллаа");
-  //         if (props.type !== 2) setbutton(2);
-  //       } else {
-  //         alert.show("амжилтгүй алдаа");
-  //       }
-  //       //history.push('/sample')
-  //     })
-  //     .catch(function (error) {
-  //       //alert(error.response.data.error.message);
-  //       console.log(error.response);
-  //       alert.show("амжилтгүй алдаа");
-  //     });
-  // }
-  // function salary() {
-  //   if (
-  //     EMPLOYEE_ID !== null &&
-  //     EMPLOYEE_ID !== "" &&
-  //     EMPLOYEE_ID !== undefined
-  //   ) {
-  //     setbutton(2);
-  //   } else {
-  //     alert.show("үндсэн мэдээлэл бөглөөд хадгалана уу");
-  //   }
-  // }
-  return (
-    <div>
-      <div
-        style={{
-          position: "absolute",
-          width: "60%",
-          height: "auto",
-          left: "25%",
-          top: "10%",
-          borderRadius: "6px",
-          backgroundColor: "white",
-          boxShadow:
-            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-          zIndex: "1",
-        }}
-      >
+
+  function saveToDB() {
+    console.log("testAddDepartment", data);
+    DataRequest({
+      url: "http://hr.audit.mn/hr/api/v1/" + props.add.path,
+      method: "POST",
+      data: data,
+    })
+      .then(function (response) {
+        if (response?.data?.message === "success") {
+          alert.show("амжилттай хадгаллаа");
+        } else {
+          alert.show("амжилтгүй алдаа");
+        }
+        //history.push('/sample')
+      })
+      .catch(function (error) {
+        //alert(error.response.data.error.message);
+        console.log(error.response);
+        alert.show("амжилтгүй алдаа");
+      });
+  }
+
+  let design;
+  if (data != undefined && data !== null) {
+    design = (
+      <div>
         <div
           style={{
+            position: "absolute",
+            width: "60%",
             height: "auto",
-            backgroundColor: "#418ee6",
-            padding: "18px 10px 18px 10px",
-            color: "white",
-            marginBottom: "10px",
-            borderTopLeftRadius: "6px",
-            borderTopRightRadius: "6px",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
+            left: "25%",
+            top: "10%",
+            borderRadius: "6px",
+            backgroundColor: "white",
+            boxShadow:
+              "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+            zIndex: "1",
           }}
         >
-          <div>{/* <span>ТУШААЛЫН БҮРТГЭЛ</span> */}</div>
-          <div>
-            <span
-              style={{
-                fontWeight: "bold",
-                cursor: " -webkit-grab",
-                cursor: "grab",
-              }}
-              onClick={() => props.setAdd({ type: 0, id: 0 })}
-            >
-              X
-            </span>
-          </div>
-        </div>
-        <div style={{ padding: "15px 15px 35px 15px" }}>
-          <div>
-            <div className="columns  ">
-              <div className="column is-6">
-                <h1>Код:</h1>
-                <input
-                  class="input "
-                  //value={props.worker.PERSON_LASTNAME}
-                />
-              </div>
-              <div className="column is-6">
-                <h1>Аймаг/хот:</h1>
-                <Office
-                  personChild={data}
-                  setPersonChild={loadData}
-                  width={true}
-                />
-              </div>
+          <div
+            style={{
+              height: "auto",
+              backgroundColor: "#418ee6",
+              padding: "18px 10px 18px 10px",
+              color: "white",
+              marginBottom: "10px",
+              borderTopLeftRadius: "6px",
+              borderTopRightRadius: "6px",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <div>{/* <span>ТУШААЛЫН БҮРТГЭЛ</span> */}</div>
+            <div>
+              <span
+                style={{
+                  fontWeight: "bold",
+                  cursor: " -webkit-grab",
+                  cursor: "grab",
+                }}
+                onClick={() => props.setAdd({ type: 0, id: 0 })}
+              >
+                X
+              </span>
             </div>
+          </div>
+          <div style={{ padding: "15px 15px 35px 15px" }}>
+            <div>
+              <div className="columns  ">
+                <div className="column is-6">
+                  <h1>Код:</h1>
+                  <input
+                    class="input "
+                    value={data.DEPARTMENT_CODE}
+                    onChange={(e) =>
+                      loadData({
+                        ...data,
+                        ...{
+                          DEPARTMENT_CODE: e.target.value,
+                          UPDATED_BY: userDetils?.USER_ID,
+                          UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yyyy"),
+                        },
+                      })
+                    }
+                  />
+                </div>
+                <div className="column is-6">
+                  <h1>Аймаг/хот:</h1>
+                  <Office
+                    personChild={data}
+                    setPersonChild={loadData}
+                    width={true}
+                  />
+                </div>
+              </div>
 
-            <div className="columns">
-              <div className="column is-6">
-                <h1>Товч нэр:</h1>
-                <input
-                  class="input"
-                  //value={props.worker.PERSON_LASTNAME}
-                />
+              <div className="columns">
+                <div className="column is-6">
+                  <h1>Товч нэр:</h1>
+                  <input
+                    class="input"
+                    value={data.DEPARTMENT_SHORT_NAME}
+                    onChange={(e) =>
+                      loadData({
+                        ...data,
+                        ...{
+                          DEPARTMENT_SHORT_NAME: e.target.value,
+                          UPDATED_BY: userDetils?.USER_ID,
+                          UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yyyy"),
+                        },
+                      })
+                    }
+                  />
+                  <div className="columns">
+                    <div className="column is-12">
+                      <h1>Байгууллагын нэр:</h1>
+                      <input
+                        class="input"
+                        value={data.DEPARTMENT_NAME}
+                        onChange={(e) =>
+                          loadData({
+                            ...data,
+                            ...{
+                              DEPARTMENT_NAME: e.target.value,
+                              UPDATED_BY: userDetils?.USER_ID,
+                              UPDATED_DATE: dateFormat(
+                                new Date(),
+                                "dd-mmm-yyyy"
+                              ),
+                            },
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="column is-6">
+                  <h1>Хаяг:</h1>
+                  <textarea
+                    class="input"
+                    value={data?.OFFICE_ADDRESS}
+                    onChange={(e) =>
+                      loadData({
+                        ...data,
+                        ...{
+                          OFFICE_ADDRESS: e.target.value,
+                          UPDATED_BY: userDetils?.USER_ID,
+                          UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yyyy"),
+                        },
+                      })
+                    }
+                  />
+                </div>
+              </div>
+
+              <div>
                 <div className="columns">
-                  <div className="column is-12">
-                    <h1>Байгууллагын нэр:</h1>
+                  <div className="column is-6">
+                    <h1>Хэрэгжих огноо:</h1>
                     <input
-                      class="input"
-                      //value={props.worker.PERSON_LASTNAME}
+                      type="date"
+                      className="input"
+                      value={dateFormat(data?.START_DATE, "yyyy-mm-dd")}
+                      onChange={(e) => {
+                        loadData({
+                          ...data,
+                          ...{
+                            START_DATE: e.target.value,
+                            UPDATED_BY: userDetils?.USER_ID,
+                            UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yyyy"),
+                          },
+                        });
+                      }}
+                    ></input>
+                  </div>
+                  <div className="column is-6">
+                    <h1>Утас:</h1>
+                    <input
+                      class="input  is-size-7"
+                      value={data?.OFFICE_PHONE}
+                      onChange={(e) => {
+                        loadData({
+                          ...data,
+                          ...{
+                            OFFICE_PHONE: e.target.value,
+                            UPDATED_BY: userDetils?.USER_ID,
+                            UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yyyy"),
+                          },
+                        });
+                      }}
                     />
                   </div>
                 </div>
               </div>
-              <div className="column is-6">
-                <h1>Хаяг:</h1>
-                <textarea
-                  class="input"
-                  // value={data?.DECISION_NO}
-                  // onChange={(e) => {
-                  //   loadData({
-                  //     ...data,
-                  //     ...{
-                  //       DECISION_NO: e.target.value,
-                  //     },
-                  //   });
-                  // }}
-                />
+              <div>
+                <div className="columns">
+                  <div className="column is-6">
+                    <h1>Эрэмбэ:</h1>
+                    <input
+                      class="input  is-size-7"
+                      type="number"
+                      value={data.ORDER_NO}
+                      onChange={(e) => {
+                        loadData({
+                          ...data,
+                          ...{
+                            ORDER_NO: e.target.value,
+                            UPDATED_BY: userDetils?.USER_ID,
+                            UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yyyy"),
+                          },
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
 
-            <div>
               <div className="columns">
-                <div className="column is-6">
-                  <h1>Хэрэгжих огноо:</h1>
-                  <input
-                    type="date"
-                    disabled={props.edit}
-                    className="input"
-                    // value={dateFormat(data?.START_DATE, "yyyy-mm-dd")}
-                    // onChange={(e) => {
-                    //   loadData({
-                    //     ...data,
-                    //     ...{
-                    //       START_DATE: e.target.value,
-                    //     },
-                    //   });
-                    // }}
-                  ></input>
+                <div className="column is-8"> </div>
+                <div className="column is-4 has-text-right">
+                  <button
+                    className="buttonTsenkher ml-1"
+                    onClick={() => {
+                      saveToDB();
+                    }}
+                  >
+                    Хадгалах
+                  </button>
                 </div>
-                <div className="column is-6">
-                  <h1>Утас:</h1>
-                  <input
-                    class="input  is-size-7"
-                    // value={data?.DECISION_DESC}
-                    // onChange={(e) => {
-                    //   loadData({
-                    //     ...data,
-                    //     ...{
-                    //       DECISION_DESC: e.target.value,
-                    //     },
-                    //   });
-                    // }}
-                  />
-                </div>
-              </div>
-            </div>
-            <div>
-              <div className="columns">
-                <div className="column is-6">
-                  <h1>Эрэмбэ:</h1>
-                  <input
-                    class="input  is-size-7"
-                    type="number"
-                    //value={props.worker.PERSON_LASTNAME}
-                    disabled={true}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="columns">
-              <div className="column is-8"> </div>
-              <div className="column is-4 has-text-right">
-                <button
-                  className="buttonTsenkher ml-1"
-                  // onClick={() => {
-                  //   saveToDB();
-                  // }}
-                >
-                  Хадгалах
-                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
+    );
+  } else {
+    design = <div>achaalj baina</div>;
+  }
+  return design;
+}
+
+function ChigUureg(props) {
+  const [data, loadData] = useState([]);
+  const [edit, setEdit] = useState(true);
+  const alert = useAlert();
+
+  useEffect(() => {
+    async function test() {
+      if (data.length === 0) {
+        let jagsaalts = await DataRequest({
+          url:
+            "http://hr.audit.mn/hr/api/v1/organizationrole/" +
+            props?.deparment_id_path,
+          method: "GET",
+          data: {},
+        });
+        if (jagsaalts.data !== undefined && jagsaalts.data.length != 0)
+          loadData(jagsaalts?.data);
+        else addRow();
+      }
+    }
+    test();
+  }, [props]);
+  function saveToDB() {
+    if (requiredField(data) === true) {
+      DataRequest({
+        url:
+          "http://hr.audit.mn/hr/api/v1/organizationrole/" +
+          props?.deparment_id_path,
+        method: "POST",
+        data: data,
+      })
+        .then(function (response) {
+          console.log("UpdateResponse", response);
+
+          if (response?.data?.message === "success") {
+            alert.show("амжилттай хадгаллаа");
+            setEdit(!edit);
+          } else {
+            alert.show("амжилтгүй алдаа");
+            setEdit(!edit);
+          }
+          //history.push('/sample')
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+          alert.show("амжилтгүй алдаа");
+          setEdit(!edit);
+        });
+    }
+  }
+
+  function requiredField() {
+    for (let i = 0; i < data.length; i++) {
+      if (
+        data[i].ORGANIZATION_ROLE_NAME === null ||
+        data[i].ORGANIZATION_ROLE_NAME === ""
+      ) {
+        alert.show(" нэр оруулан уу");
+        return false;
+      } else if (i === data.length - 1) {
+        return true;
+      }
+    }
+  }
+
+  function addRow() {
+    let value = [...data];
+    value.push({
+      ORGANIZATION_ROLE_ID: null,
+      ORGANIZATION_ROLE_NAME: "",
+      DEPARTMENT_ID: props.DEPARTMENT_ID,
+      SUB_DEPARTMENT_ID: props.SUB_DEPARTMENT_ID,
+      COMPARTMENT_ID: props.COMPARTMENT_ID,
+      IS_ACTIVE: 1,
+      CREATED_BY: userDetils?.USER_ID,
+      CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+    });
+    loadData(value);
+  }
+
+  function removeRow(indexParam, value) {
+    if (value?.ORGANIZATION_ROLE_ID !== null) {
+      DataRequest({
+        url:
+          "http://hr.audit.mn/hr/api/v1/organizationrole/" +
+          props?.deparment_id_path,
+        method: "POST",
+        data: {
+          ...value,
+          ...{
+            IS_ACTIVE: 1,
+            UPDATED_BY: userDetils?.USER_ID,
+            UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+          },
+        },
+      })
+        .then(function (response) {
+          console.log("UpdateResponse", response);
+          //history.push('/sample')
+          if (response?.data?.message === "success") {
+            alert.show("амжилттай устлаа");
+            setEdit(!edit);
+          }
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+          alert.show("aldaa");
+        });
+    }
+    loadData(data.filter((element, index) => index !== indexParam)); //splice(indexParam, 0)
+  }
+
+  return (
+    <div style={{ display: "flex" }}>
+      <table className="table ">
+        <thead>
+          <tr>
+            <td>
+              <span className="textSaaral">№</span>
+            </td>
+            <td>
+              <span className="textSaaral">нэр</span>
+            </td>
+            {!edit ? (
+              <td
+                style={{
+                  borderColor: "transparent",
+                  border: "none",
+                  paddingLeft: "0px",
+                  width: "50px",
+                }}
+              >
+                <img
+                  src={Add}
+                  width="30px"
+                  height="30px"
+                  onClick={() => addRow()}
+                />
+              </td>
+            ) : null}
+          </tr>
+        </thead>
+
+        <tbody>
+          {data.map((value, index) => (
+            <tr>
+              <td>
+                <span className="textSaaral">{index + 1}</span>
+              </td>
+              <td>
+                <input
+                  disabled={edit}
+                  className="Borderless"
+                  placeholder="утгаа оруулна уу"
+                  value={data[index]?.ORGANIZATION_ROLE_NAME}
+                  onChange={(text) => {
+                    let value = [...data];
+                    value[index].ORGANIZATION_ROLE_NAME = text.target.value;
+                    value[index].UPDATED_BY = userDetils?.USER_ID;
+                    value[index].UPDATED_DATE = dateFormat(
+                      new Date(),
+                      "dd-mmm-yy"
+                    );
+                    loadData(value);
+                  }}
+                />
+              </td>
+              {!edit ? (
+                <td
+                  style={{
+                    paddingLeft: "0px",
+                    borderColor: "transparent",
+                    width: "50px",
+                  }}
+                >
+                  <img
+                    src={Delete}
+                    width="30px"
+                    height="30px"
+                    onClick={() => removeRow(index, value)}
+                  />
+                </td>
+              ) : null}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <button
+        className="buttonTsenkher"
+        style={{ height: "30px", marginLeft: "5px" }}
+        onClick={() => setEdit(!edit)}
+      >
+        засах
+      </button>
+      {!edit ? (
+        <button
+          className="buttonTsenkher"
+          style={{ height: "30px", marginLeft: "5px" }}
+          onClick={() => saveToDB()}
+        >
+          хадгалах
+        </button>
+      ) : null}
     </div>
   );
 }

@@ -697,7 +697,13 @@ function TushaalAjiltan(props) {
     async function fetchData() {
       let listItems = await axios("http://hr.audit.mn/hr/api/v1/personall");
 
-      setJagsaalt(listItems?.data);
+      setJagsaalt(
+        listItems?.data.sort(function sortFunction(a, b) {
+          var dateA = new Date(a.START_DATE).getTime();
+          var dateB = new Date(b.START_DATE).getTime();
+          return dateA > dateB ? 1 : -1;
+        })
+      );
     }
     fetchData();
   }, [props]);

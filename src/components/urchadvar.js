@@ -157,7 +157,9 @@ function UrChadvar(props) {
 
   function saveToDB() {
     props.loading(true);
-    let newRow = data.Exam.filter((value) => value.ROWTYPE === "NEW");
+    let newRow = data.Exam.filter(
+      (value) => value.ROWTYPE === "NEW" && value.IS_EXAM !== 0
+    );
     let oldRow = data.Exam.filter(
       (value) =>
         value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
