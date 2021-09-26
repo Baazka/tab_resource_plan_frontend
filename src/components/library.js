@@ -229,6 +229,7 @@ function Suboffice(props) {
           })
         }
       >
+        <option value={999}>хоосон</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.SUB_OFFICE_ID}>
             {nation.SUB_OFFICE_NAME}
