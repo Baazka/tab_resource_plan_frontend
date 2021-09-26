@@ -641,7 +641,15 @@ const Home = (props) => {
           theme="solarized"
           customStyles={customStyles}
           noDataComponent="мэдээлэл байхгүй байна"
-          pagination={false}
+          pagination={true}
+          paginationPerPage={10}
+          paginationComponentOptions={{
+            rowsPerPageText: "Хуудас:",
+            rangeSeparatorText: "нийт:",
+            noRowsPerPage: false,
+            selectAllRowsItem: false,
+            selectAllRowsItemText: "All",
+          }}
           selectableRows
           // add for checkbox selection
           Clicked
