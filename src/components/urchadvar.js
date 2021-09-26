@@ -65,7 +65,11 @@ function UrChadvar(props) {
             ]),
           });
         } else if (listItems.data?.Exam.length == 3) {
-          loadData(listItems.data);
+          loadData({
+            Exam: listItems.data.Exam.sort(function (a, b) {
+              return a.EXAM_TYPE_ID - b.EXAM_TYPE_ID;
+            }),
+          });
         } else {
           temp = [...listItems.data?.Exam];
           let examtype;

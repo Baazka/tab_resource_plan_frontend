@@ -94,7 +94,13 @@ function Shagnaliin(props) {
         "http://hr.audit.mn/hr/api/v1/Award/" + props.person_id
       );
       console.log(listItems, "Tangarag");
-      loadData(listItems?.data);
+      loadData({
+        Award: listItems?.data.Award.sort(function sortFunction(a, b) {
+          var dateA = new Date(a.DECISION_DATE).getTime();
+          var dateB = new Date(b.DECISION_DATE).getTime();
+          return dateA > dateB ? 1 : -1;
+        }),
+      });
     }
     fetchData();
   }, [props]);
