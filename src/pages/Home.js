@@ -696,7 +696,7 @@ function Home(props) {
           >
             Шинэ
           </button>
-          {userDetils?.USER_TYPE_NAME.includes("Head") ? (
+          {
             <div style={{ position: "absolute", right: "3rem" }}>
               <button
                 className="button is-focused"
@@ -739,7 +739,7 @@ function Home(props) {
                 </button>
               ) : null}
             </div>
-          ) : null}
+          }
         </div>
         <div
           style={{
