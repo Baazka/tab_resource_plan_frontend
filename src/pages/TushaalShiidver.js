@@ -31,7 +31,7 @@ import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
 var dateFormat = require("dateformat");
 const axios = require("axios");
-const userDetils = JSON.parse(localStorage.getItem("userDetails"));
+
 var rowNumber = 1;
 createTheme("solarized", {
   text: {
@@ -110,6 +110,7 @@ const ButtonsColumn = ({
   buttonValue,
 }) => {
   const alert = useAlert();
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   function deleteDecision() {
     DataRequest({
       url: "http://hr.audit.mn/hr/api/v1/decisionDelete/",
@@ -179,6 +180,7 @@ const ButtonsColumn = ({
 
 const Home = (props) => {
   const [jagsaalt, setJagsaalt] = useState();
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [searchType, setSearchType] = useState("PERSON_FIRSTNAME");
   const [, forceRender] = useReducer((s) => s + 1, 0);
   const [found, setFound] = useState();
@@ -199,7 +201,11 @@ const Home = (props) => {
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/decision/1",
+        url:
+          "http://hr.audit.mn/hr/api/v1/decision/1/" +
+          userDetils?.USER_DEPARTMENT_ID +
+          "/" +
+          userDetils?.USER_TYPE_NAME.toUpperCase(),
         method: "GET",
         data: {},
       });
@@ -211,7 +217,11 @@ const Home = (props) => {
 
   async function unActive() {
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/decision/0",
+      url:
+        "http://hr.audit.mn/hr/api/v1/decision/0/" +
+        userDetils?.USER_DEPARTMENT_ID +
+        "/" +
+        userDetils?.USER_TYPE_NAME.toUpperCase(),
       method: "GET",
       data: {},
     });
@@ -220,7 +230,11 @@ const Home = (props) => {
   }
   async function Active() {
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/decision/1",
+      url:
+        "http://hr.audit.mn/hr/api/v1/decision/1/" +
+        userDetils?.USER_DEPARTMENT_ID +
+        "/" +
+        userDetils?.USER_TYPE_NAME.toUpperCase(),
       method: "GET",
       data: {},
     });
@@ -700,7 +714,7 @@ function TushaalAjiltan(props) {
   const [search, setSearch] = useState("");
   const [tsonkhnuud, setTsonkhnuud] = useState(1);
   const [worker, setWorker] = useState();
-
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios("http://hr.audit.mn/hr/api/v1/personall");
@@ -862,6 +876,7 @@ function TushaalAjiltan(props) {
 }
 
 function Khoyor(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [tsalinKhuls, setTsalin] = useState(false);
   const alert = useAlert();
   const [button, setbutton] = useState(1);
@@ -1198,6 +1213,7 @@ function Khoyor(props) {
 }
 
 function Salary(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
@@ -1593,6 +1609,7 @@ function Salary(props) {
 }
 
 function TushaalKharakh(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState();
 
   useEffect(() => {
@@ -1883,6 +1900,7 @@ function TushaalKharakh(props) {
   return listItems;
 }
 function SalaryKaruulakh(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
@@ -2052,6 +2070,7 @@ function SalaryKaruulakh(props) {
   return listItems;
 }
 function UstgakhTsonkh(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState({
     DECISION_ID: 0,
     REASONS_DECISION_CHANGE_ID: 1,

@@ -11,10 +11,9 @@ import dateFormat from "dateformat";
 import { css } from "@emotion/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import AnketAPrint from "./AnketAPrint";
-import Pdf from "react-to-pdf";
+
 import { useReactToPrint } from "react-to-print";
 
-const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 const axios = require("axios");
 
 class ComponentToPrint extends React.PureComponent {
@@ -76,6 +75,7 @@ const customStyles = {
 function Home(props) {
   const history = useHistory();
   const [jagsaalt, setJagsaalt] = useState();
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, setData] = useState();
   const [search, setSearch] = useState("");
   const [searchType, setSearchType] = useState("PERSON_FIRSTNAME");
@@ -107,7 +107,11 @@ function Home(props) {
   async function unActive() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/employees/0",
+      url:
+        "http://hr.audit.mn/hr/api/v1/employees/0/" +
+        userDetils?.USER_DEPARTMENT_ID +
+        "/" +
+        userDetils?.USER_TYPE_NAME.toUpperCase(),
       method: "GET",
       data: {},
     });
@@ -119,7 +123,11 @@ function Home(props) {
   async function Active() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/employees/1",
+      url:
+        "http://hr.audit.mn/hr/api/v1/employees/1/" +
+        userDetils?.USER_DEPARTMENT_ID +
+        "/" +
+        userDetils?.USER_TYPE_NAME.toUpperCase(),
       method: "GET",
       data: {},
     });
@@ -148,7 +156,11 @@ function Home(props) {
         JSON.parse(props.match?.params?.search)?.buttonValue === 2
       ) {
         let jagsaalts = await DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/employees/0",
+          url:
+            "http://hr.audit.mn/hr/api/v1/employees/0/" +
+            userDetils?.USER_DEPARTMENT_ID +
+            "/" +
+            userDetils?.USER_TYPE_NAME.toUpperCase(),
           method: "GET",
           data: {},
         });
@@ -189,7 +201,11 @@ function Home(props) {
         console.log(jagsaalts);
       } else {
         let jagsaalts = await DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/employees/1",
+          url:
+            "http://hr.audit.mn/hr/api/v1/employees/1/" +
+            userDetils?.USER_DEPARTMENT_ID +
+            "/" +
+            userDetils?.USER_TYPE_NAME.toUpperCase(),
           method: "GET",
           data: {},
         });
@@ -680,27 +696,8 @@ function Home(props) {
           >
             Шинэ
           </button>
-          <div style={{ position: "absolute", right: "3rem" }}>
-            <button
-              className="button is-focused"
-              style={{
-                backgroundColor: "#418ee6",
-                color: "white",
-                borderColor: "#418ee6",
-                borderStyle: "solid",
-                border: "2px",
-                borderRadius: "5px",
-                width: "12rem",
-                height: "2.1rem",
-                fontFamily: "RalewaySemiBold",
-                fontSize: "1rem",
-              }}
-              onClick={anketA}
-            >
-              АНКЕТ А ХЭСЭГ
-            </button>
-
-            {buttonValue === 1 || buttonValue === 2 ? (
+          {userDetils?.USER_TYPE_NAME.includes("Head") ? (
+            <div style={{ position: "absolute", right: "3rem" }}>
               <button
                 className="button is-focused"
                 style={{
@@ -714,14 +711,35 @@ function Home(props) {
                   height: "2.1rem",
                   fontFamily: "RalewaySemiBold",
                   fontSize: "1rem",
-                  marginLeft: "0.5rem",
                 }}
-                onClick={() => anketB()}
+                onClick={anketA}
               >
-                АНКЕТ Б ХЭСЭГ
+                АНКЕТ А ХЭСЭГ
               </button>
-            ) : null}
-          </div>
+
+              {buttonValue === 1 || buttonValue === 2 ? (
+                <button
+                  className="button is-focused"
+                  style={{
+                    backgroundColor: "#418ee6",
+                    color: "white",
+                    borderColor: "#418ee6",
+                    borderStyle: "solid",
+                    border: "2px",
+                    borderRadius: "5px",
+                    width: "12rem",
+                    height: "2.1rem",
+                    fontFamily: "RalewaySemiBold",
+                    fontSize: "1rem",
+                    marginLeft: "0.5rem",
+                  }}
+                  onClick={() => anketB()}
+                >
+                  АНКЕТ Б ХЭСЭГ
+                </button>
+              ) : null}
+            </div>
+          ) : null}
         </div>
         <div
           style={{
@@ -787,24 +805,26 @@ function Home(props) {
               <span class="icon is-small is-right"></span>
             </div>
 
-            <button
-              class="text"
-              style={{
-                marginLeft: "1%",
-                borderRadius: "5px",
-                backgroundColor: "#b8e6f3",
-                color: "#000",
-                border: "0px",
-              }}
-              onClick={() => {
-                anketANew();
-              }}
-            >
-              {" "}
-              <span style={{ display: "flex", paddingRight: "22px" }}>
-                <img src={AddBlue} width="20px" height="20px "></img>Нэмэх
-              </span>
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("Head") ? (
+              <button
+                class="text"
+                style={{
+                  marginLeft: "1%",
+                  borderRadius: "5px",
+                  backgroundColor: "#b8e6f3",
+                  color: "#000",
+                  border: "0px",
+                }}
+                onClick={() => {
+                  anketANew();
+                }}
+              >
+                {" "}
+                <span style={{ display: "flex", paddingRight: "22px" }}>
+                  <img src={AddBlue} width="20px" height="20px "></img>Нэмэх
+                </span>
+              </button>
+            ) : null}
 
             <button
               class="text"

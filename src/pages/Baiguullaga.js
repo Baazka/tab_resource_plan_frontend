@@ -58,7 +58,7 @@ function Subdepartment(props) {
                   style={{
                     color: "grey",
                     fontWeight: "bold",
-                    fontSize: "1.1rem",
+                    fontSize: "1rem",
                     marginLeft: "5px",
                   }}
                 >
@@ -117,13 +117,16 @@ function Subdepartment(props) {
                         setShow(!show);
                       }}
                     >
-                      {index + 1}.{value.SUB_DEPARTMENT_NAME}
+                      <span style={{ fontSize: "0.8rem" }}>
+                        {index + 1}.{value.SUB_DEPARTMENT_NAME}
+                      </span>
                     </button>
                   </div>
+                  <div className="column is-2" />
                   <div className="column is-1">
-                    <span>Чиг үүрэг:</span>
+                    <span style={{ fontSize: "0.8rem" }}>Чиг үүрэг:</span>
                   </div>
-                  <div className="column is-5">
+                  <div className="column is-3">
                     <ChigUureg
                       deparment_id_path={
                         props?.deparment_ID +
@@ -209,7 +212,7 @@ function Compartment(props) {
                   style={{
                     color: "grey",
                     fontWeight: "bold",
-                    fontSize: "1.1rem",
+                    fontSize: "1rem",
                     marginLeft: "5px",
                   }}
                 >
@@ -275,7 +278,7 @@ function Compartment(props) {
                     </button>
                   </div>
                   <div className="column is-1">
-                    <span>Чиг үүрэг:</span>
+                    <span style={{ fontSize: "0.8rem" }}>Чиг үүрэг:</span>
                   </div>
                   <div className="column is-5">
                     <ChigUureg
@@ -356,8 +359,9 @@ const Baiguullaga = (props) => {
                 style={{
                   color: "grey",
                   fontWeight: "bold",
-                  fontSize: "1.1rem",
+
                   marginLeft: "5px",
+                  fontSize: "1rem",
                 }}
               >
                 Байгууллагын нэр
@@ -412,7 +416,9 @@ const Baiguullaga = (props) => {
                       setShow(!show);
                     }}
                   >
-                    {index + 1}.{value.DEPARTMENT_NAME}
+                    <span style={{ fontSize: "0.8rem" }}>
+                      {index + 1}.{value.DEPARTMENT_NAME}
+                    </span>
                   </button>
                   <img
                     src={Edit}
@@ -428,10 +434,11 @@ const Baiguullaga = (props) => {
                     }
                   />
                 </div>
+                <div className="column is-2" />
                 <div className="column is-1">
-                  <span>Чиг үүрэг:</span>
+                  <span style={{ fontSize: "0.8rem" }}>Чиг үүрэг:</span>
                 </div>
-                <div className="column is-5">
+                <div className="column is-3">
                   <ChigUureg
                     deparment_id_path={value.DEPARTMENT_ID + "/null/null/"}
                     SUB_DEPARTMENT_ID={null}
