@@ -1460,6 +1460,7 @@ function Salary(props) {
                         style={{
                           borderColor: "transparent",
                           border: "none",
+                          paddingLeft: 0,
                         }}
                       >
                         <img
