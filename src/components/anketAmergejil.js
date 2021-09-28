@@ -5,9 +5,9 @@ import { Subfametype, Fametype } from "./library";
 import { Add, Delete } from "../assets/images/zurag";
 const axios = require("axios");
 var dateFormat = require("dateformat");
-const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
 function Mergeshliin(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
@@ -572,6 +572,7 @@ function Mergeshliin(props) {
 }
 
 function ZeregTsol(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();

@@ -5,9 +5,9 @@ import { Edutype } from "./library";
 import { Add, Delete } from "../assets/images/zurag";
 const axios = require("axios");
 var dateFormat = require("dateformat");
-const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
 function Bolowsrol(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState(null);
   const [dataSecond, loadDataSecond] = useState(null);
   const [edit, setEdit] = useState(true);

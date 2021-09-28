@@ -6,9 +6,9 @@ import { Office, Suboffice, Positioncategorytype } from "./library";
 
 const axios = require("axios");
 var dateFormat = require("dateformat");
-const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
 function Turshlgin(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();

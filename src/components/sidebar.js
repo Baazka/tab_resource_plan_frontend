@@ -155,7 +155,7 @@ const SideBar = (props) => {
                   </p>
                 </div>
               </MenuItem>
-              {userDetils?.USER_TYPE_NAME.includes("Head") ? (
+              {userDetils?.USER_TYPE_NAME.includes("BRANCH") ? null : (
                 <MenuItem active={menuClick.menu2}>
                   <div
                     className="CustomMenu"
@@ -177,8 +177,8 @@ const SideBar = (props) => {
                     </p>
                   </div>
                 </MenuItem>
-              ) : null}
-              {userDetils?.USER_TYPE_NAME.includes("Head") ? (
+              )}
+              {userDetils?.USER_TYPE_NAME.includes("BRANCH") ? null : (
                 <MenuItem active={menuClick.menu3}>
                   <div
                     className="CustomMenu"
@@ -200,7 +200,7 @@ const SideBar = (props) => {
                     </p>
                   </div>
                 </MenuItem>
-              ) : null}
+              )}
               <MenuItem active={menuClick.menu4}>
                 <div
                   className="CustomMenu"
@@ -222,7 +222,7 @@ const SideBar = (props) => {
                   </p>
                 </div>
               </MenuItem>
-              {userDetils?.USER_TYPE_NAME.includes("Head") ? (
+              {userDetils?.USER_TYPE_NAME.includes("BRANCH") ? null : (
                 <MenuItem active={menuClick.menu5}>
                   <div
                     className="CustomMenu"
@@ -244,7 +244,7 @@ const SideBar = (props) => {
                     </p>
                   </div>
                 </MenuItem>
-              ) : null}
+              )}
             </Menu>
             <div className="closemenu" onClick={menuIconClick}>
               {/* changing menu collapse icon on click */}

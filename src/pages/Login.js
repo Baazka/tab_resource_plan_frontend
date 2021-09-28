@@ -80,6 +80,7 @@ function Login(props) {
               data: {},
             })
               .then(function (response) {
+                console.log("test", response.data);
                 props.userNem({
                   userID: response?.data?.USER_ID,
                   userDetail: response?.data,

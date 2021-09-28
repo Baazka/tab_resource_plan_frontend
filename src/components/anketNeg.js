@@ -54,11 +54,12 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 import override from "../css/override";
 
 var dateFormat = require("dateformat");
-const userDetils = JSON.parse(localStorage.getItem("userDetails"));
+
 const axios = require("axios");
 
 function AnketNeg(props) {
   const [, forceRender] = useReducer((s) => s + 1, 0);
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState();
   const [menu, setMenu] = useState(1);
   const [edit, setEdit] = useState(true);
@@ -722,7 +723,7 @@ function AnketNeg(props) {
 function Yrunkhii(props) {
   const alert = useAlert();
   const [data, loadData] = useState();
-
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   return (
     <div
       className=" box"
@@ -977,6 +978,7 @@ function Kayag(props) {
   const [person, setPerson] = useState();
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
   useEffect(() => {
     async function fetchData() {
@@ -1286,6 +1288,7 @@ function Kayag(props) {
 }
 
 function HolbooBarikhHun(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [emergency, setEmergency] = useState();
   const [edit, setEdit] = useState(true);
   const [, forceRender] = useReducer((s) => s + 1, 0);
@@ -1656,6 +1659,7 @@ function HolbooBarikhHun(props) {
 }
 
 function GerBul(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [edit, setEdit] = useState(true);
   const [, forceRender] = useReducer((s) => s + 1, 0);
   const [data, loadData] = useState([]);
