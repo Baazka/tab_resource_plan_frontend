@@ -480,8 +480,8 @@ function AlbanTushaal(props) {
                     <td>№</td>
                     <td>Байгууллага нэр</td>
                     <td>Газар, нэгжийн нэр</td>
-                    <td>Алба, хэлтэсийн нэр</td>
                     <td>Албан тушаалын түвшин</td>
+                    <td>Алба, хэлтэсийн нэр</td>
                     <td>Албан тушаал</td>
                     <td>Тушаалын дугаар</td>
                     <td>Томилсон огноо</td>
@@ -540,7 +540,8 @@ function AlbanTushaal(props) {
                           value={value.POSITION_LEVEL_NAME}
                           onChange={(text) => {
                             let value = [...data];
-                            value[index].POSITION_SALARY = text.target.value;
+                            value[index].POSITION_LEVEL_NAME =
+                              text.target.value;
                             value[index].UPDATED_BY = userDetils?.USER_ID;
                             value[index].UPDATED_DATE = dateFormat(
                               new Date(),
