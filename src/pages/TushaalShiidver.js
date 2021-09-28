@@ -1614,20 +1614,13 @@ function TushaalKharakh(props) {
 
   useEffect(() => {
     async function fetchData() {
-      console.log(
-        "TushaalKharakh",
-        props.buttonValue + props.tushaal?.decision_ID
-      );
-      console.log(
-        "testtttttttttttttttttttttt",
-        "http://hr.audit.mn/hr/api/v1/decision/" +
-          props.buttonValue +
-          "/" +
-          props.tushaal?.decision_ID
-      );
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/decision/" +
           props.buttonValue +
+          "/" +
+          userDetils?.USER_DEPARTMENT_ID +
+          "/" +
+          userDetils?.USER_TYPE_NAME.toUpperCase() +
           "/" +
           props.tushaal?.decision_ID
       );
