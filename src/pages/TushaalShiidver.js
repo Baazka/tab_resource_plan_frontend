@@ -1323,11 +1323,16 @@ function Salary(props) {
   function requiredField() {
     for (let i = 0; i < data.salary.length; i++) {
       if (
-        data.salary[i].POSITION_SALARY === null ||
-        data.salary[i].POSITION_SALARY === ""
+        data.salary[i].SALARY_MOTIVE === null ||
+        data.salary[i].SALARY_MOTIVE === ""
       ) {
-        alert.show("албан тушаалын оруулан уу");
+        alert.show("Цалин хөлс өөрчилсөн үндэслэл");
         return false;
+      } else if (
+        data.salary[i].SALARY_SUPPLEMENT === null ||
+        data.salary[i].SALARY_SUPPLEMENT === ""
+      ) {
+        alert.show("Цалин хөлс нэмэгдлийн нэр оруулна уу");
       } else if (i === data.salary.length - 1) {
         return true;
       }

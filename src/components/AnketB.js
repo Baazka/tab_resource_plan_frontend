@@ -1847,10 +1847,10 @@ function NuhuhMulbur(props) {
           <div className="column is-7">
             <article className="message is-info ">
               <div className="message-body">
-                <strong style={{ color: "black" }}>
-                  Төрийн албаны тухай хуулийн 59 дүгээр зүйлийн 59.1-59.8-д
-                  заасан нөхөх төлбөрийг бичнэ)
-                </strong>
+                <p style={{ color: "black" }}>
+                  Төрийн албаны тухай хуулийн 59 дүгээр зүйлийн{" "}
+                  <b>59.1-59.8-д</b> заасан нөхөх төлбөрийг бичнэ
+                </p>
               </div>
             </article>
           </div>
