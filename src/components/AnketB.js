@@ -533,11 +533,12 @@ function AlbanTushaal(props) {
                           }}
                         />
                       </td>
+
                       <td>
                         <input
                           disabled={edit}
                           className="Borderless"
-                          value={value.POSITION_LEVEL_NAME}
+                          value={value.COMPARTMENT_NAME}
                           onChange={(text) => {
                             let value = [...data];
                             value[index].POSITION_SALARY = text.target.value;
@@ -554,10 +555,11 @@ function AlbanTushaal(props) {
                         <input
                           disabled={edit}
                           className="Borderless"
-                          value={value.COMPARTMENT_NAME}
+                          value={value.POSITION_LEVEL_NAME}
                           onChange={(text) => {
                             let value = [...data];
-                            value[index].POSITION_SALARY = text.target.value;
+                            value[index].POSITION_LEVEL_NAME =
+                              text.target.value;
                             value[index].UPDATED_BY = userDetils?.USER_ID;
                             value[index].UPDATED_DATE = dateFormat(
                               new Date(),

@@ -1460,8 +1460,7 @@ function Salary(props) {
                         style={{
                           borderColor: "transparent",
                           border: "none",
-                          paddingLeft: "0px",
-                          width: "50px",
+                          paddingLeft: 0,
                         }}
                       >
                         <img
@@ -1470,6 +1469,9 @@ function Salary(props) {
                           height="30px"
                           onClick={() => addRow()}
                         />
+                        <input
+                          style={{ width: "30px", visibility: "hidden" }}
+                        ></input>
                       </td>
                     ) : null}
                   </tr>
@@ -1569,7 +1571,6 @@ function Salary(props) {
                           style={{
                             paddingLeft: "0px",
                             borderColor: "transparent",
-                            width: "50px",
                           }}
                         >
                           <img
@@ -1578,6 +1579,9 @@ function Salary(props) {
                             height="30px"
                             onClick={() => removeRow(index, value)}
                           />
+                          <input
+                            style={{ width: "30px", visibility: "hidden" }}
+                          ></input>
                         </td>
                       ) : null}
                     </tr>
