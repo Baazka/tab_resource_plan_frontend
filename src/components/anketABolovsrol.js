@@ -304,14 +304,16 @@ function Bolowsrol(props) {
             </span>
           </div>
           <div className="column is-1">
-            <button
-              className="buttonTsenkher"
-              onClick={() => {
-                setEdit(!edit);
-              }}
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                className="buttonTsenkher"
+                onClick={() => {
+                  setEdit(!edit);
+                }}
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div class="columns">

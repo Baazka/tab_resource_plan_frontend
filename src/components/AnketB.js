@@ -32,10 +32,9 @@ import { Salarytype } from "./library";
 const axios = require("axios");
 
 var dateFormat = require("dateformat");
-const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
 function AnketB(props) {
-  console.log("anketB", JSON.parse(localStorage.getItem("personDetail")));
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [menu, setMenu] = useState(1);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -292,6 +291,7 @@ function AnketB(props) {
 }
 
 function AlbanTushaal(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [turul, setTurul] = useState("urdun");
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
@@ -842,6 +842,7 @@ function AlbanTushaal(props) {
   return listItems;
 }
 function TsalinHuls(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [zasakhTowch, setZasakhTowch] = useState(false);
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
@@ -1119,6 +1120,7 @@ function TsalinHuls(props) {
 }
 
 function Uramshuulal(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
@@ -1358,12 +1360,14 @@ function Uramshuulal(props) {
             </span>
           </div>
           <div className="column is-1">
-            <button
-              onClick={() => setZasakhTowch(!zasakhTowch)}
-              className="buttonTsenkher"
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                onClick={() => setZasakhTowch(!zasakhTowch)}
+                className="buttonTsenkher"
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
 
@@ -1602,6 +1606,7 @@ function Uramshuulal(props) {
 }
 
 function NuhuhMulbur(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
@@ -1837,12 +1842,14 @@ function NuhuhMulbur(props) {
             </span>
           </div>
           <div className="column is-1">
-            <button
-              onClick={() => setZasakhTowch(!zasakhTowch)}
-              className="buttonTsenkher"
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                onClick={() => setZasakhTowch(!zasakhTowch)}
+                className="buttonTsenkher"
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div className="columns">
@@ -2085,6 +2092,7 @@ function NuhuhMulbur(props) {
   return listItems;
 }
 function Tuslamj(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
@@ -2322,12 +2330,14 @@ function Tuslamj(props) {
             </span>
           </div>
           <div className="column is-1">
-            <button
-              onClick={() => setZasakhTowch(!zasakhTowch)}
-              className="buttonTsenkher"
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                onClick={() => setZasakhTowch(!zasakhTowch)}
+                className="buttonTsenkher"
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div className="columns">
@@ -2571,6 +2581,7 @@ function Tuslamj(props) {
   return listItems;
 }
 function Surgalt(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
@@ -2808,12 +2819,14 @@ function Surgalt(props) {
             </span>
           </div>
           <div className="column is-1">
-            <button
-              onClick={() => setZasakhTowch(!zasakhTowch)}
-              className="buttonTsenkher"
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                onClick={() => setZasakhTowch(!zasakhTowch)}
+                className="buttonTsenkher"
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div className="columns">
@@ -3058,6 +3071,7 @@ function Surgalt(props) {
   return listItems;
 }
 function Shiitgel(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
@@ -3289,12 +3303,14 @@ function Shiitgel(props) {
             </span>
           </div>
           <div className="column is-1">
-            <button
-              onClick={() => setZasakhTowch(!zasakhTowch)}
-              className="buttonTsenkher"
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                onClick={() => setZasakhTowch(!zasakhTowch)}
+                className="buttonTsenkher"
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div className="columns">
@@ -3522,6 +3538,7 @@ function Shiitgel(props) {
 }
 
 function HuwiinHereg(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
@@ -3752,12 +3769,14 @@ function HuwiinHereg(props) {
             </span>
           </div>
           <div className="column is-1">
-            <button
-              onClick={() => setZasakhTowch(!zasakhTowch)}
-              className="buttonTsenkher"
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                onClick={() => setZasakhTowch(!zasakhTowch)}
+                className="buttonTsenkher"
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <table className="table is-bordered p-3">

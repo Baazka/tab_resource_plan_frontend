@@ -47,6 +47,7 @@ import {
   Office,
   Suboffice,
   FamilyArray,
+  personNoCheck,
 } from "./library";
 import { useAlert } from "react-alert";
 import { useHistory } from "react-router-dom";
@@ -706,7 +707,6 @@ function AnketNeg(props) {
                       loading={setLoading}
                     />
                   ) : null}
-                  )
                 </div>
               )
             ) : null}
@@ -724,6 +724,17 @@ function Yrunkhii(props) {
   const alert = useAlert();
   const [data, loadData] = useState();
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
+  const [register, setRegister] = useState(0);
+  const cyrillicPattern = /^[\u0400-\u04FF]+$/;
+
+  async function personNoCheck(register) {
+    let listItems = await axios({
+      method: "POST",
+      url: "http://hr.audit.mn/hr/api/v1/personNoCheck",
+      data: { PERSON_REGISTER_NO: register },
+    });
+    setRegister(listItems?.data?.CNT);
+  }
   return (
     <div
       className=" box"
@@ -740,12 +751,14 @@ function Yrunkhii(props) {
           <span className="headerTextBold">Ерөнхий мэдээлэл</span>
         </div>
         <div className="column is-1 is-narrow-tablet">
-          <button
-            className="buttonTsenkher"
-            onClick={() => props.setEdit(!props.edit)}
-          >
-            Засварлах
-          </button>
+          {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            <button
+              className="buttonTsenkher"
+              onClick={() => props.setEdit(!props.edit)}
+            >
+              Засварлах
+            </button>
+          )}
         </div>
       </div>
       <div className="columns" style={{ marginBottom: "0px" }}>
@@ -839,14 +852,43 @@ function Yrunkhii(props) {
             placeholder="утгаа оруулна уу"
             disabled={props.edit}
             className="anketInput"
+            pattern="[а-я|А-Я|ө|Ө|ү|Ү]{2}[0-9]{8}"
+            style={{
+              borderBottom:
+                register > 0 || register === false ? "1px solid red" : "none",
+            }}
             value={props.data?.PERSON_REGISTER_NO}
-            onChange={(text) =>
+            onChange={async (text) => {
               props.loadData({
                 ...props.data,
                 ...{ PERSON_REGISTER_NO: text.target.value },
-              })
-            }
+              });
+              if (text.target.value.length === 10) {
+                if (
+                  cyrillicPattern.test(text.target.value.slice(0, 2)) &&
+                  /\d/.test(text.target.value.slice(2, 10))
+                ) {
+                  await personNoCheck(text.target.value);
+                } else setRegister(false);
+              } else {
+                setRegister(false);
+              }
+            }}
           />
+          {register > 0 ? (
+            <span
+              style={{ color: "red", fontSize: "0.6rem", marginLeft: "4px" }}
+            >
+              Бүртгэгдсэн байна!!!
+            </span>
+          ) : null}
+          {register === false ? (
+            <span
+              style={{ color: "red", fontSize: "0.6rem", marginLeft: "4px" }}
+            >
+              формат буруу байна
+            </span>
+          ) : null}
         </div>
         <div className="column is-3 has-text-right">
           <span style={{ color: "red" }}>*</span>
@@ -964,9 +1006,25 @@ function Yrunkhii(props) {
             >
               Хэвлэх
             </button> */}
-            <button className="buttonTsenkher" onClick={props.khadgalakhYo}>
-              Хадгалах
-            </button>
+
+            {register > 0 || register === false ? (
+              <button
+                style={{
+                  border: "none",
+                  fontFamily: "RalewayRegular",
+                  border: "#418ee6",
+                  borderRadius: "5px",
+                  padding: "8px",
+                  color: "white",
+                }}
+              >
+                Хадгалах
+              </button>
+            ) : (
+              <button className="buttonTsenkher" onClick={props.khadgalakhYo}>
+                Хадгалах
+              </button>
+            )}
           </div>
         ) : null}
       </div>
@@ -1086,14 +1144,16 @@ function Kayag(props) {
           <span className="headerTextBold">Хаягийн мэдээлэл</span>
         </div>
         <div className="column is-1">
-          <button
-            className="buttonTsenkher"
-            onClick={() => {
-              setEdit(!edit);
-            }}
-          >
-            Засварлах
-          </button>
+          {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            <button
+              className="buttonTsenkher"
+              onClick={() => {
+                setEdit(!edit);
+              }}
+            >
+              Засварлах
+            </button>
+          )}
         </div>
       </div>
       <div className="columns">
@@ -1496,9 +1556,11 @@ function HolbooBarikhHun(props) {
             </span>
           </div>
           <div className="column is-1">
-            <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
 
@@ -2015,9 +2077,11 @@ function GerBul(props) {
           </span>
         </div>
         <div className="column is-1">
-          <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
-            Засварлах
-          </button>
+          {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
+              Засварлах
+            </button>
+          )}
         </div>
       </div>
       <div className="columns">

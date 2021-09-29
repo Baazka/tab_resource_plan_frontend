@@ -262,9 +262,14 @@ function UrChadvar(props) {
               </span>
             </div>
             <div className="column is -1">
-              <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
-                Засварлах
-              </button>
+              {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+                <button
+                  className="buttonTsenkher"
+                  onClick={() => setEdit(!edit)}
+                >
+                  Засварлах
+                </button>
+              )}
             </div>
           </div>
           <div className="columns">
@@ -917,14 +922,16 @@ function TangaragBurtgel(props) {
             <span className="headerTextBold">2.Тангаргийн бүртгэл</span>
           </div>
           <div className="column is-1">
-            <button
-              className="buttonTsenkher"
-              onClick={() => {
-                setEdit(!edit);
-              }}
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                className="buttonTsenkher"
+                onClick={() => {
+                  setEdit(!edit);
+                }}
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div className="columns">
@@ -1317,14 +1324,16 @@ function GadaadKhel(props) {
             <span className="headerTextBold">3.Гадаад хэлний мэдлэг</span>
           </div>
           <div className="column is-1">
-            <button
-              className="buttonTsenkher"
-              onClick={() => {
-                setEdit(!edit);
-              }}
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                className="buttonTsenkher"
+                onClick={() => {
+                  setEdit(!edit);
+                }}
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div className="columns">

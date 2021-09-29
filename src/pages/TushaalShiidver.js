@@ -883,7 +883,7 @@ function Khoyor(props) {
   const [EMPLOYEE_ID, setEMPLOYEE_ID] = useState();
   const [data, loadData] = useState({
     PERSON_ID: props.worker.PERSON_ID,
-    DEPARTMENT_ID: "",
+    DEPARTMENT_ID: userDetils.USER_DEPARTMENT_ID,
     SUB_DEPARTMENT_ID: "null",
     COMPARTMENT_ID: "null",
     POSITION_ID: "",
@@ -1408,14 +1408,16 @@ function Salary(props) {
             <span className="headerTextBold">Цалингийн мэдээлэл</span>
           </div>
           <div className="column is-1">
-            <button
-              className="buttonTsenkher"
-              onClick={() => {
-                setEdit(!edit);
-              }}
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                className="buttonTsenkher"
+                onClick={() => {
+                  setEdit(!edit);
+                }}
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div className="table-container">

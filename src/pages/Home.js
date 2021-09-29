@@ -805,7 +805,7 @@ function Home(props) {
               <span class="icon is-small is-right"></span>
             </div>
 
-            {
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
               <button
                 class="text"
                 style={{
@@ -824,7 +824,7 @@ function Home(props) {
                   <img src={AddBlue} width="20px" height="20px "></img>Нэмэх
                 </span>
               </button>
-            }
+            )}
 
             <button
               class="text"
