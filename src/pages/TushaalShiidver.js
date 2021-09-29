@@ -690,16 +690,15 @@ const bagana = [
     width: "40px",
   },
   {
-    name: "Ажилтны овог",
-    selector: "PERSON_LASTNAME",
-    sortable: true,
-  },
-  {
     name: "Ажилтны нэр",
     selector: "PERSON_FIRSTNAME",
     sortable: true,
   },
-
+  {
+    name: "Ажилтны овог",
+    selector: "PERSON_LASTNAME",
+    sortable: true,
+  },
   {
     name: "регистрийн дугаар",
     selector: "PERSON_REGISTER_NO",
@@ -1684,7 +1683,7 @@ function TushaalKharakh(props) {
               <h1>Ажилтны нэр</h1>
               <input
                 class="input  is-size-7"
-                value={data?.PERSON_LASTNAME}
+                value={data?.PERSON_FIRSTNAME}
                 disabled={true}
               />
             </div>
@@ -1692,7 +1691,7 @@ function TushaalKharakh(props) {
               <h1>Ажилтны овог</h1>
               <input
                 class="input  is-size-7"
-                value={data?.PERSON_FIRSTNAME}
+                value={data?.PERSON_LASTNAME}
                 disabled={true}
               />
             </div>
