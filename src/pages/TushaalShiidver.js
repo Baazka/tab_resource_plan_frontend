@@ -986,7 +986,7 @@ function Khoyor(props) {
               <h1>Ажилтны нэр</h1>
               <input
                 class="input  is-size-7"
-                value={props.worker.PERSON_LASTNAME}
+                value={props.worker.PERSON_FIRSTNAME}
                 disabled={true}
               />
             </div>
@@ -994,7 +994,7 @@ function Khoyor(props) {
               <h1>Ажилтны овог</h1>
               <input
                 class="input  is-size-7"
-                value={props.worker.PERSON_FIRSTNAME}
+                value={props.worker.PERSON_LASTNAME}
                 disabled={true}
               />
             </div>
