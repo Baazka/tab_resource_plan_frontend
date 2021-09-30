@@ -21,10 +21,11 @@ const Dashboard = (props) => {
         style={{
           backgroundColor: "white",
           overflow: "scroll",
+          height: "100vh",
         }}
       >
         <Iframe
-          url="https://app.powerbi.com/view?r=eyJrIjoiOTVmMzU1ZmUtZjQzMi00MzAyLWI2YTEtN2EyMWI5OTMxYjFhIiwidCI6ImI0MDYwNDEyLTEwM2MtNDBlNy05YzExLTBhNjBkY2NhZjVhZCIsImMiOjEwfQ%3D%3D"
+          url="https://app.powerbi.com/view?r=eyJrIjoiNmZmNjcxMTEtMzQxMC00ODM1LWI2ZWUtNWUwNjA2Y2I1ODgyIiwidCI6ImI0MDYwNDEyLTEwM2MtNDBlNy05YzExLTBhNjBkY2NhZjVhZCIsImMiOjEwfQ%3D%3D"
           width="93%"
           height="900px"
           id="myId"

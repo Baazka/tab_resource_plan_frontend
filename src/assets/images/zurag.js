@@ -65,6 +65,8 @@ import BDoloo from "../images/icons/BDoloo.png";
 import BNaimB from "../images/icons/BNaimB.png";
 import BNaim from "../images/icons/BNaim.png";
 import Edit from "../images/icons/edit.png";
+import DownArrow from "../images/icons/downarrow.png";
+import Print from "../images/icons/print.png";
 
 export {
   LeftArrow,
@@ -130,4 +132,6 @@ export {
   BNaim,
   Eye,
   Edit,
+  DownArrow,
+  Print,
 };

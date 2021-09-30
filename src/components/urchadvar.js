@@ -65,27 +65,40 @@ function UrChadvar(props) {
             ]),
           });
         } else if (listItems.data?.Exam.length == 3) {
-          loadData(listItems.data);
+          loadData({
+            Exam: listItems.data.Exam.sort(function (a, b) {
+              return a.EXAM_TYPE_ID - b.EXAM_TYPE_ID;
+            }),
+          });
         } else {
           temp = [...listItems.data?.Exam];
+          let examtype;
+          temp.map((a) => {
+            if (a.EXAM_TYPE_ID === 2) examtype = 3;
+            else if (a.EXAM_TYPE_ID === 3) examtype = 2;
+          });
 
           loadData({
-            Exam: temp.concat({
-              PERSON_ID: props.person_id,
-              EXAM_TYPE_ID: 3,
-              EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-              IS_EXAM: 0,
-              OFFICE_ID: "1",
-              EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-              EXAM_POINT: "",
-              DECISION_NO: "",
-              DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-              DECISION_DESC: "",
-              CREATED_BY: userDetils?.USER_ID,
-              CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-              ROWTYPE: "NEW",
-              IS_ACTIVE: "1",
-            }),
+            Exam: temp
+              .concat({
+                PERSON_ID: props.person_id,
+                EXAM_TYPE_ID: examtype,
+                EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
+                IS_EXAM: 0,
+                OFFICE_ID: "1",
+                EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+                EXAM_POINT: "",
+                DECISION_NO: "",
+                DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+                DECISION_DESC: "",
+                CREATED_BY: userDetils?.USER_ID,
+                CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+                ROWTYPE: "NEW",
+                IS_ACTIVE: "1",
+              })
+              .sort(function (a, b) {
+                return a.EXAM_TYPE_ID - b.EXAM_TYPE_ID;
+              }),
           });
         }
       } else {
@@ -148,7 +161,9 @@ function UrChadvar(props) {
 
   function saveToDB() {
     props.loading(true);
-    let newRow = data.Exam.filter((value) => value.ROWTYPE === "NEW");
+    let newRow = data.Exam.filter(
+      (value) => value.ROWTYPE === "NEW" && value.IS_EXAM !== 0
+    );
     let oldRow = data.Exam.filter(
       (value) =>
         value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
@@ -247,9 +262,14 @@ function UrChadvar(props) {
               </span>
             </div>
             <div className="column is -1">
-              <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
-                Засварлах
-              </button>
+              {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+                <button
+                  className="buttonTsenkher"
+                  onClick={() => setEdit(!edit)}
+                >
+                  Засварлах
+                </button>
+              )}
             </div>
           </div>
           <div className="columns">
@@ -902,14 +922,16 @@ function TangaragBurtgel(props) {
             <span className="headerTextBold">2.Тангаргийн бүртгэл</span>
           </div>
           <div className="column is-1">
-            <button
-              className="buttonTsenkher"
-              onClick={() => {
-                setEdit(!edit);
-              }}
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                className="buttonTsenkher"
+                onClick={() => {
+                  setEdit(!edit);
+                }}
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div className="columns">
@@ -1302,14 +1324,16 @@ function GadaadKhel(props) {
             <span className="headerTextBold">3.Гадаад хэлний мэдлэг</span>
           </div>
           <div className="column is-1">
-            <button
-              className="buttonTsenkher"
-              onClick={() => {
-                setEdit(!edit);
-              }}
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                className="buttonTsenkher"
+                onClick={() => {
+                  setEdit(!edit);
+                }}
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div className="columns">

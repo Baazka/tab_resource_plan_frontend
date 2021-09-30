@@ -42,6 +42,7 @@ const SideBar = (props) => {
     menu4: false,
     menu5: false,
   });
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
   //create a custom function that will change menucollapse state from false to true and true to false
   const menuIconClick = () => {
@@ -64,7 +65,7 @@ const SideBar = (props) => {
       history.push("/web/dashboard");
       setMenuCollapse(true);
     } else if (value?.menu1) {
-      history.push("/web/workerList");
+      history.push("/web/workerList/null");
       setMenuCollapse(true);
     } else if (value?.menu2) {
       history.push("/web/Baiguullaga");
@@ -162,48 +163,52 @@ const SideBar = (props) => {
                   </p>
                 </div>
               </MenuItem>
-              <MenuItem active={menuClick.menu2}>
-                <div
-                  className="CustomMenu"
-                  onClick={() => SelectMenu({ menu2: !menuClick.menu2 })}
-                >
-                  <img
-                    src={menuClick.menu2 ? GroupB : Group}
-                    width="40"
-                    height="30"
-                  />
-                  <p
-                    className="MenuText"
-                    style={{
-                      color: `${menuClick.menu2 ? "#418ee6" : "white"}`,
-                    }}
+              {userDetils?.USER_TYPE_NAME.includes("BRANCH") ? null : (
+                <MenuItem active={menuClick.menu2}>
+                  <div
+                    className="CustomMenu"
+                    onClick={() => SelectMenu({ menu2: !menuClick.menu2 })}
                   >
-                    {" "}
-                    Байгууллагын бүтцийн бүртгэл
-                  </p>
-                </div>
-              </MenuItem>
-              <MenuItem active={menuClick.menu3}>
-                <div
-                  className="CustomMenu"
-                  onClick={() => SelectMenu({ menu3: !menuClick.menu3 })}
-                >
-                  <img
-                    src={menuClick.menu3 ? BagB : Bag}
-                    width="40"
-                    height="30"
-                  />
-                  <p
-                    className="MenuText"
-                    style={{
-                      color: `${menuClick.menu3 ? "#418ee6" : "white"}`,
-                    }}
+                    <img
+                      src={menuClick.menu2 ? GroupB : Group}
+                      width="40"
+                      height="30"
+                    />
+                    <p
+                      className="MenuText"
+                      style={{
+                        color: `${menuClick.menu2 ? "#418ee6" : "white"}`,
+                      }}
+                    >
+                      {" "}
+                      Байгууллагын бүтцийн бүртгэл
+                    </p>
+                  </div>
+                </MenuItem>
+              )}
+              {userDetils?.USER_TYPE_NAME.includes("BRANCH") ? null : (
+                <MenuItem active={menuClick.menu3}>
+                  <div
+                    className="CustomMenu"
+                    onClick={() => SelectMenu({ menu3: !menuClick.menu3 })}
                   >
-                    {" "}
-                    Албан тушаалын бүртгэл
-                  </p>
-                </div>
-              </MenuItem>
+                    <img
+                      src={menuClick.menu3 ? BagB : Bag}
+                      width="40"
+                      height="30"
+                    />
+                    <p
+                      className="MenuText"
+                      style={{
+                        color: `${menuClick.menu3 ? "#418ee6" : "white"}`,
+                      }}
+                    >
+                      {" "}
+                      Албан тушаалын бүртгэл
+                    </p>
+                  </div>
+                </MenuItem>
+              )}
               <MenuItem active={menuClick.menu4}>
                 <div
                   className="CustomMenu"
@@ -221,73 +226,33 @@ const SideBar = (props) => {
                     }}
                   >
                     {" "}
-                    Шийдвэр тушаалын бүртгэл
+                    Шийдвэр, тушаалын бүртгэл
                   </p>
                 </div>
               </MenuItem>
-              <MenuItem active={menuClick.menu5}>
-                <div
-                  className="CustomMenu"
-                  onClick={() => SelectMenu({ menu5: !menuClick.menu5 })}
-                >
-                  <img
-                    src={menuClick.menu5 ? TailanB : Tailan}
-                    width="40"
-                    height="30"
-                  />
-                  <p
-                    className="MenuText"
-                    style={{
-                      color: `${menuClick.menu5 ? "#418ee6" : "white"}`,
-                    }}
+              {userDetils?.USER_TYPE_NAME.includes("BRANCH") ? null : (
+                <MenuItem active={menuClick.menu5}>
+                  <div
+                    className="CustomMenu"
+                    onClick={() => SelectMenu({ menu5: !menuClick.menu5 })}
                   >
-                    {" "}
-                    Тайлан
-                  </p>
-                </div>
-              </MenuItem>
-              <MenuItem active={menuClick.menu5}>
-                <div
-                  className="CustomMenu"
-                  onClick={() => SelectMenu({ menu6: !menuClick.menu5 })}
-                >
-                  <img
-                    src={menuClick.menu5 ? TailanB : Tailan}
-                    width="40"
-                    height="30"
-                  />
-                  <p
-                    className="MenuText"
-                    style={{
-                      color: `${menuClick.menu5 ? "#418ee6" : "white"}`,
-                    }}
-                  >
-                    {" "}
-                    Anket
-                  </p>
-                </div>
-              </MenuItem>
-              <MenuItem active={menuClick.menu7}>
-                <div
-                  className="CustomMenu"
-                  onClick={() => SelectMenu({ menu7: !menuClick.menu7 })}
-                >
-                  <img
-                    src={menuClick.menu7 ? TailanB : Tailan}
-                    width="40"
-                    height="30"
-                  />
-                  <p
-                    className="MenuText"
-                    style={{
-                      color: `${menuClick.menu7 ? "#418ee6" : "white"}`,
-                    }}
-                  >
-                    {" "}
-                    Хууль тогтоомжийн сан
-                  </p>
-                </div>
-              </MenuItem>
+                    <img
+                      src={menuClick.menu5 ? TailanB : Tailan}
+                      width="40"
+                      height="30"
+                    />
+                    <p
+                      className="MenuText"
+                      style={{
+                        color: `${menuClick.menu5 ? "#418ee6" : "white"}`,
+                      }}
+                    >
+                      {" "}
+                      Судалгаа
+                    </p>
+                  </div>
+                </MenuItem>
+              )}
             </Menu>
             <div className="closemenu" onClick={menuIconClick}>
               {/* changing menu collapse icon on click */}

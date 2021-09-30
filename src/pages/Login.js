@@ -58,10 +58,16 @@ function Login(props) {
         data: {
           username: ner,
           password: nuutsUg,
+          systemid: 1,
         },
       })
         .then(function (response) {
-          if (response?.data?.USER_ID !== 0) {
+          console.log("response?.dataLogin", response?.data);
+          if (
+            response?.data?.USER_ID !== 0 &&
+            response?.data?.USER_ID !== null &&
+            response?.data?.USER_ID !== undefined
+          ) {
             if (sanuulakh) {
               localStorage.removeItem("rememberedUser");
               localStorage.setItem(
@@ -80,6 +86,7 @@ function Login(props) {
               data: {},
             })
               .then(function (response) {
+                console.log("test", response.data);
                 props.userNem({
                   userID: response?.data?.USER_ID,
                   userDetail: response?.data,

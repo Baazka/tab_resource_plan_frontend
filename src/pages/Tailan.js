@@ -62,7 +62,7 @@ const customStyles = {
 const Home = (props) => {
   const history = useHistory();
   const { turul } = useParams();
-  const [Button1, setButtons1] = useState(false);
+  const [Button1, setButtons1] = useState(true);
 
   return (
     <div
@@ -72,7 +72,7 @@ const Home = (props) => {
         maxHeight: "100vh !important",
       }}
     >
-      <Header title="ТАЙЛАН" />
+      <Header title="Судалгаа" />
       <div
         style={{
           backgroundColor: "white",

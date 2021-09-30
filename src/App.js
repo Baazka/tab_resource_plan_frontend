@@ -54,14 +54,10 @@ function App() {
         <Route path="/web">
           <SideBar />
         </Route>
-        <Route path="/web/workerList">
-          <Home />
-        </Route>
-        <Route path="/web/alba">
-          <AlbanTushaal />
-        </Route>
-        <Route path="/web/anketA/:id" component={AnketA} exact />
-        <Route path="/web/anketB/:id" component={AnketB} exact />
+        <Route path="/web/workerList/:search" component={Home} exact />
+
+        <Route path="/web/anketA/:search" component={AnketA} exact />
+        <Route path="/web/anketB/:search" component={AnketB} exact />
         <Route path="/web/dashboard/" component={Dashboard} exact />
         <Route path="/web/Baiguullaga/" component={Baiguullaga} exact />
         <Route

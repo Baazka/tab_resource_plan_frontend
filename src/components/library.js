@@ -180,6 +180,7 @@ function Office(props) {
           // props.forceUpdate();
         }}
       >
+        <option value={0}>Гадаад</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.OFFICE_ID}>
             {nation.OFFICE_NAME}
@@ -228,6 +229,7 @@ function Suboffice(props) {
           })
         }
       >
+        <option value={999}>хоосон</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.SUB_OFFICE_ID}>
             {nation.SUB_OFFICE_NAME}
@@ -657,6 +659,7 @@ function DepartmentID(props) {
         }
         style={{ width: "-webkit-fill-available" }}
       >
+        <option value={""}>хоосон</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.DEPARTMENT_ID}>
             {nation.DEPARTMENT_NAME}
@@ -896,6 +899,7 @@ function Position(props) {
           })
         }
       >
+        <option value={""}>хоосон</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.POSITION_ID}>
             {nation.POSITION_NAME}
@@ -984,6 +988,7 @@ function Decisiontype(props) {
           })
         }
       >
+        <option value={""}>хоосон</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.DECISION_TYPE_ID}>
             {nation.DECISION_TYPE_NAME}
@@ -1075,6 +1080,7 @@ function Positioncategorytype(props) {
           })
         }
       >
+        <option value={""}>хоосон</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.POSITION_CATEGORY_TYPE_ID}>
             {nation.POSITION_CATEGORY_TYPE_NAME}

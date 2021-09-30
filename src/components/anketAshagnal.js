@@ -5,7 +5,6 @@ import { Edutype } from "./library";
 import { Add, Delete } from "../assets/images/zurag";
 const axios = require("axios");
 var dateFormat = require("dateformat");
-const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
 // function ShagnaliinOld(props) {
 //   return (
@@ -85,6 +84,7 @@ const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 // }
 
 function Shagnaliin(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
@@ -94,7 +94,13 @@ function Shagnaliin(props) {
         "http://hr.audit.mn/hr/api/v1/Award/" + props.person_id
       );
       console.log(listItems, "Tangarag");
-      loadData(listItems?.data);
+      loadData({
+        Award: listItems?.data.Award.sort(function sortFunction(a, b) {
+          var dateA = new Date(a.DECISION_DATE).getTime();
+          var dateB = new Date(b.DECISION_DATE).getTime();
+          return dateA > dateB ? 1 : -1;
+        }),
+      });
     }
     fetchData();
   }, [props]);
@@ -282,14 +288,16 @@ function Shagnaliin(props) {
             <span className="headerTextBold">6. Шагналын талаарх мэдээлэл</span>
           </div>
           <div className="column is-1">
-            <button
-              className="buttonTsenkher"
-              onClick={() => {
-                setEdit(!edit);
-              }}
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                className="buttonTsenkher"
+                onClick={() => {
+                  setEdit(!edit);
+                }}
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div className="columns">

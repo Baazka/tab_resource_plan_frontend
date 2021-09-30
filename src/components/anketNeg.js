@@ -47,6 +47,7 @@ import {
   Office,
   Suboffice,
   FamilyArray,
+  personNoCheck,
 } from "./library";
 import { useAlert } from "react-alert";
 import { useHistory } from "react-router-dom";
@@ -54,11 +55,12 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 import override from "../css/override";
 
 var dateFormat = require("dateformat");
-const userDetils = JSON.parse(localStorage.getItem("userDetails"));
+
 const axios = require("axios");
 
 function AnketNeg(props) {
   const [, forceRender] = useReducer((s) => s + 1, 0);
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState();
   const [menu, setMenu] = useState(1);
   const [edit, setEdit] = useState(true);
@@ -298,6 +300,7 @@ function AnketNeg(props) {
             textAlign: "center",
             borderRight: "1px solid #ececec",
             height: "100hv",
+            overflow: "scroll",
           }}
         >
           <div
@@ -319,7 +322,9 @@ function AnketNeg(props) {
                 pointerEvents: "initial",
                 textDecoration: "underline",
               }}
-              onClick={() => history.push("/web/workerlist", { back: true })}
+              onClick={() =>
+                history.push("/web/workerlist/" + props.match.params.search)
+              }
             >
               {"<  Буцах"}
             </button>
@@ -406,172 +411,179 @@ function AnketNeg(props) {
               ТАЛААРХ МЭДЭЭЛЭЛ
             </button>
           </div>
-          <div className="AnketList">
-            <img
-              src={menu === 2 ? BlueKhoyor : BlackKhoyor}
-              width="45px"
-              height="45px"
-            />
-            <button
-              className="button"
-              style={{
-                color: `${menu === 2 ? "#418ee6" : "#5d5d5d"}`,
-                border: "none",
-                width: "17rem",
-                fontFamily: "RalewayRegular",
-                fontWeight: "bold",
-                whiteSpace: "nowrap",
-                marginTop: "3px",
-                fontSize: "1rem",
-              }}
-              onClick={() => setMenu(2)}
-            >
-              II. УР ЧАДВАРЫН <br />
-              ТАЛААРХ МЭДЭЭЛЭЛ
-            </button>
-          </div>
-          <div className="AnketList">
-            <img
-              src={menu === 3 ? BlueGurav : BlackGurav}
-              width="45px"
-              height="45px"
-            />
-            <button
-              className="button"
-              style={{
-                color: `${menu === 3 ? "#418ee6" : "#5d5d5d"}`,
-                border: "none",
-                width: "17rem",
-                fontFamily: "RalewayRegular",
-                fontWeight: "bold",
-                whiteSpace: "nowrap",
-                marginTop: "3px",
-                fontSize: "1rem",
-              }}
-              onClick={() => setMenu(3)}
-            >
-              III. БОЛОВСРОЛЫН <br />
-              ТАЛААРХ МЭДЭЭЛЭЛ
-            </button>
-          </div>
-          <div className="AnketList">
-            <img
-              src={menu === 4 ? BlueDuruv : BlackDuruv}
-              width="45px"
-              height="45px"
-            />
-            <button
-              className="button"
-              style={{
-                color: `${menu === 4 ? "#418ee6" : "#5d5d5d"}`,
-                border: "none",
-                width: "17rem",
-                fontFamily: "RalewayRegular",
-                fontWeight: "bold",
-                whiteSpace: "nowrap",
-                marginTop: "3px",
-                fontSize: "1rem",
-              }}
-              onClick={() => setMenu(4)}
-            >
-              IV. МЭРГЭШЛИЙН <br />
-              ТАЛААРХ МЭДЭЭЛЭЛ
-            </button>
-          </div>
-          <div className="AnketList">
-            <img
-              src={menu === 5 ? BlueTav : BlackTav}
-              width="45px"
-              height="45px"
-            />
-            <button
-              className="button"
-              style={{
-                color: `${menu === 5 ? "#418ee6" : "#5d5d5d"}`,
-                border: "none",
-                width: "17rem",
-                fontFamily: "RalewayRegular",
-                fontWeight: "bold",
-                whiteSpace: "nowrap",
-                marginTop: "3px",
-                fontSize: "1rem",
-              }}
-              onClick={() => setMenu(5)}
-            >
-              V. ЦЭРГИЙН АЛБА <br /> ХААСАН ЭСЭХ
-            </button>
-          </div>
-          <div className="AnketList">
-            <img
-              src={menu === 6 ? BlueZurgaa : BlackZurgaa}
-              width="45px"
-              height="45px"
-            />
-            <button
-              className="button"
-              style={{
-                color: `${menu === 6 ? "#418ee6" : "#5d5d5d"}`,
-                border: "none",
-                width: "17rem",
-                fontFamily: "RalewayRegular",
-                fontWeight: "bold",
-                whiteSpace: "nowrap",
-                marginTop: "3px",
-                fontSize: "1rem",
-              }}
-              onClick={() => setMenu(6)}
-            >
-              VI. ШАГНАЛЫН <br />
-              ТАЛААРХ МЭДЭЭЛЭЛ
-            </button>
-          </div>
-          <div className="AnketList">
-            <img
-              src={menu === 7 ? BlueDoloo : BlackDoloo}
-              width="45px"
-              height="45px"
-            />
-            <button
-              className="button"
-              style={{
-                color: `${menu === 7 ? "#418ee6" : "#5d5d5d"}`,
-                border: "none",
-                width: "17rem",
-                fontFamily: "RalewayRegular",
-                fontWeight: "bold",
-                whiteSpace: "nowrap",
-                marginTop: "3px",
-                fontSize: "1rem",
-              }}
-              onClick={() => setMenu(7)}
-            >
-              VII. ТУРШЛАГЫН <br />
-              ТАЛААРХ МЭДЭЭЛЭЛ
-            </button>
-          </div>
-          <div className="AnketList">
-            <img
-              src={menu === 8 ? BlueNaim : BlackNaim}
-              width="45px"
-              height="45px"
-            />
-            <button
-              className="button"
-              style={{
-                color: `${menu === 8 ? "#418ee6" : "#5d5d5d"}`,
-                border: "none",
-                width: "17rem",
-                fontFamily: "RalewayRegular",
-                fontWeight: "bold",
-                whiteSpace: "nowrap",
-                marginTop: "3px",
-                fontSize: "1rem",
-              }}
-              onClick={() => setMenu(8)}
-            >
-              VIII. БҮТЭЭЛИЙН <br /> ЖАГСААЛТ
-            </button>
-          </div>
+          {localStorage.getItem("personDetail")?.includes("person_id") ? (
+            JSON.parse(localStorage.getItem("personDetail")).person_id ===
+            "0" ? null : (
+              <div>
+                <div className="AnketList">
+                  <img
+                    src={menu === 2 ? BlueKhoyor : BlackKhoyor}
+                    width="45px"
+                    height="45px"
+                  />
+                  <button
+                    className="button"
+                    style={{
+                      color: `${menu === 2 ? "#418ee6" : "#5d5d5d"}`,
+                      border: "none",
+                      width: "17rem",
+                      fontFamily: "RalewayRegular",
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      marginTop: "3px",
+                      fontSize: "1rem",
+                    }}
+                    onClick={() => setMenu(2)}
+                  >
+                    II. УР ЧАДВАРЫН <br />
+                    ТАЛААРХ МЭДЭЭЛЭЛ
+                  </button>
+                </div>
+                <div className="AnketList">
+                  <img
+                    src={menu === 3 ? BlueGurav : BlackGurav}
+                    width="45px"
+                    height="45px"
+                  />
+                  <button
+                    className="button"
+                    style={{
+                      color: `${menu === 3 ? "#418ee6" : "#5d5d5d"}`,
+                      border: "none",
+                      width: "17rem",
+                      fontFamily: "RalewayRegular",
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      marginTop: "3px",
+                      fontSize: "1rem",
+                    }}
+                    onClick={() => setMenu(3)}
+                  >
+                    III. БОЛОВСРОЛЫН <br />
+                    ТАЛААРХ МЭДЭЭЛЭЛ
+                  </button>
+                </div>
+                <div className="AnketList">
+                  <img
+                    src={menu === 4 ? BlueDuruv : BlackDuruv}
+                    width="45px"
+                    height="45px"
+                  />
+                  <button
+                    className="button"
+                    style={{
+                      color: `${menu === 4 ? "#418ee6" : "#5d5d5d"}`,
+                      border: "none",
+                      width: "17rem",
+                      fontFamily: "RalewayRegular",
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      marginTop: "3px",
+                      fontSize: "1rem",
+                    }}
+                    onClick={() => setMenu(4)}
+                  >
+                    IV. МЭРГЭШЛИЙН <br />
+                    ТАЛААРХ МЭДЭЭЛЭЛ
+                  </button>
+                </div>
+                <div className="AnketList">
+                  <img
+                    src={menu === 5 ? BlueTav : BlackTav}
+                    width="45px"
+                    height="45px"
+                  />
+                  <button
+                    className="button"
+                    style={{
+                      color: `${menu === 5 ? "#418ee6" : "#5d5d5d"}`,
+                      border: "none",
+                      width: "17rem",
+                      fontFamily: "RalewayRegular",
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      marginTop: "3px",
+                      fontSize: "1rem",
+                    }}
+                    onClick={() => setMenu(5)}
+                  >
+                    V. ЦЭРГИЙН АЛБА <br /> ХААСАН ЭСЭХ
+                  </button>
+                </div>
+                <div className="AnketList">
+                  <img
+                    src={menu === 6 ? BlueZurgaa : BlackZurgaa}
+                    width="45px"
+                    height="45px"
+                  />
+                  <button
+                    className="button"
+                    style={{
+                      color: `${menu === 6 ? "#418ee6" : "#5d5d5d"}`,
+                      border: "none",
+                      width: "17rem",
+                      fontFamily: "RalewayRegular",
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      marginTop: "3px",
+                      fontSize: "1rem",
+                    }}
+                    onClick={() => setMenu(6)}
+                  >
+                    VI. ШАГНАЛЫН <br />
+                    ТАЛААРХ МЭДЭЭЛЭЛ
+                  </button>
+                </div>
+                <div className="AnketList">
+                  <img
+                    src={menu === 7 ? BlueDoloo : BlackDoloo}
+                    width="45px"
+                    height="45px"
+                  />
+                  <button
+                    className="button"
+                    style={{
+                      color: `${menu === 7 ? "#418ee6" : "#5d5d5d"}`,
+                      border: "none",
+                      width: "17rem",
+                      fontFamily: "RalewayRegular",
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      marginTop: "3px",
+                      fontSize: "1rem",
+                    }}
+                    onClick={() => setMenu(7)}
+                  >
+                    VII. ТУРШЛАГЫН <br />
+                    ТАЛААРХ МЭДЭЭЛЭЛ
+                  </button>
+                </div>
+                <div className="AnketList">
+                  <img
+                    src={menu === 8 ? BlueNaim : BlackNaim}
+                    width="45px"
+                    height="45px"
+                  />
+                  <button
+                    className="button"
+                    style={{
+                      color: `${menu === 8 ? "#418ee6" : "#5d5d5d"}`,
+                      border: "none",
+                      width: "17rem",
+                      fontFamily: "RalewayRegular",
+                      fontWeight: "bold",
+                      whiteSpace: "nowrap",
+                      marginTop: "3px",
+                      fontSize: "1rem",
+                    }}
+                    onClick={() => setMenu(8)}
+                  >
+                    VIII. БҮТЭЭЛИЙН <br /> ЖАГСААЛТ
+                  </button>
+                </div>
+              </div>
+            )
+          ) : null}
         </div>
         <div
           style={{
@@ -695,7 +707,6 @@ function AnketNeg(props) {
                       loading={setLoading}
                     />
                   ) : null}
-                  )
                 </div>
               )
             ) : null}
@@ -712,7 +723,18 @@ function AnketNeg(props) {
 function Yrunkhii(props) {
   const alert = useAlert();
   const [data, loadData] = useState();
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
+  const [register, setRegister] = useState(0);
+  const cyrillicPattern = /^[\u0400-\u04FF]+$/;
 
+  async function personNoCheck(register) {
+    let listItems = await axios({
+      method: "POST",
+      url: "http://hr.audit.mn/hr/api/v1/personNoCheck",
+      data: { PERSON_REGISTER_NO: register },
+    });
+    setRegister(listItems?.data?.CNT);
+  }
   return (
     <div
       className=" box"
@@ -729,12 +751,14 @@ function Yrunkhii(props) {
           <span className="headerTextBold">Ерөнхий мэдээлэл</span>
         </div>
         <div className="column is-1 is-narrow-tablet">
-          <button
-            className="buttonTsenkher"
-            onClick={() => props.setEdit(!props.edit)}
-          >
-            Засварлах
-          </button>
+          {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            <button
+              className="buttonTsenkher"
+              onClick={() => props.setEdit(!props.edit)}
+            >
+              Засварлах
+            </button>
+          )}
         </div>
       </div>
       <div className="columns" style={{ marginBottom: "0px" }}>
@@ -828,14 +852,43 @@ function Yrunkhii(props) {
             placeholder="утгаа оруулна уу"
             disabled={props.edit}
             className="anketInput"
+            pattern="[а-я|А-Я|ө|Ө|ү|Ү]{2}[0-9]{8}"
+            style={{
+              borderBottom:
+                register > 0 || register === false ? "1px solid red" : "none",
+            }}
             value={props.data?.PERSON_REGISTER_NO}
-            onChange={(text) =>
+            onChange={async (text) => {
               props.loadData({
                 ...props.data,
                 ...{ PERSON_REGISTER_NO: text.target.value },
-              })
-            }
+              });
+              if (text.target.value.length === 10) {
+                if (
+                  cyrillicPattern.test(text.target.value.slice(0, 2)) &&
+                  /\d/.test(text.target.value.slice(2, 10))
+                ) {
+                  await personNoCheck(text.target.value);
+                } else setRegister(false);
+              } else {
+                setRegister(false);
+              }
+            }}
           />
+          {register > 0 ? (
+            <span
+              style={{ color: "red", fontSize: "0.6rem", marginLeft: "4px" }}
+            >
+              Бүртгэгдсэн байна!!!
+            </span>
+          ) : null}
+          {register === false ? (
+            <span
+              style={{ color: "red", fontSize: "0.6rem", marginLeft: "4px" }}
+            >
+              формат буруу байна
+            </span>
+          ) : null}
         </div>
         <div className="column is-3 has-text-right">
           <span style={{ color: "red" }}>*</span>
@@ -953,9 +1006,25 @@ function Yrunkhii(props) {
             >
               Хэвлэх
             </button> */}
-            <button className="buttonTsenkher" onClick={props.khadgalakhYo}>
-              Хадгалах
-            </button>
+
+            {register > 0 || register === false ? (
+              <button
+                style={{
+                  border: "none",
+                  fontFamily: "RalewayRegular",
+                  border: "#418ee6",
+                  borderRadius: "5px",
+                  padding: "8px",
+                  color: "white",
+                }}
+              >
+                Хадгалах
+              </button>
+            ) : (
+              <button className="buttonTsenkher" onClick={props.khadgalakhYo}>
+                Хадгалах
+              </button>
+            )}
           </div>
         ) : null}
       </div>
@@ -967,6 +1036,7 @@ function Kayag(props) {
   const [person, setPerson] = useState();
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
   useEffect(() => {
     async function fetchData() {
@@ -1074,14 +1144,16 @@ function Kayag(props) {
           <span className="headerTextBold">Хаягийн мэдээлэл</span>
         </div>
         <div className="column is-1">
-          <button
-            className="buttonTsenkher"
-            onClick={() => {
-              setEdit(!edit);
-            }}
-          >
-            Засварлах
-          </button>
+          {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            <button
+              className="buttonTsenkher"
+              onClick={() => {
+                setEdit(!edit);
+              }}
+            >
+              Засварлах
+            </button>
+          )}
         </div>
       </div>
       <div className="columns">
@@ -1276,6 +1348,7 @@ function Kayag(props) {
 }
 
 function HolbooBarikhHun(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [emergency, setEmergency] = useState();
   const [edit, setEdit] = useState(true);
   const [, forceRender] = useReducer((s) => s + 1, 0);
@@ -1483,9 +1556,11 @@ function HolbooBarikhHun(props) {
             </span>
           </div>
           <div className="column is-1">
-            <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
 
@@ -1646,6 +1721,7 @@ function HolbooBarikhHun(props) {
 }
 
 function GerBul(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [edit, setEdit] = useState(true);
   const [, forceRender] = useReducer((s) => s + 1, 0);
   const [data, loadData] = useState([]);
@@ -1658,7 +1734,12 @@ function GerBul(props) {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/family/" + props.person_id
       );
-      console.log(listItems, "family");
+      console.log("listItems.data.Family?", listItems.data.Family);
+      // listItems.data.Family?.map((value, index) => {
+      //   listItems.data.Family[index].MEMBER_BIRTHDATE = new Date(
+      //     value.MEMBER_BIRTHDATE
+      //   ).getFullYear();
+      // });
       loadData(listItems?.data.Family);
     }
     fetchData();
@@ -1687,7 +1768,20 @@ function GerBul(props) {
       ) {
         alert.show("Албан тушаал оруулан уу");
         return false;
-      } else if (i === value.length - 1) {
+      } else if (
+        value[i].MEMBER_BIRTHDATE === null ||
+        value[i].MEMBER_BIRTHDATE === ""
+      ) {
+        alert.show("огноо оруулан уу");
+        return false;
+      }
+      // if (
+      //   value[i].MEMBER_BIRTHDATE !== null &&
+      //   value[i].MEMBER_BIRTHDATE !== ""
+      // ) {
+      //   value[i].MEMBER_BIRTHDATE = value[i].MEMBER_BIRTHDATE + "-01-01";
+      // }
+      if (i === value.length - 1) {
         return true;
       }
     }
@@ -1704,7 +1798,7 @@ function GerBul(props) {
               MEMBER_ID: 1,
               MEMBER_LASTNAME: "",
               MEMBER_FIRSTNAME: "",
-              MEMBER_BIRTHDATE: dateFormat(new Date(), "yyyy-mm-dd"),
+              MEMBER_BIRTHDATE: "",
               OFFICE_ID: "1",
               SUB_OFFICE_ID: "1",
               MEMBER_ORG: "",
@@ -1727,7 +1821,7 @@ function GerBul(props) {
               MEMBER_TYPE: 2,
               MEMBER_LASTNAME: "",
               MEMBER_FIRSTNAME: "",
-              MEMBER_BIRTHDATE: dateFormat(new Date(), "yyyy-mm-dd"),
+              MEMBER_BIRTHDATE: "",
               OFFICE_ID: "1",
               SUB_OFFICE_ID: "1",
               MEMBER_ORG: "",
@@ -1752,7 +1846,7 @@ function GerBul(props) {
       MEMBER_ID: 1,
       MEMBER_LASTNAME: "",
       MEMBER_FIRSTNAME: "",
-      MEMBER_BIRTHDATE: dateFormat(new Date(), "yyyy-mm-dd"),
+      MEMBER_BIRTHDATE: "",
       OFFICE_ID: "1",
       SUB_OFFICE_ID: "1",
       MEMBER_ORG: "",
@@ -1776,7 +1870,7 @@ function GerBul(props) {
       MEMBER_ID: 1,
       MEMBER_LASTNAME: "",
       MEMBER_FIRSTNAME: "",
-      MEMBER_BIRTHDATE: dateFormat(new Date(), "yyyy-mm-dd"),
+      MEMBER_BIRTHDATE: "",
       OFFICE_ID: "1",
       SUB_OFFICE_ID: "1",
       MEMBER_ORG: "",
@@ -1901,7 +1995,7 @@ function GerBul(props) {
           });
       }
       if (oldRow?.length > 0) {
-        console.log("update", JSON.stringify(oldRow));
+        console.log("updateGerBul.", JSON.stringify(oldRow));
         DataRequest({
           url: "http://hr.audit.mn/hr/api/v1/family/",
           method: "PUT",
@@ -1983,15 +2077,17 @@ function GerBul(props) {
           </span>
         </div>
         <div className="column is-1">
-          <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
-            Засварлах
-          </button>
+          {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
+              Засварлах
+            </button>
+          )}
         </div>
       </div>
       <div className="columns">
         <div className="column is-12">
           <div className="table-container">
-            <table className="table is-bordered is-flex-wrap-wrap">
+            <table className="table is-bordered ">
               <tbody>
                 <tr>
                   <td rowspan="2">
@@ -2012,7 +2108,7 @@ function GerBul(props) {
                     <span className="textSaaral">Гэр бүлийн гишүүний нэр</span>
                   </td>
                   <td rowspan="2">
-                    <span className="textSaaral">Төрсөн он, сар, өдөр</span>
+                    <span className="textSaaral">Төрсөн он</span>
                   </td>
                   <td rowspan="2">
                     <span className="textSaaral">Төрсөн аймаг, хот</span>
@@ -2024,19 +2120,15 @@ function GerBul(props) {
                     <span className="textSaaral">Одоо эрхэлж буй ажил</span>
                   </td>
                   {!edit ? (
-                    <td
-                      rowspan="2"
-                      style={{ border: "none", width: "80px", paddingLeft: 0 }}
-                    >
-                      <img
-                        src={Add}
-                        width="`30px"
-                        height="30px"
-                        onClick={() => addRowFamily()}
-                      />
-                      <input
-                        style={{ width: "40px", visibility: "hidden" }}
-                      ></input>
+                    <td rowspan="2" style={{ border: "none", paddingLeft: 0 }}>
+                      <div style={{ width: "35px", height: "35px" }}>
+                        <img
+                          src={Add}
+                          width="`15px"
+                          height="15px"
+                          onClick={() => addRowFamily()}
+                        />
+                      </div>
                     </td>
                   ) : null}
                 </tr>
@@ -2069,8 +2161,7 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
-                        style={{ width: "100px" }}
-                        className="anketInput"
+                        className="anketInputWidth"
                         value={value.MEMBER_LASTNAME}
                         onChange={(e) => {
                           family[index].MEMBER_LASTNAME = e.target.value;
@@ -2088,8 +2179,7 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
-                        className="anketInput"
-                        style={{ width: "110px" }}
+                        className="anketInputWidth"
                         value={value.MEMBER_FIRSTNAME}
                         onChange={(e) => {
                           family[index].MEMBER_FIRSTNAME = e.target.value;
@@ -2106,21 +2196,34 @@ function GerBul(props) {
                     <td>
                       {" "}
                       <input
-                        placeholder="утгаа оруулна уу"
-                        type="date"
-                        style={{ width: "120px" }}
+                        type="number"
+                        pattern="[0-9]{4}"
                         disabled={edit}
-                        className="anketInput"
-                        value={dateFormat(value.MEMBER_BIRTHDATE, "yyyy-mm-dd")}
+                        className="anketInputWidth"
+                        value={value.MEMBER_BIRTHDATE}
                         onChange={(e) => {
-                          family[index].MEMBER_BIRTHDATE = e.target.value;
-                          family[index].UPDATED_BY = userDetils?.USER_ID;
-                          family[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          setFamily(family);
-                          forceRender();
+                          if (e.target.value != "") {
+                            console.log("testInput", e.target.value);
+                            if (parseInt(e.target.value) <= parseInt(2100)) {
+                              family[index].MEMBER_BIRTHDATE = e.target.value;
+                              family[index].UPDATED_BY = userDetils?.USER_ID;
+                              family[index].UPDATED_DATE = dateFormat(
+                                new Date(),
+                                "dd-mmm-yy"
+                              );
+                              setFamily(family);
+                              forceRender();
+                            }
+                          } else {
+                            family[index].MEMBER_BIRTHDATE = e.target.value;
+                            family[index].UPDATED_BY = userDetils?.USER_ID;
+                            family[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            setFamily(family);
+                            forceRender();
+                          }
                         }}
                       />
                     </td>
@@ -2148,7 +2251,7 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
-                        className="anketInput"
+                        className="anketInputWidth"
                         value={value.MEMBER_ORG}
                         onChange={(e) => {
                           family[index].MEMBER_ORG = e.target.value;
@@ -2166,7 +2269,7 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
-                        className="anketInput"
+                        className="anketInputWidth"
                         value={value.MEMBER_POSITION}
                         onChange={(e) => {
                           family[index].MEMBER_POSITION = e.target.value;
@@ -2185,13 +2288,12 @@ function GerBul(props) {
                         style={{
                           paddingLeft: "0px",
                           borderColor: "transparent",
-                          width: "70px",
                         }}
                       >
                         <img
                           src={Delete}
-                          width="40px"
-                          height="40px"
+                          width="30px"
+                          height="30px"
                           onClick={() => removeFamily(index, value)}
                         />
                         <input
@@ -2253,19 +2355,17 @@ function GerBul(props) {
                       rowspan="2"
                       style={{
                         border: "none",
-                        width: "50px",
                         paddingLeft: "0px",
                       }}
                     >
-                      <img
-                        src={Add}
-                        width="`30px"
-                        height="30px"
-                        onClick={() => addRowFamily2()}
-                      />
-                      <input
-                        style={{ width: "40px", visibility: "hidden" }}
-                      ></input>
+                      <div style={{ width: "35px", height: "35px" }}>
+                        <img
+                          src={Add}
+                          width="`30px"
+                          height="30px"
+                          onClick={() => addRowFamily2()}
+                        />
+                      </div>
                     </td>
                   ) : null}
                 </tr>
@@ -2298,7 +2398,7 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
-                        className="anketInput"
+                        className="anketInputWidth"
                         value={value.MEMBER_LASTNAME}
                         onChange={(e) => {
                           family2[index].MEMBER_LASTNAME = e.target.value;
@@ -2316,7 +2416,7 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
-                        className="anketInput"
+                        className="anketInputWidth"
                         style={{ width: "110px" }}
                         value={value.MEMBER_FIRSTNAME}
                         onChange={(e) => {
@@ -2334,21 +2434,34 @@ function GerBul(props) {
                     <td>
                       {" "}
                       <input
-                        type="date"
+                        type="number"
+                        pattern="[0-9]{4}"
                         style={{ width: "120px" }}
                         disabled={edit}
-                        min="01-02-1920"
-                        className="anketInput"
-                        value={dateFormat(value.MEMBER_BIRTHDATE, "yyyy-mm-dd")}
+                        className="anketInputWidth"
+                        value={value.MEMBER_BIRTHDATE}
                         onChange={(e) => {
-                          family2[index].MEMBER_BIRTHDATE = e.target.value;
-                          family2[index].UPDATED_BY = userDetils?.USER_ID;
-                          family2[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          setFamily2(family2);
-                          forceRender();
+                          if (e.target.value != "") {
+                            if (parseInt(e.target.value) <= parseInt(2100)) {
+                              family2[index].MEMBER_BIRTHDATE = e.target.value;
+                              family2[index].UPDATED_BY = userDetils?.USER_ID;
+                              family2[index].UPDATED_DATE = dateFormat(
+                                new Date(),
+                                "dd-mmm-yy"
+                              );
+                              setFamily2(family2);
+                              forceRender();
+                            }
+                          } else {
+                            family2[index].MEMBER_BIRTHDATE = e.target.value;
+                            family2[index].UPDATED_BY = userDetils?.USER_ID;
+                            family2[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            setFamily2(family2);
+                            forceRender();
+                          }
                         }}
                       />
                     </td>
@@ -2376,7 +2489,7 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
-                        className="anketInput"
+                        className="anketInputWidth"
                         value={value.MEMBER_ORG}
                         onChange={(e) => {
                           family2[index].MEMBER_ORG = e.target.value;
@@ -2394,7 +2507,7 @@ function GerBul(props) {
                       <input
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
-                        className="anketInput"
+                        className="anketInputWidth"
                         style={{ width: "110px" }}
                         value={value.MEMBER_POSITION}
                         onChange={(e) => {
@@ -2422,9 +2535,6 @@ function GerBul(props) {
                           height="40px"
                           onClick={() => removeFamily2(index, value)}
                         />
-                        <input
-                          style={{ width: "30px", visibility: "hidden" }}
-                        ></input>
                       </td>
                     ) : null}
                   </tr>

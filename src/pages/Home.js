@@ -1,19 +1,30 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useReducer } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Search, Filter, AddBlue, Excel } from "../assets/images/zurag";
+import { Search, Filter, AddBlue, Excel, Print } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import dateFormat from "dateformat";
 import { css } from "@emotion/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import AnketAPrint from "./AnketAPrint";
 
-const userDetils = JSON.parse(localStorage.getItem("userDetails"));
+import { useReactToPrint } from "react-to-print";
+
 const axios = require("axios");
 
+class ComponentToPrint extends React.PureComponent {
+  render() {
+    return (
+      <div>
+        <AnketAPrint print={this.props.print} />
+      </div>
+    );
+  }
+}
 createTheme("solarized", {
   text: {
     primary: "gray",
@@ -64,6 +75,7 @@ const customStyles = {
 function Home(props) {
   const history = useHistory();
   const [jagsaalt, setJagsaalt] = useState();
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, setData] = useState();
   const [search, setSearch] = useState("");
   const [searchType, setSearchType] = useState("PERSON_FIRSTNAME");
@@ -71,7 +83,18 @@ function Home(props) {
   const alert = useAlert();
   const [loading, setLoading] = useState(true);
   const [buttonValue, setButtonValue] = useState(1);
-
+  const componentRef = useRef(null);
+  const [, forceRender] = useReducer((s) => s + 1, 0);
+  const [print, setPrint] = useState({
+    print: 0,
+    person_ID: null,
+    emp_ID: null,
+    buttonValue: 1,
+  });
+  const [draw, setDraw] = useState();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
   const override = css`
     display: block;
     margin: 0 auto;
@@ -84,24 +107,34 @@ function Home(props) {
   async function unActive() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/employees/0",
+      url:
+        "http://hr.audit.mn/hr/api/v1/employees/0/" +
+        userDetils?.USER_DEPARTMENT_ID +
+        "/" +
+        userDetils?.USER_TYPE_NAME.toUpperCase(),
       method: "GET",
       data: {},
     });
     setJagsaalt(jagsaalts?.data);
     setLoading(false);
     setButtonValue(2);
+    setSearch("");
   }
   async function Active() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/employees/1",
+      url:
+        "http://hr.audit.mn/hr/api/v1/employees/1/" +
+        userDetils?.USER_DEPARTMENT_ID +
+        "/" +
+        userDetils?.USER_TYPE_NAME.toUpperCase(),
       method: "GET",
       data: {},
     });
     setJagsaalt(jagsaalts?.data);
     setLoading(false);
     setButtonValue(1);
+    setSearch("");
   }
   async function newPeople() {
     setLoading(true);
@@ -113,20 +146,85 @@ function Home(props) {
     setJagsaalt(jagsaalts?.data);
     setLoading(false);
     setButtonValue(3);
+    setSearch("");
   }
 
   useEffect(() => {
     async function test() {
-      let jagsaalts = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/employees/1",
-        method: "GET",
-        data: {},
-      });
-      setJagsaalt(jagsaalts?.data);
-      setLoading(false);
+      if (
+        props.match?.params != undefined &&
+        JSON.parse(props.match?.params?.search)?.buttonValue === 2
+      ) {
+        let jagsaalts = await DataRequest({
+          url:
+            "http://hr.audit.mn/hr/api/v1/employees/0/" +
+            userDetils?.USER_DEPARTMENT_ID +
+            "/" +
+            userDetils?.USER_TYPE_NAME.toUpperCase(),
+          method: "GET",
+          data: {},
+        });
+        setJagsaalt(jagsaalts?.data);
+        setLoading(false);
+        setButtonValue(2);
+        if (
+          props.match.params.search != undefined &&
+          props.match.params.search != "null"
+        ) {
+          let ob = JSON.parse(props.match.params.search);
+
+          setSearchType(ob.searchType);
+          makeSearch(ob.search, jagsaalts?.data, ob.searchType);
+        }
+        console.log(jagsaalts);
+      } else if (
+        props.match?.params != undefined &&
+        JSON.parse(props.match?.params?.search)?.buttonValue === 3
+      ) {
+        let jagsaalts = await DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/person/1/",
+          method: "GET",
+          data: {},
+        });
+        setJagsaalt(jagsaalts?.data);
+        setLoading(false);
+        setButtonValue(3);
+        if (
+          props.match.params.search != undefined &&
+          props.match.params.search != "null"
+        ) {
+          let ob = JSON.parse(props.match?.params.search);
+
+          setSearchType(ob.searchType);
+          makeSearch(ob.search, jagsaalts?.data, ob.searchType);
+        }
+        console.log(jagsaalts);
+      } else {
+        let jagsaalts = await DataRequest({
+          url:
+            "http://hr.audit.mn/hr/api/v1/employees/1/" +
+            userDetils?.USER_DEPARTMENT_ID +
+            "/" +
+            userDetils?.USER_TYPE_NAME.toUpperCase(),
+          method: "GET",
+          data: {},
+        });
+        setLoading(false);
+        setJagsaalt(jagsaalts?.data);
+        console.log("ob", props);
+        if (
+          props.match?.params.search != undefined &&
+          props.match?.params.search != "null"
+        ) {
+          let ob = JSON.parse(props.match.params.search);
+
+          setSearchType(ob.searchType);
+          makeSearch(ob.search, jagsaalts?.data, ob.searchType);
+        }
+      }
     }
+
     test();
-    console.log("jagsaalt", jagsaalt);
   }, [props]);
 
   const handleChange = (state) => {
@@ -157,12 +255,28 @@ function Home(props) {
   };
 
   async function anketA() {
-    if (data?.checked === true) history.push("/web/anketA/1");
-    else alert.show("Албан тушаалтан сонго");
+    if (data?.checked === true)
+      history.push(
+        "/web/anketA/" +
+          JSON.stringify({
+            search: search,
+            searchType: searchType,
+            buttonValue: buttonValue,
+          })
+      );
+    else alert.show("Ажилтан сонгон уу");
   }
   async function anketB() {
-    if (data?.checked === true) history.push("/web/anketB/1");
-    else alert.show("Албан тушаалтан сонго");
+    if (data?.checked === true)
+      history.push(
+        "/web/anketB/" +
+          JSON.stringify({
+            search: search,
+            searchType: searchType,
+            buttonValue: buttonValue,
+          })
+      );
+    else alert.show("Ажилтан сонгон уу");
   }
 
   async function anketANew() {
@@ -174,13 +288,26 @@ function Home(props) {
       JSON.stringify({ person_id: "0", type: "newPerson" })
     );
 
-    history.push("/web/anketA/1");
+    history.push(
+      "/web/anketA/" +
+        JSON.stringify({
+          search: search,
+          searchType: searchType,
+          buttonValue: buttonValue,
+        })
+    );
   }
 
-  function makeSearch(value) {
+  function makeSearch(value, list, stype) {
     setSearch(value);
 
-    let found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
+    let found;
+    if (jagsaalt != undefined) {
+      found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
+    } else {
+      console.log("searchjagsaalt", searchType);
+      found = list?.filter((obj) => equalStr(obj[stype], value));
+    }
     console.log(found);
     if (found != undefined && found.length > 0) setFound(found);
     else setFound([]);
@@ -204,71 +331,275 @@ function Home(props) {
       } else if (value1.includes(value2)) return true;
     return false;
   }
+  useEffect(() => {
+    if (print.print !== 0) {
+      window.setTimeout(handlePrint(), 3000);
+      console.log("itworket", print);
+    }
+  }, [print]);
 
-  const columns = [
+  const columns =
+    buttonValue === 1
+      ? [
+          {
+            name: "№",
+            selector: (row, index) => {
+              return index + 1;
+            },
+            sortable: true,
+            width: "40px",
+          },
+          {
+            name: "Төрийн аудитын байгууллага",
+            selector: "DEPARTMENT_NAME",
+            sortable: true,
+            width: "200px",
+          },
+          {
+            name: "Харъяа газар",
+            selector: "SUB_DEPARTMENT_NAME",
+            sortable: true,
+            width: "290px",
+          },
+          {
+            name: "Дотоод бүтцийн нэгж",
+            selector: "COMPARTMENT_NAME",
+            sortable: true,
+          },
+          {
+            name: "Албан тушаалын нэр",
+            selector: "POSITION_NAME",
+            sortable: true,
+          },
+          {
+            name: "Ажилтны нэр",
+            selector: "PERSON_FIRSTNAME",
+            sortable: true,
+          },
+          {
+            name: "Ажилтны овог",
+            selector: "PERSON_LASTNAME",
+            sortable: true,
+          },
+          {
+            name: "Утасны дугаар",
+            selector: "PERSON_PHONE",
+            sortable: true,
+          },
+          {
+            name: "Имэйл",
+            selector: "PERSON_EMAIL",
+            sortable: true,
+          },
+          {
+            name: "Анкет А",
+            selector: "4",
+            width: "60px",
+            cell: (row) => (
+              <div>
+                <img
+                  src={Print}
+                  width="20px"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setPrint({
+                      print: 1,
+                      person_ID:
+                        row?.EMP_PERSON_ID != undefined &&
+                        row?.EMP_PERSON_ID !== null
+                          ? row?.EMP_PERSON_ID
+                          : row?.PERSON_ID,
+                      emp_ID: row?.EMP_ID,
+                      buttonValue: buttonValue,
+                    });
+                    forceRender();
+                  }}
+                />
+              </div>
+            ),
+
+            center: true,
+          },
+          // {
+          //   name: "Анкет Б",
+          //   width: "60px",
+          //   cell: (row) => (
+          //     <div>
+          //       <button
+          //         onClick={() => {
+          //           setPrint({
+          //             print: 1,
+          //             person_ID: row.PERSON_ID,
+          //             emp_ID: row?.EMP_ID,
+          //           });
+          //         }}
+          //       >
+          //         hide
+          //       </button>
+          //     </div>
+          //   ),
+          //   sortable: true,
+          //   center: true,
+          // },
+        ]
+      : buttonValue === 2
+      ? [
+          {
+            name: "№",
+            selector: (row, index) => {
+              return index + 1;
+            },
+            sortable: true,
+            width: "40px",
+          },
+          {
+            name: "Төрийн аудитын байгууллага",
+            selector: "DEPARTMENT_NAME",
+            sortable: true,
+            width: "200px",
+          },
+          {
+            name: "Харъяа газар",
+            selector: "SUB_DEPARTMENT_NAME",
+            sortable: true,
+            width: "290px",
+          },
+          {
+            name: "Дотоод бүтцийн нэгж",
+            selector: "COMPARTMENT_NAME",
+            sortable: true,
+          },
+          {
+            name: "Албан тушаалын нэр",
+            selector: "POSITION_NAME",
+            sortable: true,
+          },
+          {
+            name: "Ажилтны нэр",
+            selector: "PERSON_FIRSTNAME",
+            sortable: true,
+          },
+          {
+            name: "Ажилтны овог",
+            selector: "PERSON_LASTNAME",
+            sortable: true,
+          },
+          {
+            name: "Төлөв",
+            selector: "STATUS_NAME",
+            sortable: true,
+          },
+
+          {
+            name: "Анкет А",
+            selector: "4",
+
+            center: true,
+          },
+          {
+            name: "Анкет Б",
+            selector: "6",
+            sortable: true,
+            center: true,
+          },
+        ]
+      : [
+          {
+            name: "№",
+            selector: (row, index) => {
+              return index + 1;
+            },
+            sortable: true,
+            width: "40px",
+          },
+
+          {
+            name: "Ажилтны нэр",
+            selector: "PERSON_FIRSTNAME",
+            sortable: true,
+          },
+          {
+            name: "Ажилтны овог",
+            selector: "PERSON_LASTNAME",
+            sortable: true,
+          },
+          {
+            name: "Утасны дугаар",
+            selector: "PERSON_PHONE",
+            sortable: true,
+          },
+          {
+            name: "Имэйл",
+            selector: "PERSON_EMAIL",
+            sortable: true,
+          },
+          {
+            name: "Анкет А",
+            selector: "4",
+            cell: (row) => (
+              <div>
+                <img
+                  src={Print}
+                  width="20px"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    setPrint({
+                      print: 1,
+                      person_ID:
+                        row?.EMP_PERSON_ID != undefined &&
+                        row?.EMP_PERSON_ID !== null
+                          ? row?.EMP_PERSON_ID
+                          : row?.PERSON_ID,
+                      emp_ID: row?.EMP_ID,
+
+                      buttonValue: buttonValue,
+                    });
+                    forceRender();
+                  }}
+                />
+              </div>
+            ),
+            center: true,
+          },
+        ];
+
+  const columnsReactTable = React.useMemo(() => [
     {
-      name: "№",
-      selector: (row, index) => {
-        return index + 1;
-      },
-      sortable: true,
-      width: "40px",
+      Header: "Төрийн аудитын байгууллага",
+      accessor: "DEPARTMENT_NAME",
     },
     {
-      name: "Газар нэгж",
-      selector: "EMP_DEPARTMENT_NAME",
-      sortable: true,
-      width: "200px",
+      Header: "Харъяа газар",
+      accessor: "SUB_DEPARTMENT_NAME",
     },
     {
-      name: "Хэлтэс",
-      selector: "EMP_SUBDEPARTMENT_NAME",
-      sortable: true,
-      width: "290px",
+      Header: "Дотоод бүтцийн нэгж",
+      accessor: "COMPARTMENT_NAME",
     },
     {
-      name: "Албан тушаал",
-      selector: "EMP_ROLE_NAME",
-      sortable: true,
+      Header: "Албан тушаалын нэр",
+      accessor: "POSITION_NAME",
     },
     {
-      name: "Ажилтны нэр",
-      selector: "PERSON_FIRSTNAME",
-      sortable: true,
+      Header: "Ажилтны нэр",
+      accessor: "PERSON_FIRSTNAME",
     },
     {
-      name: "Ажилтны овог",
-      selector: "PERSON_LASTNAME",
-      sortable: true,
+      Header: "Ажилтны овог",
+      accessor: "PERSON_LASTNAME",
     },
     {
-      name: "Ажилтны төрөл",
-      selector: "EMP_COMPARTMENT_NAME",
-      sortable: true,
+      Header: "Утасны дугаар",
+      accessor: "PERSON_PHONE",
     },
     {
-      name: "Утасны дугаар",
-      selector: "PERSON_PHONE",
-      sortable: true,
+      Header: "Имэйл",
+      accessor: "PERSON_EMAIL",
     },
-    {
-      name: "Имэйл",
-      selector: "PERSON_EMAIL",
-      sortable: true,
-    },
-    {
-      name: "Анкет А",
-      selector: "4",
-      sortable: true,
-      center: true,
-    },
-    {
-      name: "Анкет Б",
-      selector: "6",
-      sortable: true,
-      center: true,
-    },
-  ];
+  ]);
+
+  // const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+  //   useTable({ columns, jagsaalt });
 
   return (
     <div
@@ -291,6 +622,16 @@ function Home(props) {
       >
         <div
           style={{
+            display: "none",
+            width: 0,
+            height: 0,
+            position: "absolute",
+          }}
+        >
+          <ComponentToPrint ref={componentRef} print={print} />
+        </div>
+        <div
+          style={{
             marginTop: "10px",
             display: "flex",
             borderColor: "gray",
@@ -303,8 +644,8 @@ function Home(props) {
           <button
             className="button is-focused"
             style={{
-              backgroundColor: "#418ee6",
-              color: "white",
+              backgroundColor: buttonValue === 1 ? "#418ee6" : "white",
+              color: buttonValue === 1 ? "white" : "black",
               borderColor: "#418ee6",
               borderStyle: "solid",
               border: "2px",
@@ -318,12 +659,13 @@ function Home(props) {
           >
             Идэвхтэй
           </button>
+
           <button
             className="button is-focused"
             style={{
-              backgroundColor: "transparent",
+              backgroundColor: buttonValue === 2 ? "#418ee6" : "white",
+              color: buttonValue === 2 ? "white" : "black",
               borderColor: "#418ee6",
-              color: "black",
               borderStyle: "solid",
               borderRadius: "5px",
               width: "12rem",
@@ -339,9 +681,9 @@ function Home(props) {
           <button
             className="button is-focused"
             style={{
-              backgroundColor: "transparent",
+              backgroundColor: buttonValue === 3 ? "#418ee6" : "white",
+              color: buttonValue === 3 ? "white" : "black",
               borderColor: "#418ee6",
-              color: "black",
               borderStyle: "solid",
               borderRadius: "5px",
               width: "12rem",
@@ -354,27 +696,8 @@ function Home(props) {
           >
             Шинэ
           </button>
-          <div style={{ position: "absolute", right: "3rem" }}>
-            <button
-              className="button is-focused"
-              style={{
-                backgroundColor: "#418ee6",
-                color: "white",
-                borderColor: "#418ee6",
-                borderStyle: "solid",
-                border: "2px",
-                borderRadius: "5px",
-                width: "12rem",
-                height: "2.1rem",
-                fontFamily: "RalewaySemiBold",
-                fontSize: "1rem",
-              }}
-              onClick={anketA}
-            >
-              АНКЕТ А ХЭСЭГ
-            </button>
-
-            {buttonValue === 1 || buttonValue === 2 ? (
+          {
+            <div style={{ position: "absolute", right: "3rem" }}>
               <button
                 className="button is-focused"
                 style={{
@@ -388,14 +711,35 @@ function Home(props) {
                   height: "2.1rem",
                   fontFamily: "RalewaySemiBold",
                   fontSize: "1rem",
-                  marginLeft: "0.5rem",
                 }}
-                onClick={() => anketB()}
+                onClick={anketA}
               >
-                АНКЕТ Б ХЭСЭГ
+                АНКЕТ А ХЭСЭГ
               </button>
-            ) : null}
-          </div>
+
+              {buttonValue === 1 || buttonValue === 2 ? (
+                <button
+                  className="button is-focused"
+                  style={{
+                    backgroundColor: "#418ee6",
+                    color: "white",
+                    borderColor: "#418ee6",
+                    borderStyle: "solid",
+                    border: "2px",
+                    borderRadius: "5px",
+                    width: "12rem",
+                    height: "2.1rem",
+                    fontFamily: "RalewaySemiBold",
+                    fontSize: "1rem",
+                    marginLeft: "0.5rem",
+                  }}
+                  onClick={() => anketB()}
+                >
+                  АНКЕТ Б ХЭСЭГ
+                </button>
+              ) : null}
+            </div>
+          }
         </div>
         <div
           style={{
@@ -409,14 +753,33 @@ function Home(props) {
                 value={searchType}
                 onChange={(text) => setSearchType(text.target.value)}
               >
-                <option value={"EMP_DEPARTMENT_NAME"}>Газар нэгж</option>
-                <option value={"EMP_SUBDEPARTMENT_NAME"}>Хэлтэс</option>
-                <option value={"EMP_ROLE_NAME"}>Албан тушаал</option>
+                {" "}
+                {buttonValue !== 3 ? (
+                  <option value={"DEPARTMENT_NAME"}>
+                    Төрийн аудитын байгууллага
+                  </option>
+                ) : null}
+                {buttonValue !== 3 ? (
+                  <option value={"SUB_DEPARTMENT_NAME"}>Харъяа газар</option>
+                ) : null}
+                {buttonValue !== 3 ? (
+                  <option value={"COMPARTMENT_NAME"}>
+                    Дотоод бүтцийн нэгж
+                  </option>
+                ) : null}
+                {buttonValue !== 3 ? (
+                  <option value={"POSITION_NAME"}>Албан тушаалын нэр</option>
+                ) : null}
                 <option value={"PERSON_FIRSTNAME"}>Ажилтны нэр</option>
                 <option value={"PERSON_LASTNAME"}>Ажилтны овог</option>
-                <option value={"EMP_COMPARTMENT_NAME"}>Ажилтны төрөл</option>
-                <option value={"PERSON_PHONE"}>Утасны дугаар</option>
-                <option value={"PERSON_EMAIL"}>Имэйл</option>
+                {buttonValue === 2 ? (
+                  <option value={"STATUS_NAME"}>Төлөв</option>
+                ) : (
+                  <option value={"PERSON_PHONE"}>Утасны дугаар</option>
+                )}
+                {buttonValue === 2 ? null : (
+                  <option value={"PERSON_EMAIL"}>Имэйл</option>
+                )}
               </select>
               {/* 
               <span class="icon is-small is-right">
@@ -442,24 +805,26 @@ function Home(props) {
               <span class="icon is-small is-right"></span>
             </div>
 
-            <button
-              class="text"
-              style={{
-                marginLeft: "1%",
-                borderRadius: "5px",
-                backgroundColor: "#b8e6f3",
-                color: "#000",
-                border: "0px",
-              }}
-              onClick={() => {
-                anketANew();
-              }}
-            >
-              {" "}
-              <span style={{ display: "flex", paddingRight: "22px" }}>
-                <img src={AddBlue} width="20px" height="20px "></img>Нэмэх
-              </span>
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                class="text"
+                style={{
+                  marginLeft: "1%",
+                  borderRadius: "5px",
+                  backgroundColor: "#b8e6f3",
+                  color: "#000",
+                  border: "0px",
+                }}
+                onClick={() => {
+                  anketANew();
+                }}
+              >
+                {" "}
+                <span style={{ display: "flex", paddingRight: "22px" }}>
+                  <img src={AddBlue} width="20px" height="20px "></img>Нэмэх
+                </span>
+              </button>
+            )}
 
             <button
               class="text"
@@ -479,29 +844,82 @@ function Home(props) {
             <EmployExcel />
           </div>
         </div>
+        <iframe
+          id="ifmcontentstoprint"
+          style={{
+            height: "0px",
+            width: "0px",
+            position: "absolute",
+          }}
+        ></iframe>
         <DataTable
           columns={columns}
           data={search === "" ? jagsaalt : found}
           theme="solarized"
           customStyles={customStyles}
-          pagination={true}
-          paginationPerPage={10}
           noDataComponent="мэдээлэл байхгүй байна"
           selectableRows // add for checkbox selection
           Clicked
           onSelectedRowsChange={handleChange}
           noHeader={true}
           fixedHeader={true}
+          responsive={true}
           overflowY={true}
           overflowYOffset={"390px"}
+          pagination={true}
+          paginationPerPage={10}
           paginationComponentOptions={{
             rowsPerPageText: "Хуудас:",
-            rangeSeparatorText: "of",
+            rangeSeparatorText: "нийт:",
             noRowsPerPage: false,
             selectAllRowsItem: false,
             selectAllRowsItemText: "All",
           }}
         />
+        {/* <table {...getTableProps()} style={{ border: "solid 1px blue" }}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th
+                    {...column.getHeaderProps()}
+                    style={{
+                      borderBottom: "solid 3px red",
+                      background: "aliceblue",
+                      color: "black",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {column.render("Header")}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td
+                        {...cell.getCellProps()}
+                        style={{
+                          padding: "10px",
+                          border: "solid 1px gray",
+                          background: "papayawhip",
+                        }}
+                      >
+                        {cell.render("Cell")}
+                      </td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table> */}
       </div>
       <div className="sweet-loading">
         <ScaleLoader
@@ -603,4 +1021,5 @@ function EmployExcel(props) {
   }
   return listItems;
 }
+
 export default Home;

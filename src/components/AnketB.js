@@ -33,10 +33,9 @@ import { Salarytype } from "./library";
 const axios = require("axios");
 
 var dateFormat = require("dateformat");
-const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
 function AnketB(props) {
-  console.log("anketB", JSON.parse(localStorage.getItem("personDetail")));
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [menu, setMenu] = useState(1);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -56,6 +55,7 @@ function AnketB(props) {
           textAlign: "center",
           borderRight: "1px solid #ececec",
           height: "100hv",
+          overflow: "scroll",
         }}
       >
         <div
@@ -77,12 +77,14 @@ function AnketB(props) {
               pointerEvents: "initial",
               textDecoration: "underline",
             }}
-            onClick={() => history.push("/web/workerlist", { back: true })}
+            onClick={() =>
+              history.push("/web/workerlist/" + props.match.params.search)
+            }
           >
             {"<  Буцах"}
           </button>
         </div>
-        <div style={{ marginTop: "7rem" }}>
+        <div style={{ marginTop: "10%" }}>
           <img src={AvatarB} width="120px" height="120px" />
         </div>
         <div
@@ -331,6 +333,7 @@ function AnketB(props) {
 }
 
 function AlbanTushaal(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [turul, setTurul] = useState("urdun");
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
@@ -572,11 +575,12 @@ function AlbanTushaal(props) {
                           }}
                         />
                       </td>
+
                       <td>
                         <input
                           disabled={edit}
                           className="Borderless"
-                          value={value.POSITION_LEVEL_NAME}
+                          value={value.COMPARTMENT_NAME}
                           onChange={(text) => {
                             let value = [...data];
                             value[index].POSITION_SALARY = text.target.value;
@@ -593,10 +597,11 @@ function AlbanTushaal(props) {
                         <input
                           disabled={edit}
                           className="Borderless"
-                          value={value.COMPARTMENT_NAME}
+                          value={value.POSITION_LEVEL_NAME}
                           onChange={(text) => {
                             let value = [...data];
-                            value[index].POSITION_SALARY = text.target.value;
+                            value[index].POSITION_LEVEL_NAME =
+                              text.target.value;
                             value[index].UPDATED_BY = userDetils?.USER_ID;
                             value[index].UPDATED_DATE = dateFormat(
                               new Date(),
@@ -675,12 +680,211 @@ function AlbanTushaal(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна...</p>;
+    listItems = (
+      <div>
+        <div
+          className="box"
+          style={{
+            marginTop: "80px",
+            width: "98%",
+            height: "auto",
+            marginLeft: "15px",
+            paddingBottom: "2.5rem",
+          }}
+        >
+          <div className="columns">
+            <div className="column is-11">
+              <span style={{ color: "#418ee6", fontWeight: "bold" }}>Нэг.</span>{" "}
+              <span style={{ fontWeight: "bold" }}>Үндсэн мэдээлэл</span>
+            </div>
+            <div className="column is-1"></div>
+            <div className="column is-1"></div>
+          </div>
+          <div className="columns">
+            <div className="column is-3  has-text-right">Байгууллагын нэр</div>
+            <div className="column is-2">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+              ></input>
+            </div>
+            <div className="column is-3 has-text-right">Газар, нэгжийн нэр</div>
+            <div className="column is-4 ">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+              ></input>
+            </div>
+          </div>
+          <div className="columns">
+            <div className="column is-3  has-text-right">
+              Алба, хэлтэсийн нэр{" "}
+            </div>
+            <div className="column is-2">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+              ></input>
+            </div>
+            <div className="column is-3 has-text-right">
+              Албан тушаалын түвшин
+            </div>
+            <div className="column is-4 ">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+              ></input>
+            </div>
+          </div>
+
+          <div className="columns">
+            <div className="column is-3  has-text-right">
+              Албан тушаалын нэр{" "}
+            </div>
+            <div className="column is-2">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+              ></input>
+            </div>
+            <div className="column is-3  has-text-right">
+              Тушаалын хэрэгжих огноо
+            </div>
+            <div className="column is-4 ">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+              ></input>
+            </div>
+          </div>
+
+          <div className="columns">
+            <div className="column is-3  has-text-right">
+              Албан тушаалын ангилал
+            </div>
+            <div className="column is-2">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+              ></input>
+            </div>
+            <div className="column is-3 has-text-right">
+              Тушаал бүртгэсэн огноо
+            </div>
+            <div className="column is-4 ">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+              ></input>
+            </div>
+          </div>
+
+          <div className="columns">
+            <div
+              className="column is-3  has-text-right"
+              style={{ marginBottom: "0px" }}
+            >
+              Албан тушаалын дугаар
+            </div>
+            <div className="column is-2">
+              <input
+                style={{ border: "2px solid silver", width: "15rem" }}
+              ></input>
+            </div>
+            {/* <div className="column is-3 has-text-right">
+            Тушаал бүртгэсэн ажилтан
+          </div>
+          <div className="column is-4 ">
+            <input
+              style={{
+                border: "2px solid silver",
+                width: "15rem",
+              }}
+              value={""}
+            ></input>
+          </div> */}
+          </div>
+        </div>
+        <div
+          className="box"
+          style={{
+            marginTop: "10px",
+            width: "98%",
+            height: "auto",
+            marginLeft: "15px",
+          }}
+        >
+          <div className="columns">
+            <div className="column is-11">
+              <th>
+                <span style={{ color: "#418ee6" }}>Хоёр.</span>Албан тушаалын
+                томилгоо{" "}
+              </th>
+            </div>
+          </div>
+          <div className="columns is-gapless">
+            <div className="column is-3">
+              <table
+                className="table is-bordered "
+                style={{ textAlign: "center" }}
+              >
+                <thead>
+                  <tr>
+                    <td>№</td>
+                    <td>Байгууллага нэр</td>
+                    <td>Газар, нэгжийн нэр</td>
+                    <td>Алба, хэлтэсийн нэр</td>
+                    <td>Албан тушаалын түвшин</td>
+                    <td>Албан тушаал</td>
+                    <td>Тушаалын дугаар</td>
+                    <td>Томилсон огноо</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>
+                      <input
+                        disabled={edit}
+                        className="Borderless"
+                        style={{ width: "30px" }}
+                      />
+                    </th>
+                    <td>
+                      {" "}
+                      <input disabled={edit} className="Borderless" />
+                    </td>
+                    <td>
+                      <input disabled={edit} className="Borderless" />
+                    </td>
+                    <td>
+                      <input disabled={edit} className="Borderless" />
+                    </td>
+                    <td>
+                      <input disabled={edit} className="Borderless" />
+                    </td>
+                    <td>
+                      <input disabled={edit} className="Borderless" />
+                    </td>
+                    <td>
+                      <input disabled={edit} className="Borderless" />
+                    </td>
+                    <td>
+                      <input disabled={edit} className="Borderless" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div className="column is-9" />
+            </div>
+            {/* <div
+            className="column is-2 "
+            style={{ marginTop: "115px", marginLeft: "17rem" }}
+          >
+            <img src={M} width="30px" height="30px" />
+          </div> */}
+          </div>
+        </div>
+        <TsalinHuls />
+      </div>
+    );
   }
 
   return listItems;
 }
 function TsalinHuls(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [zasakhTowch, setZasakhTowch] = useState(false);
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
@@ -700,8 +904,9 @@ function TsalinHuls(props) {
     }
     fetchData();
   }, [props]);
+
   let listItems;
-  if (data?.salary !== undefined || data?.salary.length !== 0) {
+  if (data?.salary != undefined && data?.salary.length !== 0) {
     listItems = (
       <div
         className="box"
@@ -874,13 +1079,90 @@ function TsalinHuls(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна...</p>;
+    listItems = (
+      <div
+        className="box"
+        style={{
+          width: "98%",
+          height: "auto",
+          marginLeft: "15px",
+        }}
+      >
+        <div className="columns">
+          <div className="column is-11">
+            <span style={{ color: "#418ee6", fontWeight: "bold" }}>Гурав.</span>
+            <span style={{ fontWeight: "bold" }}>
+              Цалин хөлсний талаарх мэдээлэл
+            </span>
+          </div>
+          <div className="column is-1"></div>
+        </div>
+
+        <div className="table ">
+          <table className="table is-bordered " style={{ textAlign: "center" }}>
+            <thead>
+              <tr>
+                <td>
+                  <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                    №
+                  </span>
+                </td>
+                <td>
+                  <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                    Цалингийн төрөл
+                  </span>
+                </td>
+                <td>
+                  <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                    Цалин хөлс нэмэгдлийн нэр
+                  </span>
+                </td>
+                <td>
+                  <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                    Цалин хөлс өөрчилсөн үндэслэл
+                  </span>
+                </td>
+                <td>
+                  <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                    Дүн
+                  </span>
+                </td>
+                <td>
+                  <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                    Тайлбар
+                  </span>
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>
+                  <input disabled={edit} className="Borderless" />
+                </td>
+
+                <td>
+                  <input disabled={edit} className="Borderless" />
+                </td>
+                <td></td>
+
+                <td>
+                  <input disabled={edit} className="Borderless" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
   }
 
   return listItems;
 }
 
 function Uramshuulal(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
@@ -1120,12 +1402,14 @@ function Uramshuulal(props) {
             </span>
           </div>
           <div className="column is-1">
-            <button
-              onClick={() => setZasakhTowch(!zasakhTowch)}
-              className="buttonTsenkher"
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                onClick={() => setZasakhTowch(!zasakhTowch)}
+                className="buttonTsenkher"
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
 
@@ -1141,10 +1425,10 @@ function Uramshuulal(props) {
             </article>
           </div>
         </div>
-        <table className="table" style={{ padding: "0%" }}>
+        <table className="table is-bordered p-3">
           <thead>
-            <tr style={{ textAlign: "center" }}>
-              <th style={{ paddingRight: "0px", paddingLeft: "0px" }}>
+            <tr>
+              <th>
                 <span>№</span>
               </th>
               <th>Урамшууллын нэр </th>
@@ -1157,9 +1441,8 @@ function Uramshuulal(props) {
               {!zasakhTowch ? (
                 <th
                   style={{
+                    borderColor: "transparent",
                     paddingLeft: "0px",
-                    width: "80px",
-                    textAlignLast: "start",
                   }}
                 >
                   <img
@@ -1168,6 +1451,9 @@ function Uramshuulal(props) {
                     height="30px"
                     onClick={() => addRow()}
                   />
+                  <input
+                    style={{ width: "40px", visibility: "hidden" }}
+                  ></input>
                 </th>
               ) : null}
             </tr>
@@ -1175,16 +1461,18 @@ function Uramshuulal(props) {
           <tbody>
             {data?.Promotion?.map((value, index) => (
               <tr>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "2rem" }}
                     value={index + 1}
                     disabled={true}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
                     style={{ width: "-webkit-fill-available" }}
+                    className="Borderless"
                     value={value.PROMOTION_NAME}
                     disabled={zasakhTowch}
                     placeholder="утгаа оруулна уу"
@@ -1200,8 +1488,9 @@ function Uramshuulal(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.PROMOTION_AMOUNT}
                     disabled={zasakhTowch}
@@ -1218,8 +1507,9 @@ function Uramshuulal(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.DECISION_NAME}
                     disabled={zasakhTowch}
@@ -1236,12 +1526,12 @@ function Uramshuulal(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     type="date"
                     style={{ width: "-webkit-fill-available" }}
                     disabled={zasakhTowch}
-                    className="classTbdy"
                     value={dateFormat(
                       data.Promotion[index].DECISION_DATE,
                       "yyyy-mm-dd"
@@ -1258,8 +1548,9 @@ function Uramshuulal(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.DECISION_NO}
                     disabled={zasakhTowch}
@@ -1276,8 +1567,9 @@ function Uramshuulal(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.PROMOTION_MOTIVE}
                     disabled={zasakhTowch}
@@ -1294,8 +1586,9 @@ function Uramshuulal(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.PROMOTION_DESC}
                     disabled={zasakhTowch}
@@ -1313,13 +1606,18 @@ function Uramshuulal(props) {
                   />
                 </td>
                 {!zasakhTowch ? (
-                  <td className="classTbdy">
+                  <td
+                    style={{ paddingLeft: "0px", borderColor: "transparent" }}
+                  >
                     <img
                       src={Delete}
                       width="30px"
                       height="30px"
                       onClick={() => removeRow(index, value)}
                     />
+                    <input
+                      style={{ width: "40px", visibility: "hidden" }}
+                    ></input>
                   </td>
                 ) : null}
               </tr>
@@ -1350,6 +1648,7 @@ function Uramshuulal(props) {
 }
 
 function NuhuhMulbur(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
@@ -1585,29 +1884,31 @@ function NuhuhMulbur(props) {
             </span>
           </div>
           <div className="column is-1">
-            <button
-              onClick={() => setZasakhTowch(!zasakhTowch)}
-              className="buttonTsenkher"
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                onClick={() => setZasakhTowch(!zasakhTowch)}
+                className="buttonTsenkher"
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div className="columns">
           <div className="column is-7">
             <article className="message is-info ">
               <div className="message-body">
-                <strong style={{ color: "black" }}>
-                  Төрийн албаны тухай хуулийн 59 дүгээр зүйлийн 59.1-59.8-д
-                  заасан нөхөх төлбөрийг бичнэ)
-                </strong>
+                <p style={{ color: "black" }}>
+                  Төрийн албаны тухай хуулийн 59 дүгээр зүйлийн{" "}
+                  <b>59.1-59.8-д</b> заасан нөхөх төлбөрийг бичнэ
+                </p>
               </div>
             </article>
           </div>
         </div>
-        <table className="table" style={{ padding: "0%" }}>
+        <table className="table is-bordered p-3">
           <thead>
-            <tr style={{ textAlign: "center" }}>
+            <tr>
               <th style={{ paddingLeft: "0px" }}>
                 <span>№</span>
               </th>
@@ -1621,9 +1922,8 @@ function NuhuhMulbur(props) {
               {!zasakhTowch ? (
                 <th
                   style={{
-                    paddingLeft: "12px",
-                    width: "70px",
-                    textAlignLast: "start",
+                    borderColor: "transparent",
+                    paddingLeft: "0px",
                   }}
                 >
                   <img
@@ -1632,6 +1932,9 @@ function NuhuhMulbur(props) {
                     height="30px"
                     onClick={() => addRow()}
                   />
+                  <input
+                    style={{ width: "40px", visibility: "hidden" }}
+                  ></input>
                 </th>
               ) : null}
             </tr>
@@ -1639,16 +1942,18 @@ function NuhuhMulbur(props) {
           <tbody>
             {data?.Amends?.map((value, index) => (
               <tr>
-                <td className="classTbdy">
+                <td>
                   <input
                     style={{ width: "2rem" }}
                     value={index + 1}
                     disabled={true}
+                    className="Borderless"
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
                     style={{ width: "-webkit-fill-available" }}
+                    className="Borderless"
                     value={value.AMENDS_NAME}
                     disabled={zasakhTowch}
                     placeholder="утгаа оруулна уу"
@@ -1664,9 +1969,10 @@ function NuhuhMulbur(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
                     style={{ width: "-webkit-fill-available" }}
+                    className="Borderless"
                     value={value.AMENDS_AMOUNT.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
                     })}
@@ -1685,8 +1991,9 @@ function NuhuhMulbur(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.DECISION_NAME}
                     disabled={zasakhTowch}
@@ -1703,12 +2010,12 @@ function NuhuhMulbur(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     type="date"
                     style={{ width: "-webkit-fill-available" }}
                     disabled={zasakhTowch}
-                    className="classTbdy"
                     value={dateFormat(
                       data.Amends[index].DECISION_DATE,
                       "yyyy-mm-dd"
@@ -1725,8 +2032,9 @@ function NuhuhMulbur(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.DECISION_NO}
                     disabled={zasakhTowch}
@@ -1743,8 +2051,9 @@ function NuhuhMulbur(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.AMENDS_MOTIVE}
                     disabled={zasakhTowch}
@@ -1761,8 +2070,9 @@ function NuhuhMulbur(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.AMENDS_DESC}
                     disabled={zasakhTowch}
@@ -1780,13 +2090,21 @@ function NuhuhMulbur(props) {
                   />
                 </td>
                 {!zasakhTowch ? (
-                  <td className="classTdby">
+                  <td
+                    style={{
+                      borderColor: "transparent",
+                      paddingLeft: "0px",
+                    }}
+                  >
                     <img
                       src={Delete}
                       width="30px"
                       height="30px"
                       onClick={() => removeRow(index, value)}
                     />
+                    <input
+                      style={{ width: "40px", visibility: "hidden" }}
+                    ></input>
                   </td>
                 ) : null}
               </tr>
@@ -1816,6 +2134,7 @@ function NuhuhMulbur(props) {
   return listItems;
 }
 function Tuslamj(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
@@ -2053,12 +2372,14 @@ function Tuslamj(props) {
             </span>
           </div>
           <div className="column is-1">
-            <button
-              onClick={() => setZasakhTowch(!zasakhTowch)}
-              className="buttonTsenkher"
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                onClick={() => setZasakhTowch(!zasakhTowch)}
+                className="buttonTsenkher"
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div className="columns">
@@ -2074,10 +2395,10 @@ function Tuslamj(props) {
             </article>
           </div>
         </div>
-        <table className="table" style={{ padding: "0%" }}>
+        <table className="table is-bordered p-3">
           <thead>
-            <tr style={{ textAlign: "center" }}>
-              <th style={{ paddingRight: "0px", paddingLeft: "0px" }}>
+            <tr>
+              <th>
                 <span>№</span>
               </th>
               <th>Тусламжийн нэр</th>
@@ -2088,7 +2409,12 @@ function Tuslamj(props) {
               <th>Тусламж олгосон үндэслэл</th>
               <th>Тайлбар</th>
               {!zasakhTowch ? (
-                <th style={{ paddingLeft: "0px" }}>
+                <th
+                  style={{
+                    borderColor: "transparent",
+                    paddingLeft: "0px",
+                  }}
+                >
                   {" "}
                   <img
                     src={Add}
@@ -2106,15 +2432,17 @@ function Tuslamj(props) {
           <tbody>
             {data?.Aid?.map((value, index) => (
               <tr>
-                <td className="classTbdy">
+                <td>
                   <input
                     style={{ width: "2rem" }}
                     value={index + 1}
                     disabled={true}
+                    className="Borderless"
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.AID_NAME}
                     disabled={zasakhTowch}
@@ -2131,8 +2459,9 @@ function Tuslamj(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.AID_AMOUNT.toLocaleString("en-US", {
                       minimumFractionDigits: 2,
@@ -2151,8 +2480,9 @@ function Tuslamj(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.DECISION_NAME}
                     disabled={zasakhTowch}
@@ -2169,12 +2499,12 @@ function Tuslamj(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     type="date"
                     style={{ width: "-webkit-fill-available" }}
                     disabled={zasakhTowch}
-                    className="classTbdy"
                     value={dateFormat(
                       data.Aid[index].DECISION_DATE,
                       "yyyy-mm-dd"
@@ -2191,8 +2521,9 @@ function Tuslamj(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.DECISION_NO}
                     disabled={zasakhTowch}
@@ -2209,8 +2540,9 @@ function Tuslamj(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.AID_MOTIVE}
                     disabled={zasakhTowch}
@@ -2227,8 +2559,9 @@ function Tuslamj(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.AID_DESC}
                     disabled={zasakhTowch}
@@ -2246,7 +2579,12 @@ function Tuslamj(props) {
                   />
                 </td>
                 {!zasakhTowch ? (
-                  <td className="classTbdy">
+                  <td
+                    style={{
+                      borderColor: "transparent",
+                      paddingLeft: "0px",
+                    }}
+                  >
                     <img
                       src={Delete}
                       width="30px"
@@ -2285,6 +2623,7 @@ function Tuslamj(props) {
   return listItems;
 }
 function Surgalt(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
@@ -2522,12 +2861,14 @@ function Surgalt(props) {
             </span>
           </div>
           <div className="column is-1">
-            <button
-              onClick={() => setZasakhTowch(!zasakhTowch)}
-              className="buttonTsenkher"
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                onClick={() => setZasakhTowch(!zasakhTowch)}
+                className="buttonTsenkher"
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div className="columns">
@@ -2542,10 +2883,10 @@ function Surgalt(props) {
             </article>
           </div>
         </div>
-        <table className="table" style={{ padding: "0%" }}>
+        <table className="table is-bordered p-3">
           <thead>
-            <tr style={{ textAlign: "center" }}>
-              <th style={{ paddingRight: "0px", paddingLeft: "0px" }}>
+            <tr>
+              <th>
                 <span>№</span>
               </th>
               <th>Хөтөлбөрийн эх үүсвэр</th>
@@ -2559,9 +2900,8 @@ function Surgalt(props) {
               {!zasakhTowch ? (
                 <th
                   style={{
+                    borderColor: "transparent",
                     paddingLeft: "0px",
-                    width: "80px",
-                    textAlignLast: "start",
                   }}
                 >
                   <img
@@ -2570,6 +2910,9 @@ function Surgalt(props) {
                     height="30px"
                     onClick={() => addRow()}
                   />
+                  <input
+                    style={{ width: "40px", visibility: "hidden" }}
+                  ></input>
                 </th>
               ) : null}
             </tr>
@@ -2577,15 +2920,17 @@ function Surgalt(props) {
           <tbody>
             {data?.Training?.map((value, index) => (
               <tr>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "2rem" }}
                     value={index + 1}
                     disabled={true}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.TRAINING_SOURCE}
                     disabled={zasakhTowch}
@@ -2602,8 +2947,9 @@ function Surgalt(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.TRAINING_PLACE}
                     disabled={zasakhTowch}
@@ -2620,8 +2966,9 @@ function Surgalt(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.TRAINING_ORG}
                     disabled={zasakhTowch}
@@ -2638,8 +2985,9 @@ function Surgalt(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.TRAINING_NAME}
                     disabled={zasakhTowch}
@@ -2656,12 +3004,12 @@ function Surgalt(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     type="date"
                     style={{ width: "-webkit-fill-available" }}
                     disabled={zasakhTowch}
-                    className="classTbdy"
                     value={dateFormat(
                       data.Training[index].START_DATE,
                       "yyyy-mm-dd"
@@ -2678,12 +3026,12 @@ function Surgalt(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     type="date"
                     style={{ width: "-webkit-fill-available" }}
                     disabled={zasakhTowch}
-                    className="classTbdy"
                     value={dateFormat(
                       data.Training[index].END_DATE,
                       "yyyy-mm-dd"
@@ -2700,8 +3048,9 @@ function Surgalt(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.TRAINING_DESC}
                     disabled={zasakhTowch}
@@ -2719,13 +3068,21 @@ function Surgalt(props) {
                   />
                 </td>
                 {!zasakhTowch ? (
-                  <td className="classTbdy">
+                  <td
+                    style={{
+                      borderColor: "transparent",
+                      paddingLeft: "0px",
+                    }}
+                  >
                     <img
                       src={Delete}
                       width="30px"
                       height="30px"
                       onClick={() => removeRow(index, value)}
                     />
+                    <input
+                      style={{ width: "40px", visibility: "hidden" }}
+                    ></input>
                   </td>
                 ) : null}
               </tr>
@@ -2756,6 +3113,7 @@ function Surgalt(props) {
   return listItems;
 }
 function Shiitgel(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
@@ -2987,12 +3345,14 @@ function Shiitgel(props) {
             </span>
           </div>
           <div className="column is-1">
-            <button
-              onClick={() => setZasakhTowch(!zasakhTowch)}
-              className="buttonTsenkher"
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                onClick={() => setZasakhTowch(!zasakhTowch)}
+                className="buttonTsenkher"
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div className="columns">
@@ -3023,10 +3383,10 @@ function Shiitgel(props) {
             </article>
           </div>
         </div>
-        <table className="table" style={{ padding: "1px" }}>
+        <table className="table is-bordered p-3">
           <thead>
-            <tr style={{ textAlign: "center" }}>
-              <th style={{ paddingRight: "0px", paddingLeft: "0px" }}>
+            <tr>
+              <th>
                 <span>№</span>
               </th>
               <th>
@@ -3047,13 +3407,21 @@ function Shiitgel(props) {
                 <br /> шийтгэл ногдуулсан
               </th>
               {!zasakhTowch ? (
-                <th style={{ paddingLeft: "0px" }}>
+                <th
+                  style={{
+                    borderColor: "transparent",
+                    paddingLeft: "0px",
+                  }}
+                >
                   <img
                     src={Add}
                     width="30px"
                     height="30px"
                     onClick={() => addRow()}
                   />
+                  <input
+                    style={{ width: "40px", visibility: "hidden" }}
+                  ></input>
                 </th>
               ) : null}
             </tr>
@@ -3061,16 +3429,18 @@ function Shiitgel(props) {
           <tbody>
             {data?.Punishment?.map((value, index) => (
               <tr>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "2rem" }}
                     value={index + 1}
                     disabled={true}
                   />
                 </td>
 
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.PUNISHMENT_HOLDER}
                     disabled={zasakhTowch}
@@ -3087,8 +3457,9 @@ function Shiitgel(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     value={value.DECISION_NAME}
                     style={{ width: "-webkit-fill-available" }}
                     disabled={zasakhTowch}
@@ -3105,12 +3476,12 @@ function Shiitgel(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     type="date"
                     style={{ width: "-webkit-fill-available" }}
                     disabled={zasakhTowch}
-                    className="classTbdy"
                     value={dateFormat(value.DECISION_DATE, "yyyy-mm-dd")}
                     onChange={(e) => {
                       let temp = [...data?.Punishment];
@@ -3124,8 +3495,9 @@ function Shiitgel(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     value={value.DECISION_NO}
                     style={{ width: "-webkit-fill-available" }}
                     disabled={zasakhTowch}
@@ -3142,8 +3514,9 @@ function Shiitgel(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     value={value.PUNISHMENT_DESC}
                     style={{ width: "-webkit-fill-available" }}
                     disabled={zasakhTowch}
@@ -3161,13 +3534,21 @@ function Shiitgel(props) {
                   />
                 </td>
                 {!zasakhTowch ? (
-                  <td className="classTbdy">
+                  <td
+                    style={{
+                      borderColor: "transparent",
+                      paddingLeft: "0px",
+                    }}
+                  >
                     <img
                       src={Delete}
                       width="30px"
                       height="30px"
                       onClick={() => removeRow(index, value)}
                     />
+                    <input
+                      style={{ width: "40px", visibility: "hidden" }}
+                    ></input>
                   </td>
                 ) : null}
               </tr>
@@ -3199,6 +3580,7 @@ function Shiitgel(props) {
 }
 
 function HuwiinHereg(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [zasakhTowch, setZasakhTowch] = useState(true);
   const [data, loadData] = useState(null);
   const alert = useAlert();
@@ -3429,34 +3811,33 @@ function HuwiinHereg(props) {
             </span>
           </div>
           <div className="column is-1">
-            <button
-              onClick={() => setZasakhTowch(!zasakhTowch)}
-              className="buttonTsenkher"
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                onClick={() => setZasakhTowch(!zasakhTowch)}
+                className="buttonTsenkher"
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
-        <table className="table" style={{ padding: "1px" }}>
+        <table className="table is-bordered p-3">
           <thead>
-            <tr style={{ textAlign: "center" }}>
-              <th style={{ paddingRight: "0px", paddingLeft: "0px" }}>
+            <tr>
+              <th>
                 <span>№</span>
               </th>
-              <th className="classTbdy">Баримт бичгийн нэр</th>
-              <th className="classTbdy">Баримт бичигийг бүрдүүлсэн огноо</th>
-              <th className="classTbdy">Хуудасны тоо</th>
-              <th className="classTbdy">Баяжуулалт хийсэн тухай тэмдэглэл</th>
-              <th className="classTbdy">Бүрдүүлэлт хийсэн албан тушаалтан</th>
-              <th className="classTbdy">
-                Бүрдүүлэлт хийсэн албан хаагчийн нэр
-              </th>
+              <th>Баримт бичгийн нэр</th>
+              <th>Баримт бичигийг бүрдүүлсэн огноо</th>
+              <th>Хуудасны тоо</th>
+              <th>Баяжуулалт хийсэн тухай тэмдэглэл</th>
+              <th>Бүрдүүлэлт хийсэн албан тушаалтан</th>
+              <th>Бүрдүүлэлт хийсэн албан хаагчийн нэр</th>
               {!zasakhTowch ? (
                 <th
                   style={{
+                    borderColor: "transparent",
                     paddingLeft: "0px",
-                    width: "80px",
-                    textAlignLast: "start",
                   }}
                 >
                   <img
@@ -3465,6 +3846,9 @@ function HuwiinHereg(props) {
                     height="30px"
                     onClick={() => addRow()}
                   />
+                  <input
+                    style={{ width: "30px", visibility: "hidden" }}
+                  ></input>
                 </th>
               ) : null}
             </tr>
@@ -3472,16 +3856,18 @@ function HuwiinHereg(props) {
           <tbody>
             {data?.Document?.map((value, index) => (
               <tr>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "2rem" }}
                     value={index + 1}
                     disabled={true}
                   />
                 </td>
 
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     value={value.DOCUMENT_NAME}
                     disabled={zasakhTowch}
@@ -3498,12 +3884,12 @@ function HuwiinHereg(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     type="date"
                     style={{ width: "-webkit-fill-available" }}
                     disabled={zasakhTowch}
-                    className="classTbdy"
                     value={dateFormat(
                       new Date(data.Document[index].DOCUMENT_DATE),
                       "yyyy-mm-dd"
@@ -3520,8 +3906,9 @@ function HuwiinHereg(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     disabled={zasakhTowch}
                     value={value.PAGE_COUNT}
@@ -3538,8 +3925,9 @@ function HuwiinHereg(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     disabled={zasakhTowch}
                     value={value.PROCESS_NOTE}
@@ -3556,8 +3944,9 @@ function HuwiinHereg(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     disabled={zasakhTowch}
                     value={value.COMPLETION_POSISION}
@@ -3574,8 +3963,9 @@ function HuwiinHereg(props) {
                     }}
                   />
                 </td>
-                <td className="classTbdy">
+                <td>
                   <input
+                    className="Borderless"
                     style={{ width: "-webkit-fill-available" }}
                     disabled={zasakhTowch}
                     value={value.COMPLETION_ENTRY_NAME}
@@ -3593,13 +3983,21 @@ function HuwiinHereg(props) {
                   />
                 </td>
                 {!zasakhTowch ? (
-                  <td className="classTbdy">
+                  <td
+                    style={{
+                      borderColor: "transparent",
+                      paddingLeft: "0px",
+                    }}
+                  >
                     <img
                       src={Delete}
                       width="30px"
                       height="30px"
                       onClick={() => removeRow(index, value)}
                     />
+                    <input
+                      style={{ width: "40px", visibility: "hidden" }}
+                    ></input>
                   </td>
                 ) : null}
               </tr>
