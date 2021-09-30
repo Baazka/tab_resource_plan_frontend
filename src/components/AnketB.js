@@ -23,6 +23,7 @@ import {
   BDoloo,
   BNaimB,
   BNaim,
+  Search,
 } from "../assets/images/zurag";
 import { useAlert } from "react-alert";
 import ScaleLoader from "react-spinners/ScaleLoader";
@@ -234,7 +235,44 @@ function AnketB(props) {
             IX. ХУВИЙН ХЭРЭГ
           </button>
         </div>
+        <div className="AnketList">
+          <button
+            className="button"
+            style={{
+              color: `${menu === 9 ? "#418ee6" : "#5d5d5d"}`,
+              border: "none",
+              width: "17rem",
+              fontFamily: "RalewayRegular",
+              fontWeight: "bold",
+              whiteSpace: "nowrap",
+              marginTop: "3px",
+              fontSize: "1rem",
+            }}
+            onClick={() => setMenu(9)}
+          >
+            БУСАД МЭДЭЭЛЭЛ
+          </button>
+        </div>
+        <div className="AnketList">
+          <button
+            className="button"
+            style={{
+              color: `${menu === 10 ? "#418ee6" : "#5d5d5d"}`,
+              border: "none",
+              width: "17rem",
+              fontFamily: "RalewayRegular",
+              fontWeight: "bold",
+              whiteSpace: "nowrap",
+              marginTop: "3px",
+              fontSize: "1rem",
+            }}
+            onClick={() => setMenu(10)}
+          >
+            ХАМГААЛАЛТЫН ХЭРЭГСЭЛ
+          </button>
+        </div>
       </div>
+
       <div
         style={{
           display: "flex",
@@ -281,6 +319,10 @@ function AnketB(props) {
             {menu === 6 ? <Surgalt loading={setLoading} /> : null}
             {menu === 7 ? <Shiitgel loading={setLoading} /> : null}
             {menu === 8 ? <HuwiinHereg loading={setLoading} /> : null}
+            {menu === 9 ? <BusadMedeelel loading={setLoading} /> : null}
+            {menu === 10 ? (
+              <HamgaalaltiinHeregsel loading={setLoading} />
+            ) : null}
           </div>
         </div>
       </div>
@@ -3585,5 +3627,114 @@ function HuwiinHereg(props) {
     listItems = <p>ачаалж байна...</p>;
   }
   return listItems;
+}
+function BusadMedeelel(props) {
+  return (
+    <div style={{ display: "flex", padding: "80px 15px 730px 15px" }}>
+      <br />
+      <div className="columns">
+        <div className="column is-12">
+          <span style={{ fontWeight: "bold" }}>Амьдрах орчны мэдээлэл</span>
+          <table className="table is-bordered ">
+            <tbody>
+              <tr>
+                <td>Байр</td>
+                <td>ok</td>
+                <td>no</td>
+              </tr>
+              <tr>
+                <td>хашаа байшин</td>
+                <td>ok</td>
+                <td>no</td>
+              </tr>
+              <tr>
+                <td>түрээсийн байр</td>
+                <td>ok</td>
+                <td>no</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style={{ marginLeft: "30%" }}>
+        <div className="columns">
+          <div className="column is-12">
+            <span style={{ fontWeight: "bold" }}>Зээлийн мэдээлэл</span>
+
+            <table className="table is-bordered ">
+              <tbody>
+                <tr>
+                  <td>хувь зээл</td>
+                  <td>ok</td>
+                  <td>no</td>
+                </tr>
+                <tr>
+                  <td>Ажилын газарийн зээл</td>
+                  <td>ok</td>
+                  <td>no</td>
+                </tr>
+                <tr>
+                  <td>ахуйн зээл</td>
+                  <td>ok</td>
+                  <td>no</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+function HamgaalaltiinHeregsel(props) {
+  return (
+    <div style={{ marginTop: "50px" }}>
+      <div
+        className="box"
+        style={{
+          width: "100%",
+          height: "auto",
+          margintop: "50px",
+        }}
+      >
+        <br />
+        <div className="columns">
+          <div className="column is-11"></div>
+        </div>
+        <div className="column is-2">
+          {" "}
+          <span style={{ fontWeight: "bold" }}>Тоон гарын үсэг</span>
+          <input></input>
+        </div>
+
+        <div className="columns">
+          <div className="column is-11"></div>
+        </div>
+        <div className="column is-3">
+          {" "}
+          <span style={{ fontWeight: "bold" }}>
+            {" "}
+            байгууллагын лацны бүртгэл
+          </span>
+          <input></input>
+        </div>
+        <div className="columns">
+          <div className="column is-11"></div>
+        </div>
+        <div className="column is-1">
+          <span style={{ fontWeight: "bold" }}> үнэмлэх</span>
+          <input></input>
+        </div>
+        <div className="columns">
+          <div className="column is-11"></div>
+        </div>
+        <div className="column is-2">
+          <span style={{ fontWeight: "bold" }}> тэмдэгийн дугаар</span>
+          <input></input>
+        </div>
+      </div>
+    </div>
+  );
 }
 export default AnketB;

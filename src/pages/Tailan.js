@@ -9,6 +9,7 @@ import DataTable, { createTheme } from "react-data-table-component";
 import { Search, Filter, Add } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router";
+import Nvvr from "../components/aTailan";
 
 var rowNumber = 1;
 createTheme("solarized", {
@@ -393,6 +394,7 @@ const Home = (props) => {
             </div>
           </div>
         ) : null}
+        <Nvvr />
       </div>
 
       <Footer />

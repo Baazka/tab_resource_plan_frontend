@@ -56,6 +56,8 @@ const SideBar = (props) => {
       menu3: false,
       menu4: false,
       menu5: false,
+      menu6: false,
+      menu7: false,
     };
     setMenuClick({ ...temp, ...value });
     if (value?.menu0) {
@@ -75,6 +77,12 @@ const SideBar = (props) => {
       setMenuCollapse(true);
     } else if (value?.menu5) {
       history.push("/web/Tailan");
+      setMenuCollapse(true);
+    } else if (value?.menu6) {
+      history.push("/print/anket/");
+      setMenuCollapse(true);
+    } else if (value?.menu7) {
+      history.push("/web/HuilTogtoomj/");
       setMenuCollapse(true);
     }
   }
@@ -235,6 +243,48 @@ const SideBar = (props) => {
                   >
                     {" "}
                     Тайлан
+                  </p>
+                </div>
+              </MenuItem>
+              <MenuItem active={menuClick.menu5}>
+                <div
+                  className="CustomMenu"
+                  onClick={() => SelectMenu({ menu6: !menuClick.menu5 })}
+                >
+                  <img
+                    src={menuClick.menu5 ? TailanB : Tailan}
+                    width="40"
+                    height="30"
+                  />
+                  <p
+                    className="MenuText"
+                    style={{
+                      color: `${menuClick.menu5 ? "#418ee6" : "white"}`,
+                    }}
+                  >
+                    {" "}
+                    Anket
+                  </p>
+                </div>
+              </MenuItem>
+              <MenuItem active={menuClick.menu7}>
+                <div
+                  className="CustomMenu"
+                  onClick={() => SelectMenu({ menu7: !menuClick.menu7 })}
+                >
+                  <img
+                    src={menuClick.menu7 ? TailanB : Tailan}
+                    width="40"
+                    height="30"
+                  />
+                  <p
+                    className="MenuText"
+                    style={{
+                      color: `${menuClick.menu7 ? "#418ee6" : "white"}`,
+                    }}
+                  >
+                    {" "}
+                    Хууль тогтоомжийн сан
                   </p>
                 </div>
               </MenuItem>

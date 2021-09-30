@@ -21,9 +21,11 @@ import Dashboard from "./pages/Dashboard";
 import Baiguullaga from "./pages/Baiguullaga";
 import TushaalShiidver from "./pages/TushaalShiidver";
 import Tailan from "./pages/Tailan";
+import HuilTogtoomj from "./pages/HuilTogtoomj";
 import AnketAtailan from "./pages/AnketAtailan";
 import { HashRouter } from "react-router-dom";
 import AlbanTushaalBurtgel from "./components/AlbanTushaalBurtgel";
+import Nuur from "./components/aTailan";
 const axios = require("axios");
 
 function App() {
@@ -69,6 +71,7 @@ function App() {
         />
         <Route path="/web/TushaalShiidver/" component={TushaalShiidver} exact />
         <Route path="/web/Tailan/" component={Tailan} exact />
+        <Route path="/web/HuilTogtoomj/" component={HuilTogtoomj} exact />
         <Route
           path="/web/AlbanTushaalBurtgel/:positionid/:search"
           component={AlbanTushaalBurtgel}
@@ -79,6 +82,7 @@ function App() {
           component={AnketAtailan}
           exact
         />
+        <Route path="/print/anket/" component={Nuur} exact />
       </HashRouter>
     </div>
   );
