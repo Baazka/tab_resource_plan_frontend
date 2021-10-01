@@ -28,6 +28,9 @@ import {
   Dashboard,
   Tailan,
   TailanB,
+  BNegB,
+  BNeg,
+  
 } from "../assets/images/zurag";
 
 const SideBar = (props) => {
@@ -41,6 +44,7 @@ const SideBar = (props) => {
     menu3: false,
     menu4: false,
     menu5: false,
+    menu6: false,
   });
 
   //create a custom function that will change menucollapse state from false to true and true to false
@@ -56,6 +60,7 @@ const SideBar = (props) => {
       menu3: false,
       menu4: false,
       menu5: false,
+      menu6: false,
     };
     setMenuClick({ ...temp, ...value });
     if (value?.menu0) {
@@ -75,6 +80,10 @@ const SideBar = (props) => {
       setMenuCollapse(true);
     } else if (value?.menu5) {
       history.push("/web/Tailan");
+      setMenuCollapse(true);
+    }
+    else if (value?.menu6) {
+      history.push("/web/EmployeeInformation");
       setMenuCollapse(true);
     }
   }
@@ -235,6 +244,27 @@ const SideBar = (props) => {
                   >
                     {" "}
                     Судалгаа
+                  </p>
+                </div>
+              </MenuItem>
+              <MenuItem active={menuClick.menu6}>
+                <div
+                  className="CustomMenu"
+                  onClick={() => SelectMenu({ menu6: !menuClick.menu6 })}
+                >
+                  <img
+                    src={menuClick.menu6 ? BNegB : BNeg}
+                    width="40"
+                    height="30"
+                  />
+                  <p
+                    className="MenuText"
+                    style={{
+                      color: `${menuClick.menu6 ? "#418ee6" : "white"}`,
+                    }}
+                  >
+                    {" "}
+                    Албан хаагчын мэдээлэл
                   </p>
                 </div>
               </MenuItem>
