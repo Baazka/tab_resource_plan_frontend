@@ -1,6 +1,6 @@
 import "./App.css";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   BrowserRouter,
@@ -24,25 +24,20 @@ import Tailan from "./pages/Tailan";
 import AnketAtailan from "./pages/AnketAtailan";
 import { HashRouter } from "react-router-dom";
 import AlbanTushaalBurtgel from "./components/AlbanTushaalBurtgel";
+import { LogoB } from "../src/assets/images/zurag";
+import Header from "../src/components/header";
 import EmployeeInformation from "./pages/EmployeeInformation";
 const axios = require("axios");
 
 function App() {
-  const alert = useAlert();
-  const history = useHistory();
-
-  function BlogPost() {
-    // We can call useParams() here to get the params,
-    // or in any child element as well!
-    let { slug } = useParams();
-    // ...
-  }
+  const [signin, setSignin] = useState(false);
+  // var userDetail = localStorage.getItem("userDetails");
 
   return (
     <div>
+      {/* <ProvideAuth> */}
       <HashRouter
         getUserConfirmation={(message, callback) => {
-          // this is the default behavior
           const allowTransition = window.confirm(message);
           callback(allowTransition);
         }}
@@ -50,11 +45,13 @@ function App() {
         <Route path="/" exact>
           <Login />
         </Route>
+        {/* {userDetail != undefined ? ( */}
+
         <Route path="/web">
+          <Header setSignin={setSignin} />
           <SideBar />
         </Route>
         <Route path="/web/workerList/:search" component={Home} exact />
-
         <Route path="/web/anketA/:search" component={AnketA} exact />
         <Route path="/web/anketB/:search" component={AnketB} exact />
         <Route path="/web/dashboard/" component={Dashboard} exact />
@@ -66,7 +63,11 @@ function App() {
         />
         <Route path="/web/TushaalShiidver/" component={TushaalShiidver} exact />
         <Route path="/web/Tailan/" component={Tailan} exact />
-        <Route path="/web/EmployeeInformation/" component={EmployeeInformation} exact />
+        <Route
+          path="/web/EmployeeInformation/"
+          component={EmployeeInformation}
+          exact
+        />
         <Route
           path="/web/AlbanTushaalBurtgel/:positionid/:search"
           component={AlbanTushaalBurtgel}
@@ -77,7 +78,39 @@ function App() {
           component={AnketAtailan}
           exact
         />
+
+        {/* ) : (
+            <div
+              style={{
+                margin: "100px 100px 100px 25%",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <img src={LogoB} width="300px" />
+              <span
+                style={{ fontSize: "40px", color: "red", marginLeft: "20px" }}
+              >
+                404!
+              </span>
+              <span style={{ marginLeft: "20px" }}>
+                Таны бичсэн хаяг байхгүй байна.
+              </span>
+              <button
+              style={{
+                marginLeft: "20px",
+                width: "60px",
+                backgroundColor: "transparent",
+                border: "none",
+
+              }}
+            >
+              нэвтрэх
+            </button>
+            </div>
+          )} */}
       </HashRouter>
+      {/* </ProvideAuth> */}
     </div>
   );
 }

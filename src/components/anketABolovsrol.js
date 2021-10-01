@@ -18,6 +18,7 @@ function Bolowsrol(props) {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/education/" + props.person_id
       );
+      console.log("listItems?.data?.Education", listItems?.data?.Education);
       loadData({
         Education: listItems?.data?.Education.filter(
           (a) => a.EDUCATION_LEVEL === 1
@@ -50,6 +51,7 @@ function Bolowsrol(props) {
             DIPLOM_NO: "",
             SCHOOL_CONTACT: "",
             DIPLOM_SUBJECT: "",
+            IS_PRIMARY: 0,
             IS_ACTIVE: "1",
             CREATED_BY: userDetils?.USER_ID,
             CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
@@ -77,6 +79,7 @@ function Bolowsrol(props) {
             DIPLOM_NO: "",
             SCHOOL_CONTACT: "",
             DIPLOM_SUBJECT: "",
+            IS_PRIMARY: 0,
             IS_ACTIVE: "1",
             CREATED_BY: userDetils?.USER_ID,
             CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
@@ -89,7 +92,7 @@ function Bolowsrol(props) {
   function saveToDB() {
     props.loading(true);
     let combined = data?.Education.concat(dataSecond?.Education);
-
+    console.log(combined, "combinedcombinedcombined");
     if (requiredField(combined) === true) {
       let newRow = combined?.filter((value) => value.ROWTYPE === "NEW");
       let oldRow = combined?.filter(
@@ -113,7 +116,7 @@ function Bolowsrol(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -122,7 +125,7 @@ function Bolowsrol(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -143,7 +146,7 @@ function Bolowsrol(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -151,7 +154,7 @@ function Bolowsrol(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -173,27 +176,18 @@ function Bolowsrol(props) {
     loadDataSecond({ Education: arr });
   }
   function requiredField(value) {
-    // for (let i = 0; i < value.length; i++) {
-    //   if (value[i].SCHOOL_NAME === null || value[i].SCHOOL_NAME === "") {
-    //     alert.show("Сургуулийн нэр оруулан уу");
-    //     return false;
-    //   } else if (
-    //     value[i].PROFESSION_NAME === null ||
-    //     value[i].PROFESSION_NAME === ""
-    //   ) {
-    //     alert.show("Эзэмшсэн мэргэжил оруулан уу");
-    //     return false;
-    //   } else if (value[i].DIPLOM_NO === null || value[i].DIPLOM_NO === "") {
-    //     alert.show("Гэрчилгээ дипломын дугаар оруулан уу");
-    //     return false;
-    //   } else if (
-    //     value[i].DIPLOM_SUBJECT === null ||
-    //     value[i].DIPLOM_SUBJECT === ""
-    //   ) {
-    //     alert.show("Гэрчилгээ дипломын дугаар оруулан уу");
-    //     return false;
-    //   } else if (i === value.length - 1) {
-    return true;
+    console.log("bolor", value);
+    let found = value.filter((a) => a.IS_PRIMARY == 1);
+    console.log("bolor", found);
+    if (found.length > 1) {
+      alert.show("Үндсэн нэг мэргэжилээ тохируулна уу!!!");
+      return false;
+    } else if (found.length === 1) {
+      return true;
+    } else if (found.length === 0) {
+      alert.show("Үндсэн мэргэжилээ тохируулна уу!!!");
+      return false;
+    }
     //   }
     // }
   }
@@ -213,6 +207,7 @@ function Bolowsrol(props) {
       DIPLOM_NO: "",
       SCHOOL_CONTACT: "",
       DIPLOM_SUBJECT: "",
+      IS_PRIMARY: 0,
       IS_ACTIVE: "1",
       CREATED_BY: userDetils?.USER_ID,
       CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
@@ -238,6 +233,7 @@ function Bolowsrol(props) {
       DIPLOM_NO: "",
       SCHOOL_CONTACT: "",
       DIPLOM_SUBJECT: "",
+      IS_PRIMARY: 0,
       IS_ACTIVE: "1",
       CREATED_BY: userDetils?.USER_ID,
       CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
@@ -368,6 +364,9 @@ function Bolowsrol(props) {
                       <span className="textSaaral">
                         Диплом хамгаалсан сэдэв
                       </span>
+                    </td>
+                    <td>
+                      <span className="textSaaral">Үндсэн мэргэжил</span>
                     </td>
                     {!edit ? (
                       <td
@@ -560,6 +559,38 @@ function Bolowsrol(props) {
                             loadData({ Education: value });
                           }}
                         />
+                      </td>
+                      <td>
+                        <select
+                          disabled={props.edit}
+                          className="anketInput"
+                          name="cars"
+                          id="cars"
+                          value={data.Education[index]?.IS_PRIMARY}
+                          onChange={(text) => {
+                            let value = [...data?.Education];
+                            value.map((item, ind) => {
+                              if (item.IS_PRIMARY === 1 && ind !== index) {
+                                value[ind].IS_PRIMARY = 0;
+                                value[ind].UPDATED_BY = userDetils?.USER_ID;
+                                value[ind].UPDATED_DATE = dateFormat(
+                                  new Date(),
+                                  "dd-mmm-yy"
+                                );
+                              }
+                            });
+                            value[index].IS_PRIMARY = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData({ Education: value });
+                          }}
+                        >
+                          <option value={1}>Тийм</option>
+                          <option value={0}>Үгүй</option>
+                        </select>
                       </td>
                       {!edit ? (
                         <td

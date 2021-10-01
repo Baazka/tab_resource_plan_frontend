@@ -25,7 +25,27 @@ function AnketAtailan(props) {
         backgroundColor: "#f1f1f1",
       }}
     >
-      <Header title="Тайлан" back={true} butsakh={butsakh}></Header>
+      {/* <Header title="Тайлан" back={true} butsakh={butsakh}></Header> */}
+      <div
+        style={{
+          position: "absolute",
+          left: "20%",
+          width: "50%",
+          height: "10%",
+          zIndex: 1,
+          top: "20px",
+        }}
+      >
+        <span
+          style={{
+            color: "#418ee6",
+            fontSize: 25,
+            fontFamily: "RalewayRegular",
+          }}
+        >
+          Судалгаа
+        </span>
+      </div>
       <div style={{ marginTop: "5%" }}>
         {props.match.params.turul === "emergency" ? <Emergency /> : null}
         {props.match.params.turul === "gerBvl" ? <GerBvl /> : null}

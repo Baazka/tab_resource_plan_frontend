@@ -109,14 +109,36 @@ const SideBar = (props) => {
                   </div>
                 </nav>
               ) : (
-                <nav class="navbar" style={{ backgroundColor: "transparent" }}>
+                <nav
+                  class="navbar"
+                  style={{
+                    backgroundColor: "transparent",
+                    textAlign: "-webkit-center",
+                  }}
+                >
                   <div class="navbar-brand">
                     <img
-                      src={LogoB}
-                      width="270"
+                      src={Logo}
+                      width="70"
                       height="70"
-                      style={{ marginLeft: "10%", marginTop: "10px" }}
+                      style={{
+                        marginLeft: "10%",
+                        marginTop: "10px",
+                      }}
                     />
+                    <span
+                      style={{
+                        color: "white",
+                        marginLeft: "2%",
+                        fontSize: "16px",
+                        marginTop: "22px",
+
+                        fontFamily: "RalewaySemiBold",
+                        lineHeight: "20px",
+                      }}
+                    >
+                      Үндсэний аудитын газар
+                    </span>
                   </div>
                 </nav>
               )}

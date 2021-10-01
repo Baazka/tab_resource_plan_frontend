@@ -498,7 +498,27 @@ const Home = (props) => {
         maxHeight: "100vh !important",
       }}
     >
-      <Header title="ШИЙДВЭР, ТУШААЛЫН БҮРТГЭЛ" />
+      {/*<Header  title="ШИЙДВЭР, ТУШААЛЫН БҮРТГЭЛ" /> */}
+      <div
+        style={{
+          position: "absolute",
+          left: "20%",
+          width: "50%",
+          left: "7%",
+          zIndex: 1,
+          top: "20px",
+        }}
+      >
+        <span
+          style={{
+            color: "#418ee6",
+            fontSize: 25,
+            fontFamily: "RalewayRegular",
+          }}
+        >
+          ШИЙДВЭР, ТУШААЛЫН БҮРТГЭЛ
+        </span>
+      </div>
       <div
         style={{
           backgroundColor: "white",
@@ -729,15 +749,8 @@ function TushaalAjiltan(props) {
     let found = jagsaalt?.filter((obj) =>
       equalStr(obj.PERSON_FIRSTNAME, value)
     );
-    // console.log(found, "found");
-    // if (found === undefined || found.length === 0) {
-    //   found = jagsaalt?.filter((obj) =>
-    //     equalStr(obj.PERSON_REGISTER_NO, value)
-    //   );
-    // } else if (found === undefined || found.length === 0) {
-    //   found = jagsaalt?.filter((obj) => equalStr(obj.PERSON_LASTNAME, value));
-    // } else
-    if (found !== undefined || found.length > 0) setFound(found);
+
+    if (found != undefined || found.length > 0) setFound(found);
     else setFound([]);
   }
   function equalStr(value1, value2) {
@@ -914,14 +927,14 @@ function Khoyor(props) {
           alert.show("амжилттай хадгаллаа");
           if (props.type !== 2) setbutton(2);
         } else {
-          alert.show("амжилтгүй алдаа");
+          alert.show("Системийн алдаа");
         }
         //history.push('/sample')
       })
       .catch(function (error) {
         //alert(error.response.data.error.message);
         console.log(error.response);
-        alert.show("амжилтгүй алдаа");
+        alert.show("Системийн алдаа");
       });
   }
   function salary() {
@@ -1275,7 +1288,7 @@ function Salary(props) {
                 props.close(false);
               }
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
             }
             //history.push('/sample')
@@ -1283,7 +1296,7 @@ function Salary(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
           });
       }
@@ -1305,14 +1318,14 @@ function Salary(props) {
                 props.close(false);
               }
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
             }
           })
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
           });
       }
