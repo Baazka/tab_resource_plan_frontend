@@ -26,6 +26,9 @@ import { HashRouter } from "react-router-dom";
 import AlbanTushaalBurtgel from "./components/AlbanTushaalBurtgel";
 import { LogoB } from "../src/assets/images/zurag";
 import Header from "../src/components/header";
+import EmployeeInformation from "./pages/EmployeeInformation";
+const axios = require("axios");
+
 function App() {
   const [signin, setSignin] = useState(false);
   // var userDetail = localStorage.getItem("userDetails");
@@ -60,6 +63,11 @@ function App() {
         />
         <Route path="/web/TushaalShiidver/" component={TushaalShiidver} exact />
         <Route path="/web/Tailan/" component={Tailan} exact />
+        <Route
+          path="/web/EmployeeInformation/"
+          component={EmployeeInformation}
+          exact
+        />
         <Route
           path="/web/AlbanTushaalBurtgel/:positionid/:search"
           component={AlbanTushaalBurtgel}
