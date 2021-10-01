@@ -61,7 +61,27 @@ function AlbanTushaalBurtgel(props) {
         height: "100vh",
       }}
     >
-      <Header title="Бүртгэл"></Header>
+      {/* <Header title=""></Header> */}
+      <div
+        style={{
+          position: "absolute",
+          left: "20%",
+          width: "50%",
+          left: "7%",
+          zIndex: 1,
+          top: "20px",
+        }}
+      >
+        <span
+          style={{
+            color: "#418ee6",
+            fontSize: 25,
+            fontFamily: "RalewayRegular",
+          }}
+        >
+          Бүртгэл
+        </span>
+      </div>
       <div
         style={{
           width: "20%",
@@ -241,7 +261,6 @@ function AlbanTushaalBurtgel(props) {
     </div>
   );
 }
-
 function YurunkhiiMedeelel(props) {
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, createContext } from "react";
 import { useHistory } from "react-router-dom";
 import Background from "../assets/images/background.png";
 import { LogoBottom, Filter } from "../assets/images/zurag";
@@ -8,25 +8,58 @@ import { DataRequest } from "../functions/DataApi";
 
 const axios = require("axios");
 
-const a = (state, action) => {
-  return {
-    userDetail: state.user,
-  };
-};
-const b = (dispatch) => {
-  return {
-    userNem: (user) => dispatch({ type: "ADD_USER", user: user }),
-    userHas: (userID) => dispatch({ type: "remove _USER" }),
-  };
-};
+// const fakeAuth = {
+//   isAuthenticated: false,
+//   signin(cb) {
+//     fakeAuth.isAuthenticated = true;
+//     setTimeout(cb, 100); // fake async
+//   },
+//   signout(cb) {
+//     fakeAuth.isAuthenticated = false;
+//     setTimeout(cb, 100);
+//   },
+// };
+// const authContext = createContext();
 
+// function ProvideAuth({ children }) {
+//   const auth = useProvideAuth();
+//   return <authContext.Provider value={auth}>{children}</authContext.Provider>;
+// }
+// function useAuth() {
+//   return useContext(authContext);
+// }
+
+// function useProvideAuth() {
+//   const [user, setUser] = useState(null);
+
+//   const signin = (cb) => {
+//     return fakeAuth.signin(() => {
+//       setUser("user");
+//       cb();
+//     });
+//   };
+
+//   const signout = (cb) => {
+//     return fakeAuth.signout(() => {
+//       setUser(null);
+//       cb();
+//     });
+//   };
+
+//   return {
+//     user,
+//     signin,
+//     signout,
+//   };
+// }
 function Login(props) {
   const [ner, setNer] = useState();
   const [nuutsUg, setNuutsUg] = useState();
   const [sanuulakh, setSanuulakh] = useState(false);
-  const [tabIndex, setTabIndex] = useState(0);
   const alert = useAlert();
   const history = useHistory();
+  // let location = useLocation();
+  // let auth = useAuth();
 
   useEffect(() => {
     if (localStorage.getItem("rememberedUser")?.includes("userName")) {
@@ -62,7 +95,6 @@ function Login(props) {
         },
       })
         .then(function (response) {
-          console.log("response?.dataLogin", response?.data);
           if (
             response?.data?.USER_ID !== 0 &&
             response?.data?.USER_ID !== null &&
@@ -74,7 +106,7 @@ function Login(props) {
                 "rememberedUser",
                 JSON.stringify({
                   userName: ner,
-                  password: nuutsUg,
+                  password: "",
                 })
               );
             }
@@ -87,16 +119,14 @@ function Login(props) {
             })
               .then(function (response) {
                 console.log("test", response.data);
-                props.userNem({
-                  userID: response?.data?.USER_ID,
-                  userDetail: response?.data,
-                });
                 localStorage.setItem(
                   "userDetails",
                   JSON.stringify(response?.data)
                 );
+                // auth.signin(() => {
+                history.push("/web/dashboard/");
 
-                history.push("/web/dashboard");
+                // });
               })
               .catch(function (error) {
                 //alert(error.response.data.error.message);
@@ -234,4 +264,5 @@ function Login(props) {
   );
 }
 
-export default connect(a, b)(Login);
+export default Login;
+//, useAuth, ProvideAuth

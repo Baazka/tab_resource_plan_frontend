@@ -16,7 +16,27 @@ const Dashboard = (props) => {
 
   return (
     <div>
-      <Header title="Дашбоард" />
+      {/* <Header title="Дашбоард" /> */}
+      <div
+        style={{
+          position: "absolute",
+          left: "20%",
+          width: "50%",
+          left: "7%",
+          zIndex: 1,
+          top: "20px",
+        }}
+      >
+        <span
+          style={{
+            color: "#418ee6",
+            fontSize: 25,
+            fontFamily: "RalewayRegular",
+          }}
+        >
+          Дашбоард
+        </span>
+      </div>
       <div
         style={{
           backgroundColor: "white",

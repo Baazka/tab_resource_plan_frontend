@@ -46,7 +46,27 @@ function AnketB(props) {
         height: "100vh",
       }}
     >
-      <Header title="АНКЕТ Б"></Header>
+      {/* <Header title="АНКЕТ Б"></Header> */}
+      <div
+        style={{
+          position: "absolute",
+          left: "20%",
+          width: "50%",
+          left: "7%",
+          zIndex: 1,
+          top: "20px",
+        }}
+      >
+        <span
+          style={{
+            color: "#418ee6",
+            fontSize: 25,
+            fontFamily: "RalewayRegular",
+          }}
+        >
+          АНКЕТ Б
+        </span>
+      </div>
       <div
         style={{
           width: "20%",
@@ -1255,7 +1275,7 @@ function Uramshuulal(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -1264,7 +1284,7 @@ function Uramshuulal(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -1289,7 +1309,7 @@ function Uramshuulal(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -1297,7 +1317,7 @@ function Uramshuulal(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -1739,7 +1759,7 @@ function NuhuhMulbur(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -1748,7 +1768,7 @@ function NuhuhMulbur(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -1773,7 +1793,7 @@ function NuhuhMulbur(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -1781,7 +1801,7 @@ function NuhuhMulbur(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -2225,7 +2245,7 @@ function Tuslamj(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -2234,7 +2254,7 @@ function Tuslamj(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -2259,7 +2279,7 @@ function Tuslamj(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -2267,7 +2287,7 @@ function Tuslamj(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -2711,7 +2731,7 @@ function Surgalt(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -2720,7 +2740,7 @@ function Surgalt(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -2745,7 +2765,7 @@ function Surgalt(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -2753,7 +2773,7 @@ function Surgalt(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -3201,7 +3221,7 @@ function Shiitgel(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -3210,7 +3230,7 @@ function Shiitgel(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -3235,7 +3255,7 @@ function Shiitgel(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -3243,7 +3263,7 @@ function Shiitgel(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -3672,7 +3692,7 @@ function HuwiinHereg(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -3681,7 +3701,7 @@ function HuwiinHereg(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -3706,7 +3726,7 @@ function HuwiinHereg(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -3714,7 +3734,7 @@ function HuwiinHereg(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });

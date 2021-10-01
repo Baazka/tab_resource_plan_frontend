@@ -292,7 +292,28 @@ function AnketNeg(props) {
           height: "100vh",
         }}
       >
-        <Header title="АНКЕТ А"></Header>
+        {/* <Header title="АНКЕТ А"></Header> */}
+
+        <div
+          style={{
+            position: "absolute",
+            left: "20%",
+            width: "50%",
+            left: "7%",
+            zIndex: 1,
+            top: "20px",
+          }}
+        >
+          <span
+            style={{
+              color: "#418ee6",
+              fontSize: 25,
+              fontFamily: "RalewayRegular",
+            }}
+          >
+            АНКЕТ А
+          </span>
+        </div>
         <div
           style={{
             width: "20%",
@@ -1491,7 +1512,7 @@ function HolbooBarikhHun(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -1500,7 +1521,7 @@ function HolbooBarikhHun(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -1521,14 +1542,14 @@ function HolbooBarikhHun(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
           })
           .catch(function (error) {
             //alert(error.response.data.error.message);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -1980,7 +2001,7 @@ function GerBul(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -1989,7 +2010,7 @@ function GerBul(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -2010,7 +2031,7 @@ function GerBul(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -2018,7 +2039,7 @@ function GerBul(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
