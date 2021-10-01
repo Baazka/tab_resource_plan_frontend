@@ -31,7 +31,7 @@ import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
 var dateFormat = require("dateformat");
 const axios = require("axios");
-const userDetils = JSON.parse(localStorage.getItem("userDetails"));
+
 var rowNumber = 1;
 createTheme("solarized", {
   text: {
@@ -110,6 +110,7 @@ const ButtonsColumn = ({
   buttonValue,
 }) => {
   const alert = useAlert();
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   function deleteDecision() {
     DataRequest({
       url: "http://hr.audit.mn/hr/api/v1/decisionDelete/",
@@ -179,6 +180,7 @@ const ButtonsColumn = ({
 
 const Home = (props) => {
   const [jagsaalt, setJagsaalt] = useState();
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [searchType, setSearchType] = useState("PERSON_FIRSTNAME");
   const [, forceRender] = useReducer((s) => s + 1, 0);
   const [found, setFound] = useState();
@@ -199,7 +201,11 @@ const Home = (props) => {
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/decision/1",
+        url:
+          "http://hr.audit.mn/hr/api/v1/decision/1/" +
+          userDetils?.USER_DEPARTMENT_ID +
+          "/" +
+          userDetils?.USER_TYPE_NAME.toUpperCase(),
         method: "GET",
         data: {},
       });
@@ -211,7 +217,11 @@ const Home = (props) => {
 
   async function unActive() {
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/decision/0",
+      url:
+        "http://hr.audit.mn/hr/api/v1/decision/0/" +
+        userDetils?.USER_DEPARTMENT_ID +
+        "/" +
+        userDetils?.USER_TYPE_NAME.toUpperCase(),
       method: "GET",
       data: {},
     });
@@ -220,7 +230,11 @@ const Home = (props) => {
   }
   async function Active() {
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/decision/1",
+      url:
+        "http://hr.audit.mn/hr/api/v1/decision/1/" +
+        userDetils?.USER_DEPARTMENT_ID +
+        "/" +
+        userDetils?.USER_TYPE_NAME.toUpperCase(),
       method: "GET",
       data: {},
     });
@@ -641,7 +655,15 @@ const Home = (props) => {
           theme="solarized"
           customStyles={customStyles}
           noDataComponent="мэдээлэл байхгүй байна"
-          pagination={false}
+          pagination={true}
+          paginationPerPage={10}
+          paginationComponentOptions={{
+            rowsPerPageText: "Хуудас:",
+            rangeSeparatorText: "нийт:",
+            noRowsPerPage: false,
+            selectAllRowsItem: false,
+            selectAllRowsItemText: "All",
+          }}
           selectableRows
           // add for checkbox selection
           Clicked
@@ -668,16 +690,15 @@ const bagana = [
     width: "40px",
   },
   {
-    name: "Ажилтны овог",
-    selector: "PERSON_LASTNAME",
-    sortable: true,
-  },
-  {
     name: "Ажилтны нэр",
     selector: "PERSON_FIRSTNAME",
     sortable: true,
   },
-
+  {
+    name: "Ажилтны овог",
+    selector: "PERSON_LASTNAME",
+    sortable: true,
+  },
   {
     name: "регистрийн дугаар",
     selector: "PERSON_REGISTER_NO",
@@ -692,7 +713,7 @@ function TushaalAjiltan(props) {
   const [search, setSearch] = useState("");
   const [tsonkhnuud, setTsonkhnuud] = useState(1);
   const [worker, setWorker] = useState();
-
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios("http://hr.audit.mn/hr/api/v1/personall");
@@ -854,16 +875,17 @@ function TushaalAjiltan(props) {
 }
 
 function Khoyor(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [tsalinKhuls, setTsalin] = useState(false);
   const alert = useAlert();
   const [button, setbutton] = useState(1);
   const [EMPLOYEE_ID, setEMPLOYEE_ID] = useState();
   const [data, loadData] = useState({
     PERSON_ID: props.worker.PERSON_ID,
-    DEPARTMENT_ID: 1,
+    DEPARTMENT_ID: userDetils.USER_DEPARTMENT_ID,
     SUB_DEPARTMENT_ID: "null",
     COMPARTMENT_ID: "null",
-    POSITION_ID: 1,
+    POSITION_ID: "",
     IS_ACTIVE: 1,
     CREATED_BY: 1,
     CREATED_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
@@ -879,6 +901,7 @@ function Khoyor(props) {
     forceRender();
   }, [data]);
   function saveToDB() {
+    console.log("tushaalshiidverData", data);
     DataRequest({
       url: "http://hr.audit.mn/hr/api/v1/decision",
       method: "POST",
@@ -962,7 +985,7 @@ function Khoyor(props) {
               <h1>Ажилтны нэр</h1>
               <input
                 class="input  is-size-7"
-                value={props.worker.PERSON_LASTNAME}
+                value={props.worker.PERSON_FIRSTNAME}
                 disabled={true}
               />
             </div>
@@ -970,7 +993,7 @@ function Khoyor(props) {
               <h1>Ажилтны овог</h1>
               <input
                 class="input  is-size-7"
-                value={props.worker.PERSON_FIRSTNAME}
+                value={props.worker.PERSON_LASTNAME}
                 disabled={true}
               />
             </div>
@@ -997,10 +1020,12 @@ function Khoyor(props) {
 
           <div>
             <div className="columns">
-              <div className="column is-6">
-                <h1>Байгууллага нэр</h1>
-                <DepartmentID personChild={data} setPersonChild={loadData} />
-              </div>
+              {props.type === 1 ? (
+                <div className="column is-6">
+                  <h1>Байгууллага нэр</h1>
+                  <DepartmentID personChild={data} setPersonChild={loadData} />
+                </div>
+              ) : null}
               <div className="column is-6">
                 <h1>
                   {" "}
@@ -1023,10 +1048,12 @@ function Khoyor(props) {
           </div>
           <div>
             <div className="columns">
-              <div className="column is-6">
-                <h1>Газар нэгж</h1>
-                <Subdepartment personChild={data} setPersonChild={loadData} />
-              </div>
+              {props.type === 1 ? (
+                <div className="column is-6">
+                  <h1>Газар нэгж</h1>
+                  <Subdepartment personChild={data} setPersonChild={loadData} />
+                </div>
+              ) : null}
               <div className="column is-6">
                 <h1>
                   {" "}
@@ -1049,10 +1076,12 @@ function Khoyor(props) {
           </div>
           <div>
             <div className="columns">
-              <div className="column is-6">
-                <h1>Албан хэлтэс</h1>
-                <Compartment personChild={data} setPersonChild={loadData} />
-              </div>
+              {props.type === 1 ? (
+                <div className="column is-6">
+                  <h1>Албан хэлтэс</h1>
+                  <Compartment personChild={data} setPersonChild={loadData} />
+                </div>
+              ) : null}
 
               <div className="column is-3">
                 <h1>Хэрэгжих огноо</h1>
@@ -1093,13 +1122,15 @@ function Khoyor(props) {
           </div>
           <div>
             <div className="columns ">
-              <div className="column is-6">
-                <h1>
-                  {" "}
-                  <span style={{ color: "red" }}>*</span>Албан тушаалын түвшин{" "}
-                </h1>
-                <Positionlevel personChild={data} setPersonChild={loadData} />
-              </div>
+              {props.type === 1 ? (
+                <div className="column is-6">
+                  <h1>
+                    {" "}
+                    <span style={{ color: "red" }}>*</span>Албан тушаалын түвшин{" "}
+                  </h1>
+                  <Positionlevel personChild={data} setPersonChild={loadData} />
+                </div>
+              ) : null}
               {props.type === 2 ? (
                 <div className="column is-3">
                   <h1>
@@ -1139,13 +1170,15 @@ function Khoyor(props) {
           </div>
           <div>
             <div className="columns ">
-              <div className="column is-6  ">
-                <h1>
-                  {" "}
-                  <span style={{ color: "red" }}>*</span>Албан тушаал
-                </h1>
-                <Position personChild={data} setPersonChild={loadData} />
-              </div>
+              {props.type === 1 ? (
+                <div className="column is-6  ">
+                  <h1>
+                    {" "}
+                    <span style={{ color: "red" }}>*</span>Албан тушаал
+                  </h1>
+                  <Position personChild={data} setPersonChild={loadData} />
+                </div>
+              ) : null}
             </div>
           </div>
           {/* {tsalinKhuls ? ( */}
@@ -1179,6 +1212,7 @@ function Khoyor(props) {
 }
 
 function Salary(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
@@ -1288,11 +1322,16 @@ function Salary(props) {
   function requiredField() {
     for (let i = 0; i < data.salary.length; i++) {
       if (
-        data.salary[i].POSITION_SALARY === null ||
-        data.salary[i].POSITION_SALARY === ""
+        data.salary[i].SALARY_MOTIVE === null ||
+        data.salary[i].SALARY_MOTIVE === ""
       ) {
-        alert.show("албан тушаалын оруулан уу");
+        alert.show("Цалин хөлс өөрчилсөн үндэслэл");
         return false;
+      } else if (
+        data.salary[i].SALARY_SUPPLEMENT === null ||
+        data.salary[i].SALARY_SUPPLEMENT === ""
+      ) {
+        alert.show("Цалин хөлс нэмэгдлийн нэр оруулна уу");
       } else if (i === data.salary.length - 1) {
         return true;
       }
@@ -1368,14 +1407,16 @@ function Salary(props) {
             <span className="headerTextBold">Цалингийн мэдээлэл</span>
           </div>
           <div className="column is-1">
-            <button
-              className="buttonTsenkher"
-              onClick={() => {
-                setEdit(!edit);
-              }}
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                className="buttonTsenkher"
+                onClick={() => {
+                  setEdit(!edit);
+                }}
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div className="table-container">
@@ -1420,8 +1461,7 @@ function Salary(props) {
                         style={{
                           borderColor: "transparent",
                           border: "none",
-                          paddingLeft: "0px",
-                          width: "50px",
+                          paddingLeft: 0,
                         }}
                       >
                         <img
@@ -1430,6 +1470,9 @@ function Salary(props) {
                           height="30px"
                           onClick={() => addRow()}
                         />
+                        <input
+                          style={{ width: "30px", visibility: "hidden" }}
+                        ></input>
                       </td>
                     ) : null}
                   </tr>
@@ -1529,7 +1572,6 @@ function Salary(props) {
                           style={{
                             paddingLeft: "0px",
                             borderColor: "transparent",
-                            width: "50px",
                           }}
                         >
                           <img
@@ -1538,6 +1580,9 @@ function Salary(props) {
                             height="30px"
                             onClick={() => removeRow(index, value)}
                           />
+                          <input
+                            style={{ width: "30px", visibility: "hidden" }}
+                          ></input>
                         </td>
                       ) : null}
                     </tr>
@@ -1574,14 +1619,18 @@ function Salary(props) {
 }
 
 function TushaalKharakh(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState();
 
   useEffect(() => {
     async function fetchData() {
-      console.log("TushaalKharakh", props.tushaal?.decision_ID);
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/decision/" +
           props.buttonValue +
+          "/" +
+          userDetils?.USER_DEPARTMENT_ID +
+          "/" +
+          userDetils?.USER_TYPE_NAME.toUpperCase() +
           "/" +
           props.tushaal?.decision_ID
       );
@@ -1634,7 +1683,7 @@ function TushaalKharakh(props) {
               <h1>Ажилтны нэр</h1>
               <input
                 class="input  is-size-7"
-                value={data?.PERSON_LASTNAME}
+                value={data?.PERSON_FIRSTNAME}
                 disabled={true}
               />
             </div>
@@ -1642,7 +1691,7 @@ function TushaalKharakh(props) {
               <h1>Ажилтны овог</h1>
               <input
                 class="input  is-size-7"
-                value={data?.PERSON_FIRSTNAME}
+                value={data?.PERSON_LASTNAME}
                 disabled={true}
               />
             </div>
@@ -1854,6 +1903,7 @@ function TushaalKharakh(props) {
   return listItems;
 }
 function SalaryKaruulakh(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
@@ -2023,6 +2073,7 @@ function SalaryKaruulakh(props) {
   return listItems;
 }
 function UstgakhTsonkh(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState({
     DECISION_ID: 0,
     REASONS_DECISION_CHANGE_ID: 1,

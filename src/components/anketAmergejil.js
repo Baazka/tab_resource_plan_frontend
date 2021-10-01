@@ -5,9 +5,9 @@ import { Subfametype, Fametype } from "./library";
 import { Add, Delete } from "../assets/images/zurag";
 const axios = require("axios");
 var dateFormat = require("dateformat");
-const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
 function Mergeshliin(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
@@ -241,14 +241,16 @@ function Mergeshliin(props) {
             </div>
 
             <div className="column is-1">
-              <button
-                className="buttonTsenkher"
-                onClick={() => {
-                  setEdit(!edit);
-                }}
-              >
-                Засварлах
-              </button>
+              {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+                <button
+                  className="buttonTsenkher"
+                  onClick={() => {
+                    setEdit(!edit);
+                  }}
+                >
+                  Засварлах
+                </button>
+              )}
             </div>
           </div>
           <div class="columns">
@@ -572,6 +574,7 @@ function Mergeshliin(props) {
 }
 
 function ZeregTsol(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
@@ -777,14 +780,16 @@ function ZeregTsol(props) {
             </span>
           </div>
           <div className="column is-1">
-            <button
-              className="buttonTsenkher"
-              onClick={() => {
-                setEdit(!edit);
-              }}
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                className="buttonTsenkher"
+                onClick={() => {
+                  setEdit(!edit);
+                }}
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div className="columns">

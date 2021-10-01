@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useReducer } from "react";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
-import { Edutype } from "./library";
-import { Add, Delete } from "../assets/images/zurag";
 
 const axios = require("axios");
 var dateFormat = require("dateformat");
-const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
 function TsergiinAlba(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
@@ -256,9 +254,11 @@ function TsergiinAlba(props) {
             >
               Хэвлэх
             </button> */}
-              <button className="buttonTsenkher" onClick={saveToDB}>
-                Хадгалах
-              </button>
+              {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+                <button className="buttonTsenkher" onClick={saveToDB}>
+                  Хадгалах
+                </button>
+              )}
             </div>
           ) : null}
         </div>

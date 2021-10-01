@@ -6,9 +6,9 @@ import { Office, Suboffice, Positioncategorytype } from "./library";
 
 const axios = require("axios");
 var dateFormat = require("dateformat");
-const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
 function Turshlgin(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
@@ -18,7 +18,16 @@ function Turshlgin(props) {
         "http://hr.audit.mn/hr/api/v1/Experience/" + props.person_id
       );
       console.log(listItems, "Tangarag");
-      loadData(listItems?.data);
+      loadData({
+        Experience: listItems?.data?.Experience.sort(function sortFunction(
+          a,
+          b
+        ) {
+          var dateA = new Date(a.ENTERED_DATE).getTime();
+          var dateB = new Date(b.ENTERED_DATE).getTime();
+          return dateA > dateB ? 1 : -1;
+        }),
+      });
     }
     fetchData();
   }, [props]);
@@ -256,14 +265,16 @@ function Turshlgin(props) {
             </span>
           </div>
           <div className="column is-1">
-            <button
-              className="buttonTsenkher"
-              onClick={() => {
-                setEdit(!edit);
-              }}
-            >
-              Засварлах
-            </button>
+            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              <button
+                className="buttonTsenkher"
+                onClick={() => {
+                  setEdit(!edit);
+                }}
+              >
+                Засварлах
+              </button>
+            )}
           </div>
         </div>
         <div class="columns">
@@ -284,9 +295,9 @@ function Turshlgin(props) {
                   <td>
                     <span className="textSaaral">Ажилласан аймаг, хот</span>
                   </td>
-                  <td>
+                  {/* <td>
                     <span className="textSaaral">Ажилласан сум, дүүрэг</span>
-                  </td>
+                  </td> */}
                   <td>
                     <span className="textSaaral">
                       Ажилласан байгууллагын нэр
@@ -354,7 +365,7 @@ function Turshlgin(props) {
                         edit={edit}
                       />
                     </td>
-                    <td>
+                    {/* <td>
                       <Suboffice
                         personChild={data.Experience[index]}
                         setPersonChild={setSubOfficeId}
@@ -362,7 +373,7 @@ function Turshlgin(props) {
                         index={index}
                         edit={edit}
                       />
-                    </td>
+                    </td> */}
                     <td>
                       <input
                         placeholder="утгаа оруулна уу"
@@ -423,24 +434,6 @@ function Turshlgin(props) {
                     </td>
 
                     <td>
-                      {/* <input
-                        placeholder="утгаа оруулна уу"
-                        disabled={edit}
-                        className="Borderless"
-                        style={{ width: "100px" }}
-                        value={data.Experience[index]?.EXPERIENCE_POSITION_TYPE}
-                        onChange={(text) => {
-                          let value = [...data?.Experience];
-                          value[index].EXPERIENCE_POSITION_TYPE =
-                            text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ Experience: value });
-                        }}
-                      /> */}
                       <Positioncategorytype
                         personChild={data.Experience[index]}
                         setPersonChild={setPositioncategorytype}
@@ -454,7 +447,7 @@ function Turshlgin(props) {
                         type="date"
                         disabled={edit}
                         className="Borderless"
-                        style={{ width: "118px" }}
+                        style={{ width: "120px" }}
                         value={dateFormat(
                           data.Experience[index].ENTERED_DATE,
                           "yyyy-mm-dd"
@@ -495,7 +488,7 @@ function Turshlgin(props) {
                         type="date"
                         disabled={edit}
                         className="Borderless"
-                        style={{ width: "118px" }}
+                        style={{ width: "120px" }}
                         value={dateFormat(
                           data.Experience[index].EXPIRED_DATE,
                           "yyyy-mm-dd"

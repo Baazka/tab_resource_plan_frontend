@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import {
   DepartmentID,
   Subdepartment,
@@ -9,6 +9,7 @@ import {
   Positionorder,
   Edutype,
   Profession,
+  Office,
 } from "../components/library";
 import Header from "../components/header";
 import { DataRequest } from "../functions/DataApi";
@@ -120,36 +121,63 @@ function AlbanTushaalBurtgel(props) {
             I.ЕРӨНХИЙ МЭДЭЭЛЭЛ
           </button>
         </div>
-
-        <div className="AnketList">
-          <img
-            src={menu === 2 ? BlueKhoyor : BlackKhoyor}
-            width="45px"
-            height="45px"
-          />
-          <button
-            className="button"
-            style={{
-              color: `${menu === 2 ? "#418ee6" : "#5d5d5d"}`,
-              border: "none",
-              width: "17rem",
-              fontFamily: "RalewayRegular",
-              fontWeight: "bold",
-              whiteSpace: "nowrap",
-              marginTop: "3px",
-              fontSize: "1rem",
-            }}
-            onClick={() => setMenu(2)}
-          >
-            II.ТАВИГДАХ ТУСГАЙ <br /> ШААРДЛАГА
-          </button>
-        </div>
+        {POSITION_ID != undefined ? (
+          <div>
+            <div className="AnketList">
+              <img
+                src={menu === 2 ? BlueKhoyor : BlackKhoyor}
+                width="45px"
+                height="45px"
+              />
+              <button
+                className="button"
+                style={{
+                  color: `${menu === 2 ? "#418ee6" : "#5d5d5d"}`,
+                  border: "none",
+                  width: "17rem",
+                  fontFamily: "RalewayRegular",
+                  fontWeight: "bold",
+                  whiteSpace: "nowrap",
+                  marginTop: "3px",
+                  fontSize: "1rem",
+                }}
+                onClick={() => setMenu(2)}
+              >
+                II.ТАВИГДАХ ТУСГАЙ <br /> ШААРДЛАГА
+              </button>
+            </div>
+            <div className="AnketList">
+              <img
+                src={menu === 2 ? BlueDuruv : BlackDuruv}
+                width="45px"
+                height="45px"
+              />
+              <button
+                className="button"
+                style={{
+                  color: `${menu === 3 ? "#418ee6" : "#5d5d5d"}`,
+                  border: "none",
+                  width: "17rem",
+                  fontFamily: "RalewayRegular",
+                  fontWeight: "bold",
+                  whiteSpace: "nowrap",
+                  marginTop: "3px",
+                  fontSize: "1rem",
+                }}
+                onClick={() => setMenu(3)}
+              >
+                III.Чиг үүрэг
+              </button>
+            </div>
+          </div>
+        ) : null}
       </div>
+
       <div
         style={{
           display: "flex",
           flexDirection: "column",
-          width: "90%",
+          width: "100%",
           boxSizing: "border-box",
           overflow: "scroll",
         }}
@@ -197,8 +225,11 @@ function AlbanTushaalBurtgel(props) {
                 POSITION_ID={POSITION_ID}
               />
             ) : null}
+
+            {menu === 3 ? (
+              <ChigUureg loading={setLoading} POSITION_ID={POSITION_ID} />
+            ) : null}
             {/*
-            {menu === 3 ? <Uramshuulal loading={setLoading} /> : null}
             {menu === 4 ? <NuhuhMulbur loading={setLoading} /> : null}
             {menu === 5 ? <Tuslamj loading={setLoading} /> : null}
             {menu === 6 ? <Surgalt loading={setLoading} /> : null}
@@ -348,10 +379,9 @@ function YurunkhiiMedeelel(props) {
     listItems = (
       <div>
         <div
-          className="box"
           style={{
             marginTop: "80px",
-            width: "98%",
+            width: "90%",
             height: "auto",
             marginLeft: "15px",
             paddingBottom: "2.5rem",
@@ -548,7 +578,6 @@ function YurunkhiiMedeelel(props) {
 function TavigdahTusgai(props) {
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
-  console.log("POSITION_ID", props?.POSITION_ID);
   const alert = useAlert();
 
   useEffect(() => {
@@ -813,6 +842,436 @@ function TavigdahTusgai(props) {
   }
 
   return listItems;
+}
+function ChigUureg(props) {
+  const [data, loadData] = useState([]);
+  const alert = useAlert();
+  const [edit, setEdit] = useState(true);
+  const [, forceRender] = useReducer((s) => s + 1, 0);
+
+  useEffect(() => {
+    async function fetchData() {
+      let listItems;
+      if (data.length === 0) {
+        listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/positionrole/:1/" + props?.positionId
+        );
+        if (listItems.data != undefined && listItems.data.length > 0)
+          loadData(listItems.data);
+        else
+          loadData([
+            {
+              POSITION_ROLE_ID: null,
+              POSITION_ROLE_NAME: "",
+              POSITION_ROLE_TYPE: 1,
+              POSITION_ID: 1,
+              IS_ACTIVE: 1,
+              CREATED_BY: userDetils?.USER_ID,
+              CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
+          ]);
+      }
+    }
+    fetchData();
+  }, [props]);
+
+  function saveToDB() {
+    if (requiredField(data) === true) {
+      props.setLoading(true);
+      if (props?.positionId !== "undefined" && props?.positionId != null) {
+        DataRequest({
+          url:
+            "http://hr.audit.mn/hr/api/v1/positionrole/:1/" + props?.positionId,
+          method: "POST",
+          data: data,
+        })
+          .then(function (response) {
+            console.log(response.data);
+            //history.push('/sample')
+            if (response?.data.message === "success") {
+              alert.show("амжилттай хадгаллаа");
+
+              setEdit(!edit);
+              props.setLoading(false);
+            } else {
+              props.setLoading(false);
+              setEdit(!edit);
+              alert.show("амжилтгүй");
+            }
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            props.setLoading(false);
+            alert.show("амжилтгүй");
+          });
+      }
+    }
+  }
+  async function addRow() {
+    let value = data;
+    value.push({
+      POSITION_ROLE_ID: null,
+      POSITION_ROLE_NAME: "",
+      POSITION_ROLE_TYPE: 1,
+      POSITION_ID: 1,
+      IS_ACTIVE: 1,
+      CREATED_BY: userDetils?.USER_ID,
+      CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+    });
+
+    await loadData(value);
+    forceRender();
+  }
+  function removeRow(indexParam, value) {
+    if (value?.POSITION_ROLE_ID !== null) {
+      DataRequest({
+        url:
+          "http://hr.audit.mn/hr/api/v1/positionrole/:1/" + props?.positionId,
+        method: "POST",
+        data: {
+          POSITION_ROLE_ID: value?.POSITION_ROLE_ID,
+          POSITION_ROLE_NAME: value?.POSITION_ROLE_NAME,
+          POSITION_ROLE_TYPE: 1,
+          POSITION_ID: 1,
+          IS_ACTIVE: 0,
+          UPDATED_BY: userDetils?.USER_ID,
+          UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+        },
+      })
+        .then(function (response) {
+          console.log("UpdateResponse", response);
+          //history.push('/sample')
+          if (response?.data?.message === "success") {
+            alert.show("амжилттай устлаа");
+            setEdit(!edit);
+          }
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+          alert.show("aldaa");
+        });
+    }
+    loadData(data.filter((element, index) => index !== indexParam)); //splice(indexParam, 0)
+  }
+  function requiredField() {
+    if (data.POSITION_ROLE_NAME === null || data.POSITION_ROLE_NAME === "") {
+      alert.show("нэр оруулан уу");
+      return false;
+    } else {
+      return true;
+    }
+  }
+  let listItems;
+  if (data !== undefined || data.length !== 0) {
+    listItems = (
+      <div
+        className=" box"
+        style={{
+          marginTop: "80px",
+          width: "98%",
+          height: "auto",
+          marginLeft: "10px",
+        }}
+      >
+        <div className="columns">
+          <div className="column is-11">
+            <span className="headerTextBold">Чиг үүрэг</span>
+          </div>
+          <div className="column is-1">
+            <button
+              className="buttonTsenkher"
+              onClick={() => {
+                setEdit(!edit);
+              }}
+            >
+              Засварлах
+            </button>
+          </div>
+        </div>
+
+        <div className="columns">
+          <div className="column is-12">
+            <table className="table is-bordered ">
+              <thead>
+                <tr>
+                  <td>
+                    <span className="textSaaral">№</span>
+                  </td>
+                  <td>
+                    <span className="textSaaral">нэр</span>
+                  </td>
+
+                  {!edit ? (
+                    <td
+                      style={{
+                        borderColor: "transparent",
+                        border: "none",
+                        paddingLeft: "0px",
+                        width: "50px",
+                      }}
+                    >
+                      <img
+                        src={Add}
+                        width="30px"
+                        height="30px"
+                        onClick={() => addRow()}
+                      />
+                    </td>
+                  ) : null}
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((value, index) => (
+                  <tr>
+                    <td>
+                      <span className="textSaaral">{index + 1}</span>
+                    </td>
+                    <td>
+                      <input
+                        disabled={edit}
+                        className="Borderless"
+                        placeholder="утгаа оруулна уу"
+                        value={data[index]?.POSITION_ROLE_NAME}
+                        onChange={(text) => {
+                          let value = [...data];
+                          value[index].POSITION_ROLE_NAME = text.target.value;
+                          value[index].UPDATED_BY = userDetils?.USER_ID;
+                          value[index].UPDATED_DATE = dateFormat(
+                            new Date(),
+                            "dd-mmm-yy"
+                          );
+                          loadData(value);
+                        }}
+                      />
+                    </td>
+
+                    {/* <td>
+                      <input
+                        type="date"
+                        disabled={edit}
+                        className="Borderless"
+                        value={dateFormat(
+                          data.Literature[index].LITERATURE_DATE,
+                          "yyyy-mm-dd"
+                        )}
+                        onChange={(e) => {
+                          let value = [...data?.Literature];
+                          value[index].LITERATURE_DATE = e.target.value;
+                          value[index].UPDATED_BY = userDetils?.USER_ID;
+                          value[index].UPDATED_DATE = dateFormat(
+                            new Date(),
+                            "dd-mmm-yy"
+                          );
+                          loadData({ Literature: value });
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <textarea
+                        placeholder="утгаа оруулна уу"
+                        disabled={edit}
+                        className="Borderless"
+                        value={data.Literature[index]?.LITERATURE_DESC}
+                        onChange={(text) => {
+                          let value = [...data?.Literature];
+                          value[index].LITERATURE_DESC = text.target.value;
+                          value[index].UPDATED_BY = userDetils?.USER_ID;
+                          value[index].UPDATED_DATE = dateFormat(
+                            new Date(),
+                            "dd-mmm-yy"
+                          );
+                          loadData({ Literature: value });
+                        }}
+                      />
+                    </td> */}
+                    {!edit ? (
+                      <td
+                        style={{
+                          paddingLeft: "0px",
+                          borderColor: "transparent",
+                          width: "50px",
+                        }}
+                      >
+                        <img
+                          src={Delete}
+                          width="30px"
+                          height="30px"
+                          onClick={() => removeRow(index, value)}
+                        />
+                      </td>
+                    ) : null}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="columns">
+          <div className="column is-11"></div>
+
+          {!edit ? (
+            <div className="column is-1 ">
+              {/* <button
+            className="buttonTsenkher"
+            style={{ marginRight: "0.4rem" }}
+          >
+            Хэвлэх
+          </button> */}
+              <button className="buttonTsenkher" onClick={saveToDB}>
+                Хадгалах
+              </button>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+
+  // return (
+  //   <div>
+  //     <div
+  //       className="box"
+  //       style={{
+  //         marginTop: "80px",
+  //         width: "98%",
+  //         height: "auto",
+  //         marginLeft: "15px",
+  //         paddingBottom: "2.5rem",
+  //       }}
+  //     >
+  //       <div className="columns  ">
+  //         <div className="column is-1"></div>
+  //         <div className="column is-5">
+  //           <h1>Код:</h1>
+  //           <input
+  //             class="input"
+  //             style={{ height: "25px" }}
+  //             //value={props.worker.PERSON_LASTNAME}
+  //           />
+  //         </div>
+
+  //         <div className="column is-5">
+  //           <h1>Аймаг/хот:</h1>
+  //           <Office personChild={data} setPersonChild={loadData} width={true} />
+  //         </div>
+  //       </div>
+
+  //       <div className="columns">
+  //         <div className="column is-1"></div>
+  //         <div className="column is-5">
+  //           <h1>Товч нэр:</h1>
+  //           <input
+  //             class="input"
+  //             style={{ height: "25px" }}
+  //             //value={props.worker.PERSON_LASTNAME}
+  //           />
+  //           <div className="columns">
+  //             <div className="column is-12">
+  //               <h1>Байгууллагын нэр:</h1>
+  //               <input
+  //                 class="input"
+  //                 style={{ height: "25px" }}
+  //                 //value={props.worker.PERSON_LASTNAME}
+  //               />
+  //             </div>
+  //           </div>
+  //         </div>
+  //         <div className="column is-5">
+  //           <h1>Хаяг:</h1>
+  //           <textarea
+  //             class="input"
+
+  //             // value={data?.DECISION_NO}
+  //             // onChange={(e) => {
+  //             //   loadData({
+  //             //     ...data,
+  //             //     ...{
+  //             //       DECISION_NO: e.target.value,
+  //             //     },
+  //             //   });
+  //             // }}
+  //           />
+  //         </div>
+  //         <div className="column is-1"></div>
+  //       </div>
+
+  //       <div>
+  //         <div className="columns">
+  //           <div className="column is-1"></div>
+  //           <div className="column is-5">
+  //             <h1>Хэрэгжих огноо:</h1>
+  //             <input
+  //               type="date"
+  //               className="input"
+  //               style={{ height: "25px" }}
+  //               // value={dateFormat(data?.START_DATE, "yyyy-mm-dd")}
+  //               // onChange={(e) => {
+  //               //   loadData({
+  //               //     ...data,
+  //               //     ...{
+  //               //       START_DATE: e.target.value,
+  //               //     },
+  //               //   });
+  //               // }}
+  //             ></input>
+  //           </div>
+  //           <div className="column is-5">
+  //             <h1>Утас:</h1>
+  //             <input
+  //               class="input "
+  //               style={{ height: "25px" }}
+  //               // value={data?.DECISION_DESC}
+  //               // onChange={(e) => {
+  //               //   loadData({
+  //               //     ...data,
+  //               //     ...{
+  //               //       DECISION_DESC: e.target.value,
+  //               //     },
+  //               //   });
+  //               // }}
+  //             />
+  //           </div>
+  //           <div className="column is-1"></div>
+  //         </div>
+  //       </div>
+  //       <div>
+  //         <div className="columns">
+  //           <div className="column is-1"></div>
+  //           <div className="column is-5">
+  //             <h1>Эрэмбэ:</h1>
+  //             <input
+  //               class="input  "
+  //               type="number"
+  //               style={{ height: "25px" }}
+  //               //value={props.worker.PERSON_LASTNAME}
+  //               disabled={true}
+  //             />
+  //           </div>
+  //         </div>
+  //       </div>
+
+  //       <div className="columns">
+  //         <div className="column is-8"> </div>
+  //         <div className="column is-4 has-text-right">
+  //           <button
+  //             className="buttonTsenkher ml-1"
+  //             // onClick={() => {
+  //             //   saveToDB();
+  //             // }}
+  //           >
+  //             Хадгалах
+  //           </button>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
 }
 
 export default AlbanTushaalBurtgel;
