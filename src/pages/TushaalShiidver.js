@@ -914,28 +914,52 @@ function Khoyor(props) {
     forceRender();
   }, [data]);
   function saveToDB() {
-    console.log("tushaalshiidverData", data);
-    DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/decision",
-      method: "POST",
-      data: data,
-    })
-      .then(function (response) {
-        console.log("tushaalResponse", response);
-        if (response?.data?.message === "success") {
-          setEMPLOYEE_ID(response?.data?.EMPLOYEE_ID);
-          alert.show("амжилттай хадгаллаа");
-          if (props.type !== 2) setbutton(2);
-        } else {
-          alert.show("Системийн алдаа");
-        }
-        //history.push('/sample')
+    if (props.type === 2) {
+      DataRequest({
+        url: "http://hr.audit.mn/hr/api/v1/decision",
+        method: "PUT",
+        data: data,
       })
-      .catch(function (error) {
-        //alert(error.response.data.error.message);
-        console.log(error.response);
-        alert.show("Системийн алдаа");
-      });
+        .then(function (response) {
+          console.log("tushaalResponse", response);
+          if (response?.data?.message === "success") {
+            setEMPLOYEE_ID(response?.data?.EMPLOYEE_ID);
+            alert.show("амжилттай хадгаллаа");
+            props.close(false);
+          } else {
+            alert.show("Системийн алдаа");
+          }
+          //history.push('/sample')
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+          alert.show("Системийн алдаа");
+        });
+    } else {
+      console.log("tushaalshiidverData", data);
+      DataRequest({
+        url: "http://hr.audit.mn/hr/api/v1/decision",
+        method: "POST",
+        data: data,
+      })
+        .then(function (response) {
+          console.log("tushaalResponse", response);
+          if (response?.data?.message === "success") {
+            setEMPLOYEE_ID(response?.data?.EMPLOYEE_ID);
+            alert.show("амжилттай хадгаллаа");
+            if (props.type !== 2) setbutton(2);
+          } else {
+            alert.show("Системийн алдаа");
+          }
+          //history.push('/sample')
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+          alert.show("Системийн алдаа");
+        });
+    }
   }
   function salary() {
     if (

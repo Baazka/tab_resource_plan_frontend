@@ -12,6 +12,7 @@ function Bolowsrol(props) {
   const [dataSecond, loadDataSecond] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
+  const [, forceRender] = useReducer((s) => s + 1, 0);
 
   useEffect(() => {
     async function fetchData() {
@@ -115,6 +116,7 @@ function Bolowsrol(props) {
               if (message !== 2) alert.show("амжилттай хадгаллаа");
               setEdit(!edit);
               props.loading(false);
+              forceRender();
             } else {
               alert.show("Системийн алдаа");
               setEdit(!edit);
@@ -145,6 +147,7 @@ function Bolowsrol(props) {
               if (message !== 1) alert.show("амжилттай хадгаллаа");
               setEdit(!edit);
               props.loading(false);
+              forceRender();
             } else {
               alert.show("Системийн алдаа");
               setEdit(!edit);
@@ -167,7 +170,7 @@ function Bolowsrol(props) {
   function setEduType(value) {
     let arr = data.Education;
     arr[value.index] = value;
-    console.log("test", value);
+
     loadData({ Education: arr });
   }
   function setEduTypeSecond(value) {
@@ -278,11 +281,51 @@ function Bolowsrol(props) {
       Education: data?.Education.filter(
         (element, index) => index !== indexParam
       ),
-    }); //splice(indexParam, 0)
+    });
+    forceRender();
+  }
+  function removeRowSecond(indexParam, value) {
+    console.log(indexParam, "index");
+    if (value?.ROWTYPE !== "NEW") {
+      DataRequest({
+        url: "http://hr.audit.mn/hr/api/v1/educationDelete",
+        method: "POST",
+        data: {
+          education: {
+            ...value,
+            ...{
+              IS_ACTIVE: 1,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+              PERSON_ID: props.person_id,
+            },
+          },
+        },
+      })
+        .then(function (response) {
+          console.log("UpdateResponse", response);
+          //history.push('/sample')
+          if (response?.data?.message === "success") {
+            alert.show("амжилттай устлаа");
+            setEdit(!edit);
+          }
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+          alert.show("aldaa");
+        });
+    }
+    loadDataSecond({
+      Education: dataSecond?.Education.filter(
+        (element, index) => index !== indexParam
+      ),
+    });
+    forceRender();
   }
 
   let listItems;
-  if (data?.Education !== undefined) {
+  if (data?.Education !== undefined && dataSecond?.Education !== undefined) {
     listItems = (
       <div
         className="box"
@@ -872,7 +915,7 @@ function Bolowsrol(props) {
                             src={Delete}
                             width="30px"
                             height="30px"
-                            onClick={() => removeRow(index, value)}
+                            onClick={() => removeRowSecond(index, value)}
                           />
                           <input
                             style={{ width: "30px", visibility: "hidden" }}
