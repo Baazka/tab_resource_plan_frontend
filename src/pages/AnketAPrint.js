@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useReducer } from "react";
+import { FamilyArray } from "../components/library";
 var dateFormat = require("dateformat");
 const axios = require("axios");
 
@@ -41,7 +42,7 @@ function Yrunkhii(props) {
 
   if (data != undefined && data !== null) {
     listItems = (
-      <div>
+      <div style={{ fontSize: "14px" }}>
         <span className="level-right has-text-right">
           Төрийн албаны зөвлөлийн 2019 оны 01 дүгээр
           <br /> сарын 31-ний өдрийн ..... дугаар тогтоолын
@@ -58,12 +59,12 @@ function Yrunkhii(props) {
         </h1>
         <div className="columns">
           <div className="column is-6">
-            <h1 className="is-size-5" style={{ fontWeight: "bold" }}>
+            <h1 style={{ fontWeight: "bold" }}>
               Нэг.Хувь хүний талаарх мэдээлэл
             </h1>
 
             <div style={{ display: "flex" }}>
-              <p>Регистрийн дугаар:</p>
+              <p>Регистрийн дугаар: &nbsp;</p>
               <table className="table is-bordered">
                 <tbody>
                   <tr>
@@ -83,24 +84,27 @@ function Yrunkhii(props) {
               </table>
             </div>
 
-            <h1>1.1. Иргэншил {data.NATIONAL_NAME}</h1>
-            <h1>1.2. Ургийн овог:{data.SURNAME}</h1>
+            <h1>1.1. Иргэншил &nbsp;{data.NATIONAL_NAME}</h1>
+            <h1>1.2. Ургийн овог: &nbsp;{data.SURNAME}</h1>
 
             <h1>
-              1.3. Эцэг ( эх)-ийн нэр:
+              1.3. Эцэг ( эх)-ийн нэр: &nbsp;
               {data.PERSON_LASTNAME}
             </h1>
 
-            <h1>1.4. Өөрийн нэр:{data.PERSON_FIRSTNAME} &nbsp; 1.5. Хүйс: </h1>
             <h1>
-              1.5. Төрсөн: {dateFormat(data.PERSON_BORNDATE, "yyyy-mm-dd")}
+              1.4. Өөрийн нэр: &nbsp;{data.PERSON_FIRSTNAME} &nbsp; 1.5. Хүйс:{" "}
             </h1>
             <h1>
-              1.6. Төрсөн аймаг, хот: улс {data.OFFICE_NAME}
-              сум, дүүрэг: {data.SUB_OFFICE_NAME}
-              <br /> Төрсөн газар:{data.SUB_OFFICE_NAME}
+              1.5. Төрсөн: &nbsp;
+              {dateFormat(data.PERSON_BORNDATE, "yyyy-mm-dd")}
             </h1>
-            <h1>1.7. Үндэс, угсаа: {data.DYNASTY_NAME}</h1>
+            <h1>
+              1.6. Төрсөн аймаг, хот ,улс: &nbsp;{data.OFFICE_NAME}
+              сум, дүүрэг: &nbsp; {data.SUB_OFFICE_NAME}
+              <br /> Төрсөн газар: &nbsp;{data.SUB_OFFICE_NAME}
+            </h1>
+            <h1>1.7. Үндэс, угсаа: &nbsp;{data.DYNASTY_NAME}</h1>
           </div>
           <div className="column is-6">
             <div
@@ -115,12 +119,12 @@ function Yrunkhii(props) {
             >
               Цээж зураг
               <br />
-              4Х16
+              4Х6
             </div>
           </div>
         </div>
         <Gerbul person_ID={data?.PERSON_ID} />
-        <Sadan person_ID={data?.PERSON_ID} />
+        <Sadan person_ID={data?.PERSON_ID} khayag={data} />
         <UrChadvar person_ID={data?.PERSON_ID} />
         <Bolowsrol person_ID={data?.PERSON_ID} />
         <Medeelel person_ID={data?.PERSON_ID} />
@@ -191,7 +195,7 @@ function Gerbul(props) {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/family/" + props.person_ID
       );
-      console.log("Family", listItems.data);
+      console.log("FamilyGG", listItems.data);
       loadData(listItems?.data.Family);
     }
     fetchdata();
@@ -202,30 +206,34 @@ function Gerbul(props) {
       <div>
         <h1>
           1.8. Гэр бүлийн байдал (зөвхөн гэр бүлийн бүртгэлд байгаа хүмүүсийг
-          бичнэ):
+          бичнэ)
         </h1>
         <br />
 
         <table className="table is-bordered">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Таны юу болох</th>
-              <th>Гэр бүлийн гишүүний эцэг /эх/-ийн болон өөрийн нэр</th>
-              <th>Төрсөн Он</th>
-              <th>Төрсөн аймаг, хот, сум, дүүрэг</th>
-              <th>Одоо эрхэлж буй ажил</th>
+              <td>Таны юу болох</td>
+              <td>Гэр бүлийн гишүүний эцэг /эх/-ийн болон өөрийн нэр</td>
+              <td>Төрсөн Он</td>
+              <td>Төрсөн аймаг, хот, сум, дүүрэг</td>
+              <td>Одоо эрхэлж буй ажил</td>
             </tr>
           </thead>
           <tbody>
-            {data?.map((value, index) => (
-              <tr>
-                <td>{value.FAMILY_NAME}</td>
-                <td>{value.MEMBER_LASTNAME + ", " + value.MEMBER_FIRSTNAME}</td>
-                <td> {dateFormat(data.MEMBER_BIRTHDATE, "yyyy-mm-dd")}</td>
-                <td>{value.MEMBER_ORG}</td>
-                <td>{value.MEMBER_POSITION}</td>
-              </tr>
-            ))}
+            {data
+              ?.filter((a) => a.MEMBER_TYPE === 1)
+              .map((value, index) => (
+                <tr>
+                  <td>{value.FAMILY_NAME}</td>
+                  <td>
+                    {value.MEMBER_LASTNAME + ", " + value.MEMBER_FIRSTNAME}
+                  </td>
+                  <td> {value.MEMBER_BIRTHDATE}</td>
+                  <td>{value.MEMBER_ORG}</td>
+                  <td>{value.MEMBER_POSITION}</td>
+                </tr>
+              ))}
           </tbody>
         </table>
 
@@ -237,17 +245,17 @@ function Gerbul(props) {
       <div>
         <h1>
           1.8. Гэр бүлийн байдал (зөвхөн гэр бүлийн бүртгэлд байгаа хүмүүсийг
-          бичнэ):
+          бичнэ)
         </h1>
         <br />
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Таны юу болох</th>
-              <th>Гэр бүлийн гишүүний эцэг /эх/-ийн болон өөрийн нэр</th>
-              <th>Төрсөн Он</th>
-              <th>Төрсөн аймаг, хот, сум, дүүрэг</th>
-              <th>Одоо эрхэлж буй ажил</th>
+              <td>Таны юу болох</td>
+              <td>Гэр бүлийн гишүүний эцэг /эх/-ийн болон өөрийн нэр</td>
+              <td>Төрсөн Он</td>
+              <td>Төрсөн аймаг, хот, сум, дүүрэг</td>
+              <td>Одоо эрхэлж буй ажил</td>
             </tr>
           </thead>
           <tbody>
@@ -267,13 +275,18 @@ function Gerbul(props) {
 }
 function Sadan(props) {
   const [data, loadData] = useState();
+  const [emergency, setEmergency] = useState();
   useEffect(() => {
     async function fetchdata() {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/family/" + props.person_ID
       );
-      console.log("Family", listItems.data);
       loadData(listItems?.data.Family);
+      listItems = await axios(
+        "http://hr.audit.mn/hr/api/v1/emergency/" + props.person_ID
+      );
+      console.log(listItems?.data?.Emergency, "emergency");
+      setEmergency(listItems?.data?.Emergency);
     }
     fetchdata();
   }, [props]);
@@ -289,34 +302,100 @@ function Sadan(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Таны юу болох</th>
-              <th>Гэр бүлийн гишүүний эцэг /эх/-ийн болон өөрийн нэр</th>
-              <th>Төрсөн Он</th>
-              <th>Төрсөн аймаг, хот, сум, дүүрэг</th>
-              <th>Одоо эрхэлж буй ажил</th>
+              <td>Таны юу болох</td>
+              <td>Гэр бүлийн гишүүний эцэг /эх/-ийн болон өөрийн нэр</td>
+              <td>Төрсөн Он</td>
+              <td>Төрсөн аймаг, хот, сум, дүүрэг</td>
+              <td>Одоо эрхэлж буй ажил</td>
             </tr>
           </thead>
           <tbody>
-            {data?.map((value, index) => (
+            {data
+              ?.filter((a) => a.MEMBER_TYPE === 2)
+              .map((value, index) => (
+                <tr>
+                  <td>{value.FAMILY_NAME}</td>
+                  <td>
+                    {value.MEMBER_LASTNAME + ", " + value.MEMBER_FIRSTNAME}
+                  </td>
+                  <td>{dateFormat(value.MEMBER_BIRTHDATE, "yyyy-mm-dd")}</td>
+                  <td>{value.MEMBER_ORG}</td>
+                  <td>{value.MEMBER_POSITION}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+        <h1>
+          10.Оршин суугаа хаяг: &nbsp;{props.khayag.PERSON_HOME_ADDRESS}
+          <br />
+          Утасны дугаар: &nbsp;{props.khayag.PERSON_PHONE} Е-майл хаяг: &nbsp;
+          {props.khayag.PERSON_EMAIL}
+        </h1>
+        <h1>
+          1.11.Зайлшгүй шаардлагатай үед холбоо барих хүн <br />
+        </h1>
+        <table className="table is-bordered">
+          <thead>
+            <tr>
+              <td>
+                <span className="textSaaral">№</span>
+              </td>
+              <td>
+                <span className="textSaaral">Таны юу болох</span>
+              </td>
+              <td>
+                <span className="textSaaral">Овог</span>
+              </td>
+              <td>
+                <span className="textSaaral">Нэр</span>
+              </td>
+              <td>
+                <span className="textSaaral">Утасны дугаар</span>
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            {emergency?.map((value, index) => (
               <tr>
-                <td>{value.FAMILY_NAME}</td>
-                <td>{value.MEMBER_LASTNAME + ", " + value.MEMBER_FIRSTNAME}</td>
-                <td>{dateFormat(data.MEMBER_BIRTHDATE, "yyyy-mm-dd")}</td>
-                <td>{value.MEMBER_ORG}</td>
-                <td>{value.MEMBER_POSITION}</td>
+                <td>
+                  <span className="textSaaral">{index + 1}</span>
+                </td>
+                <td>
+                  <input
+                    value={value.FAMILY_NAME}
+                    placeholder="утгаа оруулна уу"
+                    disabled={true}
+                    className="anketInput"
+                  />
+                </td>
+                <td>
+                  <input
+                    placeholder="утгаа оруулна уу"
+                    disabled={true}
+                    className="anketInput"
+                    value={value.EMERGENCY_LASTNAME}
+                  />
+                </td>
+                <td>
+                  <input
+                    placeholder="утгаа оруулна уу"
+                    disabled={true}
+                    className="anketInput"
+                    value={value.EMERGENCY_FIRSTNAME}
+                  />
+                </td>
+                <td>
+                  <input
+                    placeholder="утгаа оруулна уу"
+                    disabled={true}
+                    className="anketInput"
+                    value={value.EMERGENCY_PHONE}
+                  />
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <h1>
-          10.Оршин суугаа хаяг: аймаг, хот сум, дүүрэг, гэрийн хаяг:
-          <br />
-          Утасны дугаар: Е-майл хаяг:
-        </h1>
-        <h1>
-          1.11.Зайлшгүй шаардлагатай үед холбоо барих хүн <br />
-          Нэр / хэн болох/
-        </h1>
       </div>
     );
   } else {
@@ -330,11 +409,11 @@ function Sadan(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Таны юу болох</th>
-              <th>Гэр бүлийн гишүүний эцэг /эх/-ийн болон өөрийн нэр</th>
-              <th>Төрсөн Он</th>
-              <th>Төрсөн аймаг, хот, сум, дүүрэг</th>
-              <th>Одоо эрхэлж буй ажил</th>
+              <td>Таны юу болох</td>
+              <td>Гэр бүлийн гишүүний эцэг /эх/-ийн болон өөрийн нэр</td>
+              <td>Төрсөн Он</td>
+              <td>Төрсөн аймаг, хот, сум, дүүрэг</td>
+              <td>Одоо эрхэлж буй ажил</td>
             </tr>
           </thead>
           <tbody>
@@ -348,14 +427,75 @@ function Sadan(props) {
           </tbody>
         </table>
         <h1>
-          .10.Оршин суугаа хаяг: аймаг, хот сум, дүүрэг, гэрийн хаяг:
+          10.Оршин суугаа хаяг: &nbsp;{props.khayag.PERSON_HOME_ADDRESS}
           <br />
-          Утасны дугаар: Е-майл хаяг:
+          Утасны дугаар: &nbsp;{props.khayag.PERSON_PHONE} Е-майл хаяг: &nbsp;
+          {props.khayag.PERSON_EMAIL}
         </h1>
-        <h1>
-          1.11.Зайлшгүй шаардлагатай үед холбоо барих хүн <br />
-          Нэр / хэн болох/
-        </h1>
+        <br />
+        <table className="table is-bordered ">
+          <thead>
+            <tr>
+              <td>
+                <span className="textSaaral">№</span>
+              </td>
+              <td>
+                <span className="textSaaral">Таны юу болох</span>
+              </td>
+              <td>
+                <span className="textSaaral">Овог</span>
+              </td>
+              <td>
+                <span className="textSaaral">Нэр</span>
+              </td>
+              <td>
+                <span className="textSaaral">Утасны дугаар</span>
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            {emergency?.map((value, index) => (
+              <tr>
+                <td>
+                  <span className="textSaaral">{index + 1}</span>
+                </td>
+                <td>
+                  <FamilyArray
+                    personChild={value}
+                    setPersonChild={setEmergency}
+                    emergencyArray={emergency}
+                    indexChild={index}
+                    edit={true}
+                  />
+                </td>
+                <td>
+                  <input
+                    placeholder="утгаа оруулна уу"
+                    disabled={true}
+                    className="anketInput"
+                    value={value.EMERGENCY_LASTNAME}
+                  />
+                </td>
+                <td>
+                  <input
+                    placeholder="утгаа оруулна уу"
+                    disabled={true}
+                    className="anketInput"
+                    value={value.EMERGENCY_FIRSTNAME}
+                  />
+                </td>
+                <td>
+                  <input
+                    placeholder="утгаа оруулна уу"
+                    disabled={true}
+                    className="anketInput"
+                    value={value.EMERGENCY_PHONE}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     );
   }
@@ -379,17 +519,17 @@ function UrChadvar(props) {
   if (data !== undefined && data?.length !== 0 && data !== null) {
     listItems = (
       <div>
-        <h1 style={{ fontWeight: "bold" }}>
+        <span style={{ fontWeight: "bold" }}>
           Хоёр.Ур чадварын талаарх мэдээлэл
-        </h1>
-        <br />
-        <h1>2.1.Төрийн жинхэнэ албаны шалгалтын талаарх мэдээлэл</h1>
+        </span>
+
+        <span>2.1.Төрийн жинхэнэ албаны шалгалтын талаарх мэдээлэл</span>
 
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Мэдээллийн агуулга</th>
-              <th>Тайлбар </th>
+              <td>Мэдээллийн агуулга</td>
+              <td>Тайлбар </td>
             </tr>
           </thead>
           <tbody>
@@ -403,22 +543,22 @@ function UrChadvar(props) {
         </table>
         <h1>
           (* Шалгалт өгсөн эсэх гэсэн хэсэгт ерөнхий болон тусгай шалгалт
-          “өгсөн” гэх, өгөөгүй <br /> бол “өгөөгүй” гэж бичнэ).
+          “өгсөн” гэх, өгөөгүй <br /> бол “өгөөгүй” гэж бичнэ)
         </h1>
       </div>
     );
   } else {
     listItems = (
       <div>
-        <span>Хоёр.Ур чадварын талаарх мэдээлэл</span>
-        <h1 style={{ fontWeight: "bold" }}>
-          2.1.Төрийн жинхэнэ албаны шалгалтын талаарх мэдээлэл
-        </h1>
+        <span style={{ fontWeight: "bold" }}>
+          Хоёр.Ур чадварын талаарх мэдээлэл
+        </span>
+        <span>2.1.Төрийн жинхэнэ албаны шалгалтын талаарх мэдээлэл</span>
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Мэдээллийн агуулга</th>
-              <th>Тайлбар </th>
+              <td>Мэдээллийн агуулга</td>
+              <td>Тайлбар </td>
             </tr>
           </thead>
           <tbody>
@@ -473,19 +613,19 @@ function Bolowsrol(props) {
           <table className="table is-bordered ">
             <thead style={{ textAlignLast: "center" }}>
               <tr>
-                <th>Сургуулийн нэр*</th>
-                <th>Орсон он, сар</th>
-                <th>Төгссөн он, сар</th>
-                <th>Эзэмшсэн мэргэжил, </th>
-                <th>Гэрчилгээ, дипломын дугаар</th>
+                <td>Сургуулийн нэр*</td>
+                <td>Орсон он, сар</td>
+                <td>Төгссөн он, сар</td>
+                <td>Эзэмшсэн мэргэжил, </td>
+                <td>Гэрчилгээ, дипломын дугаар</td>
               </tr>
             </thead>
             <tbody>
               {data?.map((value, index) => (
                 <tr>
                   <td>{value.SCHOOL_NAME}</td>
-                  <td>{dateFormat(data.START_DATE, "yyyy-mm-dd")}</td>
-                  <td> {dateFormat(data.END_DATE, "yyyy-mm-dd")}</td>
+                  <td>{dateFormat(value.START_DATE, "yyyy-mm-dd")}</td>
+                  <td> {dateFormat(value.END_DATE, "yyyy-mm-dd")}</td>
                   <td>{value.PROFESSION_NAME}</td>
                   <td>{value.DIPLOM_NO}</td>
                 </tr>
@@ -500,10 +640,10 @@ function Bolowsrol(props) {
           <table className="table is-bordered ">
             <thead style={{ textAlignLast: "center" }}>
               <tr>
-                <th>Зэрэг</th>
-                <th>Хамгаалсан газар</th>
-                <th>Он, сар</th>
-                <th>Гэрчилгээ, дипломын дугаар</th>
+                <td>Зэрэг</td>
+                <td>Хамгаалсан газар</td>
+                <td>Он, сар</td>
+                <td>Гэрчилгээ, дипломын дугаар</td>
               </tr>
             </thead>
             <tbody>
@@ -511,7 +651,7 @@ function Bolowsrol(props) {
                 <tr>
                   <td>{value.EDUCATION_TYPE_NAME}</td>
                   <td>{value.EDUCATION_COUNTRY}</td>
-                  <td>{dateFormat(data.END_DATE, "yyyy-mm-dd")}</td>
+                  <td>{dateFormat(value.END_DATE, "yyyy-mm-dd")}</td>
                   <td>{value.DIPLOM_NO}</td>
                 </tr>
               ))}
@@ -539,11 +679,11 @@ function Bolowsrol(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Сургуулийн нэр*</th>
-              <th>Орсон он, сар</th>
-              <th>Төгссөн он, сар</th>
-              <th>Эзэмшсэн мэргэжил, </th>
-              <th>Гэрчилгээ, дипломын дугаар</th>
+              <td>Сургуулийн нэр*</td>
+              <td>Орсон он, сар</td>
+              <td>Төгссөн он, сар</td>
+              <td>Эзэмшсэн мэргэжил, </td>
+              <td>Гэрчилгээ, дипломын дугаар</td>
             </tr>
           </thead>
           <tbody>
@@ -563,10 +703,10 @@ function Bolowsrol(props) {
           <table className="table is-bordered ">
             <thead style={{ textAlignLast: "center" }}>
               <tr>
-                <th>Зэрэг</th>
-                <th>Хамгаалсан газар</th>
-                <th>Он, сар</th>
-                <th>Гэрчилгээ, дипломын дугаар</th>
+                <td>Зэрэг</td>
+                <td>Хамгаалсан газар</td>
+                <td>Он, сар</td>
+                <td>Гэрчилгээ, дипломын дугаар</td>
               </tr>
             </thead>
             <tbody>
@@ -618,21 +758,21 @@ function Medeelel(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Хаана, дотоод, гадаадын ямар байгууллагад</th>
-              <th>Эхэлсэн дууссан он, сар, өдөр</th>
-              <th>Хугацаа /хоногоор</th>
-              <th>Ямар чиглэлээр</th>
-              <th>Үнэмлэх, гэрчилгээний дугаар, он, сар, өдөр</th>
+              <td>Хаана, дотоод, гадаадын ямар байгууллагад</td>
+              <td>Эхэлсэн дууссан он, сар, өдөр</td>
+              <td>Хугацаа /хоногоор</td>
+              <td>Ямар чиглэлээр</td>
+              <td>Үнэмлэх, гэрчилгээний дугаар, он, сар, өдөр</td>
             </tr>
           </thead>
           <tbody>
             {data?.map((value, index) => (
               <tr>
                 <td>{value.PROFESSION_COUNTRY}</td>
-                <td>{dateFormat(data.START_DATE, "yyyy-mm-dd")}</td>
+                <td>{dateFormat(value.START_DATE, "yyyy-mm-dd")}</td>
                 <td>{value.DURATION_DAY}</td>
                 <td>{value.PROFESSION_DIRECTION}</td>
-                <td>{dateFormat(data.DIPLOM_DATE, "yyyy-mm-dd")}</td>
+                <td>{dateFormat(value.DIPLOM_DATE, "yyyy-mm-dd")}</td>
               </tr>
             ))}
           </tbody>
@@ -653,11 +793,11 @@ function Medeelel(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Хаана, дотоод, гадаадын ямар байгууллагад</th>
-              <th>Эхэлсэн дууссан он, сар, өдөр</th>
-              <th>Хугацаа /хоногоор</th>
-              <th>Ямар чиглэлээр</th>
-              <th>Үнэмлэх, гэрчилгээний дугаар, он, сар, өдөр</th>
+              <td>Хаана, дотоод, гадаадын ямар байгууллагад</td>
+              <td>Эхэлсэн дууссан он, сар, өдөр</td>
+              <td>Хугацаа /хоногоор</td>
+              <td>Ямар чиглэлээр</td>
+              <td>Үнэмлэх, гэрчилгээний дугаар, он, сар, өдөр</td>
             </tr>
           </thead>
           <tbody>
@@ -702,10 +842,10 @@ function TsolDew(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Цол</th>
-              <th>Цол олгосон байгууллага</th>
-              <th>Огноо</th>
-              <th>Гэрчилгээ, дипломын дугаар</th>
+              <td>Цол</td>
+              <td>Цол олгосон байгууллага</td>
+              <td>Огноо</td>
+              <td>Гэрчилгээ, дипломын дугаар</td>
             </tr>
           </thead>
           <tbody>
@@ -713,7 +853,7 @@ function TsolDew(props) {
               <tr>
                 <td>{value.FAME_TYPE_NAME}</td>
                 <td>{value.FAME_ORG}</td>
-                <td>{dateFormat(data.FAME_DATE, "yyyy-mm-dd")}</td>
+                <td>{dateFormat(value.FAME_DATE, "yyyy-mm-dd")}</td>
                 <td>{value.FAME_NO}</td>
               </tr>
             ))}
@@ -732,10 +872,10 @@ function TsolDew(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Цол</th>
-              <th>Цол олгосон байгууллага</th>
-              <th>Огноо</th>
-              <th>Гэрчилгээ, дипломын дугаар</th>
+              <td>Цол</td>
+              <td>Цол олгосон байгууллага</td>
+              <td>Огноо</td>
+              <td>Гэрчилгээ, дипломын дугаар</td>
             </tr>
           </thead>
           <tbody>
@@ -772,13 +912,13 @@ function TsergiinAlba(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Цэргийн алба хаасан</th>
+              <td>Цэргийн алба хаасан</td>
               <td>Хаасан</td>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th>Цэргийн алба хаагаагүй</th>
+              <td>Цэргийн алба хаагаагүй</td>
               <td>Хаасан</td>
             </tr>
           </tbody>
@@ -787,10 +927,10 @@ function TsergiinAlba(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Д/д</th>
-              <th>Цэргийн үүрэгтний үнэмлэхийн дугаар</th>
-              <th>Цэргийн алба хаасан байдал</th>
-              <th>Тайлбар</th>
+              <td>Д/д</td>
+              <td>Цэргийн үүрэгтний үнэмлэхийн дугаар</td>
+              <td>Цэргийн алба хаасан байдал</td>
+              <td>Тайлбар</td>
             </tr>
           </thead>
           <tbody>
@@ -815,13 +955,13 @@ function TsergiinAlba(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Цэргийн алба хаасан</th>
+              <td>Цэргийн алба хаасан</td>
               <td></td>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <th>Цэргийн алба хаагаагүй</th>
+              <td>Цэргийн алба хаагаагүй</td>
               <td></td>
             </tr>
           </tbody>
@@ -830,10 +970,10 @@ function TsergiinAlba(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Д/д</th>
-              <th>Цэргийн үүрэгтний үнэмлэхийн дугаар</th>
-              <th>Цэргийн алба хаасан байдал</th>
-              <th>Тайлбар</th>
+              <td>Д/д</td>
+              <td>Цэргийн үүрэгтний үнэмлэхийн дугаар</td>
+              <td>Цэргийн алба хаасан байдал</td>
+              <td>Тайлбар</td>
             </tr>
           </thead>
           <tbody>
@@ -878,16 +1018,16 @@ function Shalgagdahch(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Шагнагдсан огноо</th>
-              <th>Шагналын нэр</th>
-              <th>Шийдвэрийн нэр, огноо, дугаар</th>
-              <th>Шагнуулсан үндэслэл</th>
+              <td>Шагнагдсан огноо</td>
+              <td>Шагналын нэр</td>
+              <td>Шийдвэрийн нэр, огноо, дугаар</td>
+              <td>Шагнуулсан үндэслэл</td>
             </tr>
           </thead>
           <tbody>
             {data?.map((value, index) => (
               <tr>
-                <td>{dateFormat(data.AWARD_DATE, "yyyy-mm-dd")}</td>
+                <td>{dateFormat(value.AWARD_DATE, "yyyy-mm-dd")}</td>
                 <td>{value.AWARD_NAME}</td>
                 <td>{value.DECISION_NO}</td>
                 <td>{value.AWARD_DESC}</td>
@@ -910,10 +1050,10 @@ function Shalgagdahch(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Шагнагдсан огноо</th>
-              <th>Шагналын нэр</th>
-              <th>Шийдвэрийн нэр, огноо, дугаар</th>
-              <th>Шагнуулсан үндэслэл</th>
+              <td>Шагнагдсан огноо</td>
+              <td>Шагналын нэр</td>
+              <td>Шийдвэрийн нэр, огноо, дугаар</td>
+              <td>Шагнуулсан үндэслэл</td>
             </tr>
           </thead>
           <tbody>
@@ -954,11 +1094,11 @@ function Tushaal(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Ажилласан байгууллагын нэр*</th>
-              <th>Газар, хэлтэс, алба</th>
-              <th>Эрхэлсэн албан тушаал</th>
-              <th>Ажилд орсон он, сар (тушаалын дугаар)</th>
-              <th>Ажлаас гарсан он, сар (тушаалын дугаар)</th>
+              <td>Ажилласан байгууллагын нэр*</td>
+              <td>Газар, хэлтэс, алба</td>
+              <td>Эрхэлсэн албан тушаал</td>
+              <td>Ажилд орсон он, сар (тушаалын дугаар)</td>
+              <td>Ажлаас гарсан он, сар (тушаалын дугаар)</td>
             </tr>
           </thead>
           <tbody>
@@ -998,11 +1138,11 @@ function Tushaal(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Ажилласан байгууллагын нэр*</th>
-              <th>Газар, хэлтэс, алба</th>
-              <th>Эрхэлсэн албан тушаал</th>
-              <th>Ажилд орсон он, сар (тушаалын дугаар)</th>
-              <th>Ажлаас гарсан он, сар (тушаалын дугаар)</th>
+              <td>Ажилласан байгууллагын нэр*</td>
+              <td>Газар, хэлтэс, алба</td>
+              <td>Эрхэлсэн албан тушаал</td>
+              <td>Ажилд орсон он, сар (тушаалын дугаар)</td>
+              <td>Ажлаас гарсан он, сар (тушаалын дугаар)</td>
             </tr>
           </thead>
           <tbody>
@@ -1042,11 +1182,11 @@ function BvteeliinJagsaalt(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Д/д</th>
-              <th>Бүтээлийн нэр</th>
-              <th>Бүтээлийн төрөл</th>
-              <th>Бүтээл гаргасан огноо</th>
-              <th>Тайлбар</th>
+              <td>Д/д</td>
+              <td>Бүтээлийн нэр</td>
+              <td>Бүтээлийн төрөл</td>
+              <td>Бүтээл гаргасан огноо</td>
+              <td>Тайлбар</td>
             </tr>
           </thead>
           <tbody>
@@ -1055,7 +1195,7 @@ function BvteeliinJagsaalt(props) {
                 <td>{index + 1}</td>
                 <td>{value.LITERATURE_NAME}</td>
                 <td>{value.LITERATURE_TYPE}</td>
-                <td>{dateFormat(data.LITERATURE_DATE, "yyyy-mm-dd")}</td>
+                <td>{dateFormat(value.LITERATURE_DATE, "yyyy-mm-dd")}</td>
                 <td>{value.LITERATURE_DESC}</td>
               </tr>
             ))}
@@ -1093,11 +1233,11 @@ function BvteeliinJagsaalt(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Д/д</th>
-              <th>Бүтээлийн нэр</th>
-              <th>Бүтээлийн төрөл</th>
-              <th>Бүтээл гаргасан огноо</th>
-              <th>Тайлбар</th>
+              <td>Д/д</td>
+              <td>Бүтээлийн нэр</td>
+              <td>Бүтээлийн төрөл</td>
+              <td>Бүтээл гаргасан огноо</td>
+              <td>Тайлбар</td>
             </tr>
           </thead>
           <tbody>
@@ -1283,37 +1423,37 @@ function BAlbanTushaal(props) {
           <tbody>
             <tr>
               <td>1</td>
-              <th>Байгууллагын нэр:</th>
+              <td>Байгууллагын нэр:</td>
               <td>&nbsp;</td>
             </tr>
             <tr>
               <td>2</td>
-              <th>Нэгжийн нэр</th>
+              <td>Нэгжийн нэр</td>
               <td>&nbsp;</td>
             </tr>
             <tr>
               <td>3</td>
-              <th>Албан тушаалын нэр</th>
+              <td>Албан тушаалын нэр</td>
               <td>&nbsp;</td>
             </tr>
             <tr>
               <td>4</td>
-              <th>Албан тушаалын ангилал</th>
+              <td>Албан тушаалын ангилал</td>
               <td>&nbsp;</td>
             </tr>
             <tr>
               <td>5</td>
-              <th>Албан тушаалын зэрэглэл</th>
+              <td>Албан тушаалын зэрэглэл</td>
               <td>&nbsp;</td>
             </tr>
             <tr>
               <td>6</td>
-              <th>Албан тушаал бий болгосон шийдвэрийн нэр</th>
+              <td>Албан тушаал бий болгосон шийдвэрийн нэр</td>
               <td>&nbsp;</td>
             </tr>
             <tr>
               <td>7</td>
-              <th>Албан тушаал бий болгосон огноо</th>
+              <td>Албан тушаал бий болгосон огноо</td>
               <td>&nbsp;</td>
             </tr>
           </tbody>
@@ -1345,11 +1485,11 @@ function BAlbantushaalTomilgoo(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Д/д</th>
-              <th>Томилогдсон албан тушаалын нэр</th>
-              <th>Томилсон огноо, шийдвэрийн нэр, дугаар</th>
-              <th>Өөрчилсөн огноо, шийдвэрийн нэр, дугаар</th>
-              <th>Өөрчилсөн шалтгаан</th>
+              <td>Д/д</td>
+              <td>Томилогдсон албан тушаалын нэр</td>
+              <td>Томилсон огноо, шийдвэрийн нэр, дугаар</td>
+              <td>Өөрчилсөн огноо, шийдвэрийн нэр, дугаар</td>
+              <td>Өөрчилсөн шалтгаан</td>
             </tr>
           </thead>
           <tbody>
@@ -1393,11 +1533,11 @@ function BAlbantushaalTomilgoo(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Д/д</th>
-              <th>Томилогдсон албан тушаалын нэр</th>
-              <th>Томилсон огноо, шийдвэрийн нэр, дугаар</th>
-              <th>Өөрчилсөн огноо, шийдвэрийн нэр, дугаар</th>
-              <th>Өөрчилсөн шалтгаан</th>
+              <td>Д/д</td>
+              <td>Томилогдсон албан тушаалын нэр</td>
+              <td>Томилсон огноо, шийдвэрийн нэр, дугаар</td>
+              <td>Өөрчилсөн огноо, шийдвэрийн нэр, дугаар</td>
+              <td>Өөрчилсөн шалтгаан</td>
             </tr>
           </thead>
           <tbody>
@@ -1437,10 +1577,10 @@ function BZeregDewTsol(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Албан тушаалын ангилал, зэрэглэл</th>
-              <th>Зэрэг дэв, цолны нэр</th>
-              <th>Шийдвэрийн огноо, дугаар</th>
-              <th>Үнэмлэхийн дугаар</th>
+              <td>Албан тушаалын ангилал, зэрэглэл</td>
+              <td>Зэрэг дэв, цолны нэр</td>
+              <td>Шийдвэрийн огноо, дугаар</td>
+              <td>Үнэмлэхийн дугаар</td>
             </tr>
           </thead>
           <tbody>
@@ -1465,10 +1605,10 @@ function BZeregDewTsol(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Албан тушаалын ангилал, зэрэглэл</th>
-              <th>Зэрэг дэв, цолны нэр</th>
-              <th>Шийдвэрийн огноо, дугаар</th>
-              <th>Үнэмлэхийн дугаар</th>
+              <td>Албан тушаалын ангилал, зэрэглэл</td>
+              <td>Зэрэг дэв, цолны нэр</td>
+              <td>Шийдвэрийн огноо, дугаар</td>
+              <td>Үнэмлэхийн дугаар</td>
             </tr>
           </thead>
           <tbody>
@@ -1611,21 +1751,21 @@ function BUramshuulal(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Урамшуулал авсан огноо</th>
-              <th>Урамшууллын нэр, мөнгөн дүн /мян.төг/</th>
-              <th>Шийдвэрийн нэр, огноо, дугаар</th>
-              <th>Урамшуулсан үндэслэл</th>
+              <td>Урамшуулал авсан огноо</td>
+              <td>Урамшууллын нэр, мөнгөн дүн /мян.төг/</td>
+              <td>Шийдвэрийн нэр, огноо, дугаар</td>
+              <td>Урамшуулсан үндэслэл</td>
             </tr>
           </thead>
           <tbody>
             {data?.map((value, index) => (
               <tr>
-                <td>{dateFormat(data.DECISION_DATE, "yyyy-mm-dd")}</td>
+                <td>{dateFormat(value.DECISION_DATE, "yyyy-mm-dd")}</td>
                 <td>{value.PROMOTION_NAME + ", " + value.PROMOTION_AMOUNT}</td>
                 <td>
                   {value.DECISION_NAME +
                     ", " +
-                    dateFormat(data.DECISION_DATE, "yyyy-mm-dd")}
+                    dateFormat(value.DECISION_DATE, "yyyy-mm-dd")}
                 </td>
                 <td>&nbsp;</td>
               </tr>
@@ -1653,10 +1793,10 @@ function BUramshuulal(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Урамшуулал авсан огноо</th>
-              <th>Урамшууллын нэр, мөнгөн дүн /мян.төг/</th>
-              <th>Шийдвэрийн нэр, огноо, дугаар</th>
-              <th>Урамшуулсан үндэслэл</th>
+              <td>Урамшуулал авсан огноо</td>
+              <td>Урамшууллын нэр, мөнгөн дүн /мян.төг/</td>
+              <td>Шийдвэрийн нэр, огноо, дугаар</td>
+              <td>Урамшуулсан үндэслэл</td>
             </tr>
           </thead>
           <tbody>
@@ -1700,21 +1840,21 @@ function BNuhuhTulbur(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Нөхөх төлбөр олгосон огноо</th>
-              <th>Нөхөх төлбөрийн нэр, мөнгөн дүн /мян.төг/</th>
-              <th>Шийдвэрийн нэр, огноо, дугаар</th>
-              <th>Нөхөх төлбөр олгосон үндэслэл</th>
+              <td>Нөхөх төлбөр олгосон огноо</td>
+              <td>Нөхөх төлбөрийн нэр, мөнгөн дүн /мян.төг/</td>
+              <td>Шийдвэрийн нэр, огноо, дугаар</td>
+              <td>Нөхөх төлбөр олгосон үндэслэл</td>
             </tr>
           </thead>
           <tbody>
             {data?.map((value, index) => (
               <tr>
-                <td>{dateFormat(data.DECISION_DATE, "yyyy-mm-dd")}</td>
+                <td>{dateFormat(value.DECISION_DATE, "yyyy-mm-dd")}</td>
                 <td>{value.AMENDS_NAME + ", " + value.AMENDS_AMOUNT}</td>
                 <td>
                   {value.DECISION_NAME +
                     ", " +
-                    dateFormat(data.DECISION_DATE, "yyyy-mm-dd") +
+                    dateFormat(value.DECISION_DATE, "yyyy-mm-dd") +
                     ", " +
                     value.DECISION_NO}
                 </td>
@@ -1741,10 +1881,10 @@ function BNuhuhTulbur(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Нөхөх төлбөр олгосон огноо</th>
-              <th>Нөхөх төлбөрийн нэр, мөнгөн дүн /мян.төг/</th>
-              <th>Шийдвэрийн нэр, огноо, дугаар</th>
-              <th>Нөхөх төлбөр олгосон үндэслэл</th>
+              <td>Нөхөх төлбөр олгосон огноо</td>
+              <td>Нөхөх төлбөрийн нэр, мөнгөн дүн /мян.төг/</td>
+              <td>Шийдвэрийн нэр, огноо, дугаар</td>
+              <td>Нөхөх төлбөр олгосон үндэслэл</td>
             </tr>
           </thead>
           <tbody>
@@ -1791,10 +1931,10 @@ function BShiitegliinTalaarh(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Байгууллагын нэр</th>
-              <th>Шийтгэл ногдуулсан албан тушаалтан</th>
-              <th>Шийдвэрийн нэр, огноо, дугаар</th>
-              <th>Юуны учир, ямар шийтгэл ногдуулсан*</th>
+              <td>Байгууллагын нэр</td>
+              <td>Шийтгэл ногдуулсан албан тушаалтан</td>
+              <td>Шийдвэрийн нэр, огноо, дугаар</td>
+              <td>Юуны учир, ямар шийтгэл ногдуулсан*</td>
             </tr>
           </thead>
           <tbody>
@@ -1805,7 +1945,7 @@ function BShiitegliinTalaarh(props) {
                 <td>
                   {value.DECISION_NAME +
                     ", " +
-                    dateFormat(data.DECISION_DATE, "yyyy-mm-dd") +
+                    dateFormat(value.DECISION_DATE, "yyyy-mm-dd") +
                     ", " +
                     value.DECISION_NO}
                 </td>
@@ -1837,10 +1977,10 @@ function BShiitegliinTalaarh(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Байгууллагын нэр</th>
-              <th>Шийтгэл ногдуулсан албан тушаалтан</th>
-              <th>Шийдвэрийн нэр, огноо, дугаар</th>
-              <th>Юуны учир, ямар шийтгэл ногдуулсан*</th>
+              <td>Байгууллагын нэр</td>
+              <td>Шийтгэл ногдуулсан албан тушаалтан</td>
+              <td>Шийдвэрийн нэр, огноо, дугаар</td>
+              <td>Юуны учир, ямар шийтгэл ногдуулсан*</td>
             </tr>
           </thead>
           <tbody>
@@ -1883,18 +2023,18 @@ function BHuwiinHereg(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Мэдээллийн агуулга</th>
-              <th>Баяжуулалт хийсэн огноо</th>
-              <th>Хянаж, баяжуулалт хийсэн албан тушаалтны нэр</th>
-              <th>Баяжилт хийсэн огноо</th>
-              <th>Тайлбар</th>
+              <td>Мэдээллийн агуулга</td>
+              <td>Баяжуулалт хийсэн огноо</td>
+              <td>Хянаж, баяжуулалт хийсэн албан тушаалтны нэр</td>
+              <td>Баяжилт хийсэн огноо</td>
+              <td>Тайлбар</td>
             </tr>
           </thead>
           <tbody>
             {data?.map((value, index) => (
               <tr>
                 <td>{value.DOCUMENT_NAME}</td>
-                <td>{dateFormat(data.DOCUMENT_DATE, "yyyy-mm-dd")}</td>
+                <td>{dateFormat(value.DOCUMENT_DATE, "yyyy-mm-dd")}</td>
                 <td></td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
@@ -1916,11 +2056,11 @@ function BHuwiinHereg(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Мэдээллийн агуулга</th>
-              <th>Баяжуулалт хийсэн огноо</th>
-              <th>Хянаж, баяжуулалт хийсэн албан тушаалтны нэр</th>
-              <th>Баяжилт хийсэн огноо</th>
-              <th>Тайлбар</th>
+              <td>Мэдээллийн агуулга</td>
+              <td>Баяжуулалт хийсэн огноо</td>
+              <td>Хянаж, баяжуулалт хийсэн албан тушаалтны нэр</td>
+              <td>Баяжилт хийсэн огноо</td>
+              <td>Тайлбар</td>
             </tr>
           </thead>
           <tbody>
@@ -1953,7 +2093,7 @@ function CAnket(props) {
   let listItems;
   if (data !== undefined && data?.length !== 0 && data !== null) {
     listItems = (
-      <div>
+      <div style={{ pageBreakInside: "auto" }}>
         <span className="level-right has-text-right">
           Төрийн албаны зөвлөлийн 2019 оны 01 дүгээр
           <br /> сарын 31-ний өдрийн ..... дугаар тогтоолын
@@ -1983,14 +2123,14 @@ function CAnket(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Д/д</th>
-              <th>Баримт бичгийн нэр</th>
-              <th>Баримт бичгийг бүрдүүлсэн огноо </th>
-              <th>Хуудасны тоо</th>
-              <th>Баяжуулалт хийсэн тухай тэмдэглэл</th>
-              <th>
+              <td>Д/д</td>
+              <td>Баримт бичгийн нэр</td>
+              <td>Баримт бичгийг бүрдүүлсэн огноо </td>
+              <td>Хуудасны тоо</td>
+              <td>Баяжуулалт хийсэн тухай тэмдэглэл</td>
+              <td>
                 Хувийн хэргийг бүрдүүлж, баяжуулалт хийсэн албан тушаалтны нэр
-              </th>
+              </td>
             </tr>
           </thead>
           <tbody>
@@ -2065,14 +2205,14 @@ function CAnket(props) {
         <table className="table is-bordered ">
           <thead style={{ textAlignLast: "center" }}>
             <tr>
-              <th>Д/д</th>
-              <th>Баримт бичгийн нэр</th>
-              <th>Баримт бичгийг бүрдүүлсэн огноо </th>
-              <th>Хуудасны тоо</th>
-              <th>Баяжуулалт хийсэн тухай тэмдэглэл</th>
-              <th>
+              <td>Д/д</td>
+              <td>Баримт бичгийн нэр</td>
+              <td>Баримт бичгийг бүрдүүлсэн огноо </td>
+              <td>Хуудасны тоо</td>
+              <td>Баяжуулалт хийсэн тухай тэмдэглэл</td>
+              <td>
                 Хувийн хэргийг бүрдүүлж, баяжуулалт хийсэн албан тушаалтны нэр
-              </th>
+              </td>
             </tr>
           </thead>
           <tbody>
