@@ -30,7 +30,6 @@ import {
   TailanB,
   BNegB,
   BNeg,
-  
 } from "../assets/images/zurag";
 
 const SideBar = (props) => {
@@ -82,8 +81,7 @@ const SideBar = (props) => {
     } else if (value?.menu5) {
       history.push("/web/Tailan");
       setMenuCollapse(true);
-    }
-    else if (value?.menu6) {
+    } else if (value?.menu6) {
       history.push("/web/EmployeeInformation");
       setMenuCollapse(true);
     }
@@ -276,7 +274,7 @@ const SideBar = (props) => {
                   </div>
                 </MenuItem>
               )}
-                 {userDetils?.USER_TYPE_NAME.includes("BRANCH") ? null : (
+              {/* {userDetils?.USER_TYPE_NAME.includes("BRANCH") ? null : (
                 <MenuItem active={menuClick.menu6}>
                   <div
                     className="CustomMenu"
@@ -298,7 +296,7 @@ const SideBar = (props) => {
                     </p>
                   </div>
                 </MenuItem>
-              )}
+              )} */}
             </Menu>
             <div className="closemenu" onClick={menuIconClick}>
               {/* changing menu collapse icon on click */}
