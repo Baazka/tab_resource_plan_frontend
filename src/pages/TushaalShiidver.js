@@ -200,6 +200,7 @@ const Home = (props) => {
 
   useEffect(() => {
     async function test() {
+      setSearch("");
       let jagsaalts = await DataRequest({
         url:
           "http://hr.audit.mn/hr/api/v1/decision/1/" +
@@ -216,6 +217,7 @@ const Home = (props) => {
   }, [props]);
 
   async function unActive() {
+    setSearch("");
     let jagsaalts = await DataRequest({
       url:
         "http://hr.audit.mn/hr/api/v1/decision/0/" +

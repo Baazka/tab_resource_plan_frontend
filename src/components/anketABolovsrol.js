@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from "react";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
-import { Edutype } from "./library";
+import { Edutype, Profession } from "./library";
 import { Add, Delete } from "../assets/images/zurag";
 const axios = require("axios");
 var dateFormat = require("dateformat");
@@ -48,6 +48,7 @@ function Bolowsrol(props) {
             SCHOOL_NAME: "",
             START_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
             END_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+            PROFESSION_ID: 1,
             PROFESSION_NAME: "",
             DIPLOM_NO: "",
             SCHOOL_CONTACT: "",
@@ -76,6 +77,7 @@ function Bolowsrol(props) {
             SCHOOL_NAME: "",
             START_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
             END_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+            PROFESSION_ID: 1,
             PROFESSION_NAME: "",
             DIPLOM_NO: "",
             SCHOOL_CONTACT: "",
@@ -173,6 +175,12 @@ function Bolowsrol(props) {
 
     loadData({ Education: arr });
   }
+  function setProfession(value) {
+    let arr = data.Education;
+    arr[value.index] = value;
+
+    loadData({ Education: arr });
+  }
   function setEduTypeSecond(value) {
     let arr = dataSecond.Education;
     arr[value.index] = value;
@@ -206,6 +214,7 @@ function Bolowsrol(props) {
       SCHOOL_NAME: "",
       START_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
       END_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+      PROFESSION_ID: 1,
       PROFESSION_NAME: "",
       DIPLOM_NO: "",
       SCHOOL_CONTACT: "",
@@ -232,6 +241,7 @@ function Bolowsrol(props) {
       SCHOOL_NAME: "",
       START_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
       END_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+      PROFESSION_ID: 1,
       PROFESSION_NAME: "",
       DIPLOM_NO: "",
       SCHOOL_CONTACT: "",
@@ -391,6 +401,9 @@ function Bolowsrol(props) {
                       <span className="textSaaral">Төгссөн он,сар</span>
                     </td>
                     <td>
+                      <span className="textSaaral">Мэргэжил</span>
+                    </td>
+                    <td>
                       <span className="textSaaral">Эзэмшсэн мэргэжил</span>
                     </td>
                     <td>
@@ -525,6 +538,15 @@ function Bolowsrol(props) {
                             );
                             loadData({ Education: value });
                           }}
+                        />
+                      </td>
+                      <td>
+                        <Profession
+                          personChild={data.Education[index]}
+                          setPersonChild={setProfession}
+                          index={index}
+                          width={true}
+                          edit={edit}
                         />
                       </td>
                       <td>

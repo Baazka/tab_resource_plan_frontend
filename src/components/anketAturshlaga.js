@@ -17,7 +17,7 @@ function Turshlgin(props) {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/Experience/" + props.person_id
       );
-      console.log(listItems, "Tangarag");
+      console.log(listItems, "turshlaga");
       loadData({
         Experience: listItems?.data?.Experience.sort(function sortFunction(
           a,
