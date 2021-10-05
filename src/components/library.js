@@ -1280,7 +1280,9 @@ function Profession(props) {
       <select
         disabled={props.edit}
         className="anketInput"
-        style={{ width: "-webkit-fill-available" }}
+        style={{
+          width: props.width === true ? "100px" : "-webkit-fill-available",
+        }}
         value={props.personChild?.PROFESSION_ID}
         onChange={(text) =>
           props.setPersonChild({

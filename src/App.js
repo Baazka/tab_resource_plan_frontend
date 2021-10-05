@@ -29,6 +29,8 @@ import Header from "../src/components/header";
 import EmployeeInformation from "./pages/EmployeeInformation";
 const axios = require("axios");
 
+function PrivateRoute({ children, ...rest }) {}
+
 function App() {
   const [signin, setSignin] = useState(false);
   // var userDetail = localStorage.getItem("userDetails");
