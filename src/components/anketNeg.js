@@ -47,7 +47,6 @@ import {
   Office,
   Suboffice,
   FamilyArray,
-  personNoCheck,
 } from "./library";
 import { useAlert } from "react-alert";
 import { useHistory } from "react-router-dom";
@@ -69,15 +68,6 @@ function AnketNeg(props) {
   const alert = useAlert();
   const [loading, setLoading] = useState(true);
 
-  function getFormUrlEncoded(toConvert) {
-    const formBody = [];
-    for (const property in toConvert) {
-      const encodedKey = encodeURIComponent(property);
-      const encodedValue = encodeURIComponent(toConvert[property]);
-      formBody.push(encodedKey + "=" + encodedValue);
-    }
-    return formBody.join("&");
-  }
   function saveAvatar(file) {
     if (
       localStorage.getItem("personDetail")?.includes("person_id") &&
@@ -748,12 +738,18 @@ function Yrunkhii(props) {
   const [register, setRegister] = useState(0);
   const cyrillicPattern = /^[\u0400-\u04FF]+$/;
 
-  async function personNoCheck(register) {
+  async function personNoCheck(registerT) {
+    console.log(registerT, "registerTT");
     let listItems = await axios({
       method: "POST",
       url: "http://hr.audit.mn/hr/api/v1/personNoCheck",
-      data: { PERSON_REGISTER_NO: register },
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+      data: { PERSON_REGISTER_NO: registerT },
     });
+    console.log(listItems?.data?.CNT, "register");
     setRegister(listItems?.data?.CNT);
   }
   return (
@@ -890,6 +886,7 @@ function Yrunkhii(props) {
                   /\d/.test(text.target.value.slice(2, 10))
                 ) {
                   await personNoCheck(text.target.value);
+                  console.log(text.target.value, "registerT");
                 } else setRegister(false);
               } else {
                 setRegister(false);
