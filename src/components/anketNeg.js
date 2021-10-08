@@ -73,7 +73,7 @@ function AnketNeg(props) {
       localStorage.getItem("personDetail")?.includes("person_id") &&
       JSON.parse(localStorage.getItem("personDetail")).person_id !== "0"
     ) {
-      // "person_id",JSON.parse(localStorage.getItem("personDetail")).person_id, file.target.files[0].name
+      // "userid",JSON.parse(localStorage.getItem("personDetail")).person_id, file.target.files[0].name
       console.log("imageName", file.target.files[0].name);
       const formData = new FormData();
       formData.append("image", file.target.files[0], file.target.files[0].name);
