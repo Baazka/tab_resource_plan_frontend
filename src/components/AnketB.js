@@ -117,7 +117,27 @@ function AnketB(props) {
           <img src={Trush} width="40px" height="40px" />
           <img src={Warning} width="40px" height="40px" />
         </div>
-
+        <div style={{ marginTop: "1.5rem" }}>
+          <span
+            style={{
+              color: "#5d5d5d",
+              fontFamily: "RalewaySemiBold",
+              fontSize: "1rem",
+            }}
+          >
+            {JSON.parse(localStorage.getItem("personDetail"))?.PERSON_LASTNAME}
+          </span>
+          <span
+            style={{
+              color: "#418ee6",
+              fontFamily: "RalewaySemiBold",
+              fontSize: "1rem",
+            }}
+          >
+            &nbsp;{" "}
+            {JSON.parse(localStorage.getItem("personDetail"))?.PERSON_FIRSTNAME}
+          </span>
+        </div>
         <div className="AnketList" style={{ marginTop: "3rem" }}>
           <img src={menu === 1 ? BNegB : BNeg} width="45px" height="45px" />
           <button

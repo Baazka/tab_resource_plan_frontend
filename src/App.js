@@ -7,6 +7,7 @@ import {
   Route,
   Link,
   useHistory,
+  useLocation,
   Switch,
   useParams,
 } from "react-router-dom";
@@ -141,9 +142,11 @@ function Login(props) {
   const [sanuulakh, setSanuulakh] = useState(false);
   const alert = useAlert();
   const history = useHistory();
+  const { state } = useLocation();
+  const [login, setLogin] = useState();
   // let location = useLocation();
   // let auth = useAuth();
-  const [login, setLogin] = useState(false);
+
   useEffect(() => {
     if (localStorage.getItem("rememberedUser")?.includes("userName")) {
       setNer(JSON.parse(localStorage.getItem("rememberedUser")).userName);
@@ -225,7 +228,8 @@ function Login(props) {
         });
     }
   }
-  if (login === true) return <Redirect to="/web/dashboard/" />;
+  if (fakeAuth.isAuthenticated === true)
+    return <Redirect to={state?.form || "/web/dashboard/"} />;
   return (
     <div
       style={{
@@ -439,13 +443,6 @@ function App() {
       {/* </ProvideAuth> */}
     </div>
   );
-}
-
-function Users() {
-  return <h2>User</h2>;
-}
-function About() {
-  return <h2>About us</h2>;
 }
 
 export default App;

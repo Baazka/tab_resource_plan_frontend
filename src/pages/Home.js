@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useReducer } from "react";
+import ReactDOM from "react-dom";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import { DataRequest } from "../functions/DataApi";
@@ -11,6 +12,7 @@ import dateFormat from "dateformat";
 import { css } from "@emotion/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import AnketAPrint from "./AnketAPrint";
+import { DepartmentID } from "../components/library";
 
 import { useReactToPrint } from "react-to-print";
 
@@ -18,11 +20,7 @@ const axios = require("axios");
 
 class ComponentToPrint extends React.PureComponent {
   render() {
-    return (
-      <div>
-        <AnketAPrint print={this.props.print} />
-      </div>
-    );
+    return <AnketAPrint print={this.props.print} render={this.test} />;
   }
 }
 createTheme("solarized", {
@@ -95,6 +93,9 @@ function Home(props) {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
+  const [departmentID, setDepartmentID] = useState({
+    DEPARTMENT_ID: 0,
+  });
   const override = css`
     display: block;
     margin: 0 auto;
@@ -107,13 +108,18 @@ function Home(props) {
   async function unActive() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url:
-        "http://hr.audit.mn/hr/api/v1/employees/0/" +
-        userDetils?.USER_DEPARTMENT_ID +
-        "/" +
-        userDetils?.USER_TYPE_NAME.toUpperCase(),
-      method: "GET",
-      data: {},
+      url: "http://hr.audit.mn/hr/api/v1/employees",
+      // /0/" +
+      // userDetils?.USER_DEPARTMENT_ID +
+      // "/" +
+      // userDetils?.USER_TYPE_NAME.toUpperCase(),
+      method: "POST",
+      data: {
+        IS_ACTIVE: 0,
+        DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
+        USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
+        SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
+      },
     });
     setJagsaalt(jagsaalts?.data);
     setLoading(false);
@@ -123,13 +129,18 @@ function Home(props) {
   async function Active() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url:
-        "http://hr.audit.mn/hr/api/v1/employees/1/" +
-        userDetils?.USER_DEPARTMENT_ID +
-        "/" +
-        userDetils?.USER_TYPE_NAME.toUpperCase(),
-      method: "GET",
-      data: {},
+      url: "http://hr.audit.mn/hr/api/v1/employees",
+      // /1/" +
+      // userDetils?.USER_DEPARTMENT_ID +
+      // "/" +
+      // userDetils?.USER_TYPE_NAME.toUpperCase(),
+      method: "POST",
+      data: {
+        IS_ACTIVE: 1,
+        DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
+        USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
+        SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
+      },
     });
     setJagsaalt(jagsaalts?.data);
     setLoading(false);
@@ -156,13 +167,18 @@ function Home(props) {
         JSON.parse(props.match?.params?.search)?.buttonValue === 2
       ) {
         let jagsaalts = await DataRequest({
-          url:
-            "http://hr.audit.mn/hr/api/v1/employees/0/" +
-            userDetils?.USER_DEPARTMENT_ID +
-            "/" +
-            userDetils?.USER_TYPE_NAME.toUpperCase(),
-          method: "GET",
-          data: {},
+          url: "http://hr.audit.mn/hr/api/v1/employees",
+          // /0/" +
+          // userDetils?.USER_DEPARTMENT_ID +
+          // "/" +
+          // userDetils?.USER_TYPE_NAME.toUpperCase(),
+          method: "POST",
+          data: {
+            IS_ACTIVE: 0,
+            DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
+            USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
+            SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
+          },
         });
         setJagsaalt(jagsaalts?.data);
         setLoading(false);
@@ -201,13 +217,18 @@ function Home(props) {
         console.log(jagsaalts);
       } else {
         let jagsaalts = await DataRequest({
-          url:
-            "http://hr.audit.mn/hr/api/v1/employees/1/" +
-            userDetils?.USER_DEPARTMENT_ID +
-            "/" +
-            userDetils?.USER_TYPE_NAME.toUpperCase(),
-          method: "GET",
-          data: {},
+          url: "http://hr.audit.mn/hr/api/v1/employees",
+          // /1/" +
+          // userDetils?.USER_DEPARTMENT_ID +
+          // "/" +
+          // userDetils?.USER_TYPE_NAME.toUpperCase(),
+          method: "POST",
+          data: {
+            IS_ACTIVE: 1,
+            DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
+            USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
+            SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
+          },
         });
         setLoading(false);
         setJagsaalt(jagsaalts?.data);
@@ -225,6 +246,7 @@ function Home(props) {
     }
 
     test();
+    setDepartmentID({ DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID });
   }, [props]);
 
   const handleChange = (state) => {
@@ -246,13 +268,39 @@ function Home(props) {
               : state?.selectedRows[0].PERSON_ID,
           emp_id: state?.selectedRows[0].EMP_ID,
           type: "employ",
+          PERSON_FIRSTNAME: state?.selectedRows[0].PERSON_FIRSTNAME,
+          PERSON_LASTNAME: state?.selectedRows[0].PERSON_LASTNAME,
         })
       );
+
       setData({ checked: true });
     } else {
       setData({ checked: false });
     }
   };
+  async function departmentSearch(value) {
+    setLoading(true);
+    let jagsaalts = await DataRequest({
+      url: "http://hr.audit.mn/hr/api/v1/employees",
+      method: "POST",
+      data: {
+        IS_ACTIVE: buttonValue === 1 ? 1 : 0,
+        DEPARTMENT_ID: value.DEPARTMENT_ID,
+        USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
+        SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
+      },
+    });
+    console.log("departmentSearch", {
+      IS_ACTIVE: buttonValue === 1 ? 1 : 0,
+      DEPARTMENT_ID: value.DEPARTMENT_ID,
+      USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
+      SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
+    });
+    setJagsaalt(jagsaalts?.data);
+    setLoading(false);
+    setSearch("");
+    setDepartmentID(value);
+  }
 
   async function anketA() {
     if (data?.checked === true)
@@ -767,7 +815,27 @@ function Home(props) {
           }}
         >
           <div style={{ display: "flex" }}>
-            <div className="select is-small" style={{ marginRight: "10px" }}>
+            {buttonValue !== 3 ? (
+              <div className="select is-small">
+                <DepartmentID
+                  personChild={departmentID}
+                  setPersonChild={departmentSearch}
+                  edit={
+                    userDetils?.USER_TYPE_NAME === "ADMIN" ||
+                    (userDetils?.USER_TYPE_NAME === "HEAD_DIRECTOR" &&
+                      userDetils.USER_SUB_DEPARTMENT_ID === null &&
+                      userDetils.USER_DEPARTMENT_ID === 101)
+                      ? false
+                      : true
+                  }
+                />
+              </div>
+            ) : null}
+
+            <div
+              className="select is-small"
+              style={{ marginRight: "10px", marginLeft: "10px" }}
+            >
               <select
                 value={searchType}
                 onChange={(text) => setSearchType(text.target.value)}
@@ -805,6 +873,7 @@ function Home(props) {
                 <img src={Filter} />
               </span> */}
             </div>
+
             <div class="control has-icons-left has-icons-right">
               <input
                 class="input is-small is-gray"
