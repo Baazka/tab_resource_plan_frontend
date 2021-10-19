@@ -108,7 +108,7 @@ function Home(props) {
   async function unActive() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://172.16.24.103:3002/api/v1/employees",
+      url: "http://hr.audit.mn/hr/api/v1/employees",
       // /0/" +
       // userDetils?.USER_DEPARTMENT_ID +
       // "/" +
@@ -129,7 +129,7 @@ function Home(props) {
   async function Active() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://172.16.24.103:3002/api/v1/employees",
+      url: "http://hr.audit.mn/hr/api/v1/employees",
       // /1/" +
       // userDetils?.USER_DEPARTMENT_ID +
       // "/" +
@@ -150,7 +150,7 @@ function Home(props) {
   async function newPeople() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://172.16.24.103:3002/api/v1/person/1/",
+      url: "http://hr.audit.mn/hr/api/v1/person/1/",
       method: "GET",
       data: {},
     });
@@ -167,7 +167,7 @@ function Home(props) {
         JSON.parse(props.match?.params?.search)?.buttonValue === 2
       ) {
         let jagsaalts = await DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/employees",
+          url: "http://hr.audit.mn/hr/api/v1/employees",
           // /0/" +
           // userDetils?.USER_DEPARTMENT_ID +
           // "/" +
@@ -198,7 +198,7 @@ function Home(props) {
         JSON.parse(props.match?.params?.search)?.buttonValue === 3
       ) {
         let jagsaalts = await DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/person/1/",
+          url: "http://hr.audit.mn/hr/api/v1/person/1/",
           method: "GET",
           data: {},
         });
@@ -217,7 +217,7 @@ function Home(props) {
         console.log(jagsaalts);
       } else {
         let jagsaalts = await DataRequest({
-          url: "http://172.16.24.103:3002/api/v1/employees",
+          url: "http://hr.audit.mn/hr/api/v1/employees",
           // /1/" +
           // userDetils?.USER_DEPARTMENT_ID +
           // "/" +
@@ -281,7 +281,7 @@ function Home(props) {
   async function departmentSearch(value) {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://172.16.24.103:3002/api/v1/employees",
+      url: "http://hr.audit.mn/hr/api/v1/employees",
       method: "POST",
       data: {
         IS_ACTIVE: buttonValue === 1 ? 1 : 0,
@@ -1029,9 +1029,7 @@ function EmployExcel(props) {
 
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://172.16.24.103:3002/api/v1/excelPerson/"
-      );
+      let listItems = await axios("http://hr.audit.mn/hr/api/v1/excelPerson/");
       console.log(listItems, "tailan");
       loadData(listItems?.data);
     }
