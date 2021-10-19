@@ -108,7 +108,7 @@ function Home(props) {
   async function unActive() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/employees",
+      url: "http://172.16.24.103:3002/api/v1/employees",
       // /0/" +
       // userDetils?.USER_DEPARTMENT_ID +
       // "/" +
@@ -116,7 +116,7 @@ function Home(props) {
       method: "POST",
       data: {
         IS_ACTIVE: 0,
-        DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
+        USER_DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
         USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
         SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
       },
@@ -129,7 +129,7 @@ function Home(props) {
   async function Active() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/employees",
+      url: "http://172.16.24.103:3002/api/v1/employees",
       // /1/" +
       // userDetils?.USER_DEPARTMENT_ID +
       // "/" +
@@ -137,7 +137,7 @@ function Home(props) {
       method: "POST",
       data: {
         IS_ACTIVE: 1,
-        DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
+        USER_DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
         USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
         SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
       },
@@ -150,7 +150,7 @@ function Home(props) {
   async function newPeople() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/person/1/",
+      url: "http://172.16.24.103:3002/api/v1/person/1/",
       method: "GET",
       data: {},
     });
@@ -167,7 +167,7 @@ function Home(props) {
         JSON.parse(props.match?.params?.search)?.buttonValue === 2
       ) {
         let jagsaalts = await DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/employees",
+          url: "http://172.16.24.103:3002/api/v1/employees",
           // /0/" +
           // userDetils?.USER_DEPARTMENT_ID +
           // "/" +
@@ -175,7 +175,7 @@ function Home(props) {
           method: "POST",
           data: {
             IS_ACTIVE: 0,
-            DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
+            USER_DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
             USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
             SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
           },
@@ -198,7 +198,7 @@ function Home(props) {
         JSON.parse(props.match?.params?.search)?.buttonValue === 3
       ) {
         let jagsaalts = await DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/person/1/",
+          url: "http://172.16.24.103:3002/api/v1/person/1/",
           method: "GET",
           data: {},
         });
@@ -217,7 +217,7 @@ function Home(props) {
         console.log(jagsaalts);
       } else {
         let jagsaalts = await DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/employees",
+          url: "http://172.16.24.103:3002/api/v1/employees",
           // /1/" +
           // userDetils?.USER_DEPARTMENT_ID +
           // "/" +
@@ -225,7 +225,7 @@ function Home(props) {
           method: "POST",
           data: {
             IS_ACTIVE: 1,
-            DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
+            USER_DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
             USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
             SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
           },
@@ -281,13 +281,14 @@ function Home(props) {
   async function departmentSearch(value) {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/employees",
+      url: "http://172.16.24.103:3002/api/v1/employees",
       method: "POST",
       data: {
         IS_ACTIVE: buttonValue === 1 ? 1 : 0,
         DEPARTMENT_ID: value.DEPARTMENT_ID,
         USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
         SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
+        USER_DEPARTMENT_ID: userDetils.USER_DEPARTMENT_ID,
       },
     });
     console.log("departmentSearch", {
@@ -815,19 +816,20 @@ function Home(props) {
           }}
         >
           <div style={{ display: "flex" }}>
-            {buttonValue !== 3 ? (
+            {(buttonValue !== 3 && userDetils?.USER_TYPE_NAME === "ADMIN") ||
+            (buttonValue !== 3 &&
+              userDetils?.USER_TYPE_NAME === "GENERAL_DIRECTOR" &&
+              userDetils.USER_SUB_DEPARTMENT_ID === null &&
+              userDetils.USER_DEPARTMENT_ID === 101) ||
+            (buttonValue !== 3 &&
+              userDetils?.USER_TYPE_NAME === "HEAD_DIRECTOR" &&
+              userDetils.USER_SUB_DEPARTMENT_ID === null &&
+              userDetils.USER_DEPARTMENT_ID === 101) ? (
               <div className="select is-small">
                 <DepartmentID
                   personChild={departmentID}
                   setPersonChild={departmentSearch}
-                  edit={
-                    userDetils?.USER_TYPE_NAME === "ADMIN" ||
-                    (userDetils?.USER_TYPE_NAME === "HEAD_DIRECTOR" &&
-                      userDetils.USER_SUB_DEPARTMENT_ID === null &&
-                      userDetils.USER_DEPARTMENT_ID === 101)
-                      ? false
-                      : true
-                  }
+                  edit={false}
                 />
               </div>
             ) : null}
@@ -893,7 +895,7 @@ function Home(props) {
               <span class="icon is-small is-right"></span>
             </div>
 
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 class="text"
                 style={{
@@ -1027,7 +1029,9 @@ function EmployExcel(props) {
 
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios("http://hr.audit.mn/hr/api/v1/excelPerson/");
+      let listItems = await axios(
+        "http://172.16.24.103:3002/api/v1/excelPerson/"
+      );
       console.log(listItems, "tailan");
       loadData(listItems?.data);
     }

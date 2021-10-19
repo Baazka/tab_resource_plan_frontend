@@ -7,9 +7,6 @@ function AnketAPrint(props) {
   useEffect(() => {
     console.log("anketAprintProps", props);
   }, [props]);
-  function test() {
-    console.log("testestestestestestestestestesteststestest");
-  }
 
   return (
     <div style={{ padding: "20px" }}>

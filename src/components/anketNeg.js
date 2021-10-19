@@ -768,7 +768,7 @@ function Yrunkhii(props) {
           <span className="headerTextBold">Ерөнхий мэдээлэл</span>
         </div>
         <div className="column is-1 is-narrow-tablet">
-          {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+          {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
             <button
               className="buttonTsenkher"
               onClick={() => props.setEdit(!props.edit)}
@@ -1162,7 +1162,7 @@ function Kayag(props) {
           <span className="headerTextBold">Хаягийн мэдээлэл</span>
         </div>
         <div className="column is-1">
-          {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+          {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
             <button
               className="buttonTsenkher"
               onClick={() => {
@@ -1574,7 +1574,7 @@ function HolbooBarikhHun(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
                 Засварлах
               </button>
@@ -2095,7 +2095,7 @@ function GerBul(props) {
           </span>
         </div>
         <div className="column is-1">
-          {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+          {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
             <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
               Засварлах
             </button>

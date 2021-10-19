@@ -241,7 +241,7 @@ function Mergeshliin(props) {
             </div>
 
             <div className="column is-1">
-              {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
                 <button
                   className="buttonTsenkher"
                   onClick={() => {
@@ -780,7 +780,7 @@ function ZeregTsol(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 className="buttonTsenkher"
                 onClick={() => {

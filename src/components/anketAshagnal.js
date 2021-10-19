@@ -288,7 +288,7 @@ function Shagnaliin(props) {
             <span className="headerTextBold">6. Шагналын талаарх мэдээлэл</span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 className="buttonTsenkher"
                 onClick={() => {

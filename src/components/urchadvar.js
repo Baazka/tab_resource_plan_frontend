@@ -205,7 +205,7 @@ function UrChadvar(props) {
               </span>
             </div>
             <div className="column is -1">
-              {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
                 <button
                   className="buttonTsenkher"
                   onClick={() => setEdit(!edit)}
@@ -728,7 +728,7 @@ function TangaragBurtgel(props) {
             <span className="headerTextBold">2.Тангаргийн бүртгэл</span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 className="buttonTsenkher"
                 onClick={() => {
@@ -1131,7 +1131,7 @@ function GadaadKhel(props) {
             <span className="headerTextBold">3.Гадаад хэлний мэдлэг</span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 className="buttonTsenkher"
                 onClick={() => {

@@ -254,7 +254,7 @@ function TsergiinAlba(props) {
             >
               Хэвлэх
             </button> */}
-              {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
                 <button className="buttonTsenkher" onClick={saveToDB}>
                   Хадгалах
                 </button>

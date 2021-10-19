@@ -1400,7 +1400,7 @@ function Uramshuulal(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 onClick={() => setZasakhTowch(!zasakhTowch)}
                 className="buttonTsenkher"
@@ -1882,7 +1882,7 @@ function NuhuhMulbur(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 onClick={() => setZasakhTowch(!zasakhTowch)}
                 className="buttonTsenkher"
@@ -2370,7 +2370,7 @@ function Tuslamj(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 onClick={() => setZasakhTowch(!zasakhTowch)}
                 className="buttonTsenkher"
@@ -2859,7 +2859,7 @@ function Surgalt(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 onClick={() => setZasakhTowch(!zasakhTowch)}
                 className="buttonTsenkher"
@@ -3343,7 +3343,7 @@ function Shiitgel(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 onClick={() => setZasakhTowch(!zasakhTowch)}
                 className="buttonTsenkher"
@@ -3809,7 +3809,7 @@ function HuwiinHereg(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 onClick={() => setZasakhTowch(!zasakhTowch)}
                 className="buttonTsenkher"
