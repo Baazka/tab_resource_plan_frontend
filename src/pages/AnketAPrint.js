@@ -65,23 +65,26 @@ function Yrunkhii(props) {
 
             <div style={{ display: "flex" }}>
               <p>Регистрийн дугаар: &nbsp;</p>
-              <table className="table is-bordered">
-                <tbody>
-                  <tr>
-                    <td>{data.PERSON_REGISTER_NO.slice(0, 1)}</td>
-                    <td>{data.PERSON_REGISTER_NO.slice(1, 2)}</td>
-                    <td style={{ border: "none" }}></td>
-                    <td>{data.PERSON_REGISTER_NO.slice(2, 3)}</td>
-                    <td>{data.PERSON_REGISTER_NO.slice(3, 4)}</td>
-                    <td>{data.PERSON_REGISTER_NO.slice(4, 5)}</td>
-                    <td>{data.PERSON_REGISTER_NO.slice(5, 6)}</td>
-                    <td>{data.PERSON_REGISTER_NO.slice(6, 7)}</td>
-                    <td>{data.PERSON_REGISTER_NO.slice(7, 8)}</td>
-                    <td>{data.PERSON_REGISTER_NO.slice(8, 9)}</td>
-                    <td>{data.PERSON_REGISTER_NO.slice(9, 10)}</td>{" "}
-                  </tr>
-                </tbody>
-              </table>
+              {data.PERSON_REGISTER_NO !== undefined &&
+              data.PERSON_REGISTER_NO !== null ? (
+                <table className="table is-bordered">
+                  <tbody>
+                    <tr>
+                      <td>{data.PERSON_REGISTER_NO.slice(0, 1)}</td>
+                      <td>{data.PERSON_REGISTER_NO.slice(1, 2)}</td>
+                      <td style={{ border: "none" }}></td>
+                      <td>{data.PERSON_REGISTER_NO.slice(2, 3)}</td>
+                      <td>{data.PERSON_REGISTER_NO.slice(3, 4)}</td>
+                      <td>{data.PERSON_REGISTER_NO.slice(4, 5)}</td>
+                      <td>{data.PERSON_REGISTER_NO.slice(5, 6)}</td>
+                      <td>{data.PERSON_REGISTER_NO.slice(6, 7)}</td>
+                      <td>{data.PERSON_REGISTER_NO.slice(7, 8)}</td>
+                      <td>{data.PERSON_REGISTER_NO.slice(8, 9)}</td>
+                      <td>{data.PERSON_REGISTER_NO.slice(9, 10)}</td>{" "}
+                    </tr>
+                  </tbody>
+                </table>
+              ) : null}
             </div>
 
             <h1>1.1. Иргэншил &nbsp;{data.NATIONAL_NAME}</h1>
