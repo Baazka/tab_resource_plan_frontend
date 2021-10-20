@@ -1111,16 +1111,16 @@ function Tushaal(props) {
                 <td>{value.POSITION_CATEGORY_TYPE_ID}</td>
                 <td>{value.EXPERIENCE_POSITION}</td>
                 <td>
-                  {dateFormat(
-                    data.ENTERED_DATE,
-                    "yyyy-mm-dd" + ", " + value.ENTERED_NO
-                  )}
+                  {value.ENTERED_DATE !== undefined &&
+                  value.ENTERED_DATE !== null &&
+                  value.ENTERED_DATE !== ""
+                    ? dateFormat(value.ENTERED_DATE, "yyyy-mm-dd")
+                    : ""}
                 </td>
                 <td>
-                  {dateFormat(
-                    data.EXPIRED_DATE,
-                    "yyyy-mm-dd" + ", " + value.ENTERED_NO
-                  )}
+                  {value.EXPIRED_DATE !== undefined
+                    ? dateFormat(value.EXPIRED_DATE, "yyyy-mm-dd")
+                    : ""}
                 </td>
               </tr>
             ))}

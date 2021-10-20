@@ -696,7 +696,9 @@ function Home(props) {
             position: "absolute",
           }}
         >
-          <ComponentToPrint ref={componentRef} print={print} />
+          {print.print !== 0 ? (
+            <ComponentToPrint ref={componentRef} print={print} />
+          ) : null}
         </div>
         <div
           style={{
