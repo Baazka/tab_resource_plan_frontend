@@ -38,6 +38,7 @@ function AnketB(props) {
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [menu, setMenu] = useState(1);
   const [loading, setLoading] = useState(false);
+
   const history = useHistory();
 
   return (
@@ -4027,59 +4028,190 @@ function HuwiinHereg(props) {
   return listItems;
 }
 function BusadMedeelel(props) {
+  const [edit, setEdit] = useState(true);
+  const [zeel, setZeel] = useState(true);
   return (
-    <div style={{ display: "flex", padding: "80px 15px 730px 15px" }}>
-      <br />
-      <div className="columns">
-        <div className="column is-12">
-          <span style={{ fontWeight: "bold" }}>Амьдрах орчны мэдээлэл</span>
-          <table className="table is-bordered ">
-            <tbody>
-              <tr>
-                <td>Байр</td>
-                <td>ok</td>
-                <td>no</td>
-              </tr>
-              <tr>
-                <td>хашаа байшин</td>
-                <td>ok</td>
-                <td>no</td>
-              </tr>
-              <tr>
-                <td>түрээсийн байр</td>
-                <td>ok</td>
-                <td>no</td>
-              </tr>
-            </tbody>
-          </table>
+    <div>
+      <div
+        className="box"
+        style={{
+          display: "Block",
+          padding: "80px 15px 0px 15px",
+          boxShadow: "15px",
+        }}
+      >
+        <div className="columns">
+          <div className="column is-11">
+            <span style={{ fontWeight: "bold" }}>Амьдрах орчны мэдээлэл</span>
+          </div>
+
+          <div className="column is-1">
+            <button className="buttonTsenkher">Засварлах</button>
+          </div>
+        </div>
+        <div>
+          <div className="columns">
+            <div className="column is-2  has-text-right">Орон байр</div>
+            <div className="column ">
+              {" "}
+              <select name="cars" id="cars">
+                <option value="volvo">Сонгоно уу</option>
+                <option value="saab">Гэр хороололд гэр</option>
+                <option value="opel">Гэр хороололд байшин</option>
+                <option value="audi">Нийтийн байр</option>
+                <option value="audi">Орон сууц</option>
+                <option value="audi">Амины орон сууц /хаус/</option>
+                <option value="audi">Бусад</option>
+              </select>
+            </div>
+          </div>
+          <div className="columns">
+            <div className="column is-2  has-text-right">Эзэмших хэлбэр</div>
+            <div className="column ">
+              {" "}
+              <select
+                style={{ padding: "0px 64px 0px 0px" }}
+                name="cars"
+                id="cars"
+              >
+                <option value="volvo">Сонгоно уу</option>
+                <option value="saab">Хувийн</option>
+                <option value="opel">Түрээсийн</option>
+                <option value="audi">Байгууллагын</option>
+                <option value="audi">Бусад</option>
+              </select>
+            </div>
+          </div>
+          <div className="columns">
+            <div className="column is-2  has-text-right">Тайлбар</div>
+            <div className="column ">
+              {" "}
+              <input></input>
+            </div>
+          </div>
+
+          <input type="checkbox" />
+          <span>Төвийн халаалттай</span>
         </div>
       </div>
 
-      <div style={{ marginLeft: "30%" }}>
-        <div className="columns">
-          <div className="column is-12">
-            <span style={{ fontWeight: "bold" }}>Зээлийн мэдээлэл</span>
-
-            <table className="table is-bordered ">
-              <tbody>
-                <tr>
-                  <td>хувь зээл</td>
-                  <td>ok</td>
-                  <td>no</td>
-                </tr>
-                <tr>
-                  <td>Ажилын газарийн зээл</td>
-                  <td>ok</td>
-                  <td>no</td>
-                </tr>
-                <tr>
-                  <td>ахуйн зээл</td>
-                  <td>ok</td>
-                  <td>no</td>
-                </tr>
-              </tbody>
-            </table>
+      <div
+        className="box"
+        style={{
+          display: "Block",
+          padding: "0px 15px 10px 15px",
+          boxShadow: "15px",
+        }}
+      >
+        <div>
+          <span style={{ fontWeight: "bold" }}>Зээлийн мэдээлэл</span>
+          <div className="column is-1">
+            <button className="buttonTsenkher">Засварлах</button>
           </div>
+        </div>
+
+        <div>
+          <span style={{ fontWeight: "bold" }}>Жагсаалт</span>
+          <div className="columns">
+            <div className="column is-6">
+              <table className="table is-bordered ">
+                <thead>
+                  <tr>
+                    <th>2020</th>
+                    <th>Зээлийн төрөл</th>
+                    <th>Зээлийн дүн</th>
+                    <th>Дуусах огноо</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td></td>
+                    <td>10</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td></td>
+                    <td>20</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>Нийт дүн</td>
+                    <td>30</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="column is-6">
+              <table className="table is-bordered ">
+                <thead>
+                  <tr>
+                    <th>2021</th>
+                    <th>Зээлийн төрөл</th>
+                    <th>Зээлийн дүн</th>
+                    <th>Дуусах огноо</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td></td>
+                    <td>10</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td></td>
+                    <td>20</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>Нийт дүн</td>
+                    <td>30</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <span style={{ fontWeight: "bold" }}>Шинээр бүртгэх цонх</span>
+
+          <table className="table is-bordered ">
+            <tbody>
+              <tr>
+                <td>Он</td>
+                <td>2021</td>
+                <select
+                  style={{ padding: "0px 64px 0px 0px" }}
+                  name="cars"
+                  id="cars"
+                >
+                  <option value="volvo">Цалингийн</option>
+                  <option value="saab">Орон сууцны</option>
+                  <option value="opel">Автомашины</option>
+                  <option value="audi">Сургалтын</option>
+                  <option value="audi">Бусад</option>
+                </select>
+              </tr>
+
+              <tr>
+                <td>Зээлийн төрөл</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Зээлийн дүн</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Дуусах огноо</td>
+                <td>12/31/2022</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

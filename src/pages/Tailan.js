@@ -394,7 +394,7 @@ const Home = (props) => {
             </div>
           </div>
         ) : null}
-        <Nvvr />
+        {/* <Nvvr /> */}
       </div>
 
       <Footer />

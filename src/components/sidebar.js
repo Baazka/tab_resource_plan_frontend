@@ -253,6 +253,27 @@ const SideBar = (props) => {
                   </div>
                 </MenuItem>
               )}
+              <MenuItem active={menuClick.menu7}>
+                <div
+                  className="CustomMenu"
+                  onClick={() => SelectMenu({ menu7: !menuClick.menu4 })}
+                >
+                  <img
+                    src={menuClick.menu4 ? DocumentsB : Documents}
+                    width="40"
+                    height="30"
+                  />
+                  <p
+                    className="MenuText"
+                    style={{
+                      color: `${menuClick.menu7 ? "#418ee6" : "white"}`,
+                    }}
+                  >
+                    {" "}
+                    Шийдвэр, тушаалын бүртгэл
+                  </p>
+                </div>
+              </MenuItem>
             </Menu>
             <div className="closemenu" onClick={menuIconClick}>
               {/* changing menu collapse icon on click */}

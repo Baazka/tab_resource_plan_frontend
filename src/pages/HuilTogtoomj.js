@@ -5,6 +5,7 @@ function Nvvr(props) {
   return (
     <div style={{ display: "flex" }}>
       <BusadMedeelel />
+      <Header title="ХУУЛЬ ТОГТООМЖ"></Header>
       <div style={{}}></div>
 
       <HamgaalaltiinHeregsel />
@@ -17,7 +18,7 @@ function BusadMedeelel(props) {
       <div
         className="box"
         style={{
-          width: "145%",
+          width: "150%",
           height: "300%",
           marginLeft: "30%",
         }}
@@ -29,7 +30,7 @@ function BusadMedeelel(props) {
               Хууль тогтоомжийг төрөлжүүлэн бүлэглэн сан байгуулах
             </span>
           </div>
-          <div className="column is-2">
+          <div className="column is-1">
             <button style={{ padding: "5px 10px" }}>+</button>
           </div>
         </div>
@@ -43,19 +44,19 @@ function HamgaalaltiinHeregsel(props) {
       <div
         className="box"
         style={{
-          width: "170%",
+          width: "140%",
           height: "300%",
-          marginLeft: "80%",
+          marginLeft: "90%",
         }}
       >
         <br />
         <div className="columns">
-          <div className="column is-7">
+          <div className="column is-6">
             <span style={{ fontWeight: "bold" }}>
               Байгууллагын дотоод, дүрэм, журам бүлэглэн, сан бүрдүүлэх
             </span>
           </div>
-          <div className="column is-2">
+          <div className="column is-1">
             <button style={{ padding: "5px 10px" }}>+</button>
           </div>
         </div>
