@@ -85,11 +85,12 @@ const SideBar = (props) => {
     } else if (value?.menu6) {
       history.push("/print/anket/");
       setMenuCollapse(true);
-    } else if (value?.menu7) {
-      history.push("/web/HuilTogtoomj/");
-      history.push("/web/EmployeeInformation");
-      setMenuCollapse(true);
     }
+    //else if (value?.menu7) {
+    //   history.push("/web/HuilTogtoomj/");
+    //   history.push("/web/EmployeeInformation");
+    //   setMenuCollapse(true);
+    // }
   }
 
   return (
