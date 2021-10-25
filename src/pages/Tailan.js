@@ -72,27 +72,7 @@ const Home = (props) => {
         maxHeight: "100vh !important",
       }}
     >
-      {/* <Header title="Судалгаа" /> */}
-      <div
-        style={{
-          position: "absolute",
-          left: "20%",
-          width: "50%",
-          left: "7%",
-          zIndex: 1,
-          top: "20px",
-        }}
-      >
-        <span
-          style={{
-            color: "#418ee6",
-            fontSize: 25,
-            fontFamily: "RalewayRegular",
-          }}
-        >
-          Судалгаа
-        </span>
-      </div>
+      <Header />
       <div
         style={{
           backgroundColor: "white",

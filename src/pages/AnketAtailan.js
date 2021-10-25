@@ -25,7 +25,7 @@ function AnketAtailan(props) {
         backgroundColor: "#f1f1f1",
       }}
     >
-      {/* <Header title="Тайлан" back={true} butsakh={butsakh}></Header> */}
+      <Header title="Судалгаа" back={true} butsakh={butsakh}></Header>
       <div
         style={{
           position: "absolute",
@@ -35,17 +35,7 @@ function AnketAtailan(props) {
           zIndex: 1,
           top: "20px",
         }}
-      >
-        <span
-          style={{
-            color: "#418ee6",
-            fontSize: 25,
-            fontFamily: "RalewayRegular",
-          }}
-        >
-          Судалгаа
-        </span>
-      </div>
+      ></div>
       <div style={{ marginTop: "5%" }}>
         {props.match.params.turul === "emergency" ? <Emergency /> : null}
         {props.match.params.turul === "gerBvl" ? <GerBvl /> : null}
@@ -237,7 +227,7 @@ function Emergency(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -463,7 +453,7 @@ function GerBvl(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -667,7 +657,7 @@ function Sadan(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -830,7 +820,7 @@ function ShalgaltiinTalaarkhMedeelel(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -982,7 +972,7 @@ function TangaragiinBvrtgel(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -1138,7 +1128,7 @@ function GadaadHelniiMedleg(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -1304,7 +1294,7 @@ function Bolowsrol(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -1465,7 +1455,7 @@ function BolowsrolDoktor(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -1638,7 +1628,7 @@ function MergeshliinBeltgel(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -1777,7 +1767,7 @@ function ErdmiinTsol(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -1917,7 +1907,7 @@ function TsergiinAlba(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -1980,8 +1970,8 @@ function ShagnaliinTalaarhMedeelel(props) {
                 />
               </div>
             </div>
-            <div className="column is-3 ml-1"></div>
-            <div className="column is-1 ">
+            <div className="column is-8 ml-1"></div>
+            <div className="column is-2 ">
               <div style={{ display: "none" }}>
                 <ReactHTMLTableToExcel
                   id="shagnalButtonXSL"
@@ -2069,7 +2059,7 @@ function ShagnaliinTalaarhMedeelel(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -2125,7 +2115,7 @@ function TurshlagiinTalaarhMedeelel(props) {
               marginBottom: "3rem",
             }}
           >
-            Туршлагын талаарх мэдээлэл
+            7. Туршлагын талаарх мэдээлэл
           </span>
           <div className="columns">
             <div className="column is-5 ml-6" style={{ fontSize: "0.7rem" }}>
@@ -2184,9 +2174,8 @@ function TurshlagiinTalaarhMedeelel(props) {
                       <td>№</td>
                       <td>Ажилтны Нэр</td>
                       <td>Ажилласан аймаг, хот</td>
-                      <td>Ажилласан сум, дүүрэг</td>
-                      <td>Газар хэлтэс, алба</td>
                       <td>Ажилласан байгууллагын нэр</td>
+                      <td>Газар хэлтэс, алба</td>
                       <td>Эрхэлсэн албан тушаал</td>
                       <td>Албан тушаалын төрөл</td>
                       <td>Ажилд орсон он, сар, өдөр</td>
@@ -2198,16 +2187,15 @@ function TurshlagiinTalaarhMedeelel(props) {
                   <tbody>
                     {data?.map((value, index) => (
                       <tr>
-                        <th>{index + 1}</th>
+                        <td>{index + 1}</td>
                         <td>{value.PERSON_NAME}</td>
                         <td>{value.OFFICE_NAME}</td>
-                        <td>{value.SUB_OFFICE_NAME}</td>
-                        <td>{value.EXPERIENCE_DEPARTMENT}</td>
                         <td>{value.EXPERIENCE_ORG}</td>
+                        <td>{value.EXPERIENCE_DEPARTMENT}</td>
                         <td>{value.EXPERIENCE_POSITION}</td>
-                        <td>{value.EXPERIENCE_POSITION_TYPE}</td>
-
+                        <td>{value.POSITION_CATEGORY_TYPE_NAME}</td>
                         <td>
+                          {" "}
                           {dateFormat(
                             value.ENTERED_DATE === null ||
                               value.ENTERED_DATE === undefined
@@ -2217,8 +2205,8 @@ function TurshlagiinTalaarhMedeelel(props) {
                           )}
                         </td>
                         <td>{value.ENTERED_NO}</td>
-
                         <td>
+                          {" "}
                           {dateFormat(
                             value.EXPIRED_DATE === null ||
                               value.EXPIRED_DATE === undefined
@@ -2239,7 +2227,7 @@ function TurshlagiinTalaarhMedeelel(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -2392,7 +2380,7 @@ function BvteeliinJagsaalt(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
