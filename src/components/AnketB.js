@@ -48,7 +48,27 @@ function AnketB(props) {
         height: "100vh",
       }}
     >
-      <Header title="АНКЕТ Б"></Header>
+      {/* <Header title="АНКЕТ Б"></Header> */}
+      <div
+        style={{
+          position: "absolute",
+          left: "20%",
+          width: "50%",
+          left: "7%",
+          zIndex: 1,
+          top: "20px",
+        }}
+      >
+        <span
+          style={{
+            color: "#418ee6",
+            fontSize: 25,
+            fontFamily: "RalewayRegular",
+          }}
+        >
+          АНКЕТ Б
+        </span>
+      </div>
       <div
         style={{
           width: "20%",
@@ -99,7 +119,27 @@ function AnketB(props) {
           <img src={Trush} width="40px" height="40px" />
           <img src={Warning} width="40px" height="40px" />
         </div>
-
+        <div style={{ marginTop: "1.5rem" }}>
+          <span
+            style={{
+              color: "#5d5d5d",
+              fontFamily: "RalewaySemiBold",
+              fontSize: "1rem",
+            }}
+          >
+            {JSON.parse(localStorage.getItem("personDetail"))?.PERSON_LASTNAME}
+          </span>
+          <span
+            style={{
+              color: "#418ee6",
+              fontFamily: "RalewaySemiBold",
+              fontSize: "1rem",
+            }}
+          >
+            &nbsp;{" "}
+            {JSON.parse(localStorage.getItem("personDetail"))?.PERSON_FIRSTNAME}
+          </span>
+        </div>
         <div className="AnketList" style={{ marginTop: "3rem" }}>
           <img src={menu === 1 ? BNegB : BNeg} width="45px" height="45px" />
           <button
@@ -1298,7 +1338,7 @@ function Uramshuulal(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -1307,7 +1347,7 @@ function Uramshuulal(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -1332,7 +1372,7 @@ function Uramshuulal(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -1340,7 +1380,7 @@ function Uramshuulal(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -1403,7 +1443,7 @@ function Uramshuulal(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 onClick={() => setZasakhTowch(!zasakhTowch)}
                 className="buttonTsenkher"
@@ -1782,7 +1822,7 @@ function NuhuhMulbur(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -1791,7 +1831,7 @@ function NuhuhMulbur(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -1816,7 +1856,7 @@ function NuhuhMulbur(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -1824,7 +1864,7 @@ function NuhuhMulbur(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -1885,7 +1925,7 @@ function NuhuhMulbur(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 onClick={() => setZasakhTowch(!zasakhTowch)}
                 className="buttonTsenkher"
@@ -2268,7 +2308,7 @@ function Tuslamj(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -2277,7 +2317,7 @@ function Tuslamj(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -2302,7 +2342,7 @@ function Tuslamj(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -2310,7 +2350,7 @@ function Tuslamj(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -2373,7 +2413,7 @@ function Tuslamj(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 onClick={() => setZasakhTowch(!zasakhTowch)}
                 className="buttonTsenkher"
@@ -2754,7 +2794,7 @@ function Surgalt(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -2763,7 +2803,7 @@ function Surgalt(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -2788,7 +2828,7 @@ function Surgalt(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -2796,7 +2836,7 @@ function Surgalt(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -2862,7 +2902,7 @@ function Surgalt(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 onClick={() => setZasakhTowch(!zasakhTowch)}
                 className="buttonTsenkher"
@@ -3244,7 +3284,7 @@ function Shiitgel(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -3253,7 +3293,7 @@ function Shiitgel(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -3278,7 +3318,7 @@ function Shiitgel(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -3286,7 +3326,7 @@ function Shiitgel(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -3346,7 +3386,7 @@ function Shiitgel(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 onClick={() => setZasakhTowch(!zasakhTowch)}
                 className="buttonTsenkher"
@@ -3715,7 +3755,7 @@ function HuwiinHereg(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -3724,7 +3764,7 @@ function HuwiinHereg(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -3749,7 +3789,7 @@ function HuwiinHereg(props) {
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setZasakhTowch(!zasakhTowch);
               props.loading(false);
             }
@@ -3757,7 +3797,7 @@ function HuwiinHereg(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
@@ -3812,7 +3852,7 @@ function HuwiinHereg(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 onClick={() => setZasakhTowch(!zasakhTowch)}
                 className="buttonTsenkher"

@@ -7,13 +7,12 @@ import { Office } from "./library";
 
 const axios = require("axios");
 var dateFormat = require("dateformat");
-const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
 function UrChadvar(props) {
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
-
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   useEffect(() => {
     async function fetchData() {
       let temp;
@@ -22,60 +21,21 @@ function UrChadvar(props) {
       );
       console.log("urchadavarlistItemlength", listItems.data?.Exam.length);
       console.log("urchadavarlistItem", listItems.data?.Exam);
-      if (
-        listItems.data?.Exam !== undefined &&
-        listItems.data?.Exam.length > 0
-      ) {
-        if (listItems.data?.Exam.length === 1) {
-          temp = listItems.data?.Exam;
+      temp = listItems.data?.Exam.filter((item) => item.EXAM_TYPE_ID !== 2);
+      console.log(temp, "testm1");
+      if (temp !== undefined && temp.length > 0) {
+        console.log(temp, "testm");
+        if (temp.length == 2) {
           loadData({
-            Exam: temp.concat([
-              {
-                PERSON_ID: props.person_id,
-                EXAM_TYPE_ID: 2,
-                EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-                IS_EXAM: 0,
-                OFFICE_ID: "1",
-                EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-                EXAM_POINT: "",
-                DECISION_NO: "",
-                DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-                DECISION_DESC: "",
-                CREATED_BY: userDetils?.USER_ID,
-                CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-                ROWTYPE: "NEW",
-                IS_ACTIVE: "1",
-              },
-              {
-                PERSON_ID: props.person_id,
-                EXAM_TYPE_ID: 3,
-                EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-                IS_EXAM: 0,
-                OFFICE_ID: "1",
-                EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-                EXAM_POINT: "",
-                DECISION_NO: "",
-                DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-                DECISION_DESC: "",
-                CREATED_BY: userDetils?.USER_ID,
-                CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-                ROWTYPE: "NEW",
-                IS_ACTIVE: "1",
-              },
-            ]),
-          });
-        } else if (listItems.data?.Exam.length == 3) {
-          loadData({
-            Exam: listItems.data.Exam.sort(function (a, b) {
+            Exam: temp.sort(function (a, b) {
               return a.EXAM_TYPE_ID - b.EXAM_TYPE_ID;
             }),
           });
         } else {
-          temp = [...listItems.data?.Exam];
           let examtype;
           temp.map((a) => {
-            if (a.EXAM_TYPE_ID === 2) examtype = 3;
-            else if (a.EXAM_TYPE_ID === 3) examtype = 2;
+            if (a.EXAM_TYPE_ID === 3) examtype = 1;
+            else if (a.EXAM_TYPE_ID === 1) examtype = 3;
           });
 
           loadData({
@@ -103,7 +63,7 @@ function UrChadvar(props) {
         }
       } else {
         loadData({
-          Exam: listItems.data?.Exam.concat([
+          Exam: [
             {
               PERSON_ID: props.person_id,
               EXAM_TYPE_ID: 1,
@@ -120,22 +80,7 @@ function UrChadvar(props) {
               ROWTYPE: "NEW",
               IS_ACTIVE: "1",
             },
-            {
-              PERSON_ID: props.person_id,
-              EXAM_TYPE_ID: 2,
-              EXAM_TYPE_NAME: "Ерөнхий шалгалт өгсөн эсэх",
-              IS_EXAM: 0,
-              OFFICE_ID: "1",
-              EXAM_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-              EXAM_POINT: "0",
-              DECISION_NO: "",
-              DECISION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-              DECISION_DESC: "",
-              CREATED_BY: userDetils?.USER_ID,
-              CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-              ROWTYPE: "NEW",
-              IS_ACTIVE: "1",
-            },
+
             {
               PERSON_ID: props.person_id,
               EXAM_TYPE_ID: 3,
@@ -152,7 +97,7 @@ function UrChadvar(props) {
               ROWTYPE: "NEW",
               IS_ACTIVE: "1",
             },
-          ]),
+          ],
         });
       }
     }
@@ -161,9 +106,7 @@ function UrChadvar(props) {
 
   function saveToDB() {
     props.loading(true);
-    let newRow = data.Exam.filter(
-      (value) => value.ROWTYPE === "NEW" && value.IS_EXAM !== 0
-    );
+    let newRow = data.Exam.filter((value) => value.ROWTYPE === "NEW");
     let oldRow = data.Exam.filter(
       (value) =>
         value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
@@ -187,7 +130,7 @@ function UrChadvar(props) {
             setEdit(!edit);
             props.loading(false);
           } else {
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           }
@@ -196,7 +139,7 @@ function UrChadvar(props) {
         .catch(function (error) {
           //alert(error.response.data.error.message);
           console.log(error.response);
-          alert.show("амжилтгүй алдаа");
+          alert.show("Системийн алдаа");
           setEdit(!edit);
           props.loading(false);
         });
@@ -217,7 +160,7 @@ function UrChadvar(props) {
             setEdit(!edit);
             props.loading(false);
           } else {
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           }
@@ -225,7 +168,7 @@ function UrChadvar(props) {
         .catch(function (error) {
           //alert(error.response.data.error.message);
           console.log(error.response);
-          alert.show("амжилтгүй алдаа");
+          alert.show("Системийн алдаа");
           setEdit(!edit);
           props.loading(false);
         });
@@ -262,7 +205,7 @@ function UrChadvar(props) {
               </span>
             </div>
             <div className="column is -1">
-              {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
                 <button
                   className="buttonTsenkher"
                   onClick={() => setEdit(!edit)}
@@ -426,156 +369,18 @@ function UrChadvar(props) {
                     />
                   </td>
                 </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Нөөцөд байгаа эсэх</td>
-                  <td>
-                    <select
-                      disabled={edit}
-                      className="Borderless"
-                      value={data.Exam[1].IS_EXAM}
-                      onChange={(text) => {
-                        let value = [...data?.Exam];
-                        value[1].IS_EXAM = text.target.value;
-                        value[1].UPDATED_BY = userDetils?.USER_ID;
-                        value[1].UPDATED_DATE = dateFormat(
-                          new Date(),
-                          "dd-mmm-yy"
-                        );
-                        loadData({ Exam: value });
-                      }}
-                    >
-                      <option value={1}>Өгсөн</option>
-                      <option value={0}>Өгөөгүй</option>
-                    </select>
-                  </td>
-                  <td>
-                    <Office
-                      personChild={data.Exam[1]}
-                      setPersonChild={setOffice}
-                      fullWidth={true}
-                      index={"1"}
-                      edit={edit}
-                    />
-                  </td>
-                  <td>
-                    {" "}
-                    <input
-                      type="date"
-                      disabled={edit}
-                      className="Borderless"
-                      value={dateFormat(data.Exam[1].EXAM_DATE, "yyyy-mm-dd")}
-                      onChange={(e) => {
-                        let value = [...data?.Exam];
-                        value[1].EXAM_DATE = e.target.value;
-                        value[1].UPDATED_BY = userDetils?.USER_ID;
-                        value[1].UPDATED_DATE = dateFormat(
-                          new Date(),
-                          "dd-mmm-yy"
-                        );
-                        loadData({ Exam: value });
-                      }}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      placeholder="утгаа оруулна уу"
-                      style={{ width: "70px" }}
-                      disabled={edit}
-                      className="Borderless"
-                      type="number"
-                      min="0"
-                      max="100"
-                      value={data.Exam[1]?.EXAM_POINT}
-                      onChange={(text) => {
-                        let value = [...data?.Exam];
-                        value[1].EXAM_POINT = text.target.value;
-                        value[1].UPDATED_BY = userDetils?.USER_ID;
-                        value[1].UPDATED_DATE = dateFormat(
-                          new Date(),
-                          "dd-mmm-yy"
-                        );
-                        loadData({ Exam: value });
-                      }}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      placeholder="утгаа оруулна уу"
-                      style={{ width: "70px" }}
-                      disabled={edit}
-                      className="Borderless"
-                      rows="1"
-                      cols="10"
-                      wrap="soft"
-                      value={data.Exam[1]?.DECISION_NO}
-                      onChange={(text) => {
-                        let value = [...data?.Exam];
-                        value[1].DECISION_NO = text.target.value;
-                        value[1].UPDATED_BY = userDetils?.USER_ID;
-                        value[1].UPDATED_DATE = dateFormat(
-                          new Date(),
-                          "dd-mmm-yy"
-                        );
-                        loadData({ Exam: value });
-                      }}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="date"
-                      disabled={edit}
-                      className="Borderless"
-                      value={dateFormat(
-                        data.Exam[1].DECISION_DATE,
-                        "yyyy-mm-dd"
-                      )}
-                      onChange={(e) => {
-                        let value = [...data?.Exam];
-                        value[1].DECISION_DATE = e.target.value;
-                        value[1].UPDATED_BY = userDetils?.USER_ID;
-                        value[1].UPDATED_DATE = dateFormat(
-                          new Date(),
-                          "dd-mmm-yy"
-                        );
-                        loadData({ Exam: value });
-                      }}
-                    />
-                  </td>
-                  <td>
-                    {" "}
-                    <textarea
-                      disabled={edit}
-                      className="Borderless"
-                      rows="2"
-                      cols="45"
-                      wrap="soft"
-                      value={data.Exam[1]?.DECISION_DESC}
-                      onChange={(text) => {
-                        let value = [...data?.Exam];
-                        value[1].DECISION_DESC = text.target.value;
-                        value[1].UPDATED_BY = userDetils?.USER_ID;
-                        value[1].UPDATED_DATE = dateFormat(
-                          new Date(),
-                          "dd-mmm-yy"
-                        );
-                        loadData({ Exam: value });
-                      }}
-                    />
-                  </td>
-                </tr>
-                <td>3</td>
+                <td>2</td>
                 <td>Тусгай шалгалт өгсөн эсэх</td>
                 <td>
                   <select
                     disabled={edit}
                     className="Borderless"
-                    value={data.Exam[2].IS_EXAM}
+                    value={data.Exam[1].IS_EXAM}
                     onChange={(text) => {
                       let value = [...data?.Exam];
-                      value[2].IS_EXAM = text.target.value;
-                      value[2].UPDATED_BY = userDetils?.USER_ID;
-                      value[2].UPDATED_DATE = dateFormat(
+                      value[1].IS_EXAM = text.target.value;
+                      value[1].UPDATED_BY = userDetils?.USER_ID;
+                      value[1].UPDATED_DATE = dateFormat(
                         new Date(),
                         "dd-mmm-yy"
                       );
@@ -588,7 +393,7 @@ function UrChadvar(props) {
                 </td>
                 <td>
                   <Office
-                    personChild={data.Exam[2]}
+                    personChild={data.Exam[1]}
                     setPersonChild={setOffice}
                     fullWidth={true}
                     index={"2"}
@@ -601,12 +406,12 @@ function UrChadvar(props) {
                     type="date"
                     disabled={edit}
                     className="Borderless"
-                    value={dateFormat(data.Exam[2].EXAM_DATE, "yyyy-mm-dd")}
+                    value={dateFormat(data.Exam[1].EXAM_DATE, "yyyy-mm-dd")}
                     onChange={(e) => {
                       let value = [...data?.Exam];
-                      value[2].EXAM_DATE = e.target.value;
-                      value[2].UPDATED_BY = userDetils?.USER_ID;
-                      value[2].UPDATED_DATE = dateFormat(
+                      value[1].EXAM_DATE = e.target.value;
+                      value[1].UPDATED_BY = userDetils?.USER_ID;
+                      value[1].UPDATED_DATE = dateFormat(
                         new Date(),
                         "dd-mmm-yy"
                       );
@@ -623,12 +428,12 @@ function UrChadvar(props) {
                     type="number"
                     min="0"
                     max="100"
-                    value={data.Exam[2]?.EXAM_POINT}
+                    value={data.Exam[1]?.EXAM_POINT}
                     onChange={(text) => {
                       let value = [...data?.Exam];
-                      value[2].EXAM_POINT = text.target.value;
-                      value[2].UPDATED_BY = userDetils?.USER_ID;
-                      value[2].UPDATED_DATE = dateFormat(
+                      value[1].EXAM_POINT = text.target.value;
+                      value[1].UPDATED_BY = userDetils?.USER_ID;
+                      value[1].UPDATED_DATE = dateFormat(
                         new Date(),
                         "dd-mmm-yy"
                       );
@@ -645,12 +450,12 @@ function UrChadvar(props) {
                     rows="1"
                     cols="10"
                     wrap="soft"
-                    value={data.Exam[2]?.DECISION_NO}
+                    value={data.Exam[1]?.DECISION_NO}
                     onChange={(text) => {
                       let value = [...data?.Exam];
-                      value[2].DECISION_NO = text.target.value;
-                      value[2].UPDATED_BY = userDetils?.USER_ID;
-                      value[2].UPDATED_DATE = dateFormat(
+                      value[1].DECISION_NO = text.target.value;
+                      value[1].UPDATED_BY = userDetils?.USER_ID;
+                      value[1].UPDATED_DATE = dateFormat(
                         new Date(),
                         "dd-mmm-yy"
                       );
@@ -663,12 +468,12 @@ function UrChadvar(props) {
                     type="date"
                     disabled={edit}
                     className="Borderless"
-                    value={dateFormat(data.Exam[2].DECISION_DATE, "yyyy-mm-dd")}
+                    value={dateFormat(data.Exam[1].DECISION_DATE, "yyyy-mm-dd")}
                     onChange={(e) => {
                       let value = [...data?.Exam];
-                      value[2].DECISION_DATE = e.target.value;
-                      value[2].UPDATED_BY = userDetils?.USER_ID;
-                      value[2].UPDATED_DATE = dateFormat(
+                      value[1].DECISION_DATE = e.target.value;
+                      value[1].UPDATED_BY = userDetils?.USER_ID;
+                      value[1].UPDATED_DATE = dateFormat(
                         new Date(),
                         "dd-mmm-yy"
                       );
@@ -684,12 +489,12 @@ function UrChadvar(props) {
                     rows="2"
                     cols="45"
                     wrap="soft"
-                    value={data.Exam[2]?.DECISION_DESC}
+                    value={data.Exam[1]?.DECISION_DESC}
                     onChange={(text) => {
                       let value = [...data?.Exam];
-                      value[2].DECISION_DESC = text.target.value;
-                      value[2].UPDATED_BY = userDetils?.USER_ID;
-                      value[2].UPDATED_DATE = dateFormat(
+                      value[1].DECISION_DESC = text.target.value;
+                      value[1].UPDATED_BY = userDetils?.USER_ID;
+                      value[1].UPDATED_DATE = dateFormat(
                         new Date(),
                         "dd-mmm-yy"
                       );
@@ -727,6 +532,7 @@ function UrChadvar(props) {
 }
 
 function TangaragBurtgel(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
@@ -766,7 +572,7 @@ function TangaragBurtgel(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -775,7 +581,7 @@ function TangaragBurtgel(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -796,7 +602,7 @@ function TangaragBurtgel(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -804,7 +610,7 @@ function TangaragBurtgel(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -922,7 +728,7 @@ function TangaragBurtgel(props) {
             <span className="headerTextBold">2.Тангаргийн бүртгэл</span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 className="buttonTsenkher"
                 onClick={() => {
@@ -1114,6 +920,7 @@ function TangaragBurtgel(props) {
 }
 
 function GadaadKhel(props) {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
@@ -1153,7 +960,7 @@ function GadaadKhel(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -1162,7 +969,7 @@ function GadaadKhel(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -1183,7 +990,7 @@ function GadaadKhel(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -1191,7 +998,7 @@ function GadaadKhel(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -1324,7 +1131,7 @@ function GadaadKhel(props) {
             <span className="headerTextBold">3.Гадаад хэлний мэдлэг</span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 className="buttonTsenkher"
                 onClick={() => {

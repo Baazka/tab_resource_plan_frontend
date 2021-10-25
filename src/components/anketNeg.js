@@ -47,7 +47,6 @@ import {
   Office,
   Suboffice,
   FamilyArray,
-  personNoCheck,
 } from "./library";
 import { useAlert } from "react-alert";
 import { useHistory } from "react-router-dom";
@@ -69,21 +68,12 @@ function AnketNeg(props) {
   const alert = useAlert();
   const [loading, setLoading] = useState(true);
 
-  function getFormUrlEncoded(toConvert) {
-    const formBody = [];
-    for (const property in toConvert) {
-      const encodedKey = encodeURIComponent(property);
-      const encodedValue = encodeURIComponent(toConvert[property]);
-      formBody.push(encodedKey + "=" + encodedValue);
-    }
-    return formBody.join("&");
-  }
   function saveAvatar(file) {
     if (
       localStorage.getItem("personDetail")?.includes("person_id") &&
       JSON.parse(localStorage.getItem("personDetail")).person_id !== "0"
     ) {
-      // "person_id",JSON.parse(localStorage.getItem("personDetail")).person_id, file.target.files[0].name
+      // "userid",JSON.parse(localStorage.getItem("personDetail")).person_id, file.target.files[0].name
       console.log("imageName", file.target.files[0].name);
       const formData = new FormData();
       formData.append("image", file.target.files[0], file.target.files[0].name);
@@ -292,7 +282,28 @@ function AnketNeg(props) {
           height: "100vh",
         }}
       >
-        <Header title="АНКЕТ А"></Header>
+        {/* <Header title="АНКЕТ А"></Header> */}
+
+        <div
+          style={{
+            position: "absolute",
+            left: "20%",
+            width: "50%",
+            left: "7%",
+            zIndex: 1,
+            top: "20px",
+          }}
+        >
+          <span
+            style={{
+              color: "#418ee6",
+              fontSize: 25,
+              fontFamily: "RalewayRegular",
+            }}
+          >
+            АНКЕТ А
+          </span>
+        </div>
         <div
           style={{
             width: "20%",
@@ -727,12 +738,18 @@ function Yrunkhii(props) {
   const [register, setRegister] = useState(0);
   const cyrillicPattern = /^[\u0400-\u04FF]+$/;
 
-  async function personNoCheck(register) {
+  async function personNoCheck(registerT) {
+    console.log(registerT, "registerTT");
     let listItems = await axios({
       method: "POST",
       url: "http://hr.audit.mn/hr/api/v1/personNoCheck",
-      data: { PERSON_REGISTER_NO: register },
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+      data: { PERSON_REGISTER_NO: registerT },
     });
+    console.log(listItems?.data?.CNT, "register");
     setRegister(listItems?.data?.CNT);
   }
   return (
@@ -751,7 +768,7 @@ function Yrunkhii(props) {
           <span className="headerTextBold">Ерөнхий мэдээлэл</span>
         </div>
         <div className="column is-1 is-narrow-tablet">
-          {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+          {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
             <button
               className="buttonTsenkher"
               onClick={() => props.setEdit(!props.edit)}
@@ -869,6 +886,7 @@ function Yrunkhii(props) {
                   /\d/.test(text.target.value.slice(2, 10))
                 ) {
                   await personNoCheck(text.target.value);
+                  console.log(text.target.value, "registerT");
                 } else setRegister(false);
               } else {
                 setRegister(false);
@@ -1144,7 +1162,7 @@ function Kayag(props) {
           <span className="headerTextBold">Хаягийн мэдээлэл</span>
         </div>
         <div className="column is-1">
-          {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+          {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
             <button
               className="buttonTsenkher"
               onClick={() => {
@@ -1491,7 +1509,7 @@ function HolbooBarikhHun(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -1500,7 +1518,7 @@ function HolbooBarikhHun(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -1521,14 +1539,14 @@ function HolbooBarikhHun(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
           })
           .catch(function (error) {
             //alert(error.response.data.error.message);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -1556,7 +1574,7 @@ function HolbooBarikhHun(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
                 Засварлах
               </button>
@@ -1980,7 +1998,7 @@ function GerBul(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -1989,7 +2007,7 @@ function GerBul(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -2010,7 +2028,7 @@ function GerBul(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -2018,7 +2036,7 @@ function GerBul(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -2077,7 +2095,7 @@ function GerBul(props) {
           </span>
         </div>
         <div className="column is-1">
-          {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+          {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
             <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
               Засварлах
             </button>

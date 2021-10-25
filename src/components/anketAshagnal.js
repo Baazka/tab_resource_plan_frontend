@@ -150,7 +150,7 @@ function Shagnaliin(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -159,7 +159,7 @@ function Shagnaliin(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -180,7 +180,7 @@ function Shagnaliin(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -188,7 +188,7 @@ function Shagnaliin(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -288,7 +288,7 @@ function Shagnaliin(props) {
             <span className="headerTextBold">6. Шагналын талаарх мэдээлэл</span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 className="buttonTsenkher"
                 onClick={() => {

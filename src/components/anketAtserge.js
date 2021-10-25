@@ -79,7 +79,7 @@ function TsergiinAlba(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -88,7 +88,7 @@ function TsergiinAlba(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -105,7 +105,7 @@ function TsergiinAlba(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -114,7 +114,7 @@ function TsergiinAlba(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -254,7 +254,7 @@ function TsergiinAlba(props) {
             >
               Хэвлэх
             </button> */}
-              {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
                 <button className="buttonTsenkher" onClick={saveToDB}>
                   Хадгалах
                 </button>

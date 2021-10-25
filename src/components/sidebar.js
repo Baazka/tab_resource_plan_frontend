@@ -28,6 +28,8 @@ import {
   Dashboard,
   Tailan,
   TailanB,
+  BNegB,
+  BNeg,
 } from "../assets/images/zurag";
 
 const SideBar = (props) => {
@@ -41,6 +43,7 @@ const SideBar = (props) => {
     menu3: false,
     menu4: false,
     menu5: false,
+    menu6: false,
   });
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -84,6 +87,7 @@ const SideBar = (props) => {
       setMenuCollapse(true);
     } else if (value?.menu7) {
       history.push("/web/HuilTogtoomj/");
+      history.push("/web/EmployeeInformation");
       setMenuCollapse(true);
     }
   }
@@ -108,14 +112,36 @@ const SideBar = (props) => {
                   </div>
                 </nav>
               ) : (
-                <nav class="navbar" style={{ backgroundColor: "transparent" }}>
+                <nav
+                  class="navbar"
+                  style={{
+                    backgroundColor: "transparent",
+                    textAlign: "-webkit-center",
+                  }}
+                >
                   <div class="navbar-brand">
                     <img
-                      src={LogoB}
-                      width="270"
+                      src={Logo}
+                      width="70"
                       height="70"
-                      style={{ marginLeft: "10%", marginTop: "10px" }}
+                      style={{
+                        marginLeft: "10%",
+                        marginTop: "10px",
+                      }}
                     />
+                    <span
+                      style={{
+                        color: "white",
+                        marginLeft: "2%",
+                        fontSize: "16px",
+                        marginTop: "22px",
+
+                        fontFamily: "RalewaySemiBold",
+                        lineHeight: "20px",
+                      }}
+                    >
+                      Үндсэний аудитын газар
+                    </span>
                   </div>
                 </nav>
               )}
@@ -274,6 +300,29 @@ const SideBar = (props) => {
                   </p>
                 </div>
               </MenuItem>
+              {/* {userDetils?.USER_TYPE_NAME.includes("BRANCH") ? null : (
+                <MenuItem active={menuClick.menu6}>
+                  <div
+                    className="CustomMenu"
+                    onClick={() => SelectMenu({ menu6: !menuClick.menu6 })}
+                  >
+                    <img
+                      src={menuClick.menu6 ? BNegB : BNeg}
+                      width="40"
+                      height="30"
+                    />
+                    <p
+                      className="MenuText"
+                      style={{
+                        color: `${menuClick.menu6 ? "#418ee6" : "white"}`,
+                      }}
+                    >
+                      {" "}
+                      Албан хаагчийн мэдээлэл
+                    </p>
+                  </div>
+                </MenuItem>
+              )} */}
             </Menu>
             <div className="closemenu" onClick={menuIconClick}>
               {/* changing menu collapse icon on click */}

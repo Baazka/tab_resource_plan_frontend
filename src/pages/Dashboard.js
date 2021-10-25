@@ -16,7 +16,27 @@ const Dashboard = (props) => {
 
   return (
     <div>
-      <Header title="Дашбоард" />
+      {/* <Header title="Дашбоард" /> */}
+      <div
+        style={{
+          position: "absolute",
+          left: "20%",
+          width: "50%",
+          left: "7%",
+          zIndex: 1,
+          top: "20px",
+        }}
+      >
+        <span
+          style={{
+            color: "#418ee6",
+            fontSize: 25,
+            fontFamily: "RalewayRegular",
+          }}
+        >
+          Дашбоард
+        </span>
+      </div>
       <div
         style={{
           backgroundColor: "white",
@@ -25,7 +45,7 @@ const Dashboard = (props) => {
         }}
       >
         <Iframe
-          url="https://app.powerbi.com/view?r=eyJrIjoiNmZmNjcxMTEtMzQxMC00ODM1LWI2ZWUtNWUwNjA2Y2I1ODgyIiwidCI6ImI0MDYwNDEyLTEwM2MtNDBlNy05YzExLTBhNjBkY2NhZjVhZCIsImMiOjEwfQ%3D%3D"
+          url="https://app.powerbi.com/view?r=eyJrIjoiODZiZTAxMDEtNTU5MC00ZDM0LTlmMmEtMTgxOWUxZWExM2I1IiwidCI6ImI0MDYwNDEyLTEwM2MtNDBlNy05YzExLTBhNjBkY2NhZjVhZCIsImMiOjEwfQ%3D%3D&pageName=ReportSection"
           width="93%"
           height="900px"
           id="myId"

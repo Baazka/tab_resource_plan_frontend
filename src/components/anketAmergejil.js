@@ -47,7 +47,7 @@ function Mergeshliin(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -56,7 +56,7 @@ function Mergeshliin(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -77,7 +77,7 @@ function Mergeshliin(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -85,7 +85,7 @@ function Mergeshliin(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -241,7 +241,7 @@ function Mergeshliin(props) {
             </div>
 
             <div className="column is-1">
-              {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
                 <button
                   className="buttonTsenkher"
                   onClick={() => {
@@ -637,7 +637,7 @@ function ZeregTsol(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -646,7 +646,7 @@ function ZeregTsol(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -667,7 +667,7 @@ function ZeregTsol(props) {
               setEdit(!edit);
               props.loading(false);
             } else {
-              alert.show("амжилтгүй алдаа");
+              alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
             }
@@ -675,7 +675,7 @@ function ZeregTsol(props) {
           .catch(function (error) {
             //alert(error.response.data.error.message);
             console.log(error.response);
-            alert.show("амжилтгүй алдаа");
+            alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
@@ -780,7 +780,7 @@ function ZeregTsol(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 className="buttonTsenkher"
                 onClick={() => {
