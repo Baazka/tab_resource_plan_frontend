@@ -280,7 +280,7 @@ const SideBar = (props) => {
                   </div>
                 </MenuItem>
               )}
-              <MenuItem active={menuClick.menu7}>
+              {/* <MenuItem active={menuClick.menu7}>
                 <div
                   className="CustomMenu"
                   onClick={() => SelectMenu({ menu7: !menuClick.menu4 })}
@@ -300,7 +300,7 @@ const SideBar = (props) => {
                     Шийдвэр, тушаалын бүртгэл
                   </p>
                 </div>
-              </MenuItem>
+              </MenuItem> */}
               {/* {userDetils?.USER_TYPE_NAME.includes("BRANCH") ? null : (
                 <MenuItem active={menuClick.menu6}>
                   <div
