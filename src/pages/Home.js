@@ -933,7 +933,7 @@ function Home(props) {
                 <img src={Excel} width="20px" height="20px "></img>Excel
               </span>
             </button>
-            <EmployExcel />
+            <EmployExcel data={search === "" ? jagsaalt : found} />
           </div>
         </div>
         <iframe
@@ -1026,18 +1026,7 @@ function Home(props) {
   );
 }
 
-function EmployExcel(props) {
-  const [data, loadData] = useState(null);
-
-  useEffect(() => {
-    async function fetchData() {
-      let listItems = await axios("http://hr.audit.mn/hr/api/v1/excelPerson/");
-      console.log(listItems, "tailan");
-      loadData(listItems?.data);
-    }
-    fetchData();
-  }, [props]);
-
+function EmployExcel({ data }) {
   let listItems;
   if (data !== undefined || data.length !== 0) {
     listItems = (
