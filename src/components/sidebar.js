@@ -61,6 +61,7 @@ const SideBar = (props) => {
       menu4: false,
       menu5: false,
       menu6: false,
+      menu7: false,
     };
     setMenuClick({ ...temp, ...value });
     if (value?.menu0) {
@@ -82,9 +83,14 @@ const SideBar = (props) => {
       history.push("/web/Tailan");
       setMenuCollapse(true);
     } else if (value?.menu6) {
-      history.push("/web/EmployeeInformation");
+      history.push("/print/anket/");
       setMenuCollapse(true);
     }
+    //else if (value?.menu7) {
+    //   history.push("/web/HuilTogtoomj/");
+    //   history.push("/web/EmployeeInformation");
+    //   setMenuCollapse(true);
+    // }
   }
 
   return (
@@ -274,6 +280,27 @@ const SideBar = (props) => {
                   </div>
                 </MenuItem>
               )}
+              {/* <MenuItem active={menuClick.menu7}>
+                <div
+                  className="CustomMenu"
+                  onClick={() => SelectMenu({ menu7: !menuClick.menu4 })}
+                >
+                  <img
+                    src={menuClick.menu4 ? DocumentsB : Documents}
+                    width="40"
+                    height="30"
+                  />
+                  <p
+                    className="MenuText"
+                    style={{
+                      color: `${menuClick.menu7 ? "#418ee6" : "white"}`,
+                    }}
+                  >
+                    {" "}
+                    Шийдвэр, тушаалын бүртгэл
+                  </p>
+                </div>
+              </MenuItem> */}
               {/* {userDetils?.USER_TYPE_NAME.includes("BRANCH") ? null : (
                 <MenuItem active={menuClick.menu6}>
                   <div

@@ -9,6 +9,7 @@ import DataTable, { createTheme } from "react-data-table-component";
 import { Search, Filter, Add } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router";
+import Nvvr from "../components/aTailan";
 
 var rowNumber = 1;
 createTheme("solarized", {
@@ -71,27 +72,7 @@ const Home = (props) => {
         maxHeight: "100vh !important",
       }}
     >
-      {/* <Header title="Судалгаа" /> */}
-      <div
-        style={{
-          position: "absolute",
-          left: "20%",
-          width: "50%",
-          left: "7%",
-          zIndex: 1,
-          top: "20px",
-        }}
-      >
-        <span
-          style={{
-            color: "#418ee6",
-            fontSize: 25,
-            fontFamily: "RalewayRegular",
-          }}
-        >
-          Судалгаа
-        </span>
-      </div>
+      <Header />
       <div
         style={{
           backgroundColor: "white",
@@ -413,6 +394,7 @@ const Home = (props) => {
             </div>
           </div>
         ) : null}
+        {/* <Nvvr /> */}
       </div>
 
       <Footer />

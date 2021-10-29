@@ -21,9 +21,11 @@ import Dashboard from "./pages/Dashboard";
 import Baiguullaga from "./pages/Baiguullaga";
 import TushaalShiidver from "./pages/TushaalShiidver";
 import Tailan from "./pages/Tailan";
+import HuilTogtoomj from "./pages/HuilTogtoomj";
 import AnketAtailan from "./pages/AnketAtailan";
 import { HashRouter, Redirect, withRouter } from "react-router-dom";
 import AlbanTushaalBurtgel from "./components/AlbanTushaalBurtgel";
+import Nuur from "./components/aTailan";
 import { LogoB } from "../src/assets/images/zurag";
 import EmployeeInformation from "./pages/EmployeeInformation";
 import { UserB, Noti, BackButton } from "./assets/images/zurag";
@@ -394,6 +396,17 @@ function App() {
         />
         <PrivateRoute path="/web/Tailan/" component={Tailan} exact />
         <PrivateRoute
+          path="/web/HuilTogtoomj/"
+          component={HuilTogtoomj}
+          exact
+        />
+        <PrivateRoute
+          path="/web/TushaalShiidver/"
+          component={TushaalShiidver}
+          exact
+        />
+        <PrivateRoute path="/web/Tailan/" component={Tailan} exact />
+        <PrivateRoute
           path="/web/EmployeeInformation/"
           component={EmployeeInformation}
           exact
@@ -408,6 +421,7 @@ function App() {
           component={AnketAtailan}
           exact
         />
+        <Route path="/print/anket/" component={Nuur} exact />
 
         {/* ) : (
             <div

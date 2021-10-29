@@ -23,6 +23,7 @@ import {
   BDoloo,
   BNaimB,
   BNaim,
+  Search,
 } from "../assets/images/zurag";
 import { useAlert } from "react-alert";
 import ScaleLoader from "react-spinners/ScaleLoader";
@@ -37,6 +38,7 @@ function AnketB(props) {
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [menu, setMenu] = useState(1);
   const [loading, setLoading] = useState(false);
+
   const history = useHistory();
 
   return (
@@ -276,7 +278,44 @@ function AnketB(props) {
             IX. ХУВИЙН ХЭРЭГ
           </button>
         </div>
+        <div className="AnketList">
+          <button
+            className="button"
+            style={{
+              color: `${menu === 9 ? "#418ee6" : "#5d5d5d"}`,
+              border: "none",
+              width: "17rem",
+              fontFamily: "RalewayRegular",
+              fontWeight: "bold",
+              whiteSpace: "nowrap",
+              marginTop: "3px",
+              fontSize: "1rem",
+            }}
+            onClick={() => setMenu(9)}
+          >
+            БУСАД МЭДЭЭЛЭЛ
+          </button>
+        </div>
+        <div className="AnketList">
+          <button
+            className="button"
+            style={{
+              color: `${menu === 10 ? "#418ee6" : "#5d5d5d"}`,
+              border: "none",
+              width: "17rem",
+              fontFamily: "RalewayRegular",
+              fontWeight: "bold",
+              whiteSpace: "nowrap",
+              marginTop: "3px",
+              fontSize: "1rem",
+            }}
+            onClick={() => setMenu(10)}
+          >
+            ХАМГААЛАЛТЫН ХЭРЭГСЭЛ
+          </button>
+        </div>
       </div>
+
       <div
         style={{
           display: "flex",
@@ -323,6 +362,10 @@ function AnketB(props) {
             {menu === 6 ? <Surgalt loading={setLoading} /> : null}
             {menu === 7 ? <Shiitgel loading={setLoading} /> : null}
             {menu === 8 ? <HuwiinHereg loading={setLoading} /> : null}
+            {menu === 9 ? <BusadMedeelel loading={setLoading} /> : null}
+            {menu === 10 ? (
+              <HamgaalaltiinHeregsel loading={setLoading} />
+            ) : null}
           </div>
         </div>
       </div>
@@ -4023,5 +4066,245 @@ function HuwiinHereg(props) {
     listItems = <p>ачаалж байна...</p>;
   }
   return listItems;
+}
+function BusadMedeelel(props) {
+  const [edit, setEdit] = useState(true);
+  const [zeel, setZeel] = useState(true);
+  return (
+    <div>
+      <div
+        className="box"
+        style={{
+          display: "Block",
+          padding: "80px 15px 0px 15px",
+          boxShadow: "15px",
+        }}
+      >
+        <div className="columns">
+          <div className="column is-11">
+            <span style={{ fontWeight: "bold" }}>Амьдрах орчны мэдээлэл</span>
+          </div>
+
+          <div className="column is-1">
+            <button className="buttonTsenkher">Засварлах</button>
+          </div>
+        </div>
+        <div>
+          <div className="columns">
+            <div className="column is-2  has-text-right">Орон байр</div>
+            <div className="column ">
+              {" "}
+              <select name="cars" id="cars">
+                <option value="volvo">Сонгоно уу</option>
+                <option value="saab">Гэр хороололд гэр</option>
+                <option value="opel">Гэр хороололд байшин</option>
+                <option value="audi">Нийтийн байр</option>
+                <option value="audi">Орон сууц</option>
+                <option value="audi">Амины орон сууц /хаус/</option>
+                <option value="audi">Бусад</option>
+              </select>
+            </div>
+          </div>
+          <div className="columns">
+            <div className="column is-2  has-text-right">Эзэмших хэлбэр</div>
+            <div className="column ">
+              {" "}
+              <select
+                style={{ padding: "0px 64px 0px 0px" }}
+                name="cars"
+                id="cars"
+              >
+                <option value="volvo">Сонгоно уу</option>
+                <option value="saab">Хувийн</option>
+                <option value="opel">Түрээсийн</option>
+                <option value="audi">Байгууллагын</option>
+                <option value="audi">Бусад</option>
+              </select>
+            </div>
+          </div>
+          <div className="columns">
+            <div className="column is-2  has-text-right">Тайлбар</div>
+            <div className="column ">
+              {" "}
+              <input></input>
+            </div>
+          </div>
+
+          <input type="checkbox" />
+          <span>Төвийн халаалттай</span>
+        </div>
+      </div>
+
+      <div
+        className="box"
+        style={{
+          display: "Block",
+          padding: "0px 15px 10px 15px",
+          boxShadow: "15px",
+        }}
+      >
+        <div>
+          <span style={{ fontWeight: "bold" }}>Зээлийн мэдээлэл</span>
+          <div className="column is-1">
+            <button className="buttonTsenkher">Засварлах</button>
+          </div>
+        </div>
+
+        <div>
+          <span style={{ fontWeight: "bold" }}>Жагсаалт</span>
+          <div className="columns">
+            <div className="column is-6">
+              <table className="table is-bordered ">
+                <thead>
+                  <tr>
+                    <th>2020</th>
+                    <th>Зээлийн төрөл</th>
+                    <th>Зээлийн дүн</th>
+                    <th>Дуусах огноо</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td></td>
+                    <td>10</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td></td>
+                    <td>20</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>Нийт дүн</td>
+                    <td>30</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div className="column is-6">
+              <table className="table is-bordered ">
+                <thead>
+                  <tr>
+                    <th>2021</th>
+                    <th>Зээлийн төрөл</th>
+                    <th>Зээлийн дүн</th>
+                    <th>Дуусах огноо</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td></td>
+                    <td>10</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td></td>
+                    <td>20</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>Нийт дүн</td>
+                    <td>30</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <span style={{ fontWeight: "bold" }}>Шинээр бүртгэх цонх</span>
+
+          <table className="table is-bordered ">
+            <tbody>
+              <tr>
+                <td>Он</td>
+                <td>2021</td>
+                <select
+                  style={{ padding: "0px 64px 0px 0px" }}
+                  name="cars"
+                  id="cars"
+                >
+                  <option value="volvo">Цалингийн</option>
+                  <option value="saab">Орон сууцны</option>
+                  <option value="opel">Автомашины</option>
+                  <option value="audi">Сургалтын</option>
+                  <option value="audi">Бусад</option>
+                </select>
+              </tr>
+
+              <tr>
+                <td>Зээлийн төрөл</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Зээлийн дүн</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>Дуусах огноо</td>
+                <td>12/31/2022</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+function HamgaalaltiinHeregsel(props) {
+  return (
+    <div style={{ marginTop: "50px" }}>
+      <div
+        className="box"
+        style={{
+          width: "100%",
+          height: "auto",
+          margintop: "50px",
+        }}
+      >
+        <br />
+        <div className="columns">
+          <div className="column is-11"></div>
+        </div>
+        <div className="column is-2">
+          {" "}
+          <span style={{ fontWeight: "bold" }}>Тоон гарын үсэг</span>
+          <input></input>
+        </div>
+
+        <div className="columns">
+          <div className="column is-11"></div>
+        </div>
+        <div className="column is-3">
+          {" "}
+          <span style={{ fontWeight: "bold" }}>
+            {" "}
+            байгууллагын лацны бүртгэл
+          </span>
+          <input></input>
+        </div>
+        <div className="columns">
+          <div className="column is-11"></div>
+        </div>
+        <div className="column is-1">
+          <span style={{ fontWeight: "bold" }}> үнэмлэх</span>
+          <input></input>
+        </div>
+        <div className="columns">
+          <div className="column is-11"></div>
+        </div>
+        <div className="column is-2">
+          <span style={{ fontWeight: "bold" }}> тэмдэгийн дугаар</span>
+          <input></input>
+        </div>
+      </div>
+    </div>
+  );
 }
 export default AnketB;
