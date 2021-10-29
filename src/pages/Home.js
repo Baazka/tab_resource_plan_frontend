@@ -146,6 +146,7 @@ function Home(props) {
     setJagsaalt(jagsaalts?.data);
     setLoading(false);
     setButtonValue(1);
+    setDepartmentID({ DEPARTMENT_ID: 0 });
     setSearch("");
   }
   async function newPeople() {
