@@ -1028,7 +1028,7 @@ function Home(props) {
 
 function EmployExcel({ data }) {
   let listItems;
-  if (data !== undefined || data.length !== 0) {
+  if (data !== undefined) {
     listItems = (
       <div style={{ width: "30px", height: "30px" }}>
         <img src={Excel} height="30px" width="30px" />
