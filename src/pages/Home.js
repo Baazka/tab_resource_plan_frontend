@@ -124,6 +124,7 @@ function Home(props) {
     setJagsaalt(jagsaalts?.data);
     setLoading(false);
     setButtonValue(2);
+    setDepartmentID({ DEPARTMENT_ID: 0 });
     setSearch("");
   }
   async function Active() {
@@ -1046,6 +1047,7 @@ function EmployExcel({ data }) {
 
           <table id="table-to-xls">
             <tr>
+              <th>№</th>
               <th>Төрийн аудитын байгууллага</th>
               <th>Харъяа газар</th>
               <th>Дотоод бүтцийн нэгж</th>
@@ -1057,6 +1059,7 @@ function EmployExcel({ data }) {
             </tr>
             {data?.map((value, index) => (
               <tr>
+                <td>{index + 1}</td>
                 <td>{value.DEPARTMENT_NAME}</td>
                 <td>{value.SUB_DEPARTMENT_NAME}</td>
                 <td>{value.COMPARTMENT_NAME}</td>
