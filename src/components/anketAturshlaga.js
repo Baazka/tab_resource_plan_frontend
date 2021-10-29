@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 import { Add, Delete } from "../assets/images/zurag";
-import { Office, Suboffice, Positioncategorytype } from "./library";
+import { Office, Positioncategorytype } from "./library";
 
 const axios = require("axios");
 var dateFormat = require("dateformat");
@@ -341,6 +341,7 @@ function Turshlgin(props) {
                     >
                       <span style={{ visibility: "hidden" }}>testeee</span>
                       <img
+                        alt=""
                         src={Add}
                         width="30px"
                         height="30px"
@@ -532,6 +533,7 @@ function Turshlgin(props) {
                         }}
                       >
                         <img
+                          alt=""
                           src={Delete}
                           width="30px"
                           height="30px"

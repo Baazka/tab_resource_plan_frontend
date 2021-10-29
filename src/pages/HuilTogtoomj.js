@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useReducer } from "react";
+import React from "react";
 import Header from "../components/header";
-import Footer from "../components/footer";
 function Nvvr(props) {
   return (
     <div style={{ display: "flex" }}>

@@ -1,38 +1,22 @@
 import React, { useEffect, useState, useReducer } from "react";
-import Header from "../components/header";
 import Footer from "../components/footer";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
 import { useAlert } from "react-alert";
-import {
-  Search,
-  Filter,
-  Add,
-  Excel,
-  AddBlue,
-  M,
-  Trush,
-  Delete,
-  Eye,
-} from "../assets/images/zurag";
-import { useHistory } from "react-router-dom";
+import { Search, Add, Delete, Eye } from "../assets/images/zurag";
 import {
   DepartmentID,
   Subdepartment,
   Compartment,
   Positionlevel,
   Position,
-  Decisiontype,
-  Reasonsposition,
   Salarytype,
   Reasonsdecision,
 } from "../components/library";
-import ReactHTMLTableToExcel from "react-html-table-to-excel";
 
 var dateFormat = require("dateformat");
 const axios = require("axios");
 
-var rowNumber = 1;
 createTheme("solarized", {
   text: {
     primary: "gray",
@@ -160,6 +144,7 @@ const ButtonsColumn = ({
     <div>
       {buttonValue === 1 ? (
         <img
+          alt=""
           src={Delete}
           width="30px"
           height="30px"
@@ -168,6 +153,7 @@ const ButtonsColumn = ({
         />
       ) : null}
       <img
+        alt=""
         src={Eye}
         width="20px"
         height="20px"
@@ -601,7 +587,7 @@ const Home = (props) => {
               </select>
               {/* 
               <span class="icon is-small is-right">
-                <img src={Filter} />
+                <img alt="" src={Filter} />
               </span> */}
             </div>
             <div class="control has-icons-left has-icons-right">
@@ -617,7 +603,7 @@ const Home = (props) => {
                 }}
               />
               <span class="icon is-small is-right" style={{ zIndex: 0 }}>
-                <img src={Search} />
+                <img alt="" src={Search} />
               </span>
             </div>
             <button
@@ -844,7 +830,7 @@ function TushaalAjiltan(props) {
                   onChange={(value) => makeSearch(value.target.value)}
                 />
                 <span class="icon is-small is-right">
-                  <img src={Search} />
+                  <img alt="" src={Search} />
                 </span>
                 <span class="icon is-small is-right"></span>
               </div>
@@ -1202,8 +1188,8 @@ function Khoyor(props) {
                 </h1>
               </div>
               <div className="column  is-1 ">
-                <img src={M} width="20px" height="20px" />
-                <img src={Trush} width="20px" height="20px" />
+                <img alt="" src={M} width="20px" height="20px" />
+                <img alt="" src={Trush} width="20px" height="20px" />
               </div> */}
             </div>
           </div>
@@ -1504,6 +1490,7 @@ function Salary(props) {
                         }}
                       >
                         <img
+                          alt=""
                           src={Add}
                           width="30px"
                           height="30px"
@@ -1614,6 +1601,7 @@ function Salary(props) {
                           }}
                         >
                           <img
+                            alt=""
                             src={Delete}
                             width="30px"
                             height="30px"
@@ -1911,8 +1899,8 @@ function TushaalKharakh(props) {
                 </h1>
               </div>
               <div className="column  is-1 ">
-                <img src={M} width="20px" height="20px" />
-                <img src={Trush} width="20px" height="20px" />
+                <img alt="" src={M} width="20px" height="20px" />
+                <img alt="" src={Trush} width="20px" height="20px" />
               </div> */}
             </div>
           </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "react-pro-sidebar/dist/css/styles.css";
 import "../css/sidebarHeader.css";
 
@@ -8,14 +8,12 @@ import {
   Menu,
   MenuItem,
   SidebarHeader,
-  SidebarFooter,
   SidebarContent,
 } from "react-pro-sidebar";
 import {
   RigthArrow,
   LeftArrow,
   Logo,
-  LogoB,
   User,
   Group,
   Bag,
@@ -28,8 +26,6 @@ import {
   Dashboard,
   Tailan,
   TailanB,
-  BNegB,
-  BNeg,
 } from "../assets/images/zurag";
 
 const SideBar = (props) => {
@@ -43,7 +39,7 @@ const SideBar = (props) => {
     menu3: false,
     menu4: false,
     menu5: false,
-    menu6: false,
+    // menu6: false,
   });
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -60,8 +56,8 @@ const SideBar = (props) => {
       menu3: false,
       menu4: false,
       menu5: false,
-      menu6: false,
-      menu7: false,
+      // menu6: false,
+      // menu7: false,
     };
     setMenuClick({ ...temp, ...value });
     if (value?.menu0) {
@@ -82,11 +78,11 @@ const SideBar = (props) => {
     } else if (value?.menu5) {
       history.push("/web/Tailan");
       setMenuCollapse(true);
-    } else if (value?.menu6) {
-      history.push("/print/anket/");
-      setMenuCollapse(true);
+      // } else if (value?.menu6) {
+      //   history.push("/print/anket/");
+      //   setMenuCollapse(true);
     }
-    //else if (value?.menu7) {
+    // else if (value?.menu7) {
     //   history.push("/web/HuilTogtoomj/");
     //   history.push("/web/EmployeeInformation");
     //   setMenuCollapse(true);
@@ -105,6 +101,7 @@ const SideBar = (props) => {
                 <nav class="navbar" style={{ backgroundColor: "transparent" }}>
                   <div class="navbar-brand">
                     <img
+                      alt=""
                       src={Logo}
                       width="70"
                       height="70"
@@ -122,6 +119,7 @@ const SideBar = (props) => {
                 >
                   <div class="navbar-brand">
                     <img
+                      alt=""
                       src={Logo}
                       width="70"
                       height="70"
@@ -156,6 +154,7 @@ const SideBar = (props) => {
                   onClick={() => SelectMenu({ menu0: !menuClick.menu0 })}
                 >
                   <img
+                    alt=""
                     src={menuClick.menu0 ? Dashboard : DashboardW}
                     width="40"
                     height="30"
@@ -176,6 +175,7 @@ const SideBar = (props) => {
                   onClick={() => SelectMenu({ menu1: !menuClick.menu1 })}
                 >
                   <img
+                    alt=""
                     src={menuClick.menu1 ? UserB : User}
                     width="40"
                     height="30"
@@ -197,6 +197,7 @@ const SideBar = (props) => {
                     onClick={() => SelectMenu({ menu2: !menuClick.menu2 })}
                   >
                     <img
+                      alt=""
                       src={menuClick.menu2 ? GroupB : Group}
                       width="40"
                       height="30"
@@ -220,6 +221,7 @@ const SideBar = (props) => {
                     onClick={() => SelectMenu({ menu3: !menuClick.menu3 })}
                   >
                     <img
+                      alt=""
                       src={menuClick.menu3 ? BagB : Bag}
                       width="40"
                       height="30"
@@ -242,6 +244,7 @@ const SideBar = (props) => {
                   onClick={() => SelectMenu({ menu4: !menuClick.menu4 })}
                 >
                   <img
+                    alt=""
                     src={menuClick.menu4 ? DocumentsB : Documents}
                     width="40"
                     height="30"
@@ -264,6 +267,7 @@ const SideBar = (props) => {
                     onClick={() => SelectMenu({ menu5: !menuClick.menu5 })}
                   >
                     <img
+                      alt=""
                       src={menuClick.menu5 ? TailanB : Tailan}
                       width="40"
                       height="30"
@@ -328,9 +332,9 @@ const SideBar = (props) => {
             <div className="closemenu" onClick={menuIconClick}>
               {/* changing menu collapse icon on click */}
               {menuCollapse ? (
-                <img src={RigthArrow} width="40" height="30" />
+                <img alt="" src={RigthArrow} width="40" height="30" />
               ) : (
-                <img src={LeftArrow} width="50" height="50" />
+                <img alt="" src={LeftArrow} width="50" height="50" />
               )}
             </div>
           </SidebarContent>

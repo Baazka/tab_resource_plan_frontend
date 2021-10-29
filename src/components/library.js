@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useReducer } from "react";
-import Header from "./header";
 const axios = require("axios");
 var dateFormat = require("dateformat");
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
@@ -737,9 +736,9 @@ function Compartment(props) {
       );
 
       if (
-        props.personChild.SUB_DEPARTMENT_ID != "null" &&
+        props.personChild.SUB_DEPARTMENT_ID !== "null" &&
         props.personChild.SUB_DEPARTMENT_ID !== "" &&
-        props.personChild.DEPARTMENT_ID != "null" &&
+        props.personChild.DEPARTMENT_ID !== "null" &&
         props.personChild.DEPARTMENT_ID !== ""
       ) {
         loadData(
@@ -752,7 +751,7 @@ function Compartment(props) {
           )
         );
       } else if (
-        props.personChild.SUB_DEPARTMENT_ID != "null" &&
+        props.personChild.SUB_DEPARTMENT_ID !== "null" &&
         props.personChild.SUB_DEPARTMENT_ID !== ""
       ) {
         loadData(
@@ -763,7 +762,7 @@ function Compartment(props) {
           )
         );
       } else if (
-        props.personChild.DEPARTMENT_ID != "null" &&
+        props.personChild.DEPARTMENT_ID !== "null" &&
         props.personChild.DEPARTMENT_ID !== ""
       ) {
         loadData(
@@ -821,27 +820,27 @@ function Position(props) {
       );
 
       if (
-        props.personChild?.SUB_DEPARTMENT_ID != "null" &&
-        props.personChild?.SUB_DEPARTMENT_ID != "" &&
-        props.personChild?.DEPARTMENT_ID != "null" &&
-        props.personChild?.DEPARTMENT_ID != "" &&
-        props.personChild?.COMPARTMENT_ID != "null" &&
-        props.personChild?.COMPARTMENT_ID != ""
+        props.personChild?.SUB_DEPARTMENT_ID !== "null" &&
+        props.personChild?.SUB_DEPARTMENT_ID !== "" &&
+        props.personChild?.DEPARTMENT_ID !== "null" &&
+        props.personChild?.DEPARTMENT_ID !== "" &&
+        props.personChild?.COMPARTMENT_ID !== "null" &&
+        props.personChild?.COMPARTMENT_ID !== ""
       ) {
         loadData(
           listItems.data?.filter(
             (a) =>
-              parseInt(a.DEPARTMENT_ID) ==
+              parseInt(a.DEPARTMENT_ID) ===
                 parseInt(props.personChild.DEPARTMENT_ID) &&
-              parseInt(a.SUB_DEPARTMENT_ID) ==
+              parseInt(a.SUB_DEPARTMENT_ID) ===
                 parseInt(props.personChild.SUB_DEPARTMENT_ID) &&
-              parseInt(a.COMPARTMENT_ID) ==
+              parseInt(a.COMPARTMENT_ID) ===
                 parseInt(props.personChild.COMPARTMENT_ID)
           )
         );
       } else if (
-        props.personChild.SUB_DEPARTMENT_ID != "null" &&
-        props.personChild.SUB_DEPARTMENT_ID != ""
+        props.personChild.SUB_DEPARTMENT_ID !== "null" &&
+        props.personChild.SUB_DEPARTMENT_ID !== ""
       ) {
         loadData(
           listItems.data?.filter(

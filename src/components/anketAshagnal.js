@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
-import { Edutype } from "./library";
 import { Add, Delete } from "../assets/images/zurag";
 const axios = require("axios");
 var dateFormat = require("dateformat");
@@ -339,6 +338,7 @@ function Shagnaliin(props) {
                       }}
                     >
                       <img
+                        alt=""
                         src={Add}
                         width="30px"
                         height="30px"
@@ -460,6 +460,7 @@ function Shagnaliin(props) {
                         }}
                       >
                         <img
+                          alt=""
                           src={Delete}
                           width="30px"
                           height="30px"

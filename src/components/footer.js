@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 const Header = (props) => {
   return (
@@ -10,7 +9,6 @@ const Header = (props) => {
         width: "100px",
         minHeight: "60px",
         backgroundColor: "#f1f1f1",
-        width: "100%",
         borderTopLeftRadius: "8% 55%",
       }}
     >

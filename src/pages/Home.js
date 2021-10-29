@@ -1,10 +1,8 @@
 import React, { useEffect, useState, useRef, useReducer } from "react";
-import ReactDOM from "react-dom";
-import Header from "../components/header";
 import Footer from "../components/footer";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Search, Filter, AddBlue, Excel, Print } from "../assets/images/zurag";
+import { Search, AddBlue, Excel, Print } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
@@ -447,6 +445,7 @@ function Home(props) {
             cell: (row) => (
               <div>
                 <img
+                  alt=""
                   src={Print}
                   width="20px"
                   style={{ cursor: "pointer" }}
@@ -588,6 +587,7 @@ function Home(props) {
             cell: (row) => (
               <div>
                 <img
+                  alt=""
                   src={Print}
                   width="20px"
                   style={{ cursor: "pointer" }}
@@ -892,7 +892,7 @@ function Home(props) {
               />
 
               <span class="icon is-small is-right">
-                <img src={Search} />
+                <img alt="" src={Search} />
               </span>
               <span class="icon is-small is-right"></span>
             </div>
@@ -930,7 +930,7 @@ function Home(props) {
               onClick={() => document.getElementById("emergencyXLS").click()}
             >
               <span style={{ display: "flex", paddingRight: "22px" }}>
-                <img src={Excel} width="20px" height="20px "></img>Excel
+                <img alt="" src={Excel} width="20px" height="20px "></img>Excel
               </span>
             </button>
             <EmployExcel />
@@ -1042,7 +1042,7 @@ function EmployExcel(props) {
   if (data !== undefined || data.length !== 0) {
     listItems = (
       <div style={{ width: "30px", height: "30px" }}>
-        <img src={Excel} height="30px" width="30px" />
+        <img alt="" src={Excel} height="30px" width="30px" />
         <div style={{ display: "none" }}>
           <ReactHTMLTableToExcel
             id="emergencyXLS"
