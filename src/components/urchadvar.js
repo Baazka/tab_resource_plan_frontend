@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
-import { Oathtype, Language, Languagetype } from "./library";
+import { Language, Languagetype } from "./library";
 import { Add, Delete } from "../assets/images/zurag";
 import { Office } from "./library";
 
@@ -25,7 +25,7 @@ function UrChadvar(props) {
       console.log(temp, "testm1");
       if (temp !== undefined && temp.length > 0) {
         console.log(temp, "testm");
-        if (temp.length == 2) {
+        if (temp.length === 2) {
           loadData({
             Exam: temp.sort(function (a, b) {
               return a.EXAM_TYPE_ID - b.EXAM_TYPE_ID;

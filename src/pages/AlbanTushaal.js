@@ -1,23 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Header from "../components/header";
 import Footer from "../components/footer";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import dateFormat from "dateformat";
-import {
-  Search,
-  Filter,
-  Add,
-  AddBlue,
-  Excel,
-  Delete,
-  Edit,
-} from "../assets/images/zurag";
+import { Search, AddBlue, Excel, Delete, Edit } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { Reasonsposition } from "../components/library";
-var rowNumber = 1;
 const axios = require("axios");
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -77,7 +67,6 @@ const ButtonsColumn = ({
   setTsonkh,
   buttonValue,
 }) => {
-  const alert = useAlert();
   const history = useHistory();
   function deleteAlbanTushaal() {
     setTsonkh({ ustgakh: true, POSITION_ID: row?.POSITION_ID });
@@ -118,8 +107,9 @@ const ButtonsColumn = ({
   }
   return (
     <div>
-      {buttonValue == 1 ? (
+      {buttonValue === 1 ? (
         <img
+          alt=""
           src={Delete}
           width="30px"
           height="30px"
@@ -128,6 +118,7 @@ const ButtonsColumn = ({
         />
       ) : null}
       <img
+        alt=""
         src={Edit}
         width="20px"
         height="20px"
@@ -145,7 +136,6 @@ const AlbanTushaal = (props) => {
   const [found, setFound] = useState();
   const [search, setSearch] = useState("");
   const [data, setData] = useState();
-  const alert = useAlert();
   const [tsonkh, setTsonkh] = useState({
     ustgakh: false,
     POSITION_ID: null,
@@ -163,8 +153,8 @@ const AlbanTushaal = (props) => {
         setJagsaalt(jagsaalts?.data);
         setButtonValue(2);
         if (
-          props.match.params.search != undefined &&
-          props.match.params.search != "null"
+          props.match.params.search !== undefined &&
+          props.match.params.search !== "null"
         ) {
           let ob = JSON.parse(props.match.params.search);
           setSearchType(ob.searchType);
@@ -179,8 +169,8 @@ const AlbanTushaal = (props) => {
         });
         setJagsaalt(jagsaalts?.data);
         if (
-          props.match.params.search != undefined &&
-          props.match.params.search != "null"
+          props.match.params.search !== undefined &&
+          props.match.params.search !== "null"
         ) {
           let ob = JSON.parse(props.match.params.search);
           setSearchType(ob.searchType);

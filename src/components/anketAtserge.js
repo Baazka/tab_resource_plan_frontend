@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 

@@ -18,24 +18,13 @@ function AnketAtailan(props) {
   return (
     <div
       style={{
-        display: "flow",
         height: "100vh",
         width: "100%",
-        overflow: "scroll",
         backgroundColor: "#f1f1f1",
       }}
     >
       <Header title="Судалгаа" back={true} butsakh={butsakh}></Header>
-      <div
-        style={{
-          position: "absolute",
-          left: "20%",
-          width: "50%",
-          height: "10%",
-          zIndex: 1,
-          top: "20px",
-        }}
-      ></div>
+
       <div style={{ marginTop: "5%" }}>
         {props.match.params.turul === "emergency" ? <Emergency /> : null}
         {props.match.params.turul === "gerBvl" ? <GerBvl /> : null}
@@ -60,12 +49,6 @@ function AnketAtailan(props) {
         {props.match.params.turul === "TsergiinAlba" ? <TsergiinAlba /> : null}
         {props.match.params.turul === "ShagnaliinTalaarhMedeelel" ? (
           <ShagnaliinTalaarhMedeelel />
-        ) : null}
-        {props.match.params.turul === "TurshlagiinTalaarhMedeelel" ? (
-          <TurshlagiinTalaarhMedeelel />
-        ) : null}
-        {props.match.params.turul === "BvteeliinJagsaalt" ? (
-          <BvteeliinJagsaalt />
         ) : null}
       </div>
     </div>
@@ -147,7 +130,7 @@ function Emergency(props) {
                   onChange={() => setRegister(!register)}
                 />
                 <span style={{ marginLeft: "2px" }}>
-                  Регистерийн дугаар харах эсэх
+                  Албан хаагчдын шалгалтын судалгаа
                 </span>
               </label>
             </div>
@@ -175,7 +158,8 @@ function Emergency(props) {
                 onClick={() => document.getElementById("emergencyXLS").click()}
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -338,7 +322,8 @@ function GerBvl(props) {
                   onClick={() => document.getElementById("GerBvlXLS").click()}
                 >
                   <span style={{ display: "flex" }}>
-                    <img src={Excel} width="20px" height="20px "></img>Excel
+                    <img alt="" src={Excel} width="20px" height="20px "></img>
+                    Excel
                   </span>
                 </button>
               </div>
@@ -560,7 +545,8 @@ function Sadan(props) {
                   onClick={() => document.getElementById("sadanXLS").click()}
                 >
                   <span style={{ display: "flex" }}>
-                    <img src={Excel} width="20px" height="20px "></img>Excel
+                    <img alt="" src={Excel} width="20px" height="20px "></img>
+                    Excel
                   </span>
                 </button>
               </div>
@@ -750,7 +736,8 @@ function ShalgaltiinTalaarkhMedeelel(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -911,7 +898,8 @@ function TangaragiinBvrtgel(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -1066,7 +1054,8 @@ function GadaadHelniiMedleg(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -1219,7 +1208,8 @@ function Bolowsrol(props) {
                 onClick={() => document.getElementById("bolowsrolXLS").click()}
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -1387,7 +1377,8 @@ function BolowsrolDoktor(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -1549,7 +1540,8 @@ function MergeshliinBeltgel(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -1717,7 +1709,8 @@ function ErdmiinTsol(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -1858,7 +1851,8 @@ function TsergiinAlba(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -1996,7 +1990,8 @@ function ShagnaliinTalaarhMedeelel(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -2154,7 +2149,8 @@ function TurshlagiinTalaarhMedeelel(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -2320,7 +2316,8 @@ function BvteeliinJagsaalt(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
