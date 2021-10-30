@@ -21,6 +21,7 @@ import Dashboard from "./pages/Dashboard";
 import Baiguullaga from "./pages/Baiguullaga";
 import TushaalShiidver from "./pages/TushaalShiidver";
 import Tailan from "./pages/Tailan";
+import Survey from "./pages/Survey";
 import HuilTogtoomj from "./pages/HuilTogtoomj";
 import AnketAtailan from "./pages/AnketAtailan";
 import { HashRouter, Redirect, withRouter } from "react-router-dom";
@@ -163,7 +164,7 @@ function Login(props) {
       nevtrekh();
     }
   }
-
+  var typename = "123";
   function nevtrekh() {
     if (ner !== undefined && nuutsUg !== undefined) {
       axios.defaults.headers["Content-Type"] =
@@ -207,6 +208,8 @@ function Login(props) {
             })
               .then(function (response) {
                 console.log("test", response.data);
+                typename = response?.data?.USER_TYPE_NAME;
+                console.log(typename, "test3");
                 localStorage.setItem(
                   "userDetails",
                   JSON.stringify(response?.data)
@@ -230,8 +233,13 @@ function Login(props) {
         });
     }
   }
-  if (fakeAuth.isAuthenticated === true)
-    return <Redirect to={state?.form || "/web/dashboard/"} />;
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
+  if (fakeAuth.isAuthenticated === true) {
+    //console.log(userDetils?.USER_TYPE_NAME, "test1");
+    if (userDetils?.USER_TYPE_NAME === "SURVEY")
+      return <Redirect to={state?.form || "/web/survey/"} />;
+    else return <Redirect to={state?.form || "/web/dashboard/"} />;
+  }
   return (
     <div
       style={{
@@ -421,6 +429,7 @@ function App() {
           component={AnketAtailan}
           exact
         />
+        <PrivateRoute path="/web/Survey" component={Survey} exact />
         <Route path="/print/anket/" component={Nuur} exact />
 
         {/* ) : (
