@@ -25,11 +25,13 @@ const Survey = (props) => {
       console.log(jagsaaltsHEAD);
     }
     test();
-    onlyOneCheckBox();
+    onlyHeadCheckBox();
+    // onlyManCheckBox();
+    // onlySenCheckBox();
     console.log("jagsaalt", jagsaalt);
   }, [props]);
 
-  function onlyOneCheckBox() {
+  function onlyHeadCheckBox() {
     var checkboxgroup = document
       .getElementById("HEAD")
       .getElementsByTagName("input");
@@ -42,17 +44,56 @@ const Survey = (props) => {
         }
         if (checkedcount > limit) {
           console.log("You can select maximum of " + limit + " checkbox.");
-          alert("You can select maximum of " + limit + " checkbox.");
+          alert(limit + " -өөс дээш хүн сонгох боломжгүй.");
           //alert.show("өгөгдөл байхгүй байна");
           this.checked = false;
         }
       };
     }
   }
+  // function onlyManCheckBox() {
+  //   var checkboxgroup = document
+  //     .getElementById("MAN")
+  //     .getElementsByTagName("input");
+  //   var limit = 1;
+  //   for (var i = 0; i < checkboxgroup.length; i++) {
+  //     checkboxgroup[i].onclick = function () {
+  //       var checkedcount = 0;
+  //       for (var i = 0; i < checkboxgroup.length; i++) {
+  //         checkedcount += checkboxgroup[i].checked ? 1 : 0;
+  //       }
+  //       if (checkedcount > limit) {
+  //         console.log("You can select maximum of " + limit + " checkbox.");
+  //         alert(limit + " -өөс дээш хүн сонгох боломжгүй.");
+  //         //alert.show("өгөгдөл байхгүй байна");
+  //         this.checked = false;
+  //       }
+  //     };
+  //   }
+  // }
+  // function onlySenCheckBox() {
+  //   var checkboxgroup = document
+  //     .getElementById("SEN")
+  //     .getElementsByTagName("input");
+  //   var limit = 2;
+  //   for (var i = 0; i < checkboxgroup.length; i++) {
+  //     checkboxgroup[i].onclick = function () {
+  //       var checkedcount = 0;
+  //       for (var i = 0; i < checkboxgroup.length; i++) {
+  //         checkedcount += checkboxgroup[i].checked ? 1 : 0;
+  //       }
+  //       if (checkedcount > limit) {
+  //         console.log("You can select maximum of " + limit + " checkbox.");
+  //         alert(limit + " -өөс дээш хүн сонгох боломжгүй.");
+  //         //alert.show("өгөгдөл байхгүй байна");
+  //         this.checked = false;
+  //       }
+  //     };
+  //   }
+  // }
   var cols = [];
   for (let index = 0; index < jagsaalt?.length; index++) {
     {
-      console.log();
       cols.push(
         <div class="column is-3">
           <div class="card is-clickable" style={{ height: 170 }}>
@@ -73,11 +114,12 @@ const Survey = (props) => {
                   </figure>
                 </div>
                 <div class="media-content">
-                  <p>{jagsaalt[index].USER_NAME}</p>
+                  <p style={{ fontSize: "18px" }}>
+                    {jagsaalt[index].USER_NAME}
+                  </p>
                   <p style={{ fontSize: "12px" }}>
                     {jagsaalt[index].USER_POSITION}
                   </p>
-                  {/* <p style={{ fontSize: "12px" }}>Мэдээлэл технологийн төв</p> */}
                   <div style={{ position: "absolute", bottom: 20 }}>
                     <input type="checkbox" id={jagsaalt[index].ID} />
                     <label for={jagsaalt[index].ID} style={{ marginLeft: 5 }}>
@@ -116,7 +158,7 @@ const Survey = (props) => {
   useEffect(() => {
     async function test() {
       let jagsaaltsMAN = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/electionAttandee/" + 1 + "/" + "MAN",
+        url: "http://localhost:3002/api/v1/electionAttandee/" + 1 + "/" + "MAN",
         method: "GET",
         data: {},
       });
@@ -150,11 +192,15 @@ const Survey = (props) => {
                   </figure>
                 </div>
                 <div class="media-content">
-                  <p>{jagsaaltman[indexMan].USER_NAME}</p>
+                  <p style={{ fontSize: "18px" }}>
+                    {jagsaaltman[indexMan].USER_NAME}
+                  </p>
                   <p style={{ fontSize: "12px" }}>
                     {jagsaaltman[indexMan].USER_POSITION}
                   </p>
-                  {/* <p style={{ fontSize: "12px" }}>Мэдээлэл технологийн төв</p> */}
+                  <p style={{ fontSize: "12px", color: "#1f5fa6" }}>
+                    {jagsaaltman[indexMan].SUB_DEPARTMENT_NAME}
+                  </p>
                   <div style={{ position: "absolute", bottom: 20 }}>
                     <input type="checkbox" id={jagsaaltman[indexMan].ID} />
                     <label
@@ -178,7 +224,7 @@ const Survey = (props) => {
   useEffect(() => {
     async function test() {
       let jagsaaltsSEN = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/electionAttandee/" + 1 + "/" + "SEN",
+        url: "http://localhost:3002/api/v1/electionAttandee/" + 1 + "/" + "SEN",
         method: "GET",
         data: {},
       });
@@ -212,11 +258,15 @@ const Survey = (props) => {
                   </figure>
                 </div>
                 <div class="media-content">
-                  <p>{jagsaaltsen[indexSen].USER_NAME}</p>
+                  <p style={{ fontSize: "18px" }}>
+                    {jagsaaltsen[indexSen].USER_NAME}
+                  </p>
                   <p style={{ fontSize: "12px" }}>
                     {jagsaaltsen[indexSen].USER_POSITION}
                   </p>
-                  {/* <p style={{ fontSize: "12px" }}>Мэдээлэл технологийн төв</p> */}
+                  <p style={{ fontSize: "12px", color: "#1f5fa6" }}>
+                    {jagsaaltsen[indexSen].SUB_DEPARTMENT_NAME}
+                  </p>
                   <div style={{ position: "absolute", bottom: 20 }}>
                     <input type="checkbox" id={jagsaaltsen[indexSen].ID} />
                     <label
