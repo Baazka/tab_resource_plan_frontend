@@ -10,12 +10,14 @@ import { useHistory } from "react-router-dom";
 import Iframe from "react-iframe";
 import { useAlert } from "react-alert";
 
+var dateFormat = require("dateformat");
 const Survey = (props) => {
   const history = useHistory();
   const [jagsaalt, setJagsaalt] = useState();
-  const alert = useAlert();
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
-
+  let ar1 = [];
+  let ar2 = [];
+  let ar3 = [];
   useEffect(() => {
     async function test() {
       let jagsaaltsHEAD = await DataRequest({
@@ -30,7 +32,7 @@ const Survey = (props) => {
     test();
     setTimeout(() => {
       onlyHeadCheckBox();
-    }, 1000);
+    }, 500);
     console.log("jagsaalt", jagsaalt);
   }, [props]);
 
@@ -68,39 +70,38 @@ const Survey = (props) => {
       .getElementsByTagName("input");
 
     let c1, c2, c3;
-    for (var i = 0; i < checkboxgroup.length; i++) {
-      checkboxgroup[i].onclick = function () {
-        var checkedcount = 0;
-        for (var i = 0; i < checkboxgroup.length; i++) {
-          checkedcount += checkboxgroup[i].checked ? 1 : 0;
-        }
-        c1 = checkedcount;
-      };
-    }
 
+    for (var i = 0; i < checkboxgroup.length; i++) {
+      var checkedcount = 0;
+      for (var i = 0; i < checkboxgroup.length; i++) {
+        checkedcount += checkboxgroup[i].checked ? 1 : 0;
+
+        if (checkboxgroup[i].checked) ar1.push(checkboxgroup[i].value);
+      }
+      c1 = checkedcount;
+    }
     for (var i = 0; i < checkboxgroupMAN.length; i++) {
-      checkboxgroupMAN[i].onclick = function () {
-        var checkedcount = 0;
-        for (var i = 0; i < checkboxgroupMAN.length; i++) {
-          checkedcount += checkboxgroupMAN[i].checked ? 1 : 0;
-        }
-        c2 = checkedcount;
-      };
+      var checkedcount = 0;
+      for (var i = 0; i < checkboxgroupMAN.length; i++) {
+        checkedcount += checkboxgroupMAN[i].checked ? 1 : 0;
+        if (checkboxgroupMAN[i].checked) ar2.push(checkboxgroupMAN[i].value);
+      }
+      c2 = checkedcount;
     }
     for (var i = 0; i < checkboxgroupSEN.length; i++) {
-      checkboxgroupcheckboxgroupSENMAN[i].onclick = function () {
-        var checkedcount = 0;
-        for (var i = 0; i < checkboxgroupSEN.length; i++) {
-          checkedcount += checkboxgroupSEN[i].checked ? 1 : 0;
-        }
-        c3 = checkedcount;
-      };
+      var checkedcount = 0;
+      for (var i = 0; i < checkboxgroupSEN.length; i++) {
+        checkedcount += checkboxgroupSEN[i].checked ? 1 : 0;
+        if (checkboxgroupSEN[i].checked) ar3.push(checkboxgroupSEN[i].value);
+      }
+      c3 = checkedcount;
     }
 
-    if (c1 < 0) alert("сонгоно уу.");
-    else if (c2 < 0) alert("Менежер сонгоно уу.");
-    else if (c3 < 0) alert("Ахлах аудитор сонгоно уу.");
-    else true;
+    console.log(ar1, ar2, ar3);
+    if (c1 == 0) alert("сонгоно уу.");
+    else if (c2 == 0) alert("Менежер сонгоно уу.");
+    else if (c3 == 0) alert("Ахлах аудитор сонгоно уу.");
+    else return true;
   }
   function onlyManCheckBox() {
     var checkboxgroup = document
@@ -172,7 +173,11 @@ const Survey = (props) => {
                     {jagsaalt[index].USER_POSITION}
                   </p>
                   <div style={{ position: "absolute", bottom: 20 }}>
-                    <input type="checkbox" id={jagsaalt[index].ID} />
+                    <input
+                      type="checkbox"
+                      id={jagsaalt[index].ID}
+                      value={jagsaalt[index].ID}
+                    />
                     <label for={jagsaalt[index].ID} style={{ marginLeft: 5 }}>
                       сонгох
                     </label>
@@ -186,39 +191,58 @@ const Survey = (props) => {
     }
   }
 
+  let data = {
+    ELECTION_ID: 1,
+    USER_ID: userDetails?.USER_ID,
+    ELECTION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+    HEAD_C1: ar1[0],
+    HEAD_C2: ar1[1],
+    HEAD_C3: ar1[2],
+    HEAD_C4: ar1[3],
+    MAN_C1: ar2[0],
+    SENIOR_C1: ar3[0],
+    SENIOR_C2: ar3[1],
+  };
+  console.log(data);
   function saveToDB() {
-    CheckBox();
-    // DataRequest({
-    //   url: "http://localhost:3002/api/v1/education/",
-    //   method: "POST",
-    //   data: {
-    //     ELECTION_ID: 1,
-    //     USER_ID: userDetails?.USER_ID,
-    //     ELECTION_DATE: new Date(),
-    //     HEAD_C1: null,
-    //     HEAD_C2: null,
-    //     HEAD_C3: null,
-    //     HEAD_C4: null,
-    //     MAN_C1: null,
-    //     SENIOR_C1: null,
-    //     SENIOR_C2: null,
-    //   },
-    // })
-    //   .then(function (response) {
-    //     console.log("UpdateResponse", response);
-    //     if (response?.data?.message === "success") {
-    //       alert.show("амжилттай хадгаллаа");
-    //       props.loading(false);
-    //     } else {
-    //       alert.show("Системийн алдаа");
-    //       props.loading(false);
-    //     }
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error.response);
-    //     alert.show("Системийн алдаа");
-    //     props.loading(false);
-    //   });
+    if (CheckBox()) {
+      // this.setState({
+      //   ar1: this.state.ar1,
+      //   ar2: this.state.ar2,
+      //   ar3: this.state.ar3,
+      // });
+      //   DataRequest({
+      //     url: "http://localhost:3002/api/v1/education/",
+      //     method: "POST",
+      //     data: {
+      //       ELECTION_ID: 1,
+      //       USER_ID: userDetails?.USER_ID,
+      //       ELECTION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+      //       HEAD_C1: ar1[0],
+      //       HEAD_C2: ar1[1],
+      //       HEAD_C3: ar1[2],
+      //       HEAD_C4: ar1[3],
+      //       MAN_C1: ar2[0],
+      //       SENIOR_C1: ar3[0],
+      //       SENIOR_C2: ar3[1],
+      //     },
+      //   })
+      //     .then(function (response) {
+      //       console.log("UpdateResponse", response);
+      //       // if (response?.data?.message === "success") {
+      //       //   alert.show("амжилттай хадгаллаа");
+      //       //   props.loading(false);
+      //       // } else {
+      //       //   alert.show("Системийн алдаа");
+      //       //   props.loading(false);
+      //       // }
+      //     })
+      //     .catch(function (error) {
+      //       // console.log(error.response);
+      //       // alert.show("Системийн алдаа");
+      //       // props.loading(false);
+      //     });
+    }
   }
 
   //MAN
@@ -237,7 +261,7 @@ const Survey = (props) => {
     test();
     setTimeout(() => {
       onlyManCheckBox();
-    }, 1000);
+    }, 500);
     console.log("jagsaalt", jagsaaltman);
   }, [props]);
 
@@ -274,7 +298,11 @@ const Survey = (props) => {
                     {jagsaaltman[indexMan].SUB_DEPARTMENT_NAME}
                   </p>
                   <div style={{ position: "absolute", bottom: 20 }}>
-                    <input type="checkbox" id={jagsaaltman[indexMan].ID} />
+                    <input
+                      type="checkbox"
+                      id={jagsaaltman[indexMan].ID}
+                      value={jagsaaltman[indexMan].ID}
+                    />
                     <label
                       for={jagsaaltman[indexMan].ID}
                       style={{ marginLeft: 5 }}
@@ -306,7 +334,7 @@ const Survey = (props) => {
     test();
     setTimeout(() => {
       onlySenCheckBox();
-    }, 1000);
+    }, 500);
     console.log("jagsaalt", jagsaaltsen);
   }, [props]);
 
@@ -343,7 +371,11 @@ const Survey = (props) => {
                     {jagsaaltsen[indexSen].SUB_DEPARTMENT_NAME}
                   </p>
                   <div style={{ position: "absolute", bottom: 20 }}>
-                    <input type="checkbox" id={jagsaaltsen[indexSen].ID} />
+                    <input
+                      type="checkbox"
+                      id={jagsaaltsen[indexSen].ID}
+                      value={jagsaaltsen[indexSen].ID}
+                    />
                     <label
                       for={jagsaaltsen[indexSen].ID}
                       style={{ marginLeft: 5 }}
