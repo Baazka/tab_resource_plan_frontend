@@ -43,7 +43,6 @@ const Survey = (props) => {
       checkboxgroup[i].onclick = function () {
         var checkedcount = 0;
         for (var i = 0; i < checkboxgroup.length; i++) {
-          console.log(checkedcount);
           checkedcount += checkboxgroup[i].checked ? 1 : 0;
         }
         if (checkedcount > limit) {
@@ -54,6 +53,54 @@ const Survey = (props) => {
         }
       };
     }
+  }
+  function CheckBox() {
+    var checkboxgroup = document
+      .getElementById("HEAD")
+      .getElementsByTagName("input");
+
+    var checkboxgroupMAN = document
+      .getElementById("MAN")
+      .getElementsByTagName("input");
+
+    var checkboxgroupSEN = document
+      .getElementById("SEN")
+      .getElementsByTagName("input");
+
+    let c1, c2, c3;
+    for (var i = 0; i < checkboxgroup.length; i++) {
+      checkboxgroup[i].onclick = function () {
+        var checkedcount = 0;
+        for (var i = 0; i < checkboxgroup.length; i++) {
+          checkedcount += checkboxgroup[i].checked ? 1 : 0;
+        }
+        c1 = checkedcount;
+      };
+    }
+
+    for (var i = 0; i < checkboxgroupMAN.length; i++) {
+      checkboxgroupMAN[i].onclick = function () {
+        var checkedcount = 0;
+        for (var i = 0; i < checkboxgroupMAN.length; i++) {
+          checkedcount += checkboxgroupMAN[i].checked ? 1 : 0;
+        }
+        c2 = checkedcount;
+      };
+    }
+    for (var i = 0; i < checkboxgroupSEN.length; i++) {
+      checkboxgroupcheckboxgroupSENMAN[i].onclick = function () {
+        var checkedcount = 0;
+        for (var i = 0; i < checkboxgroupSEN.length; i++) {
+          checkedcount += checkboxgroupSEN[i].checked ? 1 : 0;
+        }
+        c3 = checkedcount;
+      };
+    }
+
+    if (c1 < 0) alert("сонгоно уу.");
+    else if (c2 < 0) alert("Менежер сонгоно уу.");
+    else if (c3 < 0) alert("Ахлах аудитор сонгоно уу.");
+    else true;
   }
   function onlyManCheckBox() {
     var checkboxgroup = document
@@ -140,38 +187,38 @@ const Survey = (props) => {
   }
 
   function saveToDB() {
-    alert("save");
-    DataRequest({
-      url: "http://localhost:3002/api/v1/education/",
-      method: "POST",
-      data: {
-        ELECTION_ID: 1,
-        USER_ID: userDetails?.USER_ID,
-        ELECTION_DATE: new Date(),
-        HEAD_C1: null,
-        HEAD_C2: null,
-        HEAD_C3: null,
-        HEAD_C4: null,
-        MAN_C1: null,
-        SENIOR_C1: null,
-        SENIOR_C2: null,
-      },
-    })
-      .then(function (response) {
-        console.log("UpdateResponse", response);
-        if (response?.data?.message === "success") {
-          alert.show("амжилттай хадгаллаа");
-          props.loading(false);
-        } else {
-          alert.show("Системийн алдаа");
-          props.loading(false);
-        }
-      })
-      .catch(function (error) {
-        console.log(error.response);
-        alert.show("Системийн алдаа");
-        props.loading(false);
-      });
+    CheckBox();
+    // DataRequest({
+    //   url: "http://localhost:3002/api/v1/education/",
+    //   method: "POST",
+    //   data: {
+    //     ELECTION_ID: 1,
+    //     USER_ID: userDetails?.USER_ID,
+    //     ELECTION_DATE: new Date(),
+    //     HEAD_C1: null,
+    //     HEAD_C2: null,
+    //     HEAD_C3: null,
+    //     HEAD_C4: null,
+    //     MAN_C1: null,
+    //     SENIOR_C1: null,
+    //     SENIOR_C2: null,
+    //   },
+    // })
+    //   .then(function (response) {
+    //     console.log("UpdateResponse", response);
+    //     if (response?.data?.message === "success") {
+    //       alert.show("амжилттай хадгаллаа");
+    //       props.loading(false);
+    //     } else {
+    //       alert.show("Системийн алдаа");
+    //       props.loading(false);
+    //     }
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error.response);
+    //     alert.show("Системийн алдаа");
+    //     props.loading(false);
+    //   });
   }
 
   //MAN
