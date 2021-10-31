@@ -158,7 +158,7 @@ const Survey = (props) => {
   useEffect(() => {
     async function test() {
       let jagsaaltsMAN = await DataRequest({
-        url: "http://hr.audit.mn/hr/v1/electionAttandee/" + 1 + "/" + "MAN",
+        url: "http://hr.audit.mn/hr/api/v1/electionAttandee/" + 1 + "/" + "MAN",
         method: "GET",
         data: {},
       });
@@ -224,7 +224,7 @@ const Survey = (props) => {
   useEffect(() => {
     async function test() {
       let jagsaaltsSEN = await DataRequest({
-        url: "http://hr.audit.mn/hr/v1/electionAttandee/" + 1 + "/" + "SEN",
+        url: "http://hr.audit.mn/hr/api/v1/electionAttandee/" + 1 + "/" + "SEN",
         method: "GET",
         data: {},
       });
@@ -302,7 +302,7 @@ const Survey = (props) => {
               width: "91.7%",
             }}
           >
-            <div class="card" style={{ overflow: "auto" }}>
+            <div class="card" style={{ overflow: "auto", height: "100vh" }}>
               <div class="card-content">
                 <p class="title" style={{ textAlign: "center" }}>
                   Ёс зүйн зөвлөлийн гишүүдийг сонгох санал асуулга
