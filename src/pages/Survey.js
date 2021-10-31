@@ -8,10 +8,13 @@ import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
 import { useHistory } from "react-router-dom";
 import Iframe from "react-iframe";
+import { useAlert } from "react-alert";
 
 const Survey = (props) => {
   const history = useHistory();
   const [jagsaalt, setJagsaalt] = useState();
+  const alert = useAlert();
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   useEffect(() => {
     async function test() {
@@ -25,9 +28,9 @@ const Survey = (props) => {
       console.log(jagsaaltsHEAD);
     }
     test();
-    onlyHeadCheckBox();
-    // onlyManCheckBox();
-    // onlySenCheckBox();
+    setTimeout(() => {
+      onlyHeadCheckBox();
+    }, 1000);
     console.log("jagsaalt", jagsaalt);
   }, [props]);
 
@@ -36,6 +39,27 @@ const Survey = (props) => {
       .getElementById("HEAD")
       .getElementsByTagName("input");
     var limit = 4;
+    for (var i = 0; i < checkboxgroup.length; i++) {
+      checkboxgroup[i].onclick = function () {
+        var checkedcount = 0;
+        for (var i = 0; i < checkboxgroup.length; i++) {
+          console.log(checkedcount);
+          checkedcount += checkboxgroup[i].checked ? 1 : 0;
+        }
+        if (checkedcount > limit) {
+          console.log("You can select maximum of " + limit + " checkbox.");
+          alert(limit + " -өөс дээш хүн сонгох боломжгүй.");
+          //alert.show("өгөгдөл байхгүй байна");
+          this.checked = false;
+        }
+      };
+    }
+  }
+  function onlyManCheckBox() {
+    var checkboxgroup = document
+      .getElementById("MAN")
+      .getElementsByTagName("input");
+    var limit = 1;
     for (var i = 0; i < checkboxgroup.length; i++) {
       checkboxgroup[i].onclick = function () {
         var checkedcount = 0;
@@ -51,46 +75,26 @@ const Survey = (props) => {
       };
     }
   }
-  // function onlyManCheckBox() {
-  //   var checkboxgroup = document
-  //     .getElementById("MAN")
-  //     .getElementsByTagName("input");
-  //   var limit = 1;
-  //   for (var i = 0; i < checkboxgroup.length; i++) {
-  //     checkboxgroup[i].onclick = function () {
-  //       var checkedcount = 0;
-  //       for (var i = 0; i < checkboxgroup.length; i++) {
-  //         checkedcount += checkboxgroup[i].checked ? 1 : 0;
-  //       }
-  //       if (checkedcount > limit) {
-  //         console.log("You can select maximum of " + limit + " checkbox.");
-  //         alert(limit + " -өөс дээш хүн сонгох боломжгүй.");
-  //         //alert.show("өгөгдөл байхгүй байна");
-  //         this.checked = false;
-  //       }
-  //     };
-  //   }
-  // }
-  // function onlySenCheckBox() {
-  //   var checkboxgroup = document
-  //     .getElementById("SEN")
-  //     .getElementsByTagName("input");
-  //   var limit = 2;
-  //   for (var i = 0; i < checkboxgroup.length; i++) {
-  //     checkboxgroup[i].onclick = function () {
-  //       var checkedcount = 0;
-  //       for (var i = 0; i < checkboxgroup.length; i++) {
-  //         checkedcount += checkboxgroup[i].checked ? 1 : 0;
-  //       }
-  //       if (checkedcount > limit) {
-  //         console.log("You can select maximum of " + limit + " checkbox.");
-  //         alert(limit + " -өөс дээш хүн сонгох боломжгүй.");
-  //         //alert.show("өгөгдөл байхгүй байна");
-  //         this.checked = false;
-  //       }
-  //     };
-  //   }
-  // }
+  function onlySenCheckBox() {
+    var checkboxgroup = document
+      .getElementById("SEN")
+      .getElementsByTagName("input");
+    var limit = 2;
+    for (var i = 0; i < checkboxgroup.length; i++) {
+      checkboxgroup[i].onclick = function () {
+        var checkedcount = 0;
+        for (var i = 0; i < checkboxgroup.length; i++) {
+          checkedcount += checkboxgroup[i].checked ? 1 : 0;
+        }
+        if (checkedcount > limit) {
+          console.log("You can select maximum of " + limit + " checkbox.");
+          alert(limit + " -өөс дээш хүн сонгох боломжгүй.");
+          //alert.show("өгөгдөл байхгүй байна");
+          this.checked = false;
+        }
+      };
+    }
+  }
   var cols = [];
   for (let index = 0; index < jagsaalt?.length; index++) {
     {
@@ -135,21 +139,39 @@ const Survey = (props) => {
     }
   }
 
-  //onlyOneCheckBox();
   function saveToDB() {
     alert("save");
-    //props.loading(true);
-
-    // if (requiredField(data) === true) {
-    //   let newRow = data?.Award?.filter((value) => value.ROWTYPE === "NEW");
-    //   let oldRow = data?.Award?.filter(
-    //     (value) =>
-    //       value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
-    //   );
-    //   let message = 0;
-    // } else {
-    //   props.loading(false);
-    // }
+    DataRequest({
+      url: "http://localhost:3002/api/v1/education/",
+      method: "POST",
+      data: {
+        ELECTION_ID: 1,
+        USER_ID: userDetails?.USER_ID,
+        ELECTION_DATE: new Date(),
+        HEAD_C1: null,
+        HEAD_C2: null,
+        HEAD_C3: null,
+        HEAD_C4: null,
+        MAN_C1: null,
+        SENIOR_C1: null,
+        SENIOR_C2: null,
+      },
+    })
+      .then(function (response) {
+        console.log("UpdateResponse", response);
+        if (response?.data?.message === "success") {
+          alert.show("амжилттай хадгаллаа");
+          props.loading(false);
+        } else {
+          alert.show("Системийн алдаа");
+          props.loading(false);
+        }
+      })
+      .catch(function (error) {
+        console.log(error.response);
+        alert.show("Системийн алдаа");
+        props.loading(false);
+      });
   }
 
   //MAN
@@ -166,6 +188,9 @@ const Survey = (props) => {
       console.log(jagsaaltsMAN);
     }
     test();
+    setTimeout(() => {
+      onlyManCheckBox();
+    }, 1000);
     console.log("jagsaalt", jagsaaltman);
   }, [props]);
 
@@ -232,6 +257,9 @@ const Survey = (props) => {
       console.log(jagsaaltsSEN);
     }
     test();
+    setTimeout(() => {
+      onlySenCheckBox();
+    }, 1000);
     console.log("jagsaalt", jagsaaltsen);
   }, [props]);
 
@@ -326,13 +354,13 @@ const Survey = (props) => {
                     <div class="columns" style={{ flexWrap: "wrap" }}>
                       {cols}
                     </div>
-                    <button
+                    {/* <button
                       className="buttonTsenkher"
                       style={{ float: "right" }}
                       onClick={saveToDB}
                     >
                       Хадгалах
-                    </button>
+                    </button>*/}
                     <br />
                   </div>
                   <div id="MAN">
@@ -359,16 +387,24 @@ const Survey = (props) => {
                       <div class="columns" style={{ flexWrap: "wrap" }}>
                         {colsSen}
                       </div>
-                      {/* <button
-                      className="buttonTsenkher"
-                      style={{ float: "right" }}
-                      onClick={saveToDB}
-                    >
-                      Хадгалах
-                    </button> */}
+
                       <br />
                     </div>
                   </div>
+                  <button
+                    style={{
+                      float: "right",
+                      backgroundColor: "#198754",
+                      borderColor: "#198754",
+                      borderRadius: "0.25rem",
+                      padding: " 0.375rem 0.75rem",
+                      color: "white",
+                    }}
+                    onClick={saveToDB}
+                  >
+                    Илгээх
+                  </button>
+                  <br />
                 </div>
               </div>
             </div>
