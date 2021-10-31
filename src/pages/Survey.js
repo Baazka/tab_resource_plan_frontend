@@ -10,25 +10,122 @@ import { Search, Filter } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 import Iframe from "react-iframe";
 
-const Dashboard = (props) => {
+const Survey = (props) => {
   const history = useHistory();
+
   const [jagsaalt, setJagsaalt] = useState();
 
-  var rows = [];
-  for (let index = 0; index < 10; index++) {
+  useEffect(() => {
+    async function test() {
+      let jagsaaltsHEAD = await DataRequest({
+        url:
+          "http://localhost:3002/api/v1/electionAttandee/" + 1 + "/" + "HEAD",
+        method: "GET",
+        data: {},
+      });
+      setJagsaalt(jagsaaltsHEAD?.data);
+      console.log(jagsaaltsHEAD);
+    }
+    test();
+    console.log("jagsaalt", jagsaalt);
+  }, [props]);
+
+  var cols = [];
+  for (let index = 0; index < jagsaalt.length; index++) {
     {
-      rows.push(
-        <div
-          style={{
-            backgroundcolor: "#f1f1f1",
-            width: "100px",
-            margin: "10px",
-            textAlign: "center",
-            lineheight: "75px",
-            fontsize: "30px",
-          }}
-        >
-          {index}
+      console.log(jagsaalt[index]);
+      cols.push(
+        <div class="column is-3">
+          <div class="card is-clickable">
+            <div class="card-content">
+              <div class="media">
+                <div class="media-left">
+                  <figure
+                    class="image"
+                    style={{
+                      width: 90,
+                      height: 120,
+                    }}
+                  >
+                    <img
+                      src="https://via.placeholder.com/90x120"
+                      alt="Placeholder image"
+                    />
+                  </figure>
+                </div>
+                <div class="media-content">
+                  <p>{jagsaalt[index].USER_NAME}</p>
+                  <p style={{ fontSize: "12px" }}>
+                    {jagsaalt[index].USER_POSITION}
+                  </p>
+                  {/* <p style={{ fontSize: "12px" }}>Мэдээлэл технологийн төв</p> */}
+                  <div>
+                    <input type="checkbox" id={jagsaalt[index].ID} />
+                    <label for={jagsaalt[index].ID}>сонгох</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
+
+  //MAN
+  const [jagsaaltman, setJagsaaltMan] = useState();
+
+  useEffect(() => {
+    async function test() {
+      let jagsaaltsMAN = await DataRequest({
+        url: "http://localhost:3002/api/v1/electionAttandee/" + 1 + "/" + "MAN",
+        method: "GET",
+        data: {},
+      });
+      setJagsaaltMan(jagsaaltsMAN?.data);
+      console.log(jagsaaltsMAN);
+    }
+    test();
+    console.log("jagsaalt", jagsaaltman);
+  }, [props]);
+
+  var colsMan = [];
+  for (let indexMan = 0; indexMan < jagsaaltman.length; indexMan++) {
+    {
+      console.log(jagsaaltman[indexMan]);
+      colsMan.push(
+        <div class="column is-3">
+          <div class="card is-clickable">
+            <div class="card-content">
+              <div class="media">
+                <div class="media-left">
+                  <figure
+                    class="image"
+                    style={{
+                      width: 90,
+                      height: 120,
+                    }}
+                  >
+                    <img
+                      src="https://via.placeholder.com/90x120"
+                      alt="Placeholder image"
+                    />
+                  </figure>
+                </div>
+                <div class="media-content">
+                  <p>{jagsaaltman[indexMan].USER_NAME}</p>
+                  <p style={{ fontSize: "12px" }}>
+                    {jagsaaltman[indexMan].USER_POSITION}
+                  </p>
+                  {/* <p style={{ fontSize: "12px" }}>Мэдээлэл технологийн төв</p> */}
+                  <div>
+                    <input type="checkbox" id={jagsaaltman[indexMan].ID} />
+                    <label for={jagsaaltman[indexMan].ID}>сонгох</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       );
     }
@@ -43,9 +140,7 @@ const Dashboard = (props) => {
       <div style={{ marginLeft: "2%" }}>
         <div
           style={{
-            height: "90vh",
             display: "flex",
-            maxHeight: "100vh !important",
           }}
         >
           <div
@@ -81,494 +176,226 @@ const Dashboard = (props) => {
                   <div
                   // style={{
                   //   display: "flex",
-                  //   flexwrap: "nowrap",
-                  //   backgroundColor: "DodgerBlue",
+                  //   flexwrap: "wrap",
                   // }}
                   >
-                    {/* {rows} */}
-                    <div class="thumbContainer">
-                      <div
-                        class="thumbBox"
-                        style={{
-                          width: "306px",
-                          height: "166px",
-                          float: "left",
-                          marginLeft: 0,
-                          margintop: "5px",
-                          background: "white",
-                          border: 1,
-                        }}
-                      >
-                        <div class="tr1 thumbList ui-draggable">
-                          <div
-                            class="picture"
-                            style={{
-                              width: "90px",
-                              height: "118px",
-                              float: "left",
-                              overflow: "hidden",
-                              position: "relative",
-                              zIndex: 1,
-                              margintop: "13px",
-                              marginRight: "13px",
-                            }}
-                          >
-                            <img
-                              width="90"
-                              height="119"
-                              src=""
-                              style={{ border: 1, borderColor: "red" }}
-                            />
-                          </div>
-                          <div class="info" style={{ float: "left" }}>
-                            <div class="sysName">Н.Учрал</div>
-                            <div class="app">Гэрээт ажилтан</div>
-                            <div class="dep">Аудитын хоёрдугаар газар</div>
-                            <div class="mail">uchraln@audit.gov.mn</div>
-
-                            <div class="mobile">(976) 95019011</div>
-                          </div>
-                          <div class="line" style={{ width: "65%" }}></div>
-                          <div class="checkBox"></div>
-
-                          <div
-                            class="bttns"
-                            id="buttons"
-                            //style="margin-right:3px;"
-                          >
-                            <div
-                              class="item cmdButton"
-                              id="print"
-                              mode="1"
-                            ></div>
-                            <div
-                              class="item cmdButton"
-                              id="edit"
-                              mode="3"
-                            ></div>
+                    <div class="columns" style={{ flexWrap: "wrap" }}>
+                      {cols}
+                      {/* <div class="column is-3">
+                        <div class="card is-clickable" for="horns">
+                          <div class="card-content">
+                            <div class="media">
+                              <div class="media-left">
+                                <figure
+                                  class="image"
+                                  style={{
+                                    width: 90,
+                                    height: 120,
+                                    border: 1,
+                                    borderColor: "red",
+                                  }}
+                                >
+                                  <img
+                                    src="https://via.placeholder.com/90x120"
+                                    alt="Placeholder image"
+                                  />
+                                </figure>
+                              </div>
+                              <div class="media-content">
+                                <p>Н.Бат-Очир</p>
+                                <p style={{ fontSize: "12px" }}>
+                                  Программ хөгжүүлэгч, ахлах шинжээч
+                                </p>
+                                <p style={{ fontSize: "12px" }}>
+                                  Мэдээлэл технологийн төв
+                                </p>
+                                <input type="checkbox" id="horns" />
+                                <label for="horns">сонгох</label>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div
-                        class="thumbBox"
-                        style={{
-                          width: "306px",
-                          height: "166px",
-                          float: "left",
-                          marginLeft: 0,
-                          margintop: "5px",
-                          background: "white",
-                          border: 1,
-                        }}
-                      >
-                        <div class="tr1 thumbList ui-draggable">
-                          <div
-                            class="picture"
-                            style={{
-                              width: "90px",
-                              height: "118px",
-                              float: "left",
-                              overflow: "hidden",
-                              position: "relative",
-                              zIndex: 1,
-                              margintop: "13px",
-                              marginRight: "13px",
-                            }}
-                          >
-                            <img width="90" height="119" src="" />
-                          </div>
-                          <div class="info" style={{ float: "left" }}>
-                            <div class="sysName">Н.Учрал</div>
-                            <div class="app">Гэрээт ажилтан</div>
-                            <div class="dep">Аудитын хоёрдугаар газар</div>
-                            <div class="mail">uchraln@audit.gov.mn</div>
-
-                            <div class="mobile">(976) 95019011</div>
-                          </div>
-                          <div class="line" style={{ width: "65%" }}></div>
-                          <div class="checkBox"></div>
-
-                          <div
-                            class="bttns"
-                            id="buttons"
-                            //style="margin-right:3px;"
-                          >
-                            <div
-                              class="item cmdButton"
-                              id="print"
-                              mode="1"
-                            ></div>
-                            <div
-                              class="item cmdButton"
-                              id="edit"
-                              mode="3"
-                            ></div>
+                      <div class="column is-3">
+                        <div class="card is-clickable" for="horns">
+                          <div class="card-content">
+                            <div class="media">
+                              <div class="media-left">
+                                <figure
+                                  class="image"
+                                  style={{
+                                    width: 90,
+                                    height: 120,
+                                    border: 1,
+                                    borderColor: "red",
+                                  }}
+                                >
+                                  <img
+                                    src="https://via.placeholder.com/90x120"
+                                    alt="Placeholder image"
+                                  />
+                                </figure>
+                              </div>
+                              <div class="media-content">
+                                <p>Н.Бат-Очир</p>
+                                <p style={{ fontSize: "12px" }}>
+                                  Программ хөгжүүлэгч, ахлах шинжээч
+                                </p>
+                                <p style={{ fontSize: "12px" }}>
+                                  Мэдээлэл технологийн төв
+                                </p>
+                                <input type="checkbox" id="horns" />
+                                <label for="horns">сонгох</label>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div
-                        class="thumbBox"
-                        style={{
-                          width: "306px",
-                          height: "166px",
-                          float: "left",
-                          marginLeft: 0,
-                          margintop: "5px",
-                          background: "white",
-                          border: 1,
-                        }}
-                      >
-                        <div class="tr1 thumbList ui-draggable">
-                          <div
-                            class="picture"
-                            style={{
-                              width: "90px",
-                              height: "118px",
-                              float: "left",
-                              overflow: "hidden",
-                              position: "relative",
-                              zIndex: 1,
-                              margintop: "13px",
-                              marginRight: "13px",
-                            }}
-                          >
-                            <img width="90" height="119" src="" />
-                          </div>
-                          <div class="info" style={{ float: "left" }}>
-                            <div class="sysName">Н.Учрал</div>
-                            <div class="app">Гэрээт ажилтан</div>
-                            <div class="dep">Аудитын хоёрдугаар газар</div>
-                            <div class="mail">uchraln@audit.gov.mn</div>
-
-                            <div class="mobile">(976) 95019011</div>
-                          </div>
-                          <div class="line" style={{ width: "65%" }}></div>
-                          <div class="checkBox"></div>
-
-                          <div
-                            class="bttns"
-                            id="buttons"
-                            //style="margin-right:3px;"
-                          >
-                            <div
-                              class="item cmdButton"
-                              id="print"
-                              mode="1"
-                            ></div>
-                            <div
-                              class="item cmdButton"
-                              id="edit"
-                              mode="3"
-                            ></div>
+                      <div class="column is-3">
+                        <div class="card is-clickable" for="horns">
+                          <div class="card-content">
+                            <div class="media">
+                              <div class="media-left">
+                                <figure
+                                  class="image"
+                                  style={{
+                                    width: 90,
+                                    height: 120,
+                                    border: 1,
+                                    borderColor: "red",
+                                  }}
+                                >
+                                  <img
+                                    src="https://via.placeholder.com/90x120"
+                                    alt="Placeholder image"
+                                  />
+                                </figure>
+                              </div>
+                              <div class="media-content">
+                                <p>Н.Бат-Очир</p>
+                                <p style={{ fontSize: "12px" }}>
+                                  Программ хөгжүүлэгч, ахлах шинжээч
+                                </p>
+                                <p style={{ fontSize: "12px" }}>
+                                  Мэдээлэл технологийн төв
+                                </p>
+                                <input type="checkbox" id="horns" />
+                                <label for="horns">сонгох</label>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div
-                        class="thumbBox"
-                        style={{
-                          width: "306px",
-                          height: "166px",
-                          float: "left",
-                          marginLeft: 0,
-                          margintop: "5px",
-                          background: "white",
-                          border: 1,
-                        }}
-                      >
-                        <div class="tr1 thumbList ui-draggable">
-                          <div
-                            class="picture"
-                            style={{
-                              width: "90px",
-                              height: "118px",
-                              float: "left",
-                              overflow: "hidden",
-                              position: "relative",
-                              zIndex: 1,
-                              margintop: "13px",
-                              marginRight: "13px",
-                            }}
-                          >
-                            <img width="90" height="119" src="" />
-                          </div>
-                          <div class="info" style={{ float: "left" }}>
-                            <div class="sysName">Н.Учрал</div>
-                            <div class="app">Гэрээт ажилтан</div>
-                            <div class="dep">Аудитын хоёрдугаар газар</div>
-                            <div class="mail">uchraln@audit.gov.mn</div>
-
-                            <div class="mobile">(976) 95019011</div>
-                          </div>
-                          <div class="line" style={{ width: "65%" }}></div>
-                          <div class="checkBox"></div>
-
-                          <div
-                            class="bttns"
-                            id="buttons"
-                            //style="margin-right:3px;"
-                          >
-                            <div
-                              class="item cmdButton"
-                              id="print"
-                              mode="1"
-                            ></div>
-                            <div
-                              class="item cmdButton"
-                              id="edit"
-                              mode="3"
-                            ></div>
+                      <div class="column is-3">
+                        <div class="card is-clickable" for="horns">
+                          <div class="card-content">
+                            <div class="media">
+                              <div class="media-left">
+                                <figure
+                                  class="image"
+                                  style={{
+                                    width: 90,
+                                    height: 120,
+                                    border: 1,
+                                    borderColor: "red",
+                                  }}
+                                >
+                                  <img
+                                    src="https://via.placeholder.com/90x120"
+                                    alt="Placeholder image"
+                                  />
+                                </figure>
+                              </div>
+                              <div class="media-content">
+                                <p>Н.Бат-Очир</p>
+                                <p style={{ fontSize: "12px" }}>
+                                  Программ хөгжүүлэгч, ахлах шинжээч
+                                </p>
+                                <p style={{ fontSize: "12px" }}>
+                                  Мэдээлэл технологийн төв
+                                </p>
+                                <input type="checkbox" id="horns" />
+                                <label for="horns">сонгох</label>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div
-                        class="thumbBox"
-                        style={{
-                          width: "306px",
-                          height: "166px",
-                          float: "left",
-                          marginLeft: 0,
-                          margintop: "5px",
-                          background: "white",
-                          border: 1,
-                        }}
-                      >
-                        <div class="tr1 thumbList ui-draggable">
-                          <div
-                            class="picture"
-                            style={{
-                              width: "90px",
-                              height: "118px",
-                              float: "left",
-                              overflow: "hidden",
-                              position: "relative",
-                              zIndex: 1,
-                              margintop: "13px",
-                              marginRight: "13px",
-                            }}
-                          >
-                            <img width="90" height="119" src="" />
-                          </div>
-                          <div class="info" style={{ float: "left" }}>
-                            <div class="sysName">Н.Учрал</div>
-                            <div class="app">Гэрээт ажилтан</div>
-                            <div class="dep">Аудитын хоёрдугаар газар</div>
-                            <div class="mail">uchraln@audit.gov.mn</div>
-
-                            <div class="mobile">(976) 95019011</div>
-                          </div>
-                          <div class="line" style={{ width: "65%" }}></div>
-                          <div class="checkBox"></div>
-
-                          <div
-                            class="bttns"
-                            id="buttons"
-                            //style="margin-right:3px;"
-                          >
-                            <div
-                              class="item cmdButton"
-                              id="print"
-                              mode="1"
-                            ></div>
-                            <div
-                              class="item cmdButton"
-                              id="edit"
-                              mode="3"
-                            ></div>
+                      <div class="column is-3">
+                        <div class="card is-clickable" for="horns">
+                          <div class="card-content">
+                            <div class="media">
+                              <div class="media-left">
+                                <figure
+                                  class="image"
+                                  style={{
+                                    width: 90,
+                                    height: 120,
+                                    border: 1,
+                                    borderColor: "red",
+                                  }}
+                                >
+                                  <img
+                                    src="https://via.placeholder.com/90x120"
+                                    alt="Placeholder image"
+                                  />
+                                </figure>
+                              </div>
+                              <div class="media-content">
+                                <p>Н.Бат-Очир</p>
+                                <p style={{ fontSize: "12px" }}>
+                                  Программ хөгжүүлэгч, ахлах шинжээч
+                                </p>
+                                <p style={{ fontSize: "12px" }}>
+                                  Мэдээлэл технологийн төв
+                                </p>
+                                <input type="checkbox" id="horns" />
+                                <label for="horns">сонгох</label>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div
-                        class="thumbBox"
-                        style={{
-                          width: "306px",
-                          height: "166px",
-                          float: "left",
-                          marginLeft: 0,
-                          margintop: "5px",
-                          background: "white",
-                          border: 1,
-                        }}
-                      >
-                        <div class="tr1 thumbList ui-draggable">
-                          <div
-                            class="picture"
-                            style={{
-                              width: "90px",
-                              height: "118px",
-                              float: "left",
-                              overflow: "hidden",
-                              position: "relative",
-                              zIndex: 1,
-                              margintop: "13px",
-                              marginRight: "13px",
-                            }}
-                          >
-                            <img width="90" height="119" src="" />
-                          </div>
-                          <div class="info" style={{ float: "left" }}>
-                            <div class="sysName">Н.Учрал</div>
-                            <div class="app">Гэрээт ажилтан</div>
-                            <div class="dep">Аудитын хоёрдугаар газар</div>
-                            <div class="mail">uchraln@audit.gov.mn</div>
-
-                            <div class="mobile">(976) 95019011</div>
-                          </div>
-                          <div class="line" style={{ width: "65%" }}></div>
-                          <div class="checkBox"></div>
-
-                          <div
-                            class="bttns"
-                            id="buttons"
-                            //style="margin-right:3px;"
-                          >
-                            <div
-                              class="item cmdButton"
-                              id="print"
-                              mode="1"
-                            ></div>
-                            <div
-                              class="item cmdButton"
-                              id="edit"
-                              mode="3"
-                            ></div>
+                      <div class="column is-3">
+                        <div class="card is-clickable" for="horns">
+                          <div class="card-content">
+                            <div class="media">
+                              <div class="media-left">
+                                <figure
+                                  class="image"
+                                  style={{
+                                    width: 90,
+                                    height: 120,
+                                    border: 1,
+                                    borderColor: "red",
+                                  }}
+                                >
+                                  <img
+                                    src="https://via.placeholder.com/90x120"
+                                    alt="Placeholder image"
+                                  />
+                                </figure>
+                              </div>
+                              <div class="media-content">
+                                <p>Н.Бат-Очир</p>
+                                <p style={{ fontSize: "12px" }}>
+                                  Программ хөгжүүлэгч, ахлах шинжээч
+                                </p>
+                                <p style={{ fontSize: "12px" }}>
+                                  Мэдээлэл технологийн төв
+                                </p>
+                                <input type="checkbox" id="horns" />
+                                <label for="horns">сонгох</label>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div
-                        class="thumbBox"
-                        style={{
-                          width: "306px",
-                          height: "166px",
-                          float: "left",
-                          marginLeft: 0,
-                          margintop: "5px",
-                          background: "white",
-                          borderColor: "red",
-                          border: "1px",
-                        }}
-                      >
-                        <div class="tr1 thumbList ui-draggable">
-                          <div
-                            class="picture"
-                            style={{
-                              width: "90px",
-                              height: "118px",
-                              float: "left",
-                              overflow: "hidden",
-                              position: "relative",
-                              zIndex: 1,
-                              margintop: "13px",
-                              marginRight: "13px",
-                            }}
-                          >
-                            <img width="90" height="119" src="" />
-                          </div>
-                          <div class="info" style={{ float: "left" }}>
-                            <div class="sysName">Н.Учрал</div>
-                            <div class="app">Гэрээт ажилтан</div>
-                            <div class="dep">Аудитын хоёрдугаар газар</div>
-                            <div class="mail">uchraln@audit.gov.mn</div>
-
-                            <div class="mobile">(976) 95019011</div>
-                          </div>
-                          <div class="line" style={{ width: "65%" }}></div>
-                          <div class="checkBox"></div>
-
-                          <div
-                            class="bttns"
-                            id="buttons"
-                            //style="margin-right:3px;"
-                          >
-                            <div
-                              class="item cmdButton"
-                              id="print"
-                              mode="1"
-                            ></div>
-                            <div
-                              class="item cmdButton"
-                              id="edit"
-                              mode="3"
-                            ></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div
-                        class="thumbBox"
-                        style={{
-                          width: "306px",
-                          height: "166px",
-                          float: "left",
-                          marginLeft: 0,
-                          margintop: "5px",
-                          background: "white",
-                          border: 1,
-                        }}
-                      >
-                        <div class="tr1 thumbList ui-draggable">
-                          <div
-                            class="picture"
-                            style={{
-                              width: "90px",
-                              height: "118px",
-                              float: "left",
-                              overflow: "hidden",
-                              position: "relative",
-                              zIndex: 1,
-                              margintop: "13px",
-                              marginRight: "13px",
-                            }}
-                          >
-                            <img width="90" height="119" src="" />
-                          </div>
-                          <div class="info" style={{ float: "left" }}>
-                            <div class="sysName">Н.Учрал</div>
-                            <div class="app">Гэрээт ажилтан</div>
-                            <div class="dep">Аудитын хоёрдугаар газар</div>
-                            <div class="mail">uchraln@audit.gov.mn</div>
-
-                            <div class="mobile">(976) 95019011</div>
-                          </div>
-                          <div class="line" style={{ width: "65%" }}></div>
-                          <div class="checkBox"></div>
-
-                          <div
-                            class="bttns"
-                            id="buttons"
-                            //style="margin-right:3px;"
-                          >
-                            <div
-                              class="item cmdButton"
-                              id="print"
-                              mode="1"
-                            ></div>
-                            <div
-                              class="item cmdButton"
-                              id="edit"
-                              mode="3"
-                            ></div>
-                          </div>
-                        </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
-            {/* <div style={{ textAlign: "center" }}>
-              
-            </div>
-            <div
-              style={{
-                borderColor: "ffecb5",
-                backgroundColor: "#fff3cd",
-                borderRadius: "5px",
-                padding: "15px",
-                color: "#664d03",
-              }}
-            >
-              Ёс зүйн хорооны гишүүдийг сонгох санал асуулга
-            </div> */}
           </div>
         </div>
       </div>
@@ -576,4 +403,4 @@ const Dashboard = (props) => {
   );
 };
 
-export default Dashboard;
+export default Survey;

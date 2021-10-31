@@ -156,14 +156,13 @@ function Login(props) {
       nevtrekh();
     }
   }
-  var typename = "123";
   function nevtrekh() {
     if (ner !== undefined && nuutsUg !== undefined) {
       axios.defaults.headers["Content-Type"] =
         "application/x-www-form-urlencoded;charset=UTF-8";
       axios({
         method: "post", //put
-        url: "http://hr.audit.mn/reg/api/v1/login",
+        url: "http://10.10.10.46:3001/api/v1/login",
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json",
@@ -193,15 +192,13 @@ function Login(props) {
             }
             DataRequest({
               url:
-                "http://hr.audit.mn/reg/api/v1/profile/" +
+                "http://10.10.10.46:3001/api/v1/profile/" +
                 response?.data?.USER_ID,
               method: "GET",
               data: {},
             })
               .then(function (response) {
                 console.log("test", response.data);
-                typename = response?.data?.USER_TYPE_NAME;
-                console.log(typename, "test3");
                 localStorage.setItem(
                   "userDetails",
                   JSON.stringify(response?.data)
@@ -227,7 +224,6 @@ function Login(props) {
   }
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   if (fakeAuth.isAuthenticated === true) {
-    //console.log(userDetils?.USER_TYPE_NAME, "test1");
     if (userDetils?.USER_TYPE_NAME === "SURVEY")
       return <Redirect to={state?.form || "/web/survey/"} />;
     else return <Redirect to={state?.form || "/web/dashboard/"} />;
