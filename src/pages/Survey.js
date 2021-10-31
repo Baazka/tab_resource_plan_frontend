@@ -6,20 +6,18 @@ import Footer from "../components/footer";
 import SideBar from "../components/sidebar";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Search, Filter } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 import Iframe from "react-iframe";
 
 const Survey = (props) => {
   const history = useHistory();
-
   const [jagsaalt, setJagsaalt] = useState();
 
   useEffect(() => {
     async function test() {
       let jagsaaltsHEAD = await DataRequest({
         url:
-          "http://localhost:3002/api/v1/electionAttandee/" + 1 + "/" + "HEAD",
+          "http://hr.audit.mn/hr/api/v1/electionAttandee/" + 1 + "/" + "HEAD",
         method: "GET",
         data: {},
       });
@@ -27,16 +25,37 @@ const Survey = (props) => {
       console.log(jagsaaltsHEAD);
     }
     test();
+    onlyOneCheckBox();
     console.log("jagsaalt", jagsaalt);
   }, [props]);
 
+  function onlyOneCheckBox() {
+    var checkboxgroup = document
+      .getElementById("HEAD")
+      .getElementsByTagName("input");
+    var limit = 4;
+    for (var i = 0; i < checkboxgroup.length; i++) {
+      checkboxgroup[i].onclick = function () {
+        var checkedcount = 0;
+        for (var i = 0; i < checkboxgroup.length; i++) {
+          checkedcount += checkboxgroup[i].checked ? 1 : 0;
+        }
+        if (checkedcount > limit) {
+          console.log("You can select maximum of " + limit + " checkbox.");
+          alert("You can select maximum of " + limit + " checkbox.");
+          //alert.show("өгөгдөл байхгүй байна");
+          this.checked = false;
+        }
+      };
+    }
+  }
   var cols = [];
-  for (let index = 0; index < jagsaalt.length; index++) {
+  for (let index = 0; index < jagsaalt?.length; index++) {
     {
-      console.log(jagsaalt[index]);
+      console.log();
       cols.push(
         <div class="column is-3">
-          <div class="card is-clickable">
+          <div class="card is-clickable" style={{ height: 170 }}>
             <div class="card-content">
               <div class="media">
                 <div class="media-left">
@@ -48,8 +67,8 @@ const Survey = (props) => {
                     }}
                   >
                     <img
-                      src="https://via.placeholder.com/90x120"
-                      alt="Placeholder image"
+                      src={"election/" + jagsaalt[index].USER_PICTURE}
+                      alt={jagsaalt[index].USER_NAME}
                     />
                   </figure>
                 </div>
@@ -59,9 +78,11 @@ const Survey = (props) => {
                     {jagsaalt[index].USER_POSITION}
                   </p>
                   {/* <p style={{ fontSize: "12px" }}>Мэдээлэл технологийн төв</p> */}
-                  <div>
+                  <div style={{ position: "absolute", bottom: 20 }}>
                     <input type="checkbox" id={jagsaalt[index].ID} />
-                    <label for={jagsaalt[index].ID}>сонгох</label>
+                    <label for={jagsaalt[index].ID} style={{ marginLeft: 5 }}>
+                      сонгох
+                    </label>
                   </div>
                 </div>
               </div>
@@ -72,13 +93,30 @@ const Survey = (props) => {
     }
   }
 
+  //onlyOneCheckBox();
+  function saveToDB() {
+    alert("save");
+    //props.loading(true);
+
+    // if (requiredField(data) === true) {
+    //   let newRow = data?.Award?.filter((value) => value.ROWTYPE === "NEW");
+    //   let oldRow = data?.Award?.filter(
+    //     (value) =>
+    //       value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
+    //   );
+    //   let message = 0;
+    // } else {
+    //   props.loading(false);
+    // }
+  }
+
   //MAN
   const [jagsaaltman, setJagsaaltMan] = useState();
 
   useEffect(() => {
     async function test() {
       let jagsaaltsMAN = await DataRequest({
-        url: "http://localhost:3002/api/v1/electionAttandee/" + 1 + "/" + "MAN",
+        url: "http://hr.audit.mn/hr/api/v1/electionAttandee/" + 1 + "/" + "MAN",
         method: "GET",
         data: {},
       });
@@ -90,9 +128,8 @@ const Survey = (props) => {
   }, [props]);
 
   var colsMan = [];
-  for (let indexMan = 0; indexMan < jagsaaltman.length; indexMan++) {
+  for (let indexMan = 0; indexMan < jagsaaltman?.length; indexMan++) {
     {
-      console.log(jagsaaltman[indexMan]);
       colsMan.push(
         <div class="column is-3">
           <div class="card is-clickable">
@@ -107,7 +144,7 @@ const Survey = (props) => {
                     }}
                   >
                     <img
-                      src="https://via.placeholder.com/90x120"
+                      src={"election/" + jagsaaltman[indexMan].USER_PICTURE}
                       alt="Placeholder image"
                     />
                   </figure>
@@ -118,9 +155,14 @@ const Survey = (props) => {
                     {jagsaaltman[indexMan].USER_POSITION}
                   </p>
                   {/* <p style={{ fontSize: "12px" }}>Мэдээлэл технологийн төв</p> */}
-                  <div>
+                  <div style={{ position: "absolute", bottom: 20 }}>
                     <input type="checkbox" id={jagsaaltman[indexMan].ID} />
-                    <label for={jagsaaltman[indexMan].ID}>сонгох</label>
+                    <label
+                      for={jagsaaltman[indexMan].ID}
+                      style={{ marginLeft: 5 }}
+                    >
+                      сонгох
+                    </label>
                   </div>
                 </div>
               </div>
@@ -130,12 +172,69 @@ const Survey = (props) => {
       );
     }
   }
+  //Sen
+  const [jagsaaltsen, setJagsaaltSen] = useState();
 
+  useEffect(() => {
+    async function test() {
+      let jagsaaltsSEN = await DataRequest({
+        url: "http://hr.audit.mn/hr/api/v1/electionAttandee/" + 1 + "/" + "SEN",
+        method: "GET",
+        data: {},
+      });
+      setJagsaaltSen(jagsaaltsSEN?.data);
+      console.log(jagsaaltsSEN);
+    }
+    test();
+    console.log("jagsaalt", jagsaaltsen);
+  }, [props]);
+
+  var colsSen = [];
+  for (let indexSen = 0; indexSen < jagsaaltsen?.length; indexSen++) {
+    {
+      colsSen.push(
+        <div class="column is-3">
+          <div class="card is-clickable">
+            <div class="card-content">
+              <div class="media">
+                <div class="media-left">
+                  <figure
+                    class="image"
+                    style={{
+                      width: 90,
+                      height: 120,
+                    }}
+                  >
+                    <img
+                      src={"election/" + jagsaaltsen[indexSen].USER_PICTURE}
+                      alt="Placeholder image"
+                    />
+                  </figure>
+                </div>
+                <div class="media-content">
+                  <p>{jagsaaltsen[indexSen].USER_NAME}</p>
+                  <p style={{ fontSize: "12px" }}>
+                    {jagsaaltsen[indexSen].USER_POSITION}
+                  </p>
+                  {/* <p style={{ fontSize: "12px" }}>Мэдээлэл технологийн төв</p> */}
+                  <div style={{ position: "absolute", bottom: 20 }}>
+                    <input type="checkbox" id={jagsaaltsen[indexSen].ID} />
+                    <label
+                      for={jagsaaltsen[indexSen].ID}
+                      style={{ marginLeft: 5 }}
+                    >
+                      сонгох
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+  }
   return (
-    //   for (let index = 0; index < array.length; index++) {
-    //       const element = array[index];
-
-    //   }
     <div>
       <div style={{ marginLeft: "2%" }}>
         <div
@@ -156,7 +255,7 @@ const Survey = (props) => {
             <div class="card">
               <div class="card-content">
                 <p class="title" style={{ textAlign: "center" }}>
-                  Ёс зүйн хорооны гишүүдийг сонгох санал асуулга
+                  Ёс зүйн зөвлөлийн гишүүдийг сонгох санал асуулга
                 </p>
                 <div
                   class="box"
@@ -167,230 +266,57 @@ const Survey = (props) => {
                     color: "#664d03",
                   }}
                 >
-                  Ёс зүйн хорооны гишүүдийг сонгох санал асуулга
+                  Ёс зүйн зөвлөлийн гишүүдийг сонгох санал асуулга
                 </div>
                 <br />
                 <div>
                   <div class="subtitle">Аудитын удирдах түвшний ажилтан</div>
                   <hr />
-                  <div
-                  // style={{
-                  //   display: "flex",
-                  //   flexwrap: "wrap",
-                  // }}
-                  >
+                  <div id="HEAD">
                     <div class="columns" style={{ flexWrap: "wrap" }}>
                       {cols}
-                      {/* <div class="column is-3">
-                        <div class="card is-clickable" for="horns">
-                          <div class="card-content">
-                            <div class="media">
-                              <div class="media-left">
-                                <figure
-                                  class="image"
-                                  style={{
-                                    width: 90,
-                                    height: 120,
-                                    border: 1,
-                                    borderColor: "red",
-                                  }}
-                                >
-                                  <img
-                                    src="https://via.placeholder.com/90x120"
-                                    alt="Placeholder image"
-                                  />
-                                </figure>
-                              </div>
-                              <div class="media-content">
-                                <p>Н.Бат-Очир</p>
-                                <p style={{ fontSize: "12px" }}>
-                                  Программ хөгжүүлэгч, ахлах шинжээч
-                                </p>
-                                <p style={{ fontSize: "12px" }}>
-                                  Мэдээлэл технологийн төв
-                                </p>
-                                <input type="checkbox" id="horns" />
-                                <label for="horns">сонгох</label>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                    </div>
+                    <button
+                      className="buttonTsenkher"
+                      style={{ float: "right" }}
+                      onClick={saveToDB}
+                    >
+                      Хадгалах
+                    </button>
+                    <br />
+                  </div>
+                  <div id="MAN">
+                    <div class="subtitle">Менежер</div>
+                    <hr />
+                    <div>
+                      <div class="columns" style={{ flexWrap: "wrap" }}>
+                        {colsMan}
                       </div>
-                      <div class="column is-3">
-                        <div class="card is-clickable" for="horns">
-                          <div class="card-content">
-                            <div class="media">
-                              <div class="media-left">
-                                <figure
-                                  class="image"
-                                  style={{
-                                    width: 90,
-                                    height: 120,
-                                    border: 1,
-                                    borderColor: "red",
-                                  }}
-                                >
-                                  <img
-                                    src="https://via.placeholder.com/90x120"
-                                    alt="Placeholder image"
-                                  />
-                                </figure>
-                              </div>
-                              <div class="media-content">
-                                <p>Н.Бат-Очир</p>
-                                <p style={{ fontSize: "12px" }}>
-                                  Программ хөгжүүлэгч, ахлах шинжээч
-                                </p>
-                                <p style={{ fontSize: "12px" }}>
-                                  Мэдээлэл технологийн төв
-                                </p>
-                                <input type="checkbox" id="horns" />
-                                <label for="horns">сонгох</label>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                      {/* <button
+                      className="buttonTsenkher"
+                      style={{ float: "right" }}
+                      onClick={saveToDB}
+                    >
+                      Хадгалах
+                    </button> */}
+                      <br />
+                    </div>
+                  </div>
+                  <div id="SEN">
+                    <div class="subtitle">Ахлах аудитор</div>
+                    <hr />
+                    <div>
+                      <div class="columns" style={{ flexWrap: "wrap" }}>
+                        {colsSen}
                       </div>
-                      <div class="column is-3">
-                        <div class="card is-clickable" for="horns">
-                          <div class="card-content">
-                            <div class="media">
-                              <div class="media-left">
-                                <figure
-                                  class="image"
-                                  style={{
-                                    width: 90,
-                                    height: 120,
-                                    border: 1,
-                                    borderColor: "red",
-                                  }}
-                                >
-                                  <img
-                                    src="https://via.placeholder.com/90x120"
-                                    alt="Placeholder image"
-                                  />
-                                </figure>
-                              </div>
-                              <div class="media-content">
-                                <p>Н.Бат-Очир</p>
-                                <p style={{ fontSize: "12px" }}>
-                                  Программ хөгжүүлэгч, ахлах шинжээч
-                                </p>
-                                <p style={{ fontSize: "12px" }}>
-                                  Мэдээлэл технологийн төв
-                                </p>
-                                <input type="checkbox" id="horns" />
-                                <label for="horns">сонгох</label>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="column is-3">
-                        <div class="card is-clickable" for="horns">
-                          <div class="card-content">
-                            <div class="media">
-                              <div class="media-left">
-                                <figure
-                                  class="image"
-                                  style={{
-                                    width: 90,
-                                    height: 120,
-                                    border: 1,
-                                    borderColor: "red",
-                                  }}
-                                >
-                                  <img
-                                    src="https://via.placeholder.com/90x120"
-                                    alt="Placeholder image"
-                                  />
-                                </figure>
-                              </div>
-                              <div class="media-content">
-                                <p>Н.Бат-Очир</p>
-                                <p style={{ fontSize: "12px" }}>
-                                  Программ хөгжүүлэгч, ахлах шинжээч
-                                </p>
-                                <p style={{ fontSize: "12px" }}>
-                                  Мэдээлэл технологийн төв
-                                </p>
-                                <input type="checkbox" id="horns" />
-                                <label for="horns">сонгох</label>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="column is-3">
-                        <div class="card is-clickable" for="horns">
-                          <div class="card-content">
-                            <div class="media">
-                              <div class="media-left">
-                                <figure
-                                  class="image"
-                                  style={{
-                                    width: 90,
-                                    height: 120,
-                                    border: 1,
-                                    borderColor: "red",
-                                  }}
-                                >
-                                  <img
-                                    src="https://via.placeholder.com/90x120"
-                                    alt="Placeholder image"
-                                  />
-                                </figure>
-                              </div>
-                              <div class="media-content">
-                                <p>Н.Бат-Очир</p>
-                                <p style={{ fontSize: "12px" }}>
-                                  Программ хөгжүүлэгч, ахлах шинжээч
-                                </p>
-                                <p style={{ fontSize: "12px" }}>
-                                  Мэдээлэл технологийн төв
-                                </p>
-                                <input type="checkbox" id="horns" />
-                                <label for="horns">сонгох</label>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="column is-3">
-                        <div class="card is-clickable" for="horns">
-                          <div class="card-content">
-                            <div class="media">
-                              <div class="media-left">
-                                <figure
-                                  class="image"
-                                  style={{
-                                    width: 90,
-                                    height: 120,
-                                    border: 1,
-                                    borderColor: "red",
-                                  }}
-                                >
-                                  <img
-                                    src="https://via.placeholder.com/90x120"
-                                    alt="Placeholder image"
-                                  />
-                                </figure>
-                              </div>
-                              <div class="media-content">
-                                <p>Н.Бат-Очир</p>
-                                <p style={{ fontSize: "12px" }}>
-                                  Программ хөгжүүлэгч, ахлах шинжээч
-                                </p>
-                                <p style={{ fontSize: "12px" }}>
-                                  Мэдээлэл технологийн төв
-                                </p>
-                                <input type="checkbox" id="horns" />
-                                <label for="horns">сонгох</label>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div> */}
+                      {/* <button
+                      className="buttonTsenkher"
+                      style={{ float: "right" }}
+                      onClick={saveToDB}
+                    >
+                      Хадгалах
+                    </button> */}
+                      <br />
                     </div>
                   </div>
                 </div>
