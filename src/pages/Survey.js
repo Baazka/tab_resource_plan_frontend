@@ -302,7 +302,7 @@ const Survey = (props) => {
               width: "91.7%",
             }}
           >
-            <div class="card">
+            <div class="card" style={{ overflow: "auto" }}>
               <div class="card-content">
                 <p class="title" style={{ textAlign: "center" }}>
                   Ёс зүйн зөвлөлийн гишүүдийг сонгох санал асуулга
