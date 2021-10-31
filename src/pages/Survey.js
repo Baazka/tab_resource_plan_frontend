@@ -158,7 +158,7 @@ const Survey = (props) => {
   useEffect(() => {
     async function test() {
       let jagsaaltsMAN = await DataRequest({
-        url: "http://localhost:3002/api/v1/electionAttandee/" + 1 + "/" + "MAN",
+        url: "http://hr.audit.mn/hr/v1/electionAttandee/" + 1 + "/" + "MAN",
         method: "GET",
         data: {},
       });
@@ -224,7 +224,7 @@ const Survey = (props) => {
   useEffect(() => {
     async function test() {
       let jagsaaltsSEN = await DataRequest({
-        url: "http://localhost:3002/api/v1/electionAttandee/" + 1 + "/" + "SEN",
+        url: "http://hr.audit.mn/hr/v1/electionAttandee/" + 1 + "/" + "SEN",
         method: "GET",
         data: {},
       });
