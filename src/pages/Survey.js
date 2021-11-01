@@ -15,6 +15,12 @@ const Survey = (props) => {
   const history = useHistory();
   const [jagsaalt, setJagsaalt] = useState();
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const [selected, setSelected] = useState({
+    darga: [],
+    maneger: [],
+    senior: [],
+  });
+  const alert = useAlert();
   let ar1 = [];
   let ar2 = [];
   let ar3 = [];
@@ -49,7 +55,7 @@ const Survey = (props) => {
         }
         if (checkedcount > limit) {
           console.log("You can select maximum of " + limit + " checkbox.");
-          alert(limit + " -өөс дээш хүн сонгох боломжгүй.");
+          alert.show(limit + " -өөс дээш хүн сонгох боломжгүй.");
           //alert.show("өгөгдөл байхгүй байна");
           this.checked = false;
         }
@@ -71,6 +77,7 @@ const Survey = (props) => {
 
     let c1, c2, c3;
 
+    ar1 = [];
     for (var i = 0; i < checkboxgroup.length; i++) {
       var checkedcount = 0;
       for (var i = 0; i < checkboxgroup.length; i++) {
@@ -80,6 +87,7 @@ const Survey = (props) => {
       }
       c1 = checkedcount;
     }
+    ar2 = [];
     for (var i = 0; i < checkboxgroupMAN.length; i++) {
       var checkedcount = 0;
       for (var i = 0; i < checkboxgroupMAN.length; i++) {
@@ -88,6 +96,7 @@ const Survey = (props) => {
       }
       c2 = checkedcount;
     }
+    ar3 = [];
     for (var i = 0; i < checkboxgroupSEN.length; i++) {
       var checkedcount = 0;
       for (var i = 0; i < checkboxgroupSEN.length; i++) {
@@ -97,7 +106,7 @@ const Survey = (props) => {
       c3 = checkedcount;
     }
 
-    console.log(ar1, ar2, ar3);
+    console.log(ar1, ar2, ar3, "Baaz");
     if (c1 == 0) alert("сонгоно уу.");
     else if (c2 == 0) alert("Менежер сонгоно уу.");
     else if (c3 == 0) alert("Ахлах аудитор сонгоно уу.");
@@ -177,6 +186,22 @@ const Survey = (props) => {
                       type="checkbox"
                       id={jagsaalt[index].ID}
                       value={jagsaalt[index].ID}
+                      onChange={(value) => {
+                        if (
+                          document.getElementById(jagsaalt[index].ID).checked
+                        ) {
+                          let temp = selected;
+                          selected.darga.push(jagsaalt[index]);
+                          setSelected(temp);
+                        } else {
+                          let temp = selected;
+                          temp.darga = selected.darga.filter(
+                            (a, ind) => a.ID !== jagsaalt[index].ID
+                          );
+                          console.log("delete", temp.darga);
+                          setSelected(temp);
+                        }
+                      }}
                     />
                     <label for={jagsaalt[index].ID} style={{ marginLeft: 5 }}>
                       сонгох
@@ -191,57 +216,73 @@ const Survey = (props) => {
     }
   }
 
-  let data = {
-    ELECTION_ID: 1,
-    USER_ID: userDetails?.USER_ID,
-    ELECTION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-    HEAD_C1: ar1[0],
-    HEAD_C2: ar1[1],
-    HEAD_C3: ar1[2],
-    HEAD_C4: ar1[3],
-    MAN_C1: ar2[0],
-    SENIOR_C1: ar3[0],
-    SENIOR_C2: ar3[1],
-  };
-  console.log(data);
   function saveToDB() {
+    console.log("end", selected);
     if (CheckBox()) {
-      // this.setState({
-      //   ar1: this.state.ar1,
-      //   ar2: this.state.ar2,
-      //   ar3: this.state.ar3,
-      // });
-      //   DataRequest({
-      //     url: "http://localhost:3002/api/v1/education/",
-      //     method: "POST",
-      //     data: {
-      //       ELECTION_ID: 1,
-      //       USER_ID: userDetails?.USER_ID,
-      //       ELECTION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-      //       HEAD_C1: ar1[0],
-      //       HEAD_C2: ar1[1],
-      //       HEAD_C3: ar1[2],
-      //       HEAD_C4: ar1[3],
-      //       MAN_C1: ar2[0],
-      //       SENIOR_C1: ar3[0],
-      //       SENIOR_C2: ar3[1],
-      //     },
-      //   })
-      //     .then(function (response) {
-      //       console.log("UpdateResponse", response);
-      //       // if (response?.data?.message === "success") {
-      //       //   alert.show("амжилттай хадгаллаа");
-      //       //   props.loading(false);
-      //       // } else {
-      //       //   alert.show("Системийн алдаа");
-      //       //   props.loading(false);
-      //       // }
-      //     })
-      //     .catch(function (error) {
-      //       // console.log(error.response);
-      //       // alert.show("Системийн алдаа");
-      //       // props.loading(false);
-      //     });
+      DataRequest({
+        url:
+          "http://hr.audit.mn/hr/api/v1/electionCheck/1/" + userDetails.USER_ID,
+        method: "GET",
+        data: {},
+      })
+        .then(function (response) {
+          console.log("UpdateResponse", response);
+          console.log(response?.data?.CNT);
+          if (response?.data?.CNT === 0) {
+            DataRequest({
+              url: "http://hr.audit.mn/hr/api/v1/electionAttandee/1/",
+              method: "POST",
+              data: {
+                ELECTION_ID: 1,
+                USER_ID: userDetails?.USER_ID,
+                ELECTION_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+                HEAD_C1:
+                  selected.darga[0] === undefined ? null : selected.darga[0].ID,
+                HEAD_C2:
+                  selected.darga[1] === undefined ? null : selected.darga[1].ID,
+                HEAD_C3:
+                  selected.darga[2] === undefined ? null : selected.darga[2].ID,
+                HEAD_C4:
+                  selected.darga[3] === undefined ? null : selected.darga[3].ID,
+                MAN_C1:
+                  selected.maneger[0] === undefined
+                    ? null
+                    : selected.maneger[0].ID,
+                SENIOR_C1:
+                  selected.senior[0] === undefined
+                    ? null
+                    : selected.senior[0].ID,
+                SENIOR_C2:
+                  selected.senior[1] === undefined
+                    ? null
+                    : selected.senior[1].ID,
+              },
+            })
+              .then(function (response) {
+                console.log("UpdateResponse", response);
+                if (response?.data?.message === "success") {
+                  alert("амжилттай хадгаллаа");
+                  props.loading(false);
+                } else {
+                  alert("Системийн алдаа");
+                  props.loading(false);
+                }
+              })
+              .catch(function (error) {
+                // console.log(error.response);
+                // alert.show("Системийн алдаа");
+                // props.loading(false);
+              });
+          } else {
+            alert("Санал илгээсэн байна.");
+            props.loading(false);
+          }
+        })
+        .catch(function (error) {
+          // console.log(error.response);
+          // alert.show("Системийн алдаа");
+          // props.loading(false);
+        });
     }
   }
 
@@ -302,6 +343,23 @@ const Survey = (props) => {
                       type="checkbox"
                       id={jagsaaltman[indexMan].ID}
                       value={jagsaaltman[indexMan].ID}
+                      onChange={() => {
+                        if (
+                          document.getElementById(jagsaaltman[indexMan].ID)
+                            .checked
+                        ) {
+                          let temp = selected;
+                          temp.maneger.push(jagsaaltman[indexMan]);
+                          setSelected(temp);
+                        } else {
+                          let temp = selected;
+                          temp.maneger = selected.maneger.filter(
+                            (a, ind) => a.ID !== jagsaaltman[indexMan].ID
+                          );
+                          setSelected(temp);
+                          console.log("delete");
+                        }
+                      }}
                     />
                     <label
                       for={jagsaaltman[indexMan].ID}
@@ -375,6 +433,23 @@ const Survey = (props) => {
                       type="checkbox"
                       id={jagsaaltsen[indexSen].ID}
                       value={jagsaaltsen[indexSen].ID}
+                      onChange={(value) => {
+                        if (
+                          document.getElementById(jagsaaltsen[indexSen].ID)
+                            .checked
+                        ) {
+                          let temp = selected;
+                          temp.senior.push(jagsaaltsen[indexSen]);
+                          setSelected(temp);
+                        } else {
+                          let temp = selected;
+                          temp.senior = temp.senior.filter(
+                            (a, ind) => a.ID !== jagsaaltsen[indexSen].ID
+                          );
+
+                          setSelected({ ...temp });
+                        }
+                      }}
                     />
                     <label
                       for={jagsaaltsen[indexSen].ID}
@@ -393,7 +468,7 @@ const Survey = (props) => {
   }
   return (
     <div>
-      <div style={{ marginLeft: "2%" }}>
+      <div style={{ marginLeft: "2%", height: "95vh" }}>
         <div
           style={{
             display: "flex",
@@ -401,15 +476,15 @@ const Survey = (props) => {
         >
           <div
             style={{
-              position: "absolute",
-              left: "20%",
-              left: "7%",
-              zIndex: 1,
-              top: "100px",
-              width: "91.7%",
+              marginTop: "80px",
+              marginLeft: "80px",
+              width: "94.7%",
             }}
           >
-            <div class="card" style={{ overflow: "auto", height: "100vh" }}>
+            <div
+              class="card"
+              style={{ height: window.innerHeight - 100, overflow: "scroll" }}
+            >
               <div class="card-content">
                 <p class="title" style={{ textAlign: "center" }}>
                   Ёс зүйн зөвлөлийн гишүүдийг сонгох санал асуулга
@@ -433,13 +508,6 @@ const Survey = (props) => {
                     <div class="columns" style={{ flexWrap: "wrap" }}>
                       {cols}
                     </div>
-                    {/* <button
-                      className="buttonTsenkher"
-                      style={{ float: "right" }}
-                      onClick={saveToDB}
-                    >
-                      Хадгалах
-                    </button>*/}
                     <br />
                   </div>
                   <div id="MAN">
@@ -449,13 +517,6 @@ const Survey = (props) => {
                       <div class="columns" style={{ flexWrap: "wrap" }}>
                         {colsMan}
                       </div>
-                      {/* <button
-                      className="buttonTsenkher"
-                      style={{ float: "right" }}
-                      onClick={saveToDB}
-                    >
-                      Хадгалах
-                    </button> */}
                       <br />
                     </div>
                   </div>
@@ -469,21 +530,22 @@ const Survey = (props) => {
 
                       <br />
                     </div>
+                    <button
+                      style={{
+                        float: "right",
+                        backgroundColor: "#198754",
+                        borderColor: "#198754",
+                        borderRadius: "0.25rem",
+                        padding: " 0.375rem 0.75rem",
+                        color: "white",
+                      }}
+                      onClick={() => saveToDB()}
+                    >
+                      Илгээх
+                    </button>
+                    <br />
+                    <br />
                   </div>
-                  <button
-                    style={{
-                      float: "right",
-                      backgroundColor: "#198754",
-                      borderColor: "#198754",
-                      borderRadius: "0.25rem",
-                      padding: " 0.375rem 0.75rem",
-                      color: "white",
-                    }}
-                    onClick={saveToDB}
-                  >
-                    Илгээх
-                  </button>
-                  <br />
                 </div>
               </div>
             </div>
