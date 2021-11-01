@@ -14,6 +14,7 @@ import Baiguullaga from "./pages/Baiguullaga";
 import TushaalShiidver from "./pages/TushaalShiidver";
 import Tailan from "./pages/Tailan";
 import Survey from "./pages/Survey";
+import SurveyFin from "./pages/SurveyFin";
 import SurveyNAG from "./pages/SurveyNAG";
 import HuilTogtoomj from "./pages/HuilTogtoomj";
 import AnketAtailan from "./pages/AnketAtailan";
@@ -249,7 +250,7 @@ function Login(props) {
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   if (fakeAuth.isAuthenticated === true) {
     if (userDetils?.USER_TYPE_NAME === "SURVEY")
-      return <Redirect to={state?.form || "/web/surveyNAG/"} />;
+      return <Redirect to={state?.form || "/web/surveyFin/"} />;
     else return <Redirect to={state?.form || "/web/dashboard/"} />;
   }
   return (
@@ -439,6 +440,7 @@ function App() {
         />
         <PrivateRoute path="/web/Survey" component={Survey} exact />
         <PrivateRoute path="/web/SurveyNAG" component={SurveyNAG} exact />
+        <PrivateRoute path="/web/SurveyFin" component={SurveyFin} exact />
         <Route path="/print/anket/" component={Nuur} exact />
         <PrivateRoute
           path="/web/Shalgalt/shalgalt1/"

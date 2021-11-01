@@ -89,6 +89,9 @@ const SideBar = (props) => {
     } else if (value?.menu8) {
       history.push("/web/SurveyNAG/");
       setMenuCollapse(true);
+    } else if (value?.menu9) {
+      history.push("/web/SurveyFin/");
+      setMenuCollapse(true);
     }
     // else if (value?.menu7) {
     //   history.push("/web/HuilTogtoomj/");
@@ -353,7 +356,7 @@ const SideBar = (props) => {
                     </p>
                   </div>
                 </MenuItem> */}
-                <MenuItem active={menuClick.menu8}>
+                {/* <MenuItem active={menuClick.menu8}>
                   <div
                     className="CustomMenu"
                     onClick={() => SelectMenu({ menu8: !menuClick.menu8 })}
@@ -367,6 +370,27 @@ const SideBar = (props) => {
                       className="MenuText"
                       style={{
                         color: `${menuClick.menu8 ? "#418ee6" : "white"}`,
+                      }}
+                    >
+                      {" "}
+                      Санал асуулга
+                    </p>
+                  </div>
+                </MenuItem> */}
+                <MenuItem active={menuClick.menu9}>
+                  <div
+                    className="CustomMenu"
+                    onClick={() => SelectMenu({ menu9: !menuClick.menu9 })}
+                  >
+                    <img
+                      src={menuClick.menu9 ? GroupB : Group}
+                      width="40"
+                      height="30"
+                    />
+                    <p
+                      className="MenuText"
+                      style={{
+                        color: `${menuClick.menu9 ? "#418ee6" : "white"}`,
                       }}
                     >
                       {" "}
@@ -398,7 +422,7 @@ const SideBar = (props) => {
                     </p>
                   </div>
                 </MenuItem> */}
-                <MenuItem active={menuClick.menu8}>
+                {/* <MenuItem active={menuClick.menu8}>
                   <div
                     className="CustomMenu"
                     onClick={() => SelectMenu({ menu8: !menuClick.menu8 })}
@@ -412,6 +436,27 @@ const SideBar = (props) => {
                       className="MenuText"
                       style={{
                         color: `${menuClick.menu8 ? "#418ee6" : "white"}`,
+                      }}
+                    >
+                      {" "}
+                      Санал асуулга
+                    </p>
+                  </div>
+                </MenuItem> */}
+                <MenuItem active={menuClick.menu9}>
+                  <div
+                    className="CustomMenu"
+                    onClick={() => SelectMenu({ menu9: !menuClick.menu9 })}
+                  >
+                    <img
+                      src={menuClick.menu9 ? GroupB : Group}
+                      width="40"
+                      height="30"
+                    />
+                    <p
+                      className="MenuText"
+                      style={{
+                        color: `${menuClick.menu9 ? "#418ee6" : "white"}`,
                       }}
                     >
                       {" "}
