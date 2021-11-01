@@ -377,7 +377,7 @@ const SideBar = (props) => {
                     </p>
                   </div>
                 </MenuItem> */}
-                <MenuItem active={menuClick.menu9}>
+                {/* <MenuItem active={menuClick.menu9}>
                   <div
                     className="CustomMenu"
                     onClick={() => SelectMenu({ menu9: !menuClick.menu9 })}
@@ -397,7 +397,7 @@ const SideBar = (props) => {
                       Санал асуулга
                     </p>
                   </div>
-                </MenuItem>
+                </MenuItem> */}
               </Menu>
             ) : (
               <Menu iconShape="square">
@@ -443,7 +443,7 @@ const SideBar = (props) => {
                     </p>
                   </div>
                 </MenuItem> */}
-                <MenuItem active={menuClick.menu9}>
+                {/* <MenuItem active={menuClick.menu9}>
                   <div
                     className="CustomMenu"
                     onClick={() => SelectMenu({ menu9: !menuClick.menu9 })}
@@ -463,7 +463,7 @@ const SideBar = (props) => {
                       Санал асуулга
                     </p>
                   </div>
-                </MenuItem>
+                </MenuItem> */}
               </Menu>
             )}
             <div className="closemenu" onClick={menuIconClick}>
