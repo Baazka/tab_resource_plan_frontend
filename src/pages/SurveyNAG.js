@@ -242,7 +242,7 @@ const SurveyNAG = (props) => {
                 </div>
                 <br />
                 <div>
-                  <div class="subtitle">Аудитын удирдах түвшний ажилтан</div>
+                  <div class="subtitle">Нэр дэвшигчид</div>
                   <hr />
                   <div id="HEAD">
                     <div class="columns" style={{ flexWrap: "wrap" }}>

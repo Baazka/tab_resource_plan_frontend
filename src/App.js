@@ -218,9 +218,9 @@ function Login(props) {
 
                 //     // auth.signin(() => {
                 //     // history.push("/web/dashboard/");
-                //     fakeAuth.authenticate(() => {
-                //       setLogin(true);
-                //     });
+                //     // fakeAuth.authenticate(() => {
+                //     //   setLogin(true);
+                //     // });
 
                 //     // });
                 //   })
@@ -249,7 +249,7 @@ function Login(props) {
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   if (fakeAuth.isAuthenticated === true) {
     if (userDetils?.USER_TYPE_NAME === "SURVEY")
-      return <Redirect to={state?.form || "/web/survey/"} />;
+      return <Redirect to={state?.form || "/web/surveyNAG/"} />;
     else return <Redirect to={state?.form || "/web/dashboard/"} />;
   }
   return (
