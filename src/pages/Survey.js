@@ -107,9 +107,9 @@ const Survey = (props) => {
     }
 
     console.log(ar1, ar2, ar3, "Baaz");
-    if (c1 == 0) alert("сонгоно уу.");
-    else if (c2 == 0) alert("Менежер сонгоно уу.");
-    else if (c3 == 0) alert("Ахлах аудитор сонгоно уу.");
+    if (c1 == 0) alert.show("сонгоно уу.");
+    else if (c2 == 0) alert.show("Менежер сонгоно уу.");
+    else if (c3 == 0) alert.show("Ахлах аудитор сонгоно уу.");
     else return true;
   }
   function onlyManCheckBox() {
@@ -125,7 +125,7 @@ const Survey = (props) => {
         }
         if (checkedcount > limit) {
           console.log("You can select maximum of " + limit + " checkbox.");
-          alert(limit + " -өөс дээш хүн сонгох боломжгүй.");
+          alert.show(limit + " -өөс дээш хүн сонгох боломжгүй.");
           //alert.show("өгөгдөл байхгүй байна");
           this.checked = false;
         }
@@ -145,7 +145,7 @@ const Survey = (props) => {
         }
         if (checkedcount > limit) {
           console.log("You can select maximum of " + limit + " checkbox.");
-          alert(limit + " -өөс дээш хүн сонгох боломжгүй.");
+          alert.show(limit + " -өөс дээш хүн сонгох боломжгүй.");
           //alert.show("өгөгдөл байхгүй байна");
           this.checked = false;
         }
@@ -261,10 +261,10 @@ const Survey = (props) => {
               .then(function (response) {
                 console.log("UpdateResponse", response);
                 if (response?.data?.message === "success") {
-                  alert("амжилттай хадгаллаа");
+                  alert.show("амжилттай хадгаллаа");
                   props.loading(false);
                 } else {
-                  alert("Системийн алдаа");
+                  alert.show("Системийн алдаа");
                   props.loading(false);
                 }
               })
@@ -274,7 +274,7 @@ const Survey = (props) => {
                 // props.loading(false);
               });
           } else {
-            alert("Санал илгээсэн байна.");
+            alert.show("Санал илгээсэн байна.");
             props.loading(false);
           }
         })
@@ -486,9 +486,9 @@ const Survey = (props) => {
               style={{ height: window.innerHeight - 100, overflow: "scroll" }}
             >
               <div class="card-content">
-                <p class="title" style={{ textAlign: "center" }}>
+                {/* <p class="title" style={{ textAlign: "center" }}>
                   Ёс зүйн зөвлөлийн гишүүдийг сонгох санал асуулга
-                </p>
+                </p> */}
                 <div
                   class="box"
                   style={{
@@ -498,11 +498,13 @@ const Survey = (props) => {
                     color: "#664d03",
                   }}
                 >
-                  Ёс зүйн зөвлөлийн гишүүдийг сонгох санал асуулга
+                  ЁС ЗҮЙН ЗӨВЛӨЛИЙН ГИШҮҮНИЙГ СОНГОН ШАЛГАРУУЛАХ САНАЛ АСУУЛГА
                 </div>
                 <br />
                 <div>
-                  <div class="subtitle">Аудитын удирдах түвшний ажилтан</div>
+                  <div class="subtitle">
+                    ҮНДЭСНИЙ АУДИТЫН ГАЗРЫН УДИРДАХ АЛБАН ТУШААЛТАН
+                  </div>
                   <hr />
                   <div id="HEAD">
                     <div class="columns" style={{ flexWrap: "wrap" }}>
@@ -511,7 +513,7 @@ const Survey = (props) => {
                     <br />
                   </div>
                   <div id="MAN">
-                    <div class="subtitle">Менежер</div>
+                    <div class="subtitle">ҮНДЭСНИЙ АУДИТЫН ГАЗРЫН МЕНЕЖЕР</div>
                     <hr />
                     <div>
                       <div class="columns" style={{ flexWrap: "wrap" }}>
@@ -521,7 +523,9 @@ const Survey = (props) => {
                     </div>
                   </div>
                   <div id="SEN">
-                    <div class="subtitle">Ахлах аудитор</div>
+                    <div class="subtitle">
+                      ҮНДЭСНИЙ АУДИТЫН ГАЗРЫН АХЛАХ АУДИТОР
+                    </div>
                     <hr />
                     <div>
                       <div class="columns" style={{ flexWrap: "wrap" }}>

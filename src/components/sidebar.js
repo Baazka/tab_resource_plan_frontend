@@ -41,6 +41,7 @@ const SideBar = (props) => {
     menu5: false,
     menu6: false,
     menu7: false,
+    menu8: false,
   });
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -84,6 +85,9 @@ const SideBar = (props) => {
       setMenuCollapse(true);
     } else if (value?.menu7) {
       history.push("/web/Survey/");
+      setMenuCollapse(true);
+    } else if (value?.menu8) {
+      history.push("/web/SurveyNAG/");
       setMenuCollapse(true);
     }
     // else if (value?.menu7) {
@@ -349,6 +353,27 @@ const SideBar = (props) => {
                     </p>
                   </div>
                 </MenuItem>
+                <MenuItem active={menuClick.menu8}>
+                  <div
+                    className="CustomMenu"
+                    onClick={() => SelectMenu({ menu8: !menuClick.menu8 })}
+                  >
+                    <img
+                      src={menuClick.menu8 ? GroupB : Group}
+                      width="40"
+                      height="30"
+                    />
+                    <p
+                      className="MenuText"
+                      style={{
+                        color: `${menuClick.menu8 ? "#418ee6" : "white"}`,
+                      }}
+                    >
+                      {" "}
+                      Санал асуулга
+                    </p>
+                  </div>
+                </MenuItem>
               </Menu>
             ) : (
               <Menu iconShape="square">
@@ -366,6 +391,27 @@ const SideBar = (props) => {
                       className="MenuText"
                       style={{
                         color: `${menuClick.menu7 ? "#418ee6" : "white"}`,
+                      }}
+                    >
+                      {" "}
+                      Санал асуулга
+                    </p>
+                  </div>
+                </MenuItem>
+                <MenuItem active={menuClick.menu8}>
+                  <div
+                    className="CustomMenu"
+                    onClick={() => SelectMenu({ menu8: !menuClick.menu8 })}
+                  >
+                    <img
+                      src={menuClick.menu8 ? GroupB : Group}
+                      width="40"
+                      height="30"
+                    />
+                    <p
+                      className="MenuText"
+                      style={{
+                        color: `${menuClick.menu8 ? "#418ee6" : "white"}`,
                       }}
                     >
                       {" "}

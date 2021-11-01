@@ -14,6 +14,7 @@ import Baiguullaga from "./pages/Baiguullaga";
 import TushaalShiidver from "./pages/TushaalShiidver";
 import Tailan from "./pages/Tailan";
 import Survey from "./pages/Survey";
+import SurveyNAG from "./pages/SurveyNAG";
 import HuilTogtoomj from "./pages/HuilTogtoomj";
 import AnketAtailan from "./pages/AnketAtailan";
 import { HashRouter, Redirect } from "react-router-dom";
@@ -203,6 +204,29 @@ function Login(props) {
                   "userDetails",
                   JSON.stringify(response?.data)
                 );
+                // DataRequest({
+                //   url: "http://hr.audit.mn/hr/api/v1/election/",
+                //   method: "GET",
+                //   data: {},
+                // })
+                //   .then(function (response) {
+                //     console.log("elid", response.data);
+                //     localStorage.setItem(
+                //       "elid",
+                //       JSON.stringify(response?.data.ELECTION_ID)
+                //     );
+
+                //     // auth.signin(() => {
+                //     // history.push("/web/dashboard/");
+                //     fakeAuth.authenticate(() => {
+                //       setLogin(true);
+                //     });
+
+                //     // });
+                //   })
+                //   .catch(function (error) {
+                //     //alert(error.response.data.error.message);
+                //   });
                 // auth.signin(() => {
                 // history.push("/web/dashboard/");
                 fakeAuth.authenticate(() => {
@@ -414,6 +438,7 @@ function App() {
           exact
         />
         <PrivateRoute path="/web/Survey" component={Survey} exact />
+        <PrivateRoute path="/web/SurveyNAG" component={SurveyNAG} exact />
         <Route path="/print/anket/" component={Nuur} exact />
         <PrivateRoute
           path="/web/Shalgalt/shalgalt1/"
