@@ -195,7 +195,9 @@ function Login(props) {
             DataRequest({
               url:
                 "http://hr.audit.mn/reg/api/v1/profile/" +
-                response?.data?.USER_ID,
+                response?.data?.USER_ID +
+                "/" +
+                1,
               method: "GET",
               data: {},
             })
