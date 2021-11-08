@@ -13,6 +13,9 @@ import Dashboard from "./pages/Dashboard";
 import Baiguullaga from "./pages/Baiguullaga";
 import TushaalShiidver from "./pages/TushaalShiidver";
 import Tailan from "./pages/Tailan";
+import Survey from "./pages/Survey";
+import SurveyFin from "./pages/SurveyFin";
+import SurveyNAG from "./pages/SurveyNAG";
 import HuilTogtoomj from "./pages/HuilTogtoomj";
 import AnketAtailan from "./pages/AnketAtailan";
 import { HashRouter, Redirect } from "react-router-dom";
@@ -155,7 +158,6 @@ function Login(props) {
       nevtrekh();
     }
   }
-
   function nevtrekh() {
     if (ner !== undefined && nuutsUg !== undefined) {
       axios.defaults.headers["Content-Type"] =
@@ -193,7 +195,9 @@ function Login(props) {
             DataRequest({
               url:
                 "http://hr.audit.mn/reg/api/v1/profile/" +
-                response?.data?.USER_ID,
+                response?.data?.USER_ID +
+                "/" +
+                1,
               method: "GET",
               data: {},
             })
@@ -203,6 +207,29 @@ function Login(props) {
                   "userDetails",
                   JSON.stringify(response?.data)
                 );
+                // DataRequest({
+                //   url: "http://hr.audit.mn/hr/api/v1/election/",
+                //   method: "GET",
+                //   data: {},
+                // })
+                //   .then(function (response) {
+                //     console.log("elid", response.data);
+                //     localStorage.setItem(
+                //       "elid",
+                //       JSON.stringify(response?.data.ELECTION_ID)
+                //     );
+
+                //     // auth.signin(() => {
+                //     // history.push("/web/dashboard/");
+                //     // fakeAuth.authenticate(() => {
+                //     //   setLogin(true);
+                //     // });
+
+                //     // });
+                //   })
+                //   .catch(function (error) {
+                //     //alert(error.response.data.error.message);
+                //   });
                 // auth.signin(() => {
                 // history.push("/web/dashboard/");
                 fakeAuth.authenticate(() => {
@@ -222,8 +249,12 @@ function Login(props) {
         });
     }
   }
-  if (fakeAuth.isAuthenticated === true)
-    return <Redirect to={state?.form || "/web/dashboard/"} />;
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
+  if (fakeAuth.isAuthenticated === true) {
+    if (userDetils?.USER_TYPE_NAME === "SURVEY")
+      return <Redirect to={state?.form || "/web/surveyFin/"} />;
+    else return <Redirect to={state?.form || "/web/dashboard/"} />;
+  }
   return (
     <div
       style={{
@@ -409,6 +440,9 @@ function App() {
           component={AnketAtailan}
           exact
         />
+        <PrivateRoute path="/web/Survey" component={Survey} exact />
+        <PrivateRoute path="/web/SurveyNAG" component={SurveyNAG} exact />
+        <PrivateRoute path="/web/SurveyFin" component={SurveyFin} exact />
         <Route path="/print/anket/" component={Nuur} exact />
         <PrivateRoute
           path="/web/Shalgalt/shalgalt1/"

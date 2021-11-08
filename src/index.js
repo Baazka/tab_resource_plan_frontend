@@ -13,7 +13,7 @@ const options = {
   position: positions.TOP_CENTER,
   timeout: 2000,
   offset: "30px",
-  containerStyle: { color: "#233772" },
+  containerStyle: { color: "#233772", zIndex: 100 },
 
   // you can also just use 'scale'
   transition: transitions.SCALE,
