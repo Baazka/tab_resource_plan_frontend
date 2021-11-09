@@ -12,11 +12,13 @@ function Bolowsrol1(props) {
   function butsakh() {
     history.goBack();
   }
-  const [data, loadData] = useState();
+  const [data, loadData] = useState([]);
+  const [grouplist, setGroupList] = useState([]);
   const [department, setDepartment] = useState({
     DEPARTMENT_ID: 1,
     check: true,
   });
+  let too = 0;
   const alert = useAlert();
 
   useEffect(() => {
@@ -24,13 +26,26 @@ function Bolowsrol1(props) {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/reportEmpEducation"
       );
-      console.log("listItems", listItems.data.person);
-      loadData(listItems?.data);
+      let temp = "";
+      let arr = [];
+      listItems?.data.map((value, index) => {
+        let tempV = value;
+        if (temp !== value.PERSON_FNAME) {
+          tempV.isGroup = true;
+          arr.push(tempV);
+          temp = value.PERSON_FNAME;
+        } else {
+          tempV.isGroup = false;
+          arr.push(tempV);
+        }
+      });
+      loadData(arr);
     }
     fetchdata();
   }, [props]);
   let listItems;
-  if (data !== undefined && data?.length !== 0 && data !== null) {
+
+  if (data.length > 0) {
     listItems = (
       <div>
         <Header title="Судалгаа" back={true} butsakh={butsakh}></Header>
@@ -98,7 +113,7 @@ function Bolowsrol1(props) {
               <thead>
                 <tr>
                   <th>№</th>
-                  <th>Овог Нэр</th>
+                  <th>Овог нэр</th>
                   <th>Албан тушаал</th>
                   <th></th>
                   <th>Зэрэг</th>
@@ -107,11 +122,25 @@ function Bolowsrol1(props) {
                   <th>Сургууль</th>
                 </tr>
               </thead>
-              <tbody>
-                {data?.map((value, index) => (
+              {data.map((value, index) =>
+                value.isGroup === true ? (
                   <tr>
-                    <td>{index + 1}</td>
-                    <td>{value.PERSON_FNAME}</td>
+                    <td
+                      style={{
+                        borderTop: "1.1px solid #f1f1f1",
+                        borderBottom: "1px solid transparent",
+                      }}
+                    >
+                      {value.isGroup === true ? (too = too + 1) : too}
+                    </td>
+                    <td
+                      style={{
+                        borderTop: "1.1px solid #f1f1f1",
+                        borderBottom: "1px solid transparent",
+                      }}
+                    >
+                      {value.PERSON_FNAME}
+                    </td>
                     <td>{value.POSITION_NAME}</td>
                     <td>{value.PE_NO}</td>
                     <td>{value.EDUCATION_TYPE_SHORT_NAME}</td>
@@ -119,8 +148,19 @@ function Bolowsrol1(props) {
                     <td>{value.PE_DATE}</td>
                     <td>{value.SCHOOL_NAME}</td>
                   </tr>
-                ))}
-              </tbody>
+                ) : (
+                  <tr>
+                    <td style={{ borderBottom: "1px solid transparent" }}></td>
+                    <td style={{ borderBottom: "1px solid transparent" }}></td>
+                    <td>{value.POSITION_NAME}</td>
+                    <td>{value.PE_NO}</td>
+                    <td>{value.EDUCATION_TYPE_SHORT_NAME}</td>
+                    <td>{value.PROFESSION_NAME}</td>
+                    <td>{value.PE_DATE}</td>
+                    <td>{value.SCHOOL_NAME}</td>
+                  </tr>
+                )
+              )}
             </table>
           </div>
         </div>

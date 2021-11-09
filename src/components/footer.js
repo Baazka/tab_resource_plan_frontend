@@ -6,7 +6,7 @@ const Header = (props) => {
       style={{
         position: "absolute",
         bottom: "0px",
-        width: "100px",
+        width: "100vw",
         minHeight: "60px",
         backgroundColor: "#f1f1f1",
         borderTopLeftRadius: "8% 55%",

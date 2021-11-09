@@ -12,41 +12,40 @@ function Shalgalt1(props) {
   function butsakh() {
     history.goBack();
   }
-  const [data, loadData] = useState();
+  const [data, loadData] = useState([]);
+  const [grouplist, setGroupList] = useState([]);
   const [department, setDepartment] = useState({
     DEPARTMENT_ID: 1,
     check: true,
   });
+  let too = 0;
   const alert = useAlert();
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchdata() {
       let listItems = await axios(
         "http://hr.audit.mn/hr/api/v1/reportEmpAward"
       );
-      if (listItems.data !== undefined && listItems.data.length === 0)
-        alert.show("өгөгдөл байхгүй байна");
-      else loadData(listItems?.data);
+      let temp = "";
+      let arr = [];
+      listItems?.data.map((value, index) => {
+        let tempV = value;
+        if (temp !== value.PERSON_FNAME) {
+          tempV.isGroup = true;
+          arr.push(tempV);
+          temp = value.PERSON_FNAME;
+        } else {
+          tempV.isGroup = false;
+          arr.push(tempV);
+        }
+      });
+      loadData(arr);
     }
-    fetchData();
+    fetchdata();
   }, [props]);
-  useEffect(() => {
-    async function fetchData() {
-      if (department.check !== true) {
-        let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportEmpAward" +
-            department.DEPARTMENT_ID
-        );
-        if (listItems.data !== undefined && listItems.data.length === 0)
-          alert.show("өгөгдөл байхгүй байна");
-        else loadData(listItems?.data);
-      }
-    }
-    fetchData();
-  }, [department]);
-
   let listItems;
-  if (data !== undefined && data?.length !== 0 && data !== null) {
+
+  if (data.length > 0) {
     listItems = (
       <div>
         <Header title="Судалгаа" back={true} butsakh={butsakh}></Header>
@@ -74,11 +73,11 @@ function Shalgalt1(props) {
                     marginBottom: "8rem",
                   }}
                 >
-                  Албан хаагчдын шалгалтын судалгаа
+                  Албан хаагчдын шагналын судалгаа
                 </span>
               </div>
               <div className="column is-8 "></div>
-              <div className="column is-1 ">
+              <div className="column is-1 ml-6">
                 <div style={{ display: "none" }}>
                   <ReactHTMLTableToExcel
                     id="shalgalt1XLS"
@@ -114,25 +113,48 @@ function Shalgalt1(props) {
               <thead>
                 <tr>
                   <th>№</th>
-                  <th>Овог Нэр</th>
+                  <th>Овог нэр</th>
                   <th>Албан тушаал</th>
                   <th></th>
                   <th>Шагнал авсан огноо</th>
                   <th>Шагналын нэр</th>
                 </tr>
               </thead>
-              <tbody>
-                {data?.map((value, index) => (
+              {data.map((value, index) =>
+                value.isGroup === true ? (
                   <tr>
-                    <td>{index + 1}</td>
-                    <td>{value.PERSON_FNAME}</td>
+                    <td
+                      style={{
+                        borderTop: "1.1px solid #f1f1f1",
+                        borderBottom: "1px solid transparent",
+                      }}
+                    >
+                      {value.isGroup === true ? (too = too + 1) : too}
+                    </td>
+                    <td
+                      style={{
+                        borderTop: "1.1px solid #f1f1f1",
+                        borderBottom: "1px solid transparent",
+                      }}
+                    >
+                      {value.PERSON_FNAME}
+                    </td>
                     <td>{value.POSITION_NAME}</td>
                     <td>{value.AW_NO}</td>
                     <td>{value.AW_DATE}</td>
                     <td>{value.AWARD_NAME}</td>
                   </tr>
-                ))}
-              </tbody>
+                ) : (
+                  <tr>
+                    <td style={{ borderBottom: "1px solid transparent" }}></td>
+                    <td style={{ borderBottom: "1px solid transparent" }}></td>
+                    <td>{value.POSITION_NAME}</td>
+                    <td>{value.AW_NO}</td>
+                    <td>{value.AW_DATE}</td>
+                    <td>{value.AWARD_NAME}</td>
+                  </tr>
+                )
+              )}
             </table>
           </div>
         </div>
@@ -156,7 +178,12 @@ function Shalgalt1(props) {
               </thead>
               <tbody>
                 <tr>
-                  <td colSpan="6"></td>
+                  <td rowSpan="3"></td>
+                  <td rowSpan="3"></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
                 </tr>
               </tbody>
             </table>
