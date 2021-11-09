@@ -36,7 +36,7 @@ const Dashboard = (props) => {
         }}
       >
         <Iframe
-          url="https://app.powerbi.com/view?r=eyJrIjoiZmM2MWZiOTMtNGM4Yy00ZWY4LWE5ZTktOTg3MzkwMjIyYWNkIiwidCI6ImI0MDYwNDEyLTEwM2MtNDBlNy05YzExLTBhNjBkY2NhZjVhZCIsImMiOjEwfQ%3D%3D&pageName=ReportSection425ff36892d46d3b9405"
+          url="https://app.powerbi.com/view?r=eyJrIjoiNWExZjEwMTItMTUwZS00MjRhLTlkYWItOTI2ZjNiYTRiYzkwIiwidCI6ImI0MDYwNDEyLTEwM2MtNDBlNy05YzExLTBhNjBkY2NhZjVhZCIsImMiOjEwfQ%3D%3D"
           width="93%"
           height={window.innerHeight - 100}
           id="myId"
