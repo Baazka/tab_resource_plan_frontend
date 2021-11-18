@@ -303,13 +303,13 @@ function Turshlgin(props) {
                       Ажилласан байгууллагын нэр
                     </span>
                   </td>
-                  <td>
+                  <td width={200}>
                     <span className="textSaaral">Газар хэлтэс, алба</span>
                   </td>
-                  <td>
+                  <td width={200}>
                     <span className="textSaaral">Эрхэлсэн албан тушаал</span>
                   </td>
-                  <td>
+                  <td width={200}>
                     <span className="textSaaral">Албан тушаалын төрөл</span>
                   </td>
                   <td>
@@ -376,11 +376,11 @@ function Turshlgin(props) {
                       />
                     </td> */}
                     <td>
-                      <input
+                      <textarea
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="Borderless"
-                        style={{ width: "100px" }}
+                        style={{ width: "100%" }}
                         value={data.Experience[index]?.EXPERIENCE_ORG}
                         onChange={(text) => {
                           let value = [...data?.Experience];
@@ -395,11 +395,11 @@ function Turshlgin(props) {
                       />
                     </td>
                     <td>
-                      <input
+                      <textarea
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="Borderless"
-                        style={{ width: "100px" }}
+                        style={{ width: "100%" }}
                         value={data.Experience[index]?.EXPERIENCE_DEPARTMENT}
                         onChange={(text) => {
                           let value = [...data?.Experience];
@@ -415,11 +415,11 @@ function Turshlgin(props) {
                       />
                     </td>
                     <td>
-                      <input
+                      <textarea
                         placeholder="утгаа оруулна уу"
                         disabled={edit}
                         className="Borderless"
-                        style={{ width: "100px" }}
+                        style={{ width: "100%" }}
                         value={data.Experience[index]?.EXPERIENCE_POSITION}
                         onChange={(text) => {
                           let value = [...data?.Experience];

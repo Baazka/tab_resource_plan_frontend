@@ -476,7 +476,7 @@ function Bolowsrol(props) {
                         />
                       </td>
                       <td>
-                        <input
+                        <textarea
                           style={{ width: "110px" }}
                           disabled={edit}
                           className="Borderless"
@@ -495,7 +495,7 @@ function Bolowsrol(props) {
                         />
                       </td>
                       <td>
-                        <input
+                        <textarea
                           style={{ width: "110px" }}
                           disabled={edit}
                           className="Borderless"
@@ -565,7 +565,7 @@ function Bolowsrol(props) {
                         />
                       </td>
                       <td>
-                        <input
+                        <textarea
                           style={{ width: "100px" }}
                           disabled={edit}
                           className="Borderless"
@@ -603,7 +603,7 @@ function Bolowsrol(props) {
                         />
                       </td>
                       <td>
-                        <input
+                        <textarea
                           style={{ width: "100px" }}
                           disabled={edit}
                           className="Borderless"
@@ -622,7 +622,7 @@ function Bolowsrol(props) {
                         />
                       </td>
                       <td>
-                        <input
+                        <textarea
                           style={{ width: "80px" }}
                           disabled={edit}
                           className="Borderless"
@@ -786,8 +786,8 @@ function Bolowsrol(props) {
                         />
                       </td>
                       <td>
-                        <input
-                          style={{ width: "100px" }}
+                        <textarea
+                          style={{ width: "100%" }}
                           disabled={edit}
                           className="Borderless"
                           placeholder="утгаа оруулна уу"
@@ -885,8 +885,8 @@ function Bolowsrol(props) {
                         />
                       </td> */}
                       <td>
-                        <input
-                          style={{ width: "80px" }}
+                        <textarea
+                          style={{ width: "100%" }}
                           disabled={edit}
                           className="Borderless"
                           placeholder="утгаа оруулна уу"
@@ -923,8 +923,8 @@ function Bolowsrol(props) {
                         />
                       </td> */}
                       <td>
-                        <input
-                          style={{ width: "90px" }}
+                        <textarea
+                          style={{ width: "100%" }}
                           disabled={edit}
                           className="Borderless"
                           placeholder="утгаа оруулна уу"

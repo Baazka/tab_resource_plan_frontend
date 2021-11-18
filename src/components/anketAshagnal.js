@@ -376,10 +376,11 @@ function Shagnaliin(props) {
                       />
                     </td>
                     <td>
-                      <input
+                      <textarea
                         disabled={edit}
                         placeholder="утгаа оруулна уу"
                         className="Borderless"
+                        style={{ width: "100%" }}
                         value={data.Award[index]?.AWARD_NAME}
                         onChange={(text) => {
                           let value = [...data?.Award];
@@ -394,8 +395,9 @@ function Shagnaliin(props) {
                       />
                     </td>
                     <td>
-                      <input
+                      <textarea
                         disabled={edit}
+                        style={{ width: "100%" }}
                         placeholder="утгаа оруулна уу"
                         className="Borderless"
                         value={data.Award[index]?.DECISION_NO}
@@ -434,10 +436,11 @@ function Shagnaliin(props) {
                       />
                     </td>
                     <td>
-                      <input
+                      <textarea
                         disabled={edit}
                         placeholder="утгаа оруулна уу"
                         className="Borderless"
+                        style={{ width: "100%" }}
                         value={data.Award[index]?.AWARD_DESC}
                         onChange={(text) => {
                           let value = [...data?.Award];
