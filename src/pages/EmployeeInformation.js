@@ -52,7 +52,6 @@ function EmployeeInformation(props) {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const [POSITION_ID, setPOSITION_ID] = useState();
- 
 
   return (
     <div
@@ -78,9 +77,7 @@ function EmployeeInformation(props) {
             textAlign: "left",
             pointerEvents: "initial",
           }}
-        >
-         
-        </div>
+        ></div>
 
         <div className="AnketList" style={{ marginTop: "3rem" }}>
           <img
@@ -126,10 +123,9 @@ function EmployeeInformation(props) {
             }}
             onClick={() => setMenu(2)}
           >
-            Албан тушаалын  <br /> тодорхойлолт
+            Албан тушаалын <br /> тодорхойлолт
           </button>
         </div>
-
 
         <div className="AnketList">
           <img
@@ -151,7 +147,8 @@ function EmployeeInformation(props) {
             }}
             onClick={() => setMenu(3)}
           >
-            Гүйцэтгэлийн<br />  төлөвлөгөө
+            Гүйцэтгэлийн
+            <br /> төлөвлөгөө
           </button>
         </div>
 
@@ -175,10 +172,10 @@ function EmployeeInformation(props) {
             }}
             onClick={() => setMenu(4)}
           >
-            Үндсэн хөрөнгө <br />эзэмшигчийн карт
+            Үндсэн хөрөнгө <br />
+            эзэмшигчийн карт
           </button>
         </div>
-
 
         <div className="AnketList">
           <img
@@ -272,7 +269,7 @@ function EmployeeInformation(props) {
             }}
             onClick={() => setMenu(8)}
           >
-            Албан томилолтын  <br /> хуудас
+            Албан томилолтын <br /> хуудас
           </button>
         </div>
 
@@ -296,7 +293,8 @@ function EmployeeInformation(props) {
             }}
             onClick={() => setMenu(9)}
           >
-            Ажлын тайлан, үүрэг<br />  даалгавар 
+            Ажлын тайлан, үүрэг
+            <br /> даалгавар
           </button>
         </div>
         <div className="AnketList">
@@ -308,7 +306,7 @@ function EmployeeInformation(props) {
           <button
             className="button"
             style={{
-              color: `${menu === 10? "#418ee6" : "#5d5d5d"}`,
+              color: `${menu === 10 ? "#418ee6" : "#5d5d5d"}`,
               border: "none",
               width: "17rem",
               fontFamily: "RalewayRegular",
@@ -404,7 +402,7 @@ function EmployeeInformation(props) {
                 POSITION_ID={POSITION_ID}
               />
             ) : null}
-          </div> 
+          </div>
         </div>
       </div>
     </div>
@@ -470,8 +468,6 @@ function YurunkhiiMedeelel(props) {
     fetchData();
   }, [props]);
 
- 
-
   function requiredField() {
     if (data.POSITION_NAME === null || data.POSITION_NAME === "") {
       alert.show("Албан тушаалын нэр оруулан уу");
@@ -496,7 +492,9 @@ function YurunkhiiMedeelel(props) {
         >
           <div className="columns">
             <div className="column is-11">
-              <span style={{ fontWeight: "bold" }}>Албан хаагчийн үндсэн мэдээлэл</span>
+              <span style={{ fontWeight: "bold" }}>
+                Албан хаагчийн үндсэн мэдээлэл
+              </span>
             </div>
             {/* <div className="column is-1">
               <button
@@ -645,9 +643,7 @@ function YurunkhiiMedeelel(props) {
 
             {!edit ? (
               <div className="column is-1 ">
-                <button className="buttonTsenkher" >
-                  Хадгалах
-                </button>
+                <button className="buttonTsenkher">Хадгалах</button>
               </div>
             ) : null}
           </div>
@@ -699,7 +695,6 @@ function TavigdahTusgai(props) {
     }
   }, [data]);
 
- 
   function requiredField() {
     if (
       data.REQUIREMENT_EDUCATION === null ||
@@ -727,7 +722,9 @@ function TavigdahTusgai(props) {
         >
           <div className="columns">
             <div className="column is-11">
-              <span style={{ fontWeight: "bold" }}>Албан тушаалын тодорхойлолт</span>
+              <span style={{ fontWeight: "bold" }}>
+                Албан тушаалын тодорхойлолт
+              </span>
             </div>
             {/* <div className="column is-1">
               <button
@@ -853,14 +850,11 @@ function TavigdahTusgai(props) {
             >
               Хэвлэх
             </button> */}
-                <button className="buttonTsenkher" >
-                  Хадгалах
-                </button>
+                <button className="buttonTsenkher">Хадгалах</button>
               </div>
             ) : null}
           </div>
         </div>
-      
       </div>
     );
   } else {
@@ -872,7 +866,6 @@ function TavigdahTusgai(props) {
 function GuitsetgeliinTuluvluguu(props) {
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
-  console.log("POSITION_ID", props?.POSITION_ID);
   const alert = useAlert();
   const [NuutsiinBvrtgel, setNuutsiinBvrtgel] = useState({
     tsonkh: false,
@@ -881,50 +874,15 @@ function GuitsetgeliinTuluvluguu(props) {
 
   useEffect(() => {
     async function fetchData() {
-      console.log("POSITION_ID", props?.POSITION_ID);
-      if (props?.POSITION_ID !== "undefined" && props?.POSITION_ID != null) {
-        let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/requirement/" + props?.POSITION_ID
-        );
-        console.log(listItems?.data, "requirement");
-        loadData(listItems?.data);
-      }
+      let listItems = await axios(
+        "http://localhost:3002/api/v1/contrgctor_plan"
+      );
+      console.log(listItems?.data, "getData");
+      loadData(listItems?.data);
     }
     fetchData();
   }, [props]);
 
-  useEffect(() => {
-    if (data?.REQUIREMENT_ID === undefined) {
-      console.log(data?.REQUIREMENT_ID, "orsooon");
-      loadData({
-        REQUIREMENT_ID: 0,
-        EDUCATION_TYPE_ID: 1,
-        PROFESSION_ID: 1,
-        REQUIREMENT_QUALIFICATION: "",
-        REQUIREMENT_EXPERIENCE: "",
-        REQUIREMENT_SKILL: "",
-        POSITION_ID: props?.POSITION_ID,
-        IS_ACTIVE: 1,
-        CREATED_BY: userDetils?.USER_ID,
-        CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-        PERSON_ID: 0,
-      });
-    }
-  }, [data]);
-
- 
-
-  function requiredField() {
-    if (
-      data.REQUIREMENT_EDUCATION === null ||
-      data.REQUIREMENT_EDUCATION === ""
-    ) {
-      alert.show("Боловсрол оруулан уу");
-      return false;
-    } else {
-      return true;
-    }
-  }
   let listItems;
   if (data !== undefined && data !== null) {
     listItems = (
@@ -939,75 +897,101 @@ function GuitsetgeliinTuluvluguu(props) {
             paddingBottom: "2.5rem",
           }}
         >
-          
           <div className="columns">
             <div className="column is-11">
-              <span style={{ fontWeight: "bold" }}>Гүйцэтгэлийн төлөвлөгөө</span>
+              <span style={{ fontWeight: "bold" }}>
+                Гүйцэтгэлийн төлөвлөгөө
+              </span>
             </div>
-             <div className="column is-1">
+            <div className="column is-1">
               <button
                 className="buttonTsenkher"
-                 onClick={() => setNuutsiinBvrtgel({ tsonkh: true, type: 1 })}
+                onClick={() => setNuutsiinBvrtgel({ tsonkh: true, type: 1 })}
               >
                 Нэмэх
               </button>
             </div>
             {NuutsiinBvrtgel?.tsonkh ? (
-          <div>
-            <TuluvluguUNemeh
-              setNuutsiinBvrtgel={setNuutsiinBvrtgel}
-              type={NuutsiinBvrtgel.type}
-            />
-          </div>
-        ) : null}
+              <div>
+                <TuluvluguUNemeh
+                  setNuutsiinBvrtgel={setNuutsiinBvrtgel}
+                  type={NuutsiinBvrtgel.type}
+                />
+              </div>
+            ) : null}
             <div className="column is-1"></div>
           </div>
-        
 
           <table className="table is-bordered is-flex-wrap-wrap">
-              <tbody>
+            <thead>
+              <tr>
+                <td>
+                  <span className="textSaaral text-bold">№</span>
+                </td>
+                <td>
+                  <span style={{ color: "red" }}>*</span>
+                  <span className="textSaaral text-bold">Менежер</span>
+                </td>
+                <td>
+                  <span className="textSaaral text-bold">Батлагч</span>
+                </td>
+                <td>
+                  <span className="textSaaral text-bold">Харах</span>
+                </td>
+                <td>
+                  <span className="textSaaral text-bold">Гүйцэтгэгч</span>
+                </td>
+                <td>
+                  <span className="textSaaral text-bold">Төрөл</span>
+                </td>
+                <td>
+                  <span className="textSaaral text-bold">Эхлэх огноо</span>
+                </td>
+                <td>
+                  <span className="textSaaral text-bold">Дуусах огноо</span>
+                </td>
+              </tr>
+            </thead>
+            <tbody>
+              {data?.map((value, index) => (
                 <tr>
-                  <td >
-                    <span className="textSaaral text-bold">№</span>
+                  <td>
+                    <span className="textSaaral text-bold">{index + 1}</span>
                   </td>
-                  <td >
-                    <span style={{ color: "red" }}>*</span>
+                  <td>
                     <span className="textSaaral text-bold">Менежер</span>
                   </td>
-                  <td >
-                    <span className="textSaaral text-bold">
-                      Батлагч
-                    </span>
+                  <td>
+                    <span className="textSaaral text-bold">Батлагч</span>
                   </td>
-                  <td >
+                  <td>
                     <span className="textSaaral text-bold">Харах</span>
                   </td>
-                  <td >
+                  <td>
                     <span className="textSaaral text-bold">Гүйцэтгэгч</span>
                   </td>
-                  <td >
+                  <td>
                     <span className="textSaaral text-bold">Төрөл</span>
                   </td>
-                  <td >
-                    <span className="textSaaral text-bold">Эхлэх огноо</span>
+                  <td>
+                    <span className="textSaaral text-bold">
+                      {dateFormat(value.START_DATE, "yyyy-mm-dd")}
+                    </span>
                   </td>
-                  <td >
-                    <span className="textSaaral text-bold">Дуусах огноо</span>
+                  <td>
+                    <span className="textSaaral text-bold">
+                      {dateFormat(value.END_DATE, "yyyy-mm-dd")}
+                    </span>
                   </td>
-                 
                 </tr>
+              ))}
+            </tbody>
+          </table>
 
-               
-              </tbody>
-            </table>
-          
-         <div className="columns">
+          <div className="columns">
             <div className="column is-11"></div>
-
-          
           </div>
         </div>
-      
       </div>
     );
   } else {
@@ -1023,6 +1007,7 @@ function TuluvluguUNemeh(props) {
   const [search, setSearch] = useState("");
   const [tsonkhnuud, setTsonkhnuud] = useState(1);
   const [worker, setWorker] = useState();
+  const alert = useAlert();
   const [data, loadData] = useState({
     ID: 0,
     MANAGER_ID: 0,
@@ -1030,148 +1015,144 @@ function TuluvluguUNemeh(props) {
     TYPE: 0,
     IS_ACTIVE: 1,
     CREATED_BY: 1,
-    CREATED_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+    CREATED_DATE: dateFormat(new Date(), "dd-mmm-yyyy"),
     UPDATE_BY: 1,
-    UPDATE_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+    UPDATE_DATE: dateFormat(new Date(), "dd-mmm-yyyy"),
     INSPECTOR_ID: 0,
     APPROVE_ID: 0,
-    START_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
-    END_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+    START_DATE: dateFormat(new Date(), "dd-mmm-yyyy"),
+    END_DATE: dateFormat(new Date(), "dd-mmm-yyyy"),
   });
 
-
-  
-
   function saveToDB() {
-    console.log("depid",data);
-    // DataRequest({
-    //   url: "http://hr.audit.mn/hr/api/v1/decision",
-    //   method: "POST",
-    //   data: data,
-    // })
-    //   .then(function (response) {
-    //     console.log("tushaalResponse", response);
-    //     if (response?.data?.message === "success") {
-    //       alert.show("амжилттай хадгаллаа");
-         
-    //     } else {
-    //       alert.show("амжилтгүй алдаа");
-    //     }
-    //     //history.push('/sample')
-    //   })
-    //   .catch(function (error) {
-    //     //alert(error.response.data.error.message);
-    //     console.log(error.response);
-    //     alert.show("амжилтгүй алдаа");
-    //   });
+    console.log("depid", data);
+    DataRequest({
+      url: "http://localhost:3002/api/v1/contrgctor_plan",
+      method: "POST",
+      data: data,
+    })
+      .then(function (response) {
+        console.log("tushaalResponse", response);
+        if (response?.data?.message === "success") {
+          alert.show("амжилттай хадгаллаа");
+        } else {
+          alert.show("амжилтгүй алдаа гарсан");
+        }
+        //history.push('/sample')
+      })
+      .catch(function (error) {
+        //alert(error.response.data.error.message);
+        console.log(error.response);
+        alert.show("амжилтгүй алдаа");
+      });
   }
 
-
-return (
+  return (
+    <div
+      style={{
+        position: "absolute",
+        width: "40%",
+        height: "auto",
+        left: "15%",
+        top: "20%",
+        borderRadius: "6px",
+        backgroundColor: "white",
+        boxShadow:
+          "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+        zIndex: "1",
+      }}
+    >
       <div
         style={{
-          position: "absolute",
-          width: "40%",
           height: "auto",
-          left: "15%",
-          top: "20%",
-          borderRadius: "6px",
-          backgroundColor: "white",
-          boxShadow:
-            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-          zIndex: "1",
+          backgroundColor: "#418ee6",
+          padding: "18px 10px 18px 10px",
+          color: "white",
+          marginBottom: "10px",
+          borderTopLeftRadius: "6px",
+          borderTopRightRadius: "6px",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
         }}
       >
-        <div
-          style={{
-            height: "auto",
-            backgroundColor: "#418ee6",
-            padding: "18px 10px 18px 10px",
-            color: "white",
-            marginBottom: "10px",
-            borderTopLeftRadius: "6px",
-            borderTopRightRadius: "6px",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <div>
-            <span>Гүйцэтгэлийн төлөвлөгөө нэмэх</span>
-          </div>
-          <div>
-            <span
-              style={{
-                fontWeight: "bold",
-                cursor: " -webkit-grab",
-                cursor: "grab",
-              }}
-              onClick={() => props.setNuutsiinBvrtgel(false)}
-            >
-              X
-            </span>
-          </div>
+        <div>
+          <span>Гүйцэтгэлийн төлөвлөгөө нэмэх</span>
         </div>
-        <div style={{ padding: "15px 15px 35px 15px" }}>
-            <div>
-              <div
-                class="control has-icons-left has-icons-right"
-                style={{ marginLeft: "10px" }}
-              >
-                
-          <div className="columns">
-            <div className="column is-5  has-text-right"><span style={{color:"red"}}>* </span>Менежер</div>
-            <div className="column is-3">
-            <DepartmentID personChild={data} setPersonChild={loadData} />
+        <div>
+          <span
+            style={{
+              fontWeight: "bold",
+              cursor: " -webkit-grab",
+              cursor: "grab",
+            }}
+            onClick={() => props.setNuutsiinBvrtgel(false)}
+          >
+            X
+          </span>
+        </div>
+      </div>
+      <div style={{ padding: "15px 15px 35px 15px" }}>
+        <div>
+          <div
+            class="control has-icons-left has-icons-right"
+            style={{ marginLeft: "10px" }}
+          >
+            <div className="columns">
+              <div className="column is-5  has-text-right">
+                <span style={{ color: "red" }}>* </span>Менежер
+              </div>
+              <div className="column is-3">
+                <DepartmentID personChild={data} setPersonChild={loadData} />
+              </div>
             </div>
-          </div>
-          <div className="columns">
-            <div className="column is-5  has-text-right">Батлагч</div>
-            <div className="column is-3">
-              <Profession
-                personChild={data}
-                setPersonChild={loadData}
-                // edit={edit}
-              />
+            <div className="columns">
+              <div className="column is-5  has-text-right">Батлагч</div>
+              <div className="column is-3">
+                <Profession
+                  personChild={data}
+                  setPersonChild={loadData}
+                  // edit={edit}
+                />
+              </div>
             </div>
-          </div>
-          <div className="columns">
-            <div className="column is-5  has-text-right">Харах</div>
-            <div className="column is-3">
-              <Profession
-                 personChild={data}
-                 setPersonChild={loadData}
-                // edit={edit}
-              />
+            <div className="columns">
+              <div className="column is-5  has-text-right">Харах</div>
+              <div className="column is-3">
+                <Profession
+                  personChild={data}
+                  setPersonChild={loadData}
+                  // edit={edit}
+                />
+              </div>
             </div>
-          </div>
-          <div className="columns">
-            <div className="column is-5  has-text-right">Гүйцэтгэгч</div>
-            <div className="column is-3">
-              <Profession
-                 personChild={data}
-                 setPersonChild={loadData}
-                // edit={edit}
-              />
+            <div className="columns">
+              <div className="column is-5  has-text-right">Гүйцэтгэгч</div>
+              <div className="column is-3">
+                <Profession
+                  personChild={data}
+                  setPersonChild={loadData}
+                  // edit={edit}
+                />
+              </div>
             </div>
-          </div>
-          <div className="columns">
-            <div className="column is-5  has-text-right">Төрөл</div>
-            <div className="column is-3">
-              <Profession
-                 personChild={data}
-                 setPersonChild={loadData}
-                // edit={edit}
-              />
+            <div className="columns">
+              <div className="column is-5  has-text-right">Төрөл</div>
+              <div className="column is-3">
+                <Profession
+                  personChild={data}
+                  setPersonChild={loadData}
+                  // edit={edit}
+                />
+              </div>
             </div>
-          </div>
-          
-          <div className="columns">
-            <div className="column is-5  has-text-right">Эхлэх огноо</div>
-            <div className="column is-3">
-            <input
+
+            <div className="columns">
+              <div className="column is-5  has-text-right">Эхлэх огноо</div>
+              <div className="column is-3">
+                <input
                   type="date"
-                 disabled={props.edit}
+                  //disabled={props.edit}
                   className="anketInput"
                   value={dateFormat(data?.START_DATE, "yyyy-mm-dd")}
                   onChange={(e) => {
@@ -1183,16 +1164,15 @@ return (
                     });
                   }}
                 ></input>
-         
+              </div>
             </div>
-          </div>
-          
-          <div className="columns">
-            <div className="column is-5  has-text-right">Дуусах огноо</div>
-            <div className="column is-3">
-            <input
+
+            <div className="columns">
+              <div className="column is-5  has-text-right">Дуусах огноо</div>
+              <div className="column is-3">
+                <input
                   type="date"
-                 disabled={props.edit}
+                  //disabled={props.edit}
                   className="anketInput"
                   value={dateFormat(data?.END_DATE, "yyyy-mm-dd")}
                   onChange={(e) => {
@@ -1204,32 +1184,27 @@ return (
                     });
                   }}
                 ></input>
-       
-         
-            </div>
-          </div>
-          
-         
-          <div className="columns">
-            <div className="column is-9"></div>
-
-            <div className="column is-3">
-                
-                <button  className="buttonTsenkher"  onClick={() => {
-                  saveToDB();
-                }}>
-                  Хадгалах
-                </button>
-                </div>
-          </div>
               </div>
             </div>
-            
+
+            <div className="columns">
+              <div className="column is-9"></div>
+
+              <div className="column is-3">
+                <button
+                  className="buttonTsenkher"
+                  onClick={() => {
+                    saveToDB();
+                  }}
+                >
+                  Хадгалах
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-        
       </div>
-  
-);
-  
+    </div>
+  );
 }
 export default EmployeeInformation;
