@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useRef, useReducer } from "react";
-import Header from "../components/header";
 import Footer from "../components/footer";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Search, Filter, AddBlue, Excel, Print } from "../assets/images/zurag";
+import { Search, AddBlue, Excel, Print } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
@@ -11,6 +10,7 @@ import dateFormat from "dateformat";
 import { css } from "@emotion/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import AnketAPrint from "./AnketAPrint";
+import { DepartmentID } from "../components/library";
 
 import { useReactToPrint } from "react-to-print";
 
@@ -18,11 +18,7 @@ const axios = require("axios");
 
 class ComponentToPrint extends React.PureComponent {
   render() {
-    return (
-      <div>
-        <AnketAPrint print={this.props.print} />
-      </div>
-    );
+    return <AnketAPrint print={this.props.print} render={this.test} />;
   }
 }
 createTheme("solarized", {
@@ -95,6 +91,9 @@ function Home(props) {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
+  const [departmentID, setDepartmentID] = useState({
+    DEPARTMENT_ID: 0,
+  });
   const override = css`
     display: block;
     margin: 0 auto;
@@ -107,33 +106,45 @@ function Home(props) {
   async function unActive() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url:
-        "http://hr.audit.mn/hr/api/v1/employees/0/" +
-        userDetils?.USER_DEPARTMENT_ID +
-        "/" +
-        userDetils?.USER_TYPE_NAME.toUpperCase(),
-      method: "GET",
-      data: {},
+      url: "http://hr.audit.mn/hr/api/v1/employees",
+      // /0/" +
+      // userDetils?.USER_DEPARTMENT_ID +
+      // "/" +
+      // userDetils?.USER_TYPE_NAME.toUpperCase(),
+      method: "POST",
+      data: {
+        IS_ACTIVE: 0,
+        USER_DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
+        USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
+        SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
+      },
     });
     setJagsaalt(jagsaalts?.data);
     setLoading(false);
     setButtonValue(2);
+    setDepartmentID({ DEPARTMENT_ID: 0 });
     setSearch("");
   }
   async function Active() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url:
-        "http://hr.audit.mn/hr/api/v1/employees/1/" +
-        userDetils?.USER_DEPARTMENT_ID +
-        "/" +
-        userDetils?.USER_TYPE_NAME.toUpperCase(),
-      method: "GET",
-      data: {},
+      url: "http://hr.audit.mn/hr/api/v1/employees",
+      // /1/" +
+      // userDetils?.USER_DEPARTMENT_ID +
+      // "/" +
+      // userDetils?.USER_TYPE_NAME.toUpperCase(),
+      method: "POST",
+      data: {
+        IS_ACTIVE: 1,
+        USER_DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
+        USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
+        SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
+      },
     });
     setJagsaalt(jagsaalts?.data);
     setLoading(false);
     setButtonValue(1);
+    setDepartmentID({ DEPARTMENT_ID: 0 });
     setSearch("");
   }
   async function newPeople() {
@@ -156,13 +167,18 @@ function Home(props) {
         JSON.parse(props.match?.params?.search)?.buttonValue === 2
       ) {
         let jagsaalts = await DataRequest({
-          url:
-            "http://hr.audit.mn/hr/api/v1/employees/0/" +
-            userDetils?.USER_DEPARTMENT_ID +
-            "/" +
-            userDetils?.USER_TYPE_NAME.toUpperCase(),
-          method: "GET",
-          data: {},
+          url: "http://hr.audit.mn/hr/api/v1/employees",
+          // /0/" +
+          // userDetils?.USER_DEPARTMENT_ID +
+          // "/" +
+          // userDetils?.USER_TYPE_NAME.toUpperCase(),
+          method: "POST",
+          data: {
+            IS_ACTIVE: 0,
+            USER_DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
+            USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
+            SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
+          },
         });
         setJagsaalt(jagsaalts?.data);
         setLoading(false);
@@ -201,13 +217,18 @@ function Home(props) {
         console.log(jagsaalts);
       } else {
         let jagsaalts = await DataRequest({
-          url:
-            "http://hr.audit.mn/hr/api/v1/employees/1/" +
-            userDetils?.USER_DEPARTMENT_ID +
-            "/" +
-            userDetils?.USER_TYPE_NAME.toUpperCase(),
-          method: "GET",
-          data: {},
+          url: "http://hr.audit.mn/hr/api/v1/employees",
+          // /1/" +
+          // userDetils?.USER_DEPARTMENT_ID +
+          // "/" +
+          // userDetils?.USER_TYPE_NAME.toUpperCase(),
+          method: "POST",
+          data: {
+            IS_ACTIVE: 1,
+            USER_DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
+            USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
+            SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
+          },
         });
         setLoading(false);
         setJagsaalt(jagsaalts?.data);
@@ -225,6 +246,7 @@ function Home(props) {
     }
 
     test();
+    setDepartmentID({ DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID });
   }, [props]);
 
   const handleChange = (state) => {
@@ -246,13 +268,40 @@ function Home(props) {
               : state?.selectedRows[0].PERSON_ID,
           emp_id: state?.selectedRows[0].EMP_ID,
           type: "employ",
+          PERSON_FIRSTNAME: state?.selectedRows[0].PERSON_FIRSTNAME,
+          PERSON_LASTNAME: state?.selectedRows[0].PERSON_LASTNAME,
         })
       );
+
       setData({ checked: true });
     } else {
       setData({ checked: false });
     }
   };
+  async function departmentSearch(value) {
+    setLoading(true);
+    let jagsaalts = await DataRequest({
+      url: "http://hr.audit.mn/hr/api/v1/employees",
+      method: "POST",
+      data: {
+        IS_ACTIVE: buttonValue === 1 ? 1 : 0,
+        DEPARTMENT_ID: value.DEPARTMENT_ID,
+        USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
+        SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
+        USER_DEPARTMENT_ID: userDetils.USER_DEPARTMENT_ID,
+      },
+    });
+    console.log("departmentSearch", {
+      IS_ACTIVE: buttonValue === 1 ? 1 : 0,
+      DEPARTMENT_ID: value.DEPARTMENT_ID,
+      USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
+      SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
+    });
+    setJagsaalt(jagsaalts?.data);
+    setLoading(false);
+    setSearch("");
+    setDepartmentID(value);
+  }
 
   async function anketA() {
     if (data?.checked === true)
@@ -398,6 +447,7 @@ function Home(props) {
             cell: (row) => (
               <div>
                 <img
+                  alt=""
                   src={Print}
                   width="20px"
                   style={{ cursor: "pointer" }}
@@ -539,6 +589,7 @@ function Home(props) {
             cell: (row) => (
               <div>
                 <img
+                  alt=""
                   src={Print}
                   width="20px"
                   style={{ cursor: "pointer" }}
@@ -647,7 +698,9 @@ function Home(props) {
             position: "absolute",
           }}
         >
-          <ComponentToPrint ref={componentRef} print={print} />
+          {print.print !== 0 ? (
+            <ComponentToPrint ref={componentRef} print={print} />
+          ) : null}
         </div>
         <div
           style={{
@@ -767,7 +820,28 @@ function Home(props) {
           }}
         >
           <div style={{ display: "flex" }}>
-            <div className="select is-small" style={{ marginRight: "10px" }}>
+            {(buttonValue !== 3 && userDetils?.USER_TYPE_NAME === "ADMIN") ||
+            (buttonValue !== 3 &&
+              userDetils?.USER_TYPE_NAME === "GENERAL_DIRECTOR" &&
+              userDetils.USER_SUB_DEPARTMENT_ID === null &&
+              userDetils.USER_DEPARTMENT_ID === 101) ||
+            (buttonValue !== 3 &&
+              userDetils?.USER_TYPE_NAME === "HEAD_DIRECTOR" &&
+              userDetils.USER_SUB_DEPARTMENT_ID === null &&
+              userDetils.USER_DEPARTMENT_ID === 101) ? (
+              <div className="select is-small">
+                <DepartmentID
+                  personChild={departmentID}
+                  setPersonChild={departmentSearch}
+                  edit={false}
+                />
+              </div>
+            ) : null}
+
+            <div
+              className="select is-small"
+              style={{ marginRight: "10px", marginLeft: "10px" }}
+            >
               <select
                 value={searchType}
                 onChange={(text) => setSearchType(text.target.value)}
@@ -805,6 +879,7 @@ function Home(props) {
                 <img src={Filter} />
               </span> */}
             </div>
+
             <div class="control has-icons-left has-icons-right">
               <input
                 class="input is-small is-gray"
@@ -819,12 +894,12 @@ function Home(props) {
               />
 
               <span class="icon is-small is-right">
-                <img src={Search} />
+                <img alt="" src={Search} />
               </span>
               <span class="icon is-small is-right"></span>
             </div>
 
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 class="text"
                 style={{
@@ -845,22 +920,24 @@ function Home(props) {
               </button>
             )}
 
-            <button
-              class="text"
-              style={{
-                marginLeft: "1%",
-                borderRadius: "5px",
-                backgroundColor: "#1cc88a",
-                color: "#fff",
-                border: "double",
-              }}
-              onClick={() => document.getElementById("emergencyXLS").click()}
-            >
-              <span style={{ display: "flex", paddingRight: "22px" }}>
-                <img src={Excel} width="20px" height="20px "></img>Excel
-              </span>
-            </button>
-            <EmployExcel />
+            {buttonValue === 1 ? (
+              <button
+                class="text"
+                style={{
+                  marginLeft: "1%",
+                  borderRadius: "5px",
+                  backgroundColor: "#1cc88a",
+                  color: "#fff",
+                  border: "double",
+                }}
+                onClick={() => document.getElementById("emergencyXLS").click()}
+              >
+                <span style={{ display: "flex", paddingRight: "22px" }}>
+                  <img src={Excel} width="20px" height="20px "></img>Excel
+                </span>
+              </button>
+            ) : null}
+            <EmployExcel data={search === "" ? jagsaalt : found} />
           </div>
         </div>
         <iframe
@@ -953,23 +1030,12 @@ function Home(props) {
   );
 }
 
-function EmployExcel(props) {
-  const [data, loadData] = useState(null);
-
-  useEffect(() => {
-    async function fetchData() {
-      let listItems = await axios("http://hr.audit.mn/hr/api/v1/excelPerson/");
-      console.log(listItems, "tailan");
-      loadData(listItems?.data);
-    }
-    fetchData();
-  }, [props]);
-
+function EmployExcel({ data }) {
   let listItems;
-  if (data !== undefined || data.length !== 0) {
+  if (data !== undefined) {
     listItems = (
       <div style={{ width: "30px", height: "30px" }}>
-        <img src={Excel} height="30px" width="30px" />
+        <img alt="" src={Excel} height="30px" width="30px" />
         <div style={{ display: "none" }}>
           <ReactHTMLTableToExcel
             id="emergencyXLS"
@@ -979,54 +1045,28 @@ function EmployExcel(props) {
             sheet="tablexls"
             buttonText="XLS"
           />
+
           <table id="table-to-xls">
             <tr>
-              <th>Эцэг эхийн нэр</th>
-              <th>Өөрийн нэр</th>
-              <th>Регистерийн дугаар</th>
-              <th>Иргэншил</th>
-              <th>Ургийн овог</th>
-              <th>Үндэс угсаа</th>
-              <th>Хүйс</th>
-              <th>Төрсөн он,сар,өдөр</th>
-              <th>Төрсөн аймаг,хот</th>
-              <th>Төрсөн сум, дүүрэг</th>
-              <th>Төрсөн газар</th>
-              <th>Гэрлэсэн эсэх</th>
-              <th>Утас</th>
-              <th>N-мэйл</th>
+              <th>№</th>
+              <th>Төрийн аудитын байгууллага</th>
+              <th>Харъяа газар</th>
+              <th>Дотоод бүтцийн нэгж</th>
+              <th>Албан тушаалын нэр</th>
+              <th>Ажилтны нэр</th>
+              <th>Ажилтны овог</th>
+              <th>Утасны дугаар</th>
+              <th>Имэйл</th>
             </tr>
             {data?.map((value, index) => (
               <tr>
-                <td>{value.PERSON_LASTNAME}</td>
+                <td>{index + 1}</td>
+                <td>{value.DEPARTMENT_NAME}</td>
+                <td>{value.SUB_DEPARTMENT_NAME}</td>
+                <td>{value.COMPARTMENT_NAME}</td>
+                <td>{value.POSITION_NAME}</td>
                 <td>{value.PERSON_FIRSTNAME}</td>
-                <td>{value.PERSON_REGISTER_NO}</td>
-                <td>{value.NATIONAL_NAME}</td>
-                <td>{value.SURNAME}</td>
-                <td>{value.DYNASTY_NAME}</td>
-                <td>
-                  {value.PERSON_GENDER === null
-                    ? ""
-                    : value.PERSON_GENDER === 1
-                    ? "Эмэгтэй"
-                    : "Эрэгтэй"}
-                </td>
-                <td>
-                  {value.PERSON_BORNDATE !== null &&
-                  value.PERSON_BORNDATE !== undefined
-                    ? dateFormat(new Date(value.PERSON_BORNDATE), "yyyy-mm-dd")
-                    : ""}
-                </td>
-                <td>{value.OFFICE_NAME}</td>
-                <td>{value.SUB_OFFICE_NAME}</td>
-                <td>{value.BIRTH_PLACE}</td>
-                <td>
-                  {value.IS_MARRIED === null
-                    ? ""
-                    : value.IS_MARRIED === 0
-                    ? "Гэрлэсэн"
-                    : "Гэрлээгүй"}
-                </td>
+                <td>{value.PERSON_LASTNAME}</td>
                 <td>{value.PERSON_PHONE}</td>
                 <td>{value.PERSON_EMAIL}</td>
               </tr>

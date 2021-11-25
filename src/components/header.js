@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useReducer } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import { useHistory } from "react-router-dom";
-import { UserB, Noti, BackButton } from "../assets/images/zurag";
+import { UserB, BackButton } from "../assets/images/zurag";
 
 const Header = (props) => {
   const history = useHistory();
@@ -24,7 +23,6 @@ const Header = (props) => {
         width: "100vw",
         minHeight: "70px",
         backgroundColor: "#f1f1f1",
-        width: "100%",
         display: "flex",
         zIndex: "1",
       }}
@@ -32,6 +30,7 @@ const Header = (props) => {
       <div style={{ marginLeft: "7%", marginTop: "20px" }}>
         {props.back ? (
           <img
+            alt=""
             src={BackButton}
             height="25"
             width="25"
@@ -54,7 +53,7 @@ const Header = (props) => {
       <div class="navbar-menu" id="nav-links" style={{ marginTop: "15px" }}>
         <div class="navbar-end">
           <div>
-            <img src={UserB} width="45" height="45" />
+            <img src={UserB} width="45" height="45" alt="" />
           </div>
 
           <select

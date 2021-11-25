@@ -1,12 +1,5 @@
-import React, {
-  useState,
-  useEffect,
-  useReducer,
-  prevState,
-  useRef,
-} from "react";
+import React, { useState, useEffect, useReducer, useRef } from "react";
 import { UrChadvar, TangaragBurtgel, GadaadKhel } from "./urchadvar";
-import Header from "../components/header";
 import { DataRequest } from "../functions/DataApi";
 import Bolowsrol from "../components/anketABolovsrol";
 import { Mergeshliin, ZeregTsol } from "./anketAmergejil";
@@ -30,7 +23,6 @@ import {
   BlackNaim,
   BlueNeg,
   BlueKhoyor,
-  BlueKGurav,
   BlueDuruv,
   BlueTav,
   BlueZurgaa,
@@ -47,7 +39,6 @@ import {
   Office,
   Suboffice,
   FamilyArray,
-  personNoCheck,
 } from "./library";
 import { useAlert } from "react-alert";
 import { useHistory } from "react-router-dom";
@@ -69,21 +60,12 @@ function AnketNeg(props) {
   const alert = useAlert();
   const [loading, setLoading] = useState(true);
 
-  function getFormUrlEncoded(toConvert) {
-    const formBody = [];
-    for (const property in toConvert) {
-      const encodedKey = encodeURIComponent(property);
-      const encodedValue = encodeURIComponent(toConvert[property]);
-      formBody.push(encodedKey + "=" + encodedValue);
-    }
-    return formBody.join("&");
-  }
   function saveAvatar(file) {
     if (
       localStorage.getItem("personDetail")?.includes("person_id") &&
       JSON.parse(localStorage.getItem("personDetail")).person_id !== "0"
     ) {
-      // "person_id",JSON.parse(localStorage.getItem("personDetail")).person_id, file.target.files[0].name
+      // "userid",JSON.parse(localStorage.getItem("personDetail")).person_id, file.target.files[0].name
       console.log("imageName", file.target.files[0].name);
       const formData = new FormData();
       formData.append("image", file.target.files[0], file.target.files[0].name);
@@ -299,7 +281,6 @@ function AnketNeg(props) {
             position: "absolute",
             left: "20%",
             width: "50%",
-            left: "7%",
             zIndex: 1,
             top: "20px",
           }}
@@ -351,7 +332,7 @@ function AnketNeg(props) {
             </button>
           </div>
           <div style={{ marginTop: "1rem" }}>
-            <img src={AvatarB} width="120px" height="120px" />
+            <img src={AvatarB} width="120px" height="120px" alt="" />
           </div>
 
           <div
@@ -372,6 +353,7 @@ function AnketNeg(props) {
               />
             </div>
             <img
+              alt=""
               src={Face}
               width="40px"
               height="40px"
@@ -379,8 +361,9 @@ function AnketNeg(props) {
               onClick={() => refContainer.current.click()}
             />
 
-            <img src={Trush} width="40px" height="40px" />
+            <img alt="" src={Trush} width="40px" height="40px" />
             <img
+              alt=""
               src={Warning}
               style={{ cursor: "pointer" }}
               width="40px"
@@ -410,6 +393,7 @@ function AnketNeg(props) {
           </div>
           <div className="AnketList" style={{ marginTop: "1.5rem" }}>
             <img
+              alt=""
               src={menu === 1 ? BlueNeg : BlackNeg}
               width="45px"
               height="45px"
@@ -462,6 +446,7 @@ function AnketNeg(props) {
                 </div>
                 <div className="AnketList">
                   <img
+                    alt=""
                     src={menu === 3 ? BlueGurav : BlackGurav}
                     width="45px"
                     height="45px"
@@ -748,12 +733,18 @@ function Yrunkhii(props) {
   const [register, setRegister] = useState(0);
   const cyrillicPattern = /^[\u0400-\u04FF]+$/;
 
-  async function personNoCheck(register) {
+  async function personNoCheck(registerT) {
+    console.log(registerT, "registerTT");
     let listItems = await axios({
       method: "POST",
       url: "http://hr.audit.mn/hr/api/v1/personNoCheck",
-      data: { PERSON_REGISTER_NO: register },
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+      data: { PERSON_REGISTER_NO: registerT },
     });
+    console.log(listItems?.data?.CNT, "register");
     setRegister(listItems?.data?.CNT);
   }
   return (
@@ -772,7 +763,7 @@ function Yrunkhii(props) {
           <span className="headerTextBold">Ерөнхий мэдээлэл</span>
         </div>
         <div className="column is-1 is-narrow-tablet">
-          {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+          {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
             <button
               className="buttonTsenkher"
               onClick={() => props.setEdit(!props.edit)}
@@ -890,6 +881,7 @@ function Yrunkhii(props) {
                   /\d/.test(text.target.value.slice(2, 10))
                 ) {
                   await personNoCheck(text.target.value);
+                  console.log(text.target.value, "registerT");
                 } else setRegister(false);
               } else {
                 setRegister(false);
@@ -1165,7 +1157,7 @@ function Kayag(props) {
           <span className="headerTextBold">Хаягийн мэдээлэл</span>
         </div>
         <div className="column is-1">
-          {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+          {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
             <button
               className="buttonTsenkher"
               onClick={() => {
@@ -1573,11 +1565,11 @@ function HolbooBarikhHun(props) {
         <div className="columns">
           <div className="column is-11">
             <span className="headerTextBold">
-              Зайлшгүй шаардлагатай үед холбоо барих хүний мэдээлэл
+              лшгүй шаардлагатай үед холбоо барих хүний мэдээлэл
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
                 Засварлах
               </button>
@@ -2098,7 +2090,7 @@ function GerBul(props) {
           </span>
         </div>
         <div className="column is-1">
-          {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+          {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
             <button className="buttonTsenkher" onClick={() => setEdit(!edit)}>
               Засварлах
             </button>

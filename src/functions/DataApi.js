@@ -1,6 +1,3 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-
 const axios = require("axios");
 
 export async function DataRequest(param) {

@@ -18,34 +18,14 @@ function AnketAtailan(props) {
   return (
     <div
       style={{
-        display: "flow",
         height: "100vh",
         width: "100%",
-        overflow: "scroll",
         backgroundColor: "#f1f1f1",
+        overflow: "scroll",
       }}
     >
-      {/* <Header title="Тайлан" back={true} butsakh={butsakh}></Header> */}
-      <div
-        style={{
-          position: "absolute",
-          left: "20%",
-          width: "50%",
-          height: "10%",
-          zIndex: 1,
-          top: "20px",
-        }}
-      >
-        <span
-          style={{
-            color: "#418ee6",
-            fontSize: 25,
-            fontFamily: "RalewayRegular",
-          }}
-        >
-          Судалгаа
-        </span>
-      </div>
+      <Header title="Судалгаа" back={true} butsakh={butsakh}></Header>
+
       <div style={{ marginTop: "5%" }}>
         {props.match.params.turul === "emergency" ? <Emergency /> : null}
         {props.match.params.turul === "gerBvl" ? <GerBvl /> : null}
@@ -87,21 +67,11 @@ function Emergency(props) {
     DEPARTMENT_ID: 1,
     check: true,
   });
+
+  let too = 0;
   const alert = useAlert();
   const [register, setRegister] = useState(true);
 
-  useEffect(() => {
-    async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportEmergency/"
-      );
-
-      if (listItems.data !== undefined && listItems.data.length === 0)
-        alert.show("өгөгдөл байхгүй байна");
-      else loadData(listItems?.data);
-    }
-    fetchData();
-  }, [props]);
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
@@ -109,13 +79,44 @@ function Emergency(props) {
           "http://hr.audit.mn/hr/api/v1/reportEmergency/" +
             department.DEPARTMENT_ID
         );
-        if (listItems.data !== undefined && listItems.data.length === 0)
-          alert.show("өгөгдөл байхгүй байна");
-        else loadData(listItems?.data);
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
+      } else {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportEmergency/"
+        );
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
       }
     }
     fetchData();
-  }, [department]);
+  }, [props, department]);
 
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -157,7 +158,7 @@ function Emergency(props) {
                   onChange={() => setRegister(!register)}
                 />
                 <span style={{ marginLeft: "2px" }}>
-                  Регистерийн дугаар харах эсэх
+                  Албан хаагчдын шалгалтын судалгаа
                 </span>
               </label>
             </div>
@@ -185,7 +186,8 @@ function Emergency(props) {
                 onClick={() => document.getElementById("emergencyXLS").click()}
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -207,29 +209,52 @@ function Emergency(props) {
                     <td>Утасны дугаар</td>
                   </tr>
                 </thead>
-                <tbody>
-                  {data?.map((value, index) => (
+                {data.map((value, index) =>
+                  value.isGroup === true ? (
                     <tr>
-                      <td style={{ width: "2rem" }}>{index + 1}</td>
-                      <td style={{ width: "10rem" }}>{value.PERSON_NAME}</td>
+                      <td
+                        style={{
+                          borderTop: "1.1px solid #f1f1f1",
+                          borderBottom: "1px solid transparent",
+                        }}
+                      >
+                        {value.isGroup === true ? (too = too + 1) : too}
+                      </td>
+                      <td
+                        style={{
+                          borderTop: "1.1px solid #f1f1f1",
+                          borderBottom: "1px solid transparent",
+                        }}
+                      >
+                        {value.PERSON_NAME}
+                      </td>
                       {register === false ? (
-                        <td style={{ width: "20rem" }}>
-                          {value.PERSON_REGISTER_NO}
-                        </td>
+                        <td>{value.PERSON_REGISTER_NO}</td>
                       ) : null}
-                      <td style={{ width: "10rem" }}>
-                        {value.EMERGENCY_LASTNAME}
-                      </td>
-                      <td style={{ width: "10rem" }}>
-                        {value.EMERGENCY_FIRSTNAME}
-                      </td>
-                      <td style={{ width: "10rem" }}>{value.FAMILY_NAME}</td>
-                      <td style={{ width: "20rem" }}>
-                        {value.EMERGENCY_PHONE}
-                      </td>
+                      <td>{value.PERSON_LASTNAME}</td>
+                      <td>{value.PERSON_FIRSTNAME}</td>
+                      <td>{value.FAMILY_NAME}</td>
+                      <td>{value.EMERGENCY_PHONE}</td>
                     </tr>
-                  ))}
-                </tbody>
+                  ) : (
+                    <tr>
+                      <td
+                        style={{ borderBottom: "1px solid transparent" }}
+                      ></td>
+                      <td
+                        style={{ borderBottom: "1px solid transparent" }}
+                      ></td>
+                      {register === false ? (
+                        <td>{value.PERSON_REGISTER_NO}</td>
+                      ) : null}
+                      <td>{value.PERSON_FIRSTNAME}</td>
+
+                      <td>{value.PERSON_LASTNAME}</td>
+                      <td>{value.FAMILY_NAME}</td>
+                      <td>{value.EMERGENCY_PHONE}</td>
+                    </tr>
+                  )
+                )}
               </table>
             </div>
           </div>
@@ -237,7 +262,7 @@ function Emergency(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -248,22 +273,10 @@ function GerBvl(props) {
     DEPARTMENT_ID: 1,
     check: true,
   });
+
+  let too = 0;
   const alert = useAlert();
   const [register, setRegister] = useState(true);
-
-  useEffect(() => {
-    async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportFamily/1/"
-      );
-      console.log("amjilttai", listItems.data);
-      if (listItems.data !== undefined && listItems.data.length === 0)
-        alert.show("өгөгдөл байхгүй байна");
-      else loadData(listItems?.data);
-    }
-    fetchData();
-  }, [props]);
-
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
@@ -271,13 +284,44 @@ function GerBvl(props) {
           "http://hr.audit.mn/hr/api/v1/reportFamily/1/" +
             department.DEPARTMENT_ID
         );
-        if (listItems.data !== undefined && listItems.data.length === 0)
-          alert.show("өгөгдөл байхгүй байна");
-        else loadData(listItems?.data);
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
+      } else {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportFamily/1/"
+        );
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
       }
     }
     fetchData();
-  }, [department]);
+  }, [props, department]);
 
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -348,7 +392,8 @@ function GerBvl(props) {
                   onClick={() => document.getElementById("GerBvlXLS").click()}
                 >
                   <span style={{ display: "flex" }}>
-                    <img src={Excel} width="20px" height="20px "></img>Excel
+                    <img alt="" src={Excel} width="20px" height="20px "></img>
+                    Excel
                   </span>
                 </button>
               </div>
@@ -361,7 +406,7 @@ function GerBvl(props) {
                     id={"GerBvlXls"}
                     className="table is-bordered is-flex-wrap-wrap"
                   >
-                    <tbody>
+                    <thead>
                       <tr>
                         <td rowspan="2" style={{ backgroundColor: "#f1f1f1" }}>
                           <span>№</span>
@@ -418,15 +463,28 @@ function GerBvl(props) {
                           <span>Албан тушаал</span>
                         </td>
                       </tr>
-                      {data?.map((value, index) => (
+                    </thead>
+                    {data.map((value, index) =>
+                      value.isGroup === true ? (
                         <tr>
-                          <td>
+                          {" "}
+                          <td
+                            style={{
+                              borderTop: "1.1px solid #f1f1f1",
+                              borderBottom: "1px solid transparent",
+                            }}
+                          >
                             {" "}
-                            <span>{index + 1}</span>
+                            {value.isGroup === true ? (too = too + 1) : too}
                           </td>
-
-                          <td>{value.PERSON_NAME}</td>
-
+                          <td
+                            style={{
+                              borderTop: "1.1px solid #f1f1f1",
+                              borderBottom: "1px solid transparent",
+                            }}
+                          >
+                            {value.PERSON_NAME}
+                          </td>
                           {/* <td>{value.PERSON_LASTNAME}</td>
 
                           <td>{value.PERSON_FIRSTNAME}</td> */}
@@ -452,8 +510,42 @@ function GerBvl(props) {
                           <td>{value.MEMBER_ORG}</td>
                           <td>{value.MEMBER_POSITION}</td>
                         </tr>
-                      ))}
-                    </tbody>
+                      ) : (
+                        <tr>
+                          <td
+                            style={{ borderBottom: "1px solid transparent" }}
+                          ></td>
+
+                          <td
+                            style={{ borderBottom: "1px solid transparent" }}
+                          ></td>
+                          {/* <td>{value.PERSON_LASTNAME}</td>
+
+                          <td>{value.PERSON_FIRSTNAME}</td> */}
+                          {register === false ? (
+                            <td style={{ width: "20rem" }}>
+                              {value.PERSON_REGISTER_NO}
+                            </td>
+                          ) : null}
+                          <td>{value.FAMILY_NAME}</td>
+                          <td>{value.MEMBER_LASTNAME}</td>
+                          <td>{value.MEMBER_FIRSTNAME}</td>
+                          <td>
+                            {dateFormat(
+                              value.MEMBER_BIRTHDATE === null ||
+                                value.MEMBER_BIRTHDATE === undefined
+                                ? new Date()
+                                : value.MEMBER_BIRTHDATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.OFFICE_NAME}</td>
+                          <td>{value.SUB_OFFICE_NAME}</td>
+                          <td>{value.MEMBER_ORG}</td>
+                          <td>{value.MEMBER_POSITION}</td>
+                        </tr>
+                      )
+                    )}
                   </table>
                 </div>
               </div>
@@ -463,7 +555,7 @@ function GerBvl(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -474,19 +566,9 @@ function Sadan(props) {
     DEPARTMENT_ID: 1,
     check: true,
   });
+  let too = 0;
   const alert = useAlert();
   const [register, setRegister] = useState(true);
-
-  useEffect(() => {
-    async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportFamily/2/"
-      );
-      console.log("amjilttai", listItems.data);
-      loadData(listItems?.data);
-    }
-    fetchData();
-  }, [props]);
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
@@ -494,13 +576,45 @@ function Sadan(props) {
           "http://hr.audit.mn/hr/api/v1/reportFamily/2/" +
             department.DEPARTMENT_ID
         );
-        if (listItems.data !== undefined && listItems.data.length === 0)
-          alert.show("өгөгдөл байхгүй байна");
-        else loadData(listItems?.data);
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
+      } else {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportFamily/2/"
+        );
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
       }
     }
     fetchData();
-  }, [department]);
+  }, [props, department]);
+
   let listItems;
   if (data !== undefined && data.length > 0) {
     listItems = (
@@ -570,7 +684,8 @@ function Sadan(props) {
                   onClick={() => document.getElementById("sadanXLS").click()}
                 >
                   <span style={{ display: "flex" }}>
-                    <img src={Excel} width="20px" height="20px "></img>Excel
+                    <img alt="" src={Excel} width="20px" height="20px "></img>
+                    Excel
                   </span>
                 </button>
               </div>
@@ -628,36 +743,80 @@ function Sadan(props) {
                         <span>Албан тушаал</span>
                       </td>
                     </tr>
-                    {data?.map((value, index) => (
-                      <tr>
-                        <td>
-                          {" "}
-                          <span>{index + 1}</span>
-                        </td>
-                        <td>{value.PERSON_NAME}</td>
-                        {register === false ? (
-                          <td style={{ width: "20rem" }}>
-                            {value.PERSON_REGISTER_NO}
+                    {data.map((value, index) =>
+                      value.isGroup === true ? (
+                        <tr>
+                          <td
+                            style={{
+                              borderTop: "1.1px solid #f1f1f1",
+                              borderBottom: "1px solid transparent",
+                            }}
+                          >
+                            {" "}
+                            {value.isGroup === true ? (too = too + 1) : too}
                           </td>
-                        ) : null}
-                        <td>{value.MEMBER_LASTNAME}</td>
-                        <td>{value.MEMBER_FIRSTNAME}</td>
+                          <td
+                            style={{
+                              borderTop: "1.1px solid #f1f1f1",
+                              borderBottom: "1px solid transparent",
+                            }}
+                          >
+                            {value.PERSON_NAME}
+                          </td>
+                          {register === false ? (
+                            <td style={{ width: "20rem" }}>
+                              {value.PERSON_REGISTER_NO}
+                            </td>
+                          ) : null}
+                          <td>{value.MEMBER_LASTNAME}</td>
+                          <td>{value.MEMBER_FIRSTNAME}</td>
 
-                        <td>
-                          {dateFormat(
-                            value.MEMBER_BIRTHDATE === null ||
-                              value.MEMBER_BIRTHDATE === undefined
-                              ? new Date()
-                              : value.MEMBER_BIRTHDATE,
-                            "yyyy-mm-dd"
-                          )}
-                        </td>
-                        <td>{value.OFFICE_NAME}</td>
-                        <td>{value.SUB_OFFICE_NAME}</td>
-                        <td>{value.MEMBER_ORG}</td>
-                        <td>{value.MEMBER_POSITION}</td>
-                      </tr>
-                    ))}
+                          <td>
+                            {dateFormat(
+                              value.MEMBER_BIRTHDATE === null ||
+                                value.MEMBER_BIRTHDATE === undefined
+                                ? new Date()
+                                : value.MEMBER_BIRTHDATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.OFFICE_NAME}</td>
+                          <td>{value.SUB_OFFICE_NAME}</td>
+                          <td>{value.MEMBER_ORG}</td>
+                          <td>{value.MEMBER_POSITION}</td>
+                        </tr>
+                      ) : (
+                        <tr>
+                          <td
+                            style={{ borderBottom: "1px solid transparent" }}
+                          ></td>
+                          <td
+                            style={{ borderBottom: "1px solid transparent" }}
+                          ></td>
+                          {register === false ? (
+                            <td style={{ width: "20rem" }}>
+                              {value.PERSON_REGISTER_NO}
+                            </td>
+                          ) : null}
+                          <td>{value.MEMBER_LASTNAME}</td>
+                          <td>{value.MEMBER_FIRSTNAME}</td>
+
+                          <td>
+                            {dateFormat(
+                              value.MEMBER_BIRTHDATE === null ||
+                                value.MEMBER_BIRTHDATE === undefined
+                                ? new Date()
+                                : value.MEMBER_BIRTHDATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.OFFICE_NAME}</td>
+                          <td>{value.SUB_OFFICE_NAME}</td>
+                          <td>{value.MEMBER_ORG}</td>
+                          <td>{value.MEMBER_POSITION}</td>
+                        </tr>
+                      )
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -667,7 +826,7 @@ function Sadan(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -678,29 +837,50 @@ function ShalgaltiinTalaarkhMedeelel(props) {
     DEPARTMENT_ID: 1,
     check: true,
   });
+  let too = 0;
   const alert = useAlert();
-
-  useEffect(() => {
-    async function fetchData() {
-      let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportExam/");
-      console.log("amjilttai", listItems.data);
-      loadData(listItems?.data);
-    }
-    fetchData();
-  }, [props]);
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
           "http://hr.audit.mn/hr/api/v1/reportExam/" + department.DEPARTMENT_ID
         );
-        if (listItems.data !== undefined && listItems.data.length === 0)
-          alert.show("өгөгдөл байхгүй байна");
-        else loadData(listItems?.data);
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
+      } else {
+        let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportExam/");
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
       }
     }
     fetchData();
-  }, [department]);
+  }, [props, department]);
 
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -760,7 +940,8 @@ function ShalgaltiinTalaarkhMedeelel(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -788,39 +969,91 @@ function ShalgaltiinTalaarkhMedeelel(props) {
                     </tr>
                   </thead>
                   <tbody>
-                    {data?.map((value, index) => (
-                      <tr>
-                        <td>{index + 1}</td>
-                        <td>{value.PERSON_NAME}</td>
-                        <td>{value.EXAM_TYPE_NAME}</td>
-                        <td>{value.IS_EXAM}</td>
-                        <td>{value.OFFICE_NAME}</td>
+                    {data.map((value, index) =>
+                      value.isGroup === true ? (
+                        <tr>
+                          <td
+                            style={{
+                              borderTop: "1.1px solid #f1f1f1",
+                              borderBottom: "1px solid transparent",
+                            }}
+                          >
+                            {value.isGroup === true ? (too = too + 1) : too}
+                          </td>
+                          <td
+                            style={{
+                              borderTop: "1.1px solid #f1f1f1",
+                              borderBottom: "1px solid transparent",
+                            }}
+                          >
+                            {value.PERSON_NAME}
+                          </td>
+                          <td>{value.EXAM_TYPE_NAME}</td>
+                          <td>{value.IS_EXAM}</td>
+                          <td>{value.OFFICE_NAME}</td>
 
-                        <td>
-                          {dateFormat(
-                            value.EXAM_DATE === null ||
-                              value.EXAM_DATE === undefined
-                              ? new Date()
-                              : value.EXAM_DATE,
-                            "yyyy-mm-dd"
-                          )}
-                        </td>
-                        <td>{value.EXAM_POINT}</td>
+                          <td>
+                            {dateFormat(
+                              value.EXAM_DATE === null ||
+                                value.EXAM_DATE === undefined
+                                ? new Date()
+                                : value.EXAM_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.EXAM_POINT}</td>
 
-                        <td>{value.DECISION_NO}</td>
+                          <td>{value.DECISION_NO}</td>
 
-                        <td>
-                          {dateFormat(
-                            value.DECISION_DATE === null ||
-                              value.DECISION_DATE === undefined
-                              ? new Date()
-                              : value.DECISION_DATE,
-                            "yyyy-mm-dd"
-                          )}
-                        </td>
-                        <td>{value.DECISION_DESC}</td>
-                      </tr>
-                    ))}
+                          <td>
+                            {dateFormat(
+                              value.DECISION_DATE === null ||
+                                value.DECISION_DATE === undefined
+                                ? new Date()
+                                : value.DECISION_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.DECISION_DESC}</td>
+                        </tr>
+                      ) : (
+                        <tr>
+                          <td
+                            style={{ borderBottom: "1px solid transparent" }}
+                          ></td>
+                          <td
+                            style={{ borderBottom: "1px solid transparent" }}
+                          ></td>
+                          <td>{value.EXAM_TYPE_NAME}</td>
+                          <td>{value.IS_EXAM}</td>
+                          <td>{value.OFFICE_NAME}</td>
+
+                          <td>
+                            {dateFormat(
+                              value.EXAM_DATE === null ||
+                                value.EXAM_DATE === undefined
+                                ? new Date()
+                                : value.EXAM_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.EXAM_POINT}</td>
+
+                          <td>{value.DECISION_NO}</td>
+
+                          <td>
+                            {dateFormat(
+                              value.DECISION_DATE === null ||
+                                value.DECISION_DATE === undefined
+                                ? new Date()
+                                : value.DECISION_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.DECISION_DESC}</td>
+                        </tr>
+                      )
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -830,7 +1063,7 @@ function ShalgaltiinTalaarkhMedeelel(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -841,29 +1074,51 @@ function TangaragiinBvrtgel(props) {
     DEPARTMENT_ID: 1,
     check: true,
   });
-  const alert = useAlert();
 
-  useEffect(() => {
-    async function fetchData() {
-      let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportOath/");
-      console.log("amjilttai", listItems.data);
-      loadData(listItems?.data);
-    }
-    fetchData();
-  }, [props]);
+  let too = 0;
+  const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
           "http://hr.audit.mn/hr/api/v1/reportOath/" + department.DEPARTMENT_ID
         );
-        if (listItems.data !== undefined && listItems.data.length === 0)
-          alert.show("өгөгдөл байхгүй байна");
-        else loadData(listItems?.data);
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
+      } else {
+        let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportOath/");
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
       }
     }
     fetchData();
-  }, [department]);
+  }, [props, department]);
 
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -921,7 +1176,8 @@ function TangaragiinBvrtgel(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -945,34 +1201,81 @@ function TangaragiinBvrtgel(props) {
                     </tr>
                   </thead>
                   <tbody>
-                    {data?.map((value, index) => (
-                      <tr>
-                        <th>{index + 1}</th>
-                        <td>{value.PERSON_NAME}</td>
-                        <td>{value.OATH_TYPE}</td>
+                    {data.map((value, index) =>
+                      value.isGroup === true ? (
+                        <tr>
+                          <td
+                            style={{
+                              borderTop: "1.1px solid #f1f1f1",
+                              borderBottom: "1px solid transparent",
+                            }}
+                          >
+                            {value.isGroup === true ? (too = too + 1) : too}
+                          </td>
+                          <td
+                            style={{
+                              borderTop: "1.1px solid #f1f1f1",
+                              borderBottom: "1px solid transparent",
+                            }}
+                          >
+                            {value.PERSON_NAME}
+                          </td>
+                          <td>{value.OATH_TYPE}</td>
 
-                        <td>
-                          {dateFormat(
-                            value.OATH_DATE === null ||
-                              value.OATH_DATE === undefined
-                              ? new Date()
-                              : value.OATH_DATE,
-                            "yyyy-mm-dd"
-                          )}
-                        </td>
-                        <td>{value.DECISION_NO}</td>
+                          <td>
+                            {dateFormat(
+                              value.OATH_DATE === null ||
+                                value.OATH_DATE === undefined
+                                ? new Date()
+                                : value.OATH_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.DECISION_NO}</td>
 
-                        <td>
-                          {dateFormat(
-                            value.DECISION_DATE === null ||
-                              value.DECISION_DATE === undefined
-                              ? new Date()
-                              : value.DECISION_DATE,
-                            "yyyy-mm-dd"
-                          )}
-                        </td>
-                      </tr>
-                    ))}
+                          <td>
+                            {dateFormat(
+                              value.DECISION_DATE === null ||
+                                value.DECISION_DATE === undefined
+                                ? new Date()
+                                : value.DECISION_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                        </tr>
+                      ) : (
+                        <tr>
+                          <td
+                            style={{ borderBottom: "1px solid transparent" }}
+                          ></td>
+                          <td
+                            style={{ borderBottom: "1px solid transparent" }}
+                          ></td>
+                          <td>{value.OATH_TYPE}</td>
+
+                          <td>
+                            {dateFormat(
+                              value.OATH_DATE === null ||
+                                value.OATH_DATE === undefined
+                                ? new Date()
+                                : value.OATH_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.DECISION_NO}</td>
+
+                          <td>
+                            {dateFormat(
+                              value.DECISION_DATE === null ||
+                                value.DECISION_DATE === undefined
+                                ? new Date()
+                                : value.DECISION_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                        </tr>
+                      )
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -982,7 +1285,7 @@ function TangaragiinBvrtgel(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -993,18 +1296,8 @@ function GadaadHelniiMedleg(props) {
     DEPARTMENT_ID: 1,
     check: true,
   });
+  let too = 0;
   const alert = useAlert();
-
-  useEffect(() => {
-    async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportLanguage/"
-      );
-      console.log("amjilttai", listItems.data);
-      loadData(listItems?.data);
-    }
-    fetchData();
-  }, [props]);
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
@@ -1012,13 +1305,44 @@ function GadaadHelniiMedleg(props) {
           "http://hr.audit.mn/hr/api/v1/reportLanguage/" +
             department.DEPARTMENT_ID
         );
-        if (listItems.data !== undefined && listItems.data.length === 0)
-          alert.show("өгөгдөл байхгүй байна");
-        else loadData(listItems?.data);
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
+      } else {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportLanguage/"
+        );
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
       }
     }
     fetchData();
-  }, [department]);
+  }, [props, department]);
 
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -1076,7 +1400,8 @@ function GadaadHelniiMedleg(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -1105,30 +1430,73 @@ function GadaadHelniiMedleg(props) {
                     </tr>
                   </thead>
                   <tbody>
-                    {data?.map((value, index) => (
-                      <tr>
-                        <th>{index + 1}</th>
-                        <td>{value.PERSON_NAME}</td>
-                        <td>{value.LANGUAGE_NAME}</td>
-                        <td>{value.LANGUAGE_READ}</td>
-                        <td>{value.LANGUAGE_WRITE}</td>
-                        <td>{value.LANGUAGE_LISTEN}</td>
-                        <td>{value.LANGUAGE_SPEAK}</td>
-                        <td>{value.EXAM_NAME}</td>
-                        <td>{value.EXAM_POINT}</td>
+                    {data.map((value, index) =>
+                      value.isGroup === true ? (
+                        <tr>
+                          <td
+                            style={{
+                              borderTop: "1.1px solid #f1f1f1",
+                              borderBottom: "1px solid transparent",
+                            }}
+                          >
+                            {value.isGroup === true ? (too = too + 1) : too}
+                          </td>
+                          <td
+                            style={{
+                              borderTop: "1.1px solid #f1f1f1",
+                              borderBottom: "1px solid transparent",
+                            }}
+                          >
+                            {value.PERSON_NAME}
+                          </td>
+                          <td>{value.LANGUAGE_NAME}</td>
+                          <td>{value.LANGUAGE_READ}</td>
+                          <td>{value.LANGUAGE_WRITE}</td>
+                          <td>{value.LANGUAGE_LISTEN}</td>
+                          <td>{value.LANGUAGE_SPEAK}</td>
+                          <td>{value.EXAM_NAME}</td>
+                          <td>{value.EXAM_POINT}</td>
 
-                        <td>
-                          {dateFormat(
-                            value.EXAM_DATE === null ||
-                              value.EXAM_DATE === undefined
-                              ? new Date()
-                              : value.EXAM_DATE,
-                            "yyyy-mm-dd"
-                          )}
-                        </td>
-                        <td>{value.CONFIRMATION_NO}</td>
-                      </tr>
-                    ))}
+                          <td>
+                            {dateFormat(
+                              value.EXAM_DATE === null ||
+                                value.EXAM_DATE === undefined
+                                ? new Date()
+                                : value.EXAM_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.CONFIRMATION_NO}</td>
+                        </tr>
+                      ) : (
+                        <tr>
+                          <td
+                            style={{ borderBottom: "1px solid transparent" }}
+                          ></td>
+                          <td
+                            style={{ borderBottom: "1px solid transparent" }}
+                          ></td>
+                          <td>{value.LANGUAGE_NAME}</td>
+                          <td>{value.LANGUAGE_READ}</td>
+                          <td>{value.LANGUAGE_WRITE}</td>
+                          <td>{value.LANGUAGE_LISTEN}</td>
+                          <td>{value.LANGUAGE_SPEAK}</td>
+                          <td>{value.EXAM_NAME}</td>
+                          <td>{value.EXAM_POINT}</td>
+
+                          <td>
+                            {dateFormat(
+                              value.EXAM_DATE === null ||
+                                value.EXAM_DATE === undefined
+                                ? new Date()
+                                : value.EXAM_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.CONFIRMATION_NO}</td>
+                        </tr>
+                      )
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -1138,7 +1506,7 @@ function GadaadHelniiMedleg(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -1149,18 +1517,8 @@ function Bolowsrol(props) {
     DEPARTMENT_ID: 1,
     check: true,
   });
+  let too = 0;
   const alert = useAlert();
-
-  useEffect(() => {
-    async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportEducation/1/"
-      );
-      console.log("amjilttai", listItems.data);
-      loadData(listItems?.data);
-    }
-    fetchData();
-  }, [props]);
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
@@ -1168,13 +1526,45 @@ function Bolowsrol(props) {
           "http://hr.audit.mn/hr/api/v1/reportEducation/1/" +
             department.DEPARTMENT_ID
         );
-        if (listItems.data !== undefined && listItems.data.length === 0)
-          alert.show("өгөгдөл байхгүй байна");
-        else loadData(listItems?.data);
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
+      } else {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportEducation/1/"
+        );
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
       }
     }
     fetchData();
-  }, [department]);
+  }, [props, department]);
+
   let listItems;
   if (data !== undefined && data.length > 0) {
     listItems = (
@@ -1185,7 +1575,10 @@ function Bolowsrol(props) {
       >
         <div
           className="box"
-          style={{ marginLeft: "7%", padding: "20px 15px 15% 20px" }}
+          style={{
+            marginLeft: "7%",
+            height: "auto",
+          }}
         >
           <span
             style={{
@@ -1229,7 +1622,8 @@ function Bolowsrol(props) {
                 onClick={() => document.getElementById("bolowsrolXLS").click()}
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -1260,41 +1654,95 @@ function Bolowsrol(props) {
                     </tr>
                   </thead>
                   <tbody>
-                    {data?.map((value, index) => (
-                      <tr>
-                        <th>{index + 1}</th>
-                        <td>{value.PERSON_NAME}</td>
-                        <td>{value.EDUCATION_TYPE_ID}</td>
-                        <td>{value.EDUCATION_TYPE_NAME}</td>
-                        <td>{value.EDUCATION_LEVEL}</td>
-                        <td>{value.EDUCATION_COUNTRY}</td>
-                        <td>{value.SCHOOL_NAME}</td>
+                    {data.map((value, index) =>
+                      value.isGroup === true ? (
+                        <tr>
+                          <td
+                            style={{
+                              borderTop: "1.1px solid #f1f1f1",
+                              borderBottom: "1px solid transparent",
+                            }}
+                          >
+                            {value.isGroup === true ? (too = too + 1) : too}
+                          </td>
+                          <td
+                            style={{
+                              borderTop: "1.1px solid #f1f1f1",
+                              borderBottom: "1px solid transparent",
+                            }}
+                          >
+                            {value.PERSON_NAME}
+                          </td>
+                          <td>{value.EDUCATION_TYPE_ID}</td>
+                          <td>{value.EDUCATION_TYPE_NAME}</td>
+                          <td>{value.EDUCATION_LEVEL}</td>
+                          <td>{value.EDUCATION_COUNTRY}</td>
+                          <td>{value.SCHOOL_NAME}</td>
 
-                        <td>
-                          {dateFormat(
-                            value.START_DATE === null ||
-                              value.START_DATE === undefined
-                              ? new Date()
-                              : value.START_DATE,
-                            "yyyy-mm-dd"
-                          )}
-                        </td>
+                          <td>
+                            {dateFormat(
+                              value.START_DATE === null ||
+                                value.START_DATE === undefined
+                                ? new Date()
+                                : value.START_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
 
-                        <td>
-                          {dateFormat(
-                            value.END_DATE === null ||
-                              value.END_DATE === undefined
-                              ? new Date()
-                              : value.END_DATE,
-                            "yyyy-mm-dd"
-                          )}
-                        </td>
-                        <td>{value.PROFESSION_NAME}</td>
-                        <td>{value.DIPLOM_NO}</td>
-                        <td>{value.SCHOOL_CONTACT}</td>
-                        <td>{value.DIPLOM_SUBJECT}</td>
-                      </tr>
-                    ))}
+                          <td>
+                            {dateFormat(
+                              value.END_DATE === null ||
+                                value.END_DATE === undefined
+                                ? new Date()
+                                : value.END_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.PROFESSION_NAME}</td>
+                          <td>{value.DIPLOM_NO}</td>
+                          <td>{value.SCHOOL_CONTACT}</td>
+                          <td>{value.DIPLOM_SUBJECT}</td>
+                        </tr>
+                      ) : (
+                        <tr>
+                          <td
+                            style={{ borderBottom: "1px solid transparent" }}
+                          ></td>
+                          <td
+                            style={{ borderBottom: "1px solid transparent" }}
+                          ></td>
+                          <td>{value.EDUCATION_TYPE_ID}</td>
+                          <td>{value.EDUCATION_TYPE_NAME}</td>
+                          <td>{value.EDUCATION_LEVEL}</td>
+                          <td>{value.EDUCATION_COUNTRY}</td>
+                          <td>{value.SCHOOL_NAME}</td>
+
+                          <td>
+                            {dateFormat(
+                              value.START_DATE === null ||
+                                value.START_DATE === undefined
+                                ? new Date()
+                                : value.START_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+
+                          <td>
+                            {dateFormat(
+                              value.END_DATE === null ||
+                                value.END_DATE === undefined
+                                ? new Date()
+                                : value.END_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.PROFESSION_NAME}</td>
+                          <td>{value.DIPLOM_NO}</td>
+                          <td>{value.SCHOOL_CONTACT}</td>
+                          <td>{value.DIPLOM_SUBJECT}</td>
+                        </tr>
+                      )
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -1304,7 +1752,7 @@ function Bolowsrol(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -1315,18 +1763,8 @@ function BolowsrolDoktor(props) {
     DEPARTMENT_ID: 1,
     check: true,
   });
+  let too = 0;
   const alert = useAlert();
-
-  useEffect(() => {
-    async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportEducation/2/"
-      );
-      console.log("amjilttai", listItems.data);
-      loadData(listItems?.data);
-    }
-    fetchData();
-  }, [props]);
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
@@ -1334,13 +1772,45 @@ function BolowsrolDoktor(props) {
           "http://hr.audit.mn/hr/api/v1/reportEducation/2/" +
             department.DEPARTMENT_ID
         );
-        if (listItems.data !== undefined && listItems.data.length === 0)
-          alert.show("өгөгдөл байхгүй байна");
-        else loadData(listItems?.data);
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
+      } else {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportEducation/2/"
+        );
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
       }
     }
     fetchData();
-  }, [department]);
+  }, [props, department]);
+
   let listItems;
   if (data !== undefined && data.length > 0) {
     listItems = (
@@ -1397,7 +1867,8 @@ function BolowsrolDoktor(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -1416,46 +1887,98 @@ function BolowsrolDoktor(props) {
                       <td>Сургуулийн нэр</td>
                       <td>Орсон он,сар</td>
                       <td>Төгссөн он,сар</td>
-                      <td> Эзэмшсэн мэргэжил</td>
+                      <td>Эзэмшсэн мэргэжил</td>
                       <td>Гэрчилгээ дипломын дугаар</td>
                       <td>Сургуулийн холбоо барих мэдээлэл</td>
                       <td>Диплом хамгаалсан сэдэв</td>
                     </tr>
                   </thead>
                   <tbody>
-                    {data?.map((value, index) => (
-                      <tr>
-                        <td>{index + 1}</td>
-                        <td>{value.PERSON_NAME}</td>
-                        <td>{value.EDUCATION_TYPE_ID}</td>
-                        <td>{value.EDUCATION_TYPE_NAME}</td>
-                        <td>{value.EDUCATION_LEVEL}</td>
+                    {data.map((value, index) =>
+                      value.isGroup === true ? (
+                        <tr>
+                          <td
+                            style={{
+                              borderTop: "1.1px solid #f1f1f1",
+                              borderBottom: "1px solid transparent",
+                            }}
+                          >
+                            {value.isGroup === true ? (too = too + 1) : too}
+                          </td>
+                          <td
+                            style={{
+                              borderTop: "1.1px solid #f1f1f1",
+                              borderBottom: "1px solid transparent",
+                            }}
+                          >
+                            {value.PERSON_NAME}
+                          </td>
+                          <td>{value.EDUCATION_TYPE_ID}</td>
+                          <td>{value.EDUCATION_TYPE_NAME}</td>
+                          <td>{value.EDUCATION_LEVEL}</td>
 
-                        <td>
-                          {dateFormat(
-                            value.START_DATE === null ||
-                              value.START_DATE === undefined
-                              ? new Date()
-                              : value.START_DATE,
-                            "yyyy-mm-dd"
-                          )}
-                        </td>
+                          <td>
+                            {dateFormat(
+                              value.START_DATE === null ||
+                                value.START_DATE === undefined
+                                ? new Date()
+                                : value.START_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
 
-                        <td>
-                          {dateFormat(
-                            value.END_DATE === null ||
-                              value.END_DATE === undefined
-                              ? new Date()
-                              : value.END_DATE,
-                            "yyyy-mm-dd"
-                          )}
-                        </td>
-                        <td>{value.PROFESSION_NAME}</td>
-                        <td>{value.DIPLOM_NO}</td>
-                        <td>{value.SCHOOL_CONTACT}</td>
-                        <td>{value.DIPLOM_SUBJECT}</td>
-                      </tr>
-                    ))}
+                          <td>
+                            {dateFormat(
+                              value.END_DATE === null ||
+                                value.END_DATE === undefined
+                                ? new Date()
+                                : value.END_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.PROFESSION_NAME}</td>
+                          <td>{value.DIPLOM_NO}</td>
+                          <td>{value.SCHOOL_CONTACT}</td>
+                          <td>{value.DIPLOM_SUBJECT}</td>
+                        </tr>
+                      ) : (
+                        <tr>
+                          <td
+                            style={{ borderBottom: "1px solid transparent" }}
+                          ></td>
+                          <td
+                            style={{ borderBottom: "1px solid transparent" }}
+                          ></td>
+                          <td>{value.EDUCATION_TYPE_ID}</td>
+                          <td>{value.EDUCATION_TYPE_NAME}</td>
+                          <td>{value.EDUCATION_LEVEL}</td>
+
+                          <td>
+                            {dateFormat(
+                              value.START_DATE === null ||
+                                value.START_DATE === undefined
+                                ? new Date()
+                                : value.START_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+
+                          <td>
+                            {dateFormat(
+                              value.END_DATE === null ||
+                                value.END_DATE === undefined
+                                ? new Date()
+                                : value.END_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.PROFESSION_NAME}</td>
+                          <td>{value.DIPLOM_NO}</td>
+                          <td>{value.SCHOOL_CONTACT}</td>
+                          <td>{value.DIPLOM_SUBJECT}</td>
+                        </tr>
+                      )
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -1465,7 +1988,7 @@ function BolowsrolDoktor(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -1476,19 +1999,8 @@ function MergeshliinBeltgel(props) {
     DEPARTMENT_ID: 1,
     check: true,
   });
+  let too = 0;
   const alert = useAlert();
-
-  useEffect(() => {
-    async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportProfession/"
-      );
-      console.log("amjilttai", listItems.data);
-      loadData(listItems?.data);
-    }
-    fetchData();
-  }, [props]);
-
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
@@ -1496,13 +2008,45 @@ function MergeshliinBeltgel(props) {
           "http://hr.audit.mn/hr/api/v1/reportProfession/" +
             department.DEPARTMENT_ID
         );
-        if (listItems.data !== undefined && listItems.data.length === 0)
-          alert.show("өгөгдөл байхгүй байна");
-        else loadData(listItems?.data);
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
+      } else {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportProfession/"
+        );
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
       }
     }
     fetchData();
-  }, [department]);
+  }, [props, department]);
+
   let listItems;
   if (data !== undefined && data.length > 0) {
     listItems = (
@@ -1559,7 +2103,8 @@ function MergeshliinBeltgel(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -1587,48 +2132,110 @@ function MergeshliinBeltgel(props) {
                   </tr>
                 </thead>
                 <tbody>
-                  {data?.map((value, index) => (
-                    <tr>
-                      <td>{index + 1}</td>
-                      <td>{value.PERSON_NAME}</td>
-                      <td>{value.PROFESSION_COUNTRY}</td>
-                      <td>{value.PROFESSION_ORG}</td>
-                      <td>{value.PROFESSION_NAME}</td>
+                  {data.map((value, index) =>
+                    value.isGroup === true ? (
+                      <tr>
+                        <td
+                          style={{
+                            borderTop: "1.1px solid #f1f1f1",
+                            borderBottom: "1px solid transparent",
+                          }}
+                        >
+                          {value.isGroup === true ? (too = too + 1) : too}
+                        </td>
+                        <td
+                          style={{
+                            borderTop: "1.1px solid #f1f1f1",
+                            borderBottom: "1px solid transparent",
+                          }}
+                        >
+                          {value.PERSON_NAME}
+                        </td>
+                        <td>{value.PROFESSION_COUNTRY}</td>
+                        <td>{value.PROFESSION_ORG}</td>
+                        <td>{value.PROFESSION_NAME}</td>
 
-                      <td>
-                        {dateFormat(
-                          value.START_DATE === null ||
-                            value.START_DATE === undefined
-                            ? new Date()
-                            : value.START_DATE,
-                          "yyyy-mm-dd"
-                        )}
-                      </td>
+                        <td>
+                          {dateFormat(
+                            value.START_DATE === null ||
+                              value.START_DATE === undefined
+                              ? new Date()
+                              : value.START_DATE,
+                            "yyyy-mm-dd"
+                          )}
+                        </td>
 
-                      <td>
-                        {dateFormat(
-                          value.END_DATE === null ||
-                            value.END_DATE === undefined
-                            ? new Date()
-                            : value.END_DATE,
-                          "yyyy-mm-dd"
-                        )}
-                      </td>
-                      <td>{value.DURATION_DAY}</td>
-                      <td>{value.PROFESSION_DIRECTION}</td>
-                      <td>{value.DIPLOM_NO}</td>
+                        <td>
+                          {dateFormat(
+                            value.END_DATE === null ||
+                              value.END_DATE === undefined
+                              ? new Date()
+                              : value.END_DATE,
+                            "yyyy-mm-dd"
+                          )}
+                        </td>
+                        <td>{value.DURATION_DAY}</td>
+                        <td>{value.PROFESSION_DIRECTION}</td>
+                        <td>{value.DIPLOM_NO}</td>
 
-                      <td>
-                        {dateFormat(
-                          value.DIPLOM_DATE === null ||
-                            value.DIPLOM_DATE === undefined
-                            ? new Date()
-                            : value.DIPLOM_DATE,
-                          "yyyy-mm-dd"
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                        <td>
+                          {dateFormat(
+                            value.DIPLOM_DATE === null ||
+                              value.DIPLOM_DATE === undefined
+                              ? new Date()
+                              : value.DIPLOM_DATE,
+                            "yyyy-mm-dd"
+                          )}
+                        </td>
+                      </tr>
+                    ) : (
+                      <tr>
+                        <td
+                          style={{ borderBottom: "1px solid transparent" }}
+                        ></td>
+                        <td
+                          style={{ borderBottom: "1px solid transparent" }}
+                        ></td>
+
+                        <td>{value.PROFESSION_COUNTRY}</td>
+                        <td>{value.PROFESSION_ORG}</td>
+                        <td>{value.PROFESSION_NAME}</td>
+
+                        <td>
+                          {dateFormat(
+                            value.START_DATE === null ||
+                              value.START_DATE === undefined
+                              ? new Date()
+                              : value.START_DATE,
+                            "yyyy-mm-dd"
+                          )}
+                        </td>
+
+                        <td>
+                          {dateFormat(
+                            value.END_DATE === null ||
+                              value.END_DATE === undefined
+                              ? new Date()
+                              : value.END_DATE,
+                            "yyyy-mm-dd"
+                          )}
+                        </td>
+                        <td>{value.DURATION_DAY}</td>
+                        <td>{value.PROFESSION_DIRECTION}</td>
+                        <td>{value.DIPLOM_NO}</td>
+
+                        <td>
+                          {dateFormat(
+                            value.DIPLOM_DATE === null ||
+                              value.DIPLOM_DATE === undefined
+                              ? new Date()
+                              : value.DIPLOM_DATE,
+                            "yyyy-mm-dd"
+                          )}
+                        </td>
+                      </tr>
+                    )
+                  )}
                 </tbody>
               </table>
             </div>
@@ -1638,7 +2245,7 @@ function MergeshliinBeltgel(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -1649,28 +2256,51 @@ function ErdmiinTsol(props) {
     DEPARTMENT_ID: 1,
     check: true,
   });
+  let too = 0;
   const alert = useAlert();
-  useEffect(() => {
-    async function fetchData() {
-      let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportFame/");
-      console.log("amjilttai", listItems.data);
-      loadData(listItems?.data);
-    }
-    fetchData();
-  }, [props]);
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
           "http://hr.audit.mn/hr/api/v1/reportFame/" + department.DEPARTMENT_ID
         );
-        if (listItems.data !== undefined && listItems.data.length === 0)
-          alert.show("өгөгдөл байхгүй байна");
-        else loadData(listItems?.data);
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
+      } else {
+        let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportFame/");
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
       }
     }
     fetchData();
-  }, [department]);
+  }, [props, department]);
+
   let listItems;
   if (data !== undefined && data.length > 0) {
     listItems = (
@@ -1727,7 +2357,8 @@ function ErdmiinTsol(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -1748,27 +2379,59 @@ function ErdmiinTsol(props) {
                       <td>Гэрчилгээ дипломын дугаар</td>
                     </tr>
                   </thead>
-                  <tbody>
-                    {data?.map((value, index) => (
+
+                  {data.map((value, index) =>
+                    value.isGroup === true ? (
                       <tr>
-                        <th>{index + 1}</th>
-                        <td>{value.PERSON_NAME}</td>
-                        <td>{value.FAME_TYPE_NAME}</td>
-                        <td>{value.SUBFAME_TYPE_NAME}</td>
-                        <td>{value.FAME_ORG}</td>
-                        <td>
-                          {dateFormat(
-                            value.FAME_DATE === null ||
-                              value.FAME_DATE === undefined
-                              ? new Date()
-                              : value.FAME_DATE,
-                            "yyyy-mm-dd"
-                          )}
+                        <td
+                          style={{
+                            borderTop: "1.1px solid #f1f1f1",
+                            borderBottom: "1px solid transparent",
+                          }}
+                        >
+                          {value.isGroup === true ? (too = too + 1) : too}
+                        </td>
+                        <td className="table has-text-left">
+                          {value.PERSON_NAME}
+                        </td>
+                        <td className="table has-text-left">
+                          {value.FAME_TYPE_NAME}
+                        </td>
+                        <td className="table has-text-left">
+                          {value.SUBFAME_TYPE_NAME}
+                        </td>
+                        <td className="table has-text-left">
+                          {value.FAME_ORG}
+                        </td>
+                        <td className="table has-text-left">
+                          {value.FAME_DATE}
                         </td>
                         <td>{value.FAME_NO}</td>
                       </tr>
-                    ))}
-                  </tbody>
+                    ) : (
+                      <tr>
+                        <td
+                          style={{ borderBottom: "1px solid transparent" }}
+                        ></td>
+                        <td
+                          style={{ borderBottom: "1px solid transparent" }}
+                        ></td>
+                        <td className="table has-text-left">
+                          {value.FAME_TYPE_NAME}
+                        </td>
+                        <td className="table has-text-left">
+                          {value.SUBFAME_TYPE_NAME}
+                        </td>
+                        <td className="table has-text-left">
+                          {value.FAME_ORG}
+                        </td>
+                        <td className="table has-text-left">
+                          {value.FAME_DATE}
+                        </td>
+                        <td>{value.FAME_NO}</td>
+                      </tr>
+                    )
+                  )}
                 </table>
               </div>
             </div>
@@ -1777,7 +2440,107 @@ function ErdmiinTsol(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = (
+      <p style={{ textAlignLast: "center" }}>
+        {" "}
+        <div
+          style={{
+            width: "99%",
+          }}
+        >
+          <div
+            className="box"
+            style={{ marginLeft: "7%", padding: "20px 2px 30% 10px" }}
+          >
+            <span
+              style={{
+                fontSize: "2rem",
+                marginLeft: "3rem",
+                marginBottom: "3rem",
+              }}
+            >
+              Эрдмийн цол
+            </span>
+            <div className="columns">
+              <div className="column is-3 ml-6" style={{ fontSize: "0.7rem" }}>
+                <div class="select">
+                  <DepartmentID
+                    personChild={department}
+                    setPersonChild={setDepartment}
+                  />
+                </div>
+              </div>
+              <div className="column is-3 ml-6"></div>
+              <div className="column is-2 ">
+                <div style={{ display: "none" }}>
+                  <ReactHTMLTableToExcel
+                    id="erdmiinTsolXLS"
+                    className="download-table-xls-button"
+                    table="erdmiinTsolXls"
+                    filename="tablexls"
+                    sheet="tablexls"
+                    buttonText="XLS"
+                  />
+                </div>
+                <button
+                  class="text"
+                  style={{
+                    marginLeft: "20%",
+                    borderRadius: "1px",
+                    backgroundColor: "#1cc88a",
+                    color: "#fff",
+                    border: "double",
+                  }}
+                  onClick={() =>
+                    document.getElementById("erdmiinTsolXLS").click()
+                  }
+                >
+                  <span style={{ display: "flex" }}>
+                    <img alt="" src={Excel} width="20px" height="20px "></img>
+                    Excel
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div className="columns">
+                <div className="column is-9 ml-6  ">
+                  <table id={"erdmiinTsolXls"} className="table is-bordered ">
+                    <thead style={{ backgroundColor: "#f1f1f1" }}>
+                      <tr>
+                        <td>№</td>
+                        <td>Ажилтны Нэр</td>
+                        <td>Цолны төрөл</td>
+                        <td>Цол</td>
+                        <td>Цол олгосон байгууллага</td>
+                        <td>Огноо</td>
+                        <td>Гэрчилгээ дипломын дугаар</td>
+                      </tr>
+                    </thead>
+
+                    <tr>
+                      <td
+                        style={{
+                          borderTop: "1.1px solid #f1f1f1",
+                          borderBottom: "1px solid transparent",
+                        }}
+                      ></td>
+                      <td className="table has-text-left"></td>
+                      <td className="table has-text-left"></td>
+                      <td className="table has-text-left"></td>
+                      <td className="table has-text-left"></td>
+                      <td className="table has-text-left"></td>
+                      <td></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p>
+    );
   }
 
   return listItems;
@@ -1789,28 +2552,53 @@ function TsergiinAlba(props) {
     DEPARTMENT_ID: 1,
     check: true,
   });
+  let too = 0;
   const alert = useAlert();
-  useEffect(() => {
-    async function fetchData() {
-      let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportForce/");
-      console.log("amjilttai", listItems.data);
-      loadData(listItems?.data);
-    }
-    fetchData();
-  }, [props]);
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
           "http://hr.audit.mn/hr/api/v1/reportForce/" + department.DEPARTMENT_ID
         );
-        if (listItems.data !== undefined && listItems.data.length === 0)
-          alert.show("өгөгдөл байхгүй байна");
-        else loadData(listItems?.data);
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
+      } else {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportForce/"
+        );
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
       }
     }
     fetchData();
-  }, [department]);
+  }, [props, department]);
+
   let listItems;
 
   if (data !== undefined && data.length > 0) {
@@ -1868,7 +2656,8 @@ function TsergiinAlba(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -1891,24 +2680,62 @@ function TsergiinAlba(props) {
                       <td>Тайлбар</td>
                     </tr>
                   </thead>
-                  {data?.map((value, index) => (
-                    <tbody>
-                      <td>{index + 1}</td>
-                      <td className="table has-text-left">
-                        {value.PERSON_NAME}
-                      </td>
-                      <td className="table has-text-left">
-                        {value.FORCE_TYPE_NAME}
-                      </td>
-                      <td className="table has-text-left">{value.FORCE_NO}</td>
-                      <td className="table has-text-left">
-                        {value.FORCE_LOCATION}
-                      </td>
-                      <td className="table has-text-left">
-                        {value.FORCE_DESC}
-                      </td>
-                    </tbody>
-                  ))}
+                  {data.map((value, index) =>
+                    value.isGroup === true ? (
+                      <tr>
+                        <td
+                          style={{
+                            borderTop: "1.1px solid #f1f1f1",
+                            borderBottom: "1px solid transparent",
+                          }}
+                        >
+                          {value.isGroup === true ? (too = too + 1) : too}
+                        </td>
+                        <td
+                          style={{
+                            borderTop: "1.1px solid #f1f1f1",
+                            borderBottom: "1px solid transparent",
+                          }}
+                        >
+                          {" "}
+                          {value.PERSON_NAME}
+                        </td>
+                        <td className="table has-text-left">
+                          {value.FORCE_TYPE_NAME}
+                        </td>
+                        <td className="table has-text-left">
+                          {value.FORCE_NO}
+                        </td>
+                        <td className="table has-text-left">
+                          {value.FORCE_LOCATION}
+                        </td>
+                        <td className="table has-text-left">
+                          {value.FORCE_DESC}
+                        </td>
+                      </tr>
+                    ) : (
+                      <tr>
+                        <td
+                          style={{ borderBottom: "1px solid transparent" }}
+                        ></td>
+                        <td
+                          style={{ borderBottom: "1px solid transparent" }}
+                        ></td>
+                        <td className="table has-text-left">
+                          {value.FORCE_TYPE_NAME}
+                        </td>
+                        <td className="table has-text-left">
+                          {value.FORCE_NO}
+                        </td>
+                        <td className="table has-text-left">
+                          {value.FORCE_LOCATION}
+                        </td>
+                        <td className="table has-text-left">
+                          {value.FORCE_DESC}
+                        </td>
+                      </tr>
+                    )
+                  )}
                 </table>
               </div>
             </div>
@@ -1917,7 +2744,7 @@ function TsergiinAlba(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = <p style={{ textAlignLast: "center" }}>ачаалж байна.......</p>;
   }
 
   return listItems;
@@ -1928,28 +2755,53 @@ function ShagnaliinTalaarhMedeelel(props) {
     DEPARTMENT_ID: 1,
     check: true,
   });
+  let too = 0;
   const alert = useAlert();
-  useEffect(() => {
-    async function fetchData() {
-      let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportAward/");
-      console.log("amjilttai", listItems.data);
-      loadData(listItems?.data);
-    }
-    fetchData();
-  }, [props]);
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
           "http://hr.audit.mn/hr/api/v1/reportAward/" + department.DEPARTMENT_ID
         );
-        if (listItems.data !== undefined && listItems.data.length === 0)
-          alert.show("өгөгдөл байхгүй байна");
-        else loadData(listItems?.data);
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
+      } else {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportAward/"
+        );
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
       }
     }
     fetchData();
-  }, [department]);
+  }, [props, department]);
+
   let listItems;
   if (data !== undefined && data.length > 0) {
     listItems = (
@@ -1980,8 +2832,8 @@ function ShagnaliinTalaarhMedeelel(props) {
                 />
               </div>
             </div>
-            <div className="column is-3 ml-1"></div>
-            <div className="column is-1 ">
+            <div className="column is-8 ml-1"></div>
+            <div className="column is-2 ">
               <div style={{ display: "none" }}>
                 <ReactHTMLTableToExcel
                   id="shagnalButtonXSL"
@@ -2006,7 +2858,8 @@ function ShagnaliinTalaarhMedeelel(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -2033,33 +2886,79 @@ function ShagnaliinTalaarhMedeelel(props) {
                     </tr>
                   </thead>
                   <tbody>
-                    {data?.map((value, index) => (
-                      <tr>
-                        <td>{index + 1}</td>
-                        <td>{value.PERSON_NAME}</td>
-                        <td>
-                          {dateFormat(
-                            value.AWARD_DATE === null ||
-                              value.AWARD_DATE === undefined
-                              ? new Date()
-                              : value.AWARD_DATE,
-                            "yyyy-mm-dd"
-                          )}
-                        </td>
-                        <td>{value.AWARD_NAME}</td>
-                        <td>{value.DECISION_NO}</td>
-                        <td>
-                          {dateFormat(
-                            value.DECISION_DATE === null ||
-                              value.DECISION_DATE === undefined
-                              ? new Date()
-                              : value.DECISION_DATE,
-                            "yyyy-mm-dd"
-                          )}
-                        </td>
-                        <td>{value.AWARD_DESC}</td>
-                      </tr>
-                    ))}
+                    {data.map((value, index) =>
+                      value.isGroup === true ? (
+                        <tr>
+                          <td
+                            style={{
+                              borderTop: "1.1px solid #f1f1f1",
+                              borderBottom: "1px solid transparent",
+                            }}
+                          >
+                            {value.isGroup === true ? (too = too + 1) : too}
+                          </td>
+                          <td
+                            style={{
+                              borderTop: "1.1px solid #f1f1f1",
+                              borderBottom: "1px solid transparent",
+                            }}
+                          >
+                            {value.PERSON_NAME}
+                          </td>
+                          <td>
+                            {dateFormat(
+                              value.AWARD_DATE === null ||
+                                value.AWARD_DATE === undefined
+                                ? new Date()
+                                : value.AWARD_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.AWARD_NAME}</td>
+                          <td>{value.DECISION_NO}</td>
+                          <td>
+                            {dateFormat(
+                              value.DECISION_DATE === null ||
+                                value.DECISION_DATE === undefined
+                                ? new Date()
+                                : value.DECISION_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.AWARD_DESC}</td>
+                        </tr>
+                      ) : (
+                        <tr>
+                          <td
+                            style={{ borderBottom: "1px solid transparent" }}
+                          ></td>
+                          <td
+                            style={{ borderBottom: "1px solid transparent" }}
+                          ></td>
+                          <td>
+                            {dateFormat(
+                              value.AWARD_DATE === null ||
+                                value.AWARD_DATE === undefined
+                                ? new Date()
+                                : value.AWARD_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.AWARD_NAME}</td>
+                          <td>{value.DECISION_NO}</td>
+                          <td>
+                            {dateFormat(
+                              value.DECISION_DATE === null ||
+                                value.DECISION_DATE === undefined
+                                ? new Date()
+                                : value.DECISION_DATE,
+                              "yyyy-mm-dd"
+                            )}
+                          </td>
+                          <td>{value.AWARD_DESC}</td>
+                        </tr>
+                      )
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -2069,7 +2968,117 @@ function ShagnaliinTalaarhMedeelel(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = (
+      <p style={{ textAlignLast: "center" }}>
+        <div
+          style={{
+            width: "99%",
+          }}
+        >
+          <div
+            className="box"
+            style={{ marginLeft: "7%", padding: "20px 2px 21% 10px" }}
+          >
+            <span
+              style={{
+                fontSize: "2rem",
+                marginLeft: "3rem",
+                marginBottom: "3rem",
+              }}
+            >
+              Шагналын талаарх мэдээлэл
+            </span>
+            <div className="columns">
+              <div className="column is-3 ml-6" style={{ fontSize: "0.7rem" }}>
+                <div class="select">
+                  <DepartmentID
+                    personChild={department}
+                    setPersonChild={setDepartment}
+                  />
+                </div>
+              </div>
+              <div className="column is-8 ml-1"></div>
+              <div className="column is-2 ">
+                <div style={{ display: "none" }}>
+                  <ReactHTMLTableToExcel
+                    id="shagnalButtonXSL"
+                    className="download-table-xls-button"
+                    table="shagnalTableXls"
+                    filename="tablexls"
+                    sheet="tablexls"
+                    buttonText="XLS"
+                  />
+                </div>
+                <button
+                  class="text"
+                  style={{
+                    marginLeft: "1%",
+                    borderRadius: "1px",
+                    backgroundColor: "#1cc88a",
+                    color: "#fff",
+                    border: "double",
+                  }}
+                  onClick={() =>
+                    document.getElementById("shagnalButtonXSL").click()
+                  }
+                >
+                  <span style={{ display: "flex" }}>
+                    <img alt="" src={Excel} width="20px" height="20px "></img>
+                    Excel
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div>
+                <div class="columns is-12 is-gapless">
+                  <div class="column is-0 " />
+
+                  <table
+                    id={"shagnalTableXls"}
+                    className="table is-bordered ml-6"
+                  >
+                    <thead style={{ backgroundColor: "#f1f1f1" }}>
+                      <tr>
+                        <td>№</td>
+                        <td>Ажилтны нэр</td>
+                        <td>Шагнагдсан огноо</td>
+                        <td>Шагналын нэр</td>
+                        <td>Шийдвэрийн нэр, дугаар</td>
+                        <td>Огноо</td>
+                        <td>Шагнуулсан үндэслэл</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td
+                          style={{
+                            borderTop: "1.1px solid #f1f1f1",
+                            borderBottom: "1px solid transparent",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            borderTop: "1.1px solid #f1f1f1",
+                            borderBottom: "1px solid transparent",
+                          }}
+                        ></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p>
+    );
   }
 
   return listItems;
@@ -2080,17 +3089,8 @@ function TurshlagiinTalaarhMedeelel(props) {
     DEPARTMENT_ID: 1,
     check: true,
   });
+  let too = 0;
   const alert = useAlert();
-  useEffect(() => {
-    async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportExperience/"
-      );
-      console.log("amjilttai", listItems.data);
-      loadData(listItems?.data);
-    }
-    fetchData();
-  }, [props]);
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
@@ -2098,13 +3098,44 @@ function TurshlagiinTalaarhMedeelel(props) {
           "http://hr.audit.mn/hr/api/v1/reportExperience/" +
             department.DEPARTMENT_ID
         );
-        if (listItems.data !== undefined && listItems.data.length === 0)
-          alert.show("өгөгдөл байхгүй байна");
-        else loadData(listItems?.data);
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
+      } else {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportExperience/"
+        );
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
       }
     }
     fetchData();
-  }, [department]);
+  }, [props, department]);
 
   let listItems;
   if (data !== undefined && data.length > 0) {
@@ -2125,7 +3156,7 @@ function TurshlagiinTalaarhMedeelel(props) {
               marginBottom: "3rem",
             }}
           >
-            Туршлагын талаарх мэдээлэл
+            7. Туршлагын талаарх мэдээлэл
           </span>
           <div className="columns">
             <div className="column is-5 ml-6" style={{ fontSize: "0.7rem" }}>
@@ -2164,7 +3195,8 @@ function TurshlagiinTalaarhMedeelel(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -2184,9 +3216,8 @@ function TurshlagiinTalaarhMedeelel(props) {
                       <td>№</td>
                       <td>Ажилтны Нэр</td>
                       <td>Ажилласан аймаг, хот</td>
-                      <td>Ажилласан сум, дүүрэг</td>
-                      <td>Газар хэлтэс, алба</td>
                       <td>Ажилласан байгууллагын нэр</td>
+                      <td>Газар хэлтэс, алба</td>
                       <td>Эрхэлсэн албан тушаал</td>
                       <td>Албан тушаалын төрөл</td>
                       <td>Ажилд орсон он, сар, өдөр</td>
@@ -2195,19 +3226,33 @@ function TurshlagiinTalaarhMedeelel(props) {
                       <td>Ажилаас чөлөөлөгдсөн тушаалын дугаар</td>
                     </tr>
                   </thead>
-                  <tbody>
-                    {data?.map((value, index) => (
-                      <tr>
-                        <th>{index + 1}</th>
-                        <td>{value.PERSON_NAME}</td>
-                        <td>{value.OFFICE_NAME}</td>
-                        <td>{value.SUB_OFFICE_NAME}</td>
-                        <td>{value.EXPERIENCE_DEPARTMENT}</td>
-                        <td>{value.EXPERIENCE_ORG}</td>
-                        <td>{value.EXPERIENCE_POSITION}</td>
-                        <td>{value.EXPERIENCE_POSITION_TYPE}</td>
 
+                  {data.map((value, index) =>
+                    value.isGroup === true ? (
+                      <tr>
+                        <td
+                          style={{
+                            borderTop: "1.1px solid #f1f1f1",
+                            borderBottom: "1px solid transparent",
+                          }}
+                        >
+                          {value.isGroup === true ? (too = too + 1) : too}
+                        </td>
+                        <td
+                          style={{
+                            borderTop: "1.1px solid #f1f1f1",
+                            borderBottom: "1px solid transparent",
+                          }}
+                        >
+                          {value.PERSON_NAME}
+                        </td>
+                        <td>{value.OFFICE_NAME}</td>
+                        <td>{value.EXPERIENCE_ORG}</td>
+                        <td>{value.EXPERIENCE_DEPARTMENT}</td>
+                        <td>{value.EXPERIENCE_POSITION}</td>
+                        <td>{value.POSITION_CATEGORY_TYPE_NAME}</td>
                         <td>
+                          {" "}
                           {dateFormat(
                             value.ENTERED_DATE === null ||
                               value.ENTERED_DATE === undefined
@@ -2217,8 +3262,8 @@ function TurshlagiinTalaarhMedeelel(props) {
                           )}
                         </td>
                         <td>{value.ENTERED_NO}</td>
-
                         <td>
+                          {" "}
                           {dateFormat(
                             value.EXPIRED_DATE === null ||
                               value.EXPIRED_DATE === undefined
@@ -2229,8 +3274,44 @@ function TurshlagiinTalaarhMedeelel(props) {
                         </td>
                         <td>{value.EXPIRED_NO}</td>
                       </tr>
-                    ))}
-                  </tbody>
+                    ) : (
+                      <tr>
+                        <td
+                          style={{ borderBottom: "1px solid transparent" }}
+                        ></td>
+                        <td
+                          style={{ borderBottom: "1px solid transparent" }}
+                        ></td>
+                        <td>{value.OFFICE_NAME}</td>
+                        <td>{value.EXPERIENCE_ORG}</td>
+                        <td>{value.EXPERIENCE_DEPARTMENT}</td>
+                        <td>{value.EXPERIENCE_POSITION}</td>
+                        <td>{value.POSITION_CATEGORY_TYPE_NAME}</td>
+                        <td>
+                          {" "}
+                          {dateFormat(
+                            value.ENTERED_DATE === null ||
+                              value.ENTERED_DATE === undefined
+                              ? new Date()
+                              : value.ENTERED_DATE,
+                            "yyyy-mm-dd"
+                          )}
+                        </td>
+                        <td>{value.ENTERED_NO}</td>
+                        <td>
+                          {" "}
+                          {dateFormat(
+                            value.EXPIRED_DATE === null ||
+                              value.EXPIRED_DATE === undefined
+                              ? new Date()
+                              : value.EXPIRED_DATE,
+                            "yyyy-mm-dd"
+                          )}
+                        </td>
+                        <td>{value.EXPIRED_NO}</td>
+                      </tr>
+                    )
+                  )}
                 </table>
               </div>
             </div>
@@ -2239,7 +3320,120 @@ function TurshlagiinTalaarhMedeelel(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = (
+      <p style={{ textAlignLast: "center" }}>
+        <div
+          className="box"
+          style={{ marginLeft: "7%", padding: "20px 30px 7% 30px" }}
+        >
+          <span
+            style={{
+              fontSize: "2rem",
+              marginLeft: "3rem",
+              marginBottom: "3rem",
+            }}
+          >
+            7. Туршлагын талаарх мэдээлэл
+          </span>
+          <div className="columns">
+            <div className="column is-5 ml-6" style={{ fontSize: "0.7rem" }}>
+              <div class="select">
+                <DepartmentID
+                  personChild={department}
+                  setPersonChild={setDepartment}
+                />
+              </div>
+            </div>
+            <div className="column is-5 ml-6"></div>
+            <div className="column is-2 ">
+              <div style={{ display: "none" }}>
+                <ReactHTMLTableToExcel
+                  id="turshlagiinTalaarhMedeelelXls"
+                  className="download-table-xls-button"
+                  table="turshlagiinTalaarhMedeelelXls"
+                  filename="tablexls"
+                  sheet="tablexls"
+                  buttonText="XLS"
+                />
+              </div>
+              <button
+                class="text"
+                style={{
+                  marginLeft: "38%",
+                  borderRadius: "1px",
+                  backgroundColor: "#1cc88a",
+                  color: "#fff",
+                  border: "double",
+                }}
+                onClick={() =>
+                  document
+                    .getElementById("turshlagiinTalaarhMedeelelXls")
+                    .click()
+                }
+              >
+                <span style={{ display: "flex" }}>
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <div>
+              <div class="columns is-12 ml-6 is-gapless">
+                <div class="column is-0 " />
+
+                <table
+                  id={"turshlagiinTalaarhMedeelelXLS"}
+                  className="table is-bordered p-3"
+                >
+                  <thead style={{ backgroundColor: "#f1f1f1" }}>
+                    <tr>
+                      <td>№</td>
+                      <td>Ажилтны Нэр</td>
+                      <td>Ажилласан аймаг, хот</td>
+                      <td>Ажилласан байгууллагын нэр</td>
+                      <td>Газар хэлтэс, алба</td>
+                      <td>Эрхэлсэн албан тушаал</td>
+                      <td>Албан тушаалын төрөл</td>
+                      <td>Ажилд орсон он, сар, өдөр</td>
+                      <td>Ажилд томилогдсон тушаалын дугаар</td>
+                      <td>Ажлаас чөлөөлөгдсөн он, сар</td>
+                      <td>Ажилаас чөлөөлөгдсөн тушаалын дугаар</td>
+                    </tr>
+                  </thead>
+
+                  <tr>
+                    <td
+                      style={{
+                        borderTop: "1.1px solid #f1f1f1",
+                        borderBottom: "1px solid transparent",
+                      }}
+                    ></td>
+                    <td
+                      style={{
+                        borderTop: "1.1px solid #f1f1f1",
+                        borderBottom: "1px solid transparent",
+                      }}
+                    ></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p>
+    );
   }
 
   return listItems;
@@ -2250,18 +3444,8 @@ function BvteeliinJagsaalt(props) {
     DEPARTMENT_ID: 1,
     check: true,
   });
+  let too = 0;
   const alert = useAlert();
-
-  useEffect(() => {
-    async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportLiterature/"
-      );
-      console.log("amjilttai", listItems.data);
-      loadData(listItems?.data);
-    }
-    fetchData();
-  }, [props]);
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
@@ -2269,13 +3453,45 @@ function BvteeliinJagsaalt(props) {
           "http://hr.audit.mn/hr/api/v1/reportLiterature/" +
             department.DEPARTMENT_ID
         );
-        if (listItems.data !== undefined && listItems.data.length === 0)
-          alert.show("өгөгдөл байхгүй байна");
-        else loadData(listItems?.data);
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
+      } else {
+        let listItems = await axios(
+          "http://hr.audit.mn/hr/api/v1/reportLiterature/"
+        );
+
+        let temp = "";
+        let arr = [];
+        listItems?.data.map((value, index) => {
+          let tempV = value;
+          if (temp !== value.PERSON_NAME) {
+            tempV.isGroup = true;
+            arr.push(tempV);
+            temp = value.PERSON_NAME;
+          } else {
+            tempV.isGroup = false;
+            arr.push(tempV);
+          }
+        });
+        loadData(arr);
       }
     }
     fetchData();
-  }, [department]);
+  }, [props, department]);
+
   let listItems;
   if (data !== undefined && data.length > 0) {
     listItems = (
@@ -2306,7 +3522,7 @@ function BvteeliinJagsaalt(props) {
                 />
               </div>
             </div>
-            <div className="column is-1 ml-6"></div>
+            <div className="column is-6  ml-6"></div>
             <div className="column is-2 ">
               <div style={{ display: "none" }}>
                 <ReactHTMLTableToExcel
@@ -2332,7 +3548,8 @@ function BvteeliinJagsaalt(props) {
                 }
               >
                 <span style={{ display: "flex" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <img alt="" src={Excel} width="20px" height="20px "></img>
+                  Excel
                 </span>
               </button>
             </div>
@@ -2356,11 +3573,26 @@ function BvteeliinJagsaalt(props) {
                     <td>Тайлбар</td>
                   </tr>
                 </thead>
-                <tbody>
-                  {data?.map((value, index) => (
+
+                {data.map((value, index) =>
+                  value.isGroup === true ? (
                     <tr>
-                      <td>{index + 1}</td>
-                      <td>{value.PERSON_NAME}</td>
+                      <td
+                        style={{
+                          borderTop: "1.1px solid #f1f1f1",
+                          borderBottom: "1px solid transparent",
+                        }}
+                      >
+                        {value.isGroup === true ? (too = too + 1) : too}
+                      </td>
+                      <td
+                        style={{
+                          borderTop: "1.1px solid #f1f1f1",
+                          borderBottom: "1px solid transparent",
+                        }}
+                      >
+                        {value.PERSON_NAME}
+                      </td>
                       <td>{value.LITERATURE_NAME}</td>
                       <td>{value.LITERATURE_TYPE}</td>
 
@@ -2383,8 +3615,38 @@ function BvteeliinJagsaalt(props) {
                         )}
                       </td>
                     </tr>
-                  ))}
-                </tbody>
+                  ) : (
+                    <tr>
+                      <td
+                        style={{ borderBottom: "1px solid transparent" }}
+                      ></td>
+                      <td
+                        style={{ borderBottom: "1px solid transparent" }}
+                      ></td>
+                      <td>{value.LITERATURE_NAME}</td>
+                      <td>{value.LITERATURE_TYPE}</td>
+
+                      <td>
+                        {dateFormat(
+                          value.LITERATURE_DATE === null ||
+                            value.LITERATURE_DATE === undefined
+                            ? new Date()
+                            : value.LITERATURE_DATE,
+                          "yyyy-mm-dd"
+                        )}
+                      </td>
+                      <td>
+                        {dateFormat(
+                          value.LITERATURE_DATE === null ||
+                            value.LITERATURE_DATE === undefined
+                            ? new Date()
+                            : value.LITERATURE_DATE,
+                          "yyyy-mm-dd"
+                        )}
+                      </td>
+                    </tr>
+                  )
+                )}
               </table>
             </div>
           </div>
@@ -2392,7 +3654,121 @@ function BvteeliinJagsaalt(props) {
       </div>
     );
   } else {
-    listItems = <p>ачаалж байна.......</p>;
+    listItems = (
+      <p style={{ textAlignLast: "center" }}>
+        <div
+          style={{
+            width: "99%",
+          }}
+        >
+          <div
+            className="box"
+            style={{ marginLeft: "7%", padding: "20px 2px 35% 10px" }}
+          >
+            <span
+              style={{
+                fontSize: "2rem",
+                marginLeft: "3rem",
+                marginBottom: "3rem",
+              }}
+            >
+              Бүтээлийн жагсаалт
+            </span>
+            <div className="columns">
+              <div className="column is-3 ml-6" style={{ fontSize: "0.7rem" }}>
+                <div class="select">
+                  <DepartmentID
+                    personChild={department}
+                    setPersonChild={setDepartment}
+                  />
+                </div>
+              </div>
+              <div className="column is-6  ml-6"></div>
+              <div className="column is-2 ">
+                <div style={{ display: "none" }}>
+                  <ReactHTMLTableToExcel
+                    id="bvteeliinJagsaaltXSL"
+                    className="download-table-xls-button"
+                    table="bvteeliinJagsaaltXls"
+                    filename="tablexls"
+                    sheet="tablexls"
+                    buttonText="XLS"
+                  />
+                </div>
+                <button
+                  class="text"
+                  style={{
+                    marginLeft: "23%",
+                    borderRadius: "1px",
+                    backgroundColor: "#1cc88a",
+                    color: "#fff",
+                    border: "double",
+                  }}
+                  onClick={() =>
+                    document.getElementById("bvteeliinJagsaaltXSL").click()
+                  }
+                >
+                  <span style={{ display: "flex" }}>
+                    <img alt="" src={Excel} width="20px" height="20px "></img>
+                    Excel
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div class="columns  is-gapless">
+                <div class="column is-0 " />
+
+                <table
+                  id={"bvteeliinJagsaaltXls"}
+                  className="table is-bordered ml-6"
+                >
+                  <thead style={{ backgroundColor: "#f1f1f1" }}>
+                    <tr>
+                      <td>№</td>
+                      <td>Ажилтны Нэр</td>
+                      <td>Бүтээлийн нэр</td>
+                      <td>Бүтээлийн төрөл</td>
+                      <td>Бүтээл гаргасан огноо</td>
+                      <td>Тайлбар</td>
+                    </tr>
+                  </thead>
+                  <tr>
+                    <td
+                      style={{
+                        borderTop: "1.1px solid #f1f1f1",
+                        borderBottom: "1px solid transparent",
+                      }}
+                    ></td>
+                    <td
+                      style={{
+                        borderTop: "1.1px solid #f1f1f1",
+                        borderBottom: "1px solid transparent",
+                      }}
+                    ></td>
+                    <td></td>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </p>
+    );
   }
 
   return listItems;

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useReducer } from "react";
-import Header from "./header";
 const axios = require("axios");
 var dateFormat = require("dateformat");
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
@@ -229,7 +228,7 @@ function Suboffice(props) {
           })
         }
       >
-        <option value={999}>хоосон</option>
+        <option value={999}>Сонгоно уу</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.SUB_OFFICE_ID}>
             {nation.SUB_OFFICE_NAME}
@@ -659,7 +658,7 @@ function DepartmentID(props) {
         }
         style={{ width: "-webkit-fill-available" }}
       >
-        <option value={""}>хоосон</option>
+        <option value={""}>Сонгоно уу</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.DEPARTMENT_ID}>
             {nation.DEPARTMENT_NAME}
@@ -715,7 +714,7 @@ function Subdepartment(props) {
           })
         }
       >
-        <option value={"null"}>хоосон</option>
+        <option value={"null"}>Сонгоно уу</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.SUB_DEPARTMENT_ID}>
             {nation.SUB_DEPARTMENT_NAME}
@@ -737,9 +736,9 @@ function Compartment(props) {
       );
 
       if (
-        props.personChild.SUB_DEPARTMENT_ID != "null" &&
+        props.personChild.SUB_DEPARTMENT_ID !== "null" &&
         props.personChild.SUB_DEPARTMENT_ID !== "" &&
-        props.personChild.DEPARTMENT_ID != "null" &&
+        props.personChild.DEPARTMENT_ID !== "null" &&
         props.personChild.DEPARTMENT_ID !== ""
       ) {
         loadData(
@@ -752,7 +751,7 @@ function Compartment(props) {
           )
         );
       } else if (
-        props.personChild.SUB_DEPARTMENT_ID != "null" &&
+        props.personChild.SUB_DEPARTMENT_ID !== "null" &&
         props.personChild.SUB_DEPARTMENT_ID !== ""
       ) {
         loadData(
@@ -763,7 +762,7 @@ function Compartment(props) {
           )
         );
       } else if (
-        props.personChild.DEPARTMENT_ID != "null" &&
+        props.personChild.DEPARTMENT_ID !== "null" &&
         props.personChild.DEPARTMENT_ID !== ""
       ) {
         loadData(
@@ -798,7 +797,7 @@ function Compartment(props) {
           })
         }
       >
-        <option value={"null"}>хоосон</option>
+        <option value={"null"}>Сонгоно уу</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.COMPARTMENT_ID}>
             {nation.COMPARTMENT_NAME}
@@ -821,27 +820,27 @@ function Position(props) {
       );
 
       if (
-        props.personChild?.SUB_DEPARTMENT_ID != "null" &&
-        props.personChild?.SUB_DEPARTMENT_ID != "" &&
-        props.personChild?.DEPARTMENT_ID != "null" &&
-        props.personChild?.DEPARTMENT_ID != "" &&
-        props.personChild?.COMPARTMENT_ID != "null" &&
-        props.personChild?.COMPARTMENT_ID != ""
+        props.personChild?.SUB_DEPARTMENT_ID !== "null" &&
+        props.personChild?.SUB_DEPARTMENT_ID !== "" &&
+        props.personChild?.DEPARTMENT_ID !== "null" &&
+        props.personChild?.DEPARTMENT_ID !== "" &&
+        props.personChild?.COMPARTMENT_ID !== "null" &&
+        props.personChild?.COMPARTMENT_ID !== ""
       ) {
         loadData(
           listItems.data?.filter(
             (a) =>
-              parseInt(a.DEPARTMENT_ID) ==
+              parseInt(a.DEPARTMENT_ID) ===
                 parseInt(props.personChild.DEPARTMENT_ID) &&
-              parseInt(a.SUB_DEPARTMENT_ID) ==
+              parseInt(a.SUB_DEPARTMENT_ID) ===
                 parseInt(props.personChild.SUB_DEPARTMENT_ID) &&
-              parseInt(a.COMPARTMENT_ID) ==
+              parseInt(a.COMPARTMENT_ID) ===
                 parseInt(props.personChild.COMPARTMENT_ID)
           )
         );
       } else if (
-        props.personChild.SUB_DEPARTMENT_ID != "null" &&
-        props.personChild.SUB_DEPARTMENT_ID != ""
+        props.personChild.SUB_DEPARTMENT_ID !== "null" &&
+        props.personChild.SUB_DEPARTMENT_ID !== ""
       ) {
         loadData(
           listItems.data?.filter(
@@ -899,7 +898,7 @@ function Position(props) {
           })
         }
       >
-        <option value={""}>хоосон</option>
+        <option value={""}>Сонгоно уу</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.POSITION_ID}>
             {nation.POSITION_NAME}
@@ -988,7 +987,7 @@ function Decisiontype(props) {
           })
         }
       >
-        <option value={""}>хоосон</option>
+        <option value={""}>Сонгоно уу</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.DECISION_TYPE_ID}>
             {nation.DECISION_TYPE_NAME}
@@ -1080,7 +1079,7 @@ function Positioncategorytype(props) {
           })
         }
       >
-        <option value={""}>хоосон</option>
+        <option value={""}>Сонгоно уу</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.POSITION_CATEGORY_TYPE_ID}>
             {nation.POSITION_CATEGORY_TYPE_NAME}
@@ -1137,7 +1136,7 @@ function Positioncategory(props) {
           })
         }
       >
-        <option value={"null"}>хоосон</option>
+        <option value={"null"}>Сонгоно уу</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.POSITION_CATEGORY_ID}>
             {nation.POSITION_CATEGORY_NAME}
@@ -1280,7 +1279,9 @@ function Profession(props) {
       <select
         disabled={props.edit}
         className="anketInput"
-        style={{ width: "-webkit-fill-available" }}
+        style={{
+          width: props.width === true ? "100px" : "-webkit-fill-available",
+        }}
         value={props.personChild?.PROFESSION_ID}
         onChange={(text) =>
           props.setPersonChild({
@@ -1295,8 +1296,9 @@ function Profession(props) {
           })
         }
       >
+        <option value={999}>Сонгоно уу</option>
         {data?.map((nation, index) => (
-          <option key={index} value={nation.PROFESSION_ID}>
+          <option key={nation.PROFESSION_NAME} value={nation.PROFESSION_ID}>
             {nation.PROFESSION_NAME}
           </option>
         ))}

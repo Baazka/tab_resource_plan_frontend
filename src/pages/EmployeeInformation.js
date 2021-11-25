@@ -11,32 +11,11 @@ import {
   Profession,
 } from "../components/library";
 import Header from "../components/header";
-import { DataRequest } from "../functions/DataApi";
 import {
-  AvatarB,
-  Face,
-  Trush,
-  Warning,
   BlackNeg,
   BlackKhoyor,
-  BlackGurav,
-  BlackDuruv,
-  BlackTav,
-  BlackZurgaa,
-  BlackDoloo,
-  BlackNaim,
-  Add,
   BlueNeg,
   BlueKhoyor,
-  BlueKGurav,
-  BlueDuruv,
-  BlueTav,
-  BlueZurgaa,
-  BlueDoloo,
-  BlueNaim,
-  BlueGurav,
-  Delete,
-  M,
 } from "../assets/images/zurag";
 import { useAlert } from "react-alert";
 import ScaleLoader from "react-spinners/ScaleLoader";
@@ -81,6 +60,7 @@ function EmployeeInformation(props) {
 
         <div className="AnketList" style={{ marginTop: "3rem" }}>
           <img
+            alt=""
             src={menu === 1 ? BlueNeg : BlackNeg}
             width="45px"
             height="45px"
@@ -105,6 +85,7 @@ function EmployeeInformation(props) {
 
         <div className="AnketList">
           <img
+            alt=""
             src={menu === 2 ? BlueKhoyor : BlackKhoyor}
             width="45px"
             height="45px"
@@ -129,6 +110,7 @@ function EmployeeInformation(props) {
 
         <div className="AnketList">
           <img
+            alt=""
             src={menu === 3 ? BlueKhoyor : BlackKhoyor}
             width="45px"
             height="45px"
@@ -154,6 +136,7 @@ function EmployeeInformation(props) {
 
         <div className="AnketList">
           <img
+            alt=""
             src={menu === 4 ? BlueKhoyor : BlackKhoyor}
             width="45px"
             height="45px"
@@ -179,6 +162,7 @@ function EmployeeInformation(props) {
 
         <div className="AnketList">
           <img
+            alt=""
             src={menu === 5 ? BlueKhoyor : BlackKhoyor}
             width="45px"
             height="45px"
@@ -203,6 +187,7 @@ function EmployeeInformation(props) {
 
         <div className="AnketList">
           <img
+            alt=""
             src={menu === 6 ? BlueKhoyor : BlackKhoyor}
             width="45px"
             height="45px"
@@ -227,6 +212,7 @@ function EmployeeInformation(props) {
 
         <div className="AnketList">
           <img
+            alt=""
             src={menu === 7 ? BlueKhoyor : BlackKhoyor}
             width="45px"
             height="45px"
@@ -251,6 +237,7 @@ function EmployeeInformation(props) {
 
         <div className="AnketList">
           <img
+            alt=""
             src={menu === 8 ? BlueKhoyor : BlackKhoyor}
             width="45px"
             height="45px"
@@ -275,6 +262,7 @@ function EmployeeInformation(props) {
 
         <div className="AnketList">
           <img
+            alt=""
             src={menu === 9 ? BlueKhoyor : BlackKhoyor}
             width="45px"
             height="45px"
@@ -299,6 +287,7 @@ function EmployeeInformation(props) {
         </div>
         <div className="AnketList">
           <img
+            alt=""
             src={menu === 10 ? BlueKhoyor : BlackKhoyor}
             width="45px"
             height="45px"
@@ -322,6 +311,7 @@ function EmployeeInformation(props) {
         </div>
         <div className="AnketList">
           <img
+            alt=""
             src={menu === 11 ? BlueKhoyor : BlackKhoyor}
             width="45px"
             height="45px"
@@ -883,6 +873,36 @@ function GuitsetgeliinTuluvluguu(props) {
     fetchData();
   }, [props]);
 
+  useEffect(() => {
+    if (data?.REQUIREMENT_ID === undefined) {
+      console.log(data?.REQUIREMENT_ID, "orsooon");
+      loadData({
+        REQUIREMENT_ID: 0,
+        EDUCATION_TYPE_ID: 1,
+        PROFESSION_ID: 1,
+        REQUIREMENT_QUALIFICATION: "",
+        REQUIREMENT_EXPERIENCE: "",
+        REQUIREMENT_SKILL: "",
+        POSITION_ID: props?.POSITION_ID,
+        IS_ACTIVE: 1,
+        CREATED_BY: userDetils?.USER_ID,
+        CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+        PERSON_ID: 0,
+      });
+    }
+  }, [data]);
+
+  function requiredField() {
+    if (
+      data.REQUIREMENT_EDUCATION === null ||
+      data.REQUIREMENT_EDUCATION === ""
+    ) {
+      alert.show("Боловсрол оруулан уу");
+      return false;
+    } else {
+      return true;
+    }
+  }
   let listItems;
   if (data !== undefined && data !== null) {
     listItems = (
@@ -923,7 +943,7 @@ function GuitsetgeliinTuluvluguu(props) {
           </div>
 
           <table className="table is-bordered is-flex-wrap-wrap">
-            <thead>
+            <tbody>
               <tr>
                 <td>
                   <span className="textSaaral text-bold">№</span>
@@ -951,40 +971,6 @@ function GuitsetgeliinTuluvluguu(props) {
                   <span className="textSaaral text-bold">Дуусах огноо</span>
                 </td>
               </tr>
-            </thead>
-            <tbody>
-              {data?.map((value, index) => (
-                <tr>
-                  <td>
-                    <span className="textSaaral text-bold">{index + 1}</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral text-bold">Менежер</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral text-bold">Батлагч</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral text-bold">Харах</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral text-bold">Гүйцэтгэгч</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral text-bold">Төрөл</span>
-                  </td>
-                  <td>
-                    <span className="textSaaral text-bold">
-                      {dateFormat(value.START_DATE, "yyyy-mm-dd")}
-                    </span>
-                  </td>
-                  <td>
-                    <span className="textSaaral text-bold">
-                      {dateFormat(value.END_DATE, "yyyy-mm-dd")}
-                    </span>
-                  </td>
-                </tr>
-              ))}
             </tbody>
           </table>
 
@@ -1026,25 +1012,26 @@ function TuluvluguUNemeh(props) {
 
   function saveToDB() {
     console.log("depid", data);
-    DataRequest({
-      url: "http://localhost:3002/api/v1/contrgctor_plan",
-      method: "POST",
-      data: data,
-    })
-      .then(function (response) {
-        console.log("tushaalResponse", response);
-        if (response?.data?.message === "success") {
-          alert.show("амжилттай хадгаллаа");
-        } else {
-          alert.show("амжилтгүй алдаа гарсан");
-        }
-        //history.push('/sample')
-      })
-      .catch(function (error) {
-        //alert(error.response.data.error.message);
-        console.log(error.response);
-        alert.show("амжилтгүй алдаа");
-      });
+    // DataRequest({
+    //   url: "http://hr.audit.mn/hr/api/v1/decision",
+    //   method: "POST",
+    //   data: data,
+    // })
+    //   .then(function (response) {
+    //     console.log("tushaalResponse", response);
+    //     if (response?.data?.message === "success") {
+    //       alert.show("амжилттай хадгаллаа");
+
+    //     } else {
+    //       alert.show("амжилтгүй алдаа");
+    //     }
+    //     //history.push('/sample')
+    //   })
+    //   .catch(function (error) {
+    //     //alert(error.response.data.error.message);
+    //     console.log(error.response);
+    //     alert.show("амжилтгүй алдаа");
+    //   });
   }
 
   return (
@@ -1152,7 +1139,7 @@ function TuluvluguUNemeh(props) {
               <div className="column is-3">
                 <input
                   type="date"
-                  //disabled={props.edit}
+                  disabled={props.edit}
                   className="anketInput"
                   value={dateFormat(data?.START_DATE, "yyyy-mm-dd")}
                   onChange={(e) => {
@@ -1172,7 +1159,7 @@ function TuluvluguUNemeh(props) {
               <div className="column is-3">
                 <input
                   type="date"
-                  //disabled={props.edit}
+                  disabled={props.edit}
                   className="anketInput"
                   value={dateFormat(data?.END_DATE, "yyyy-mm-dd")}
                   onChange={(e) => {

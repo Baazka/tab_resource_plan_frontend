@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useReducer } from "react";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
-import { Edutype } from "./library";
+import { Edutype, Profession } from "./library";
 import { Add, Delete } from "../assets/images/zurag";
 const axios = require("axios");
 var dateFormat = require("dateformat");
@@ -12,6 +12,7 @@ function Bolowsrol(props) {
   const [dataSecond, loadDataSecond] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
+  const [, forceRender] = useReducer((s) => s + 1, 0);
 
   useEffect(() => {
     async function fetchData() {
@@ -47,6 +48,7 @@ function Bolowsrol(props) {
             SCHOOL_NAME: "",
             START_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
             END_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+            PROFESSION_ID: 999,
             PROFESSION_NAME: "",
             DIPLOM_NO: "",
             SCHOOL_CONTACT: "",
@@ -75,6 +77,7 @@ function Bolowsrol(props) {
             SCHOOL_NAME: "",
             START_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
             END_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+            PROFESSION_ID: 999,
             PROFESSION_NAME: "",
             DIPLOM_NO: "",
             SCHOOL_CONTACT: "",
@@ -88,76 +91,96 @@ function Bolowsrol(props) {
         ],
       });
   }, [data, dataSecond]);
+  function dataCheck() {
+    for (let i = 0; i < data.Education.length; i++) {
+      if (
+        data.Education[i].PROFESSION_ID === 999 ||
+        data.Education[i].PROFESSION_ID === null ||
+        data.Education[i].PROFESSION_ID === undefined
+      ) {
+        alert.show("мэргэжил сонгоно уу");
+        return false;
+      } else if (i === data.Education.length - 1) {
+        return true;
+      }
+    }
+  }
 
   function saveToDB() {
     props.loading(true);
-    let combined = data?.Education.concat(dataSecond?.Education);
-    console.log(combined, "combinedcombinedcombined");
-    if (requiredField(combined) === true) {
-      let newRow = combined?.filter((value) => value.ROWTYPE === "NEW");
-      let oldRow = combined?.filter(
-        (value) =>
-          value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
-      );
-      let message = 0;
+    if (dataCheck()) {
+      let combined = data?.Education.concat(dataSecond?.Education);
+      console.log(combined, "combinedcombinedcombined");
+      if (requiredField(combined) === true) {
+        let newRow = combined?.filter((value) => value.ROWTYPE === "NEW");
+        let oldRow = combined?.filter(
+          (value) =>
+            value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
+        );
+        let message = 0;
 
-      if (newRow?.length > 0) {
-        console.log("insert", JSON.stringify(newRow));
-        DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/education/",
-          method: "POST",
-          data: { education: newRow, PERSON_ID: props.person_id },
-        })
-          .then(function (response) {
-            console.log("UpdateResponse", response);
-            if (response?.data?.message === "success") {
-              message = 1;
-              if (message !== 2) alert.show("амжилттай хадгаллаа");
-              setEdit(!edit);
-              props.loading(false);
-            } else {
-              alert.show("Системийн алдаа");
-              setEdit(!edit);
-              props.loading(false);
-            }
-            //history.push('/sample')
+        if (newRow?.length > 0) {
+          console.log("insert", JSON.stringify(newRow));
+          DataRequest({
+            url: "http://hr.audit.mn/hr/api/v1/education/",
+            method: "POST",
+            data: { education: newRow, PERSON_ID: props.person_id },
           })
-          .catch(function (error) {
-            //alert(error.response.data.error.message);
-            console.log(error.response);
-            alert.show("Системийн алдаа");
-            setEdit(!edit);
-            props.loading(false);
-          });
-      }
-      if (oldRow?.length > 0) {
-        console.log("update", JSON.stringify(oldRow));
-        DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/education/",
-          method: "PUT",
-          data: { education: oldRow, PERSON_ID: props.person_id },
-        })
-          .then(function (response) {
-            console.log("UpdateResponse", response);
-            if (response?.data?.message === "success") {
-              message = 2;
+            .then(function (response) {
+              console.log("UpdateResponse", response);
+              if (response?.data?.message === "success") {
+                message = 1;
+                if (message !== 2) alert.show("амжилттай хадгаллаа");
+                setEdit(!edit);
+                props.loading(false);
+                forceRender();
+              } else {
+                alert.show("Системийн алдаа");
+                setEdit(!edit);
+                props.loading(false);
+              }
               //history.push('/sample')
-              if (message !== 1) alert.show("амжилттай хадгаллаа");
-              setEdit(!edit);
-              props.loading(false);
-            } else {
+            })
+            .catch(function (error) {
+              //alert(error.response.data.error.message);
+              console.log(error.response);
               alert.show("Системийн алдаа");
               setEdit(!edit);
               props.loading(false);
-            }
+            });
+        }
+        if (oldRow?.length > 0) {
+          console.log("update", JSON.stringify(oldRow));
+          DataRequest({
+            url: "http://hr.audit.mn/hr/api/v1/education/",
+            method: "PUT",
+            data: { education: oldRow, PERSON_ID: props.person_id },
           })
-          .catch(function (error) {
-            //alert(error.response.data.error.message);
-            console.log(error.response);
-            alert.show("Системийн алдаа");
-            setEdit(!edit);
-            props.loading(false);
-          });
+            .then(function (response) {
+              console.log("UpdateResponse", response);
+              if (response?.data?.message === "success") {
+                message = 2;
+                //history.push('/sample')
+                if (message !== 1) alert.show("амжилттай хадгаллаа");
+                setEdit(!edit);
+                props.loading(false);
+                forceRender();
+              } else {
+                alert.show("Системийн алдаа");
+                setEdit(!edit);
+                props.loading(false);
+              }
+            })
+            .catch(function (error) {
+              //alert(error.response.data.error.message);
+              console.log(error.response);
+              alert.show("Системийн алдаа");
+              setEdit(!edit);
+              props.loading(false);
+            });
+        }
+      } else {
+        props.loading(false);
       }
     } else {
       props.loading(false);
@@ -167,7 +190,13 @@ function Bolowsrol(props) {
   function setEduType(value) {
     let arr = data.Education;
     arr[value.index] = value;
-    console.log("test", value);
+
+    loadData({ Education: arr });
+  }
+  function setProfession(value) {
+    let arr = data.Education;
+    arr[value.index].PROFESSION_ID = value.PROFESSION_ID;
+
     loadData({ Education: arr });
   }
   function setEduTypeSecond(value) {
@@ -176,9 +205,8 @@ function Bolowsrol(props) {
     loadDataSecond({ Education: arr });
   }
   function requiredField(value) {
-    console.log("bolor", value);
     let found = value.filter((a) => a.IS_PRIMARY == 1);
-    console.log("bolor", found);
+
     if (found.length > 1) {
       alert.show("Үндсэн нэг мэргэжилээ тохируулна уу!!!");
       return false;
@@ -188,8 +216,6 @@ function Bolowsrol(props) {
       alert.show("Үндсэн мэргэжилээ тохируулна уу!!!");
       return false;
     }
-    //   }
-    // }
   }
   async function addRow() {
     let value = data.Education;
@@ -203,6 +229,7 @@ function Bolowsrol(props) {
       SCHOOL_NAME: "",
       START_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
       END_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+      PROFESSION_ID: 999,
       PROFESSION_NAME: "",
       DIPLOM_NO: "",
       SCHOOL_CONTACT: "",
@@ -229,6 +256,7 @@ function Bolowsrol(props) {
       SCHOOL_NAME: "",
       START_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
       END_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
+      PROFESSION_ID: 999,
       PROFESSION_NAME: "",
       DIPLOM_NO: "",
       SCHOOL_CONTACT: "",
@@ -278,11 +306,51 @@ function Bolowsrol(props) {
       Education: data?.Education.filter(
         (element, index) => index !== indexParam
       ),
-    }); //splice(indexParam, 0)
+    });
+    forceRender();
+  }
+  function removeRowSecond(indexParam, value) {
+    console.log(indexParam, "index");
+    if (value?.ROWTYPE !== "NEW") {
+      DataRequest({
+        url: "http://hr.audit.mn/hr/api/v1/educationDelete",
+        method: "POST",
+        data: {
+          education: {
+            ...value,
+            ...{
+              IS_ACTIVE: 1,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+              PERSON_ID: props.person_id,
+            },
+          },
+        },
+      })
+        .then(function (response) {
+          console.log("UpdateResponse", response);
+          //history.push('/sample')
+          if (response?.data?.message === "success") {
+            alert.show("амжилттай устлаа");
+            setEdit(!edit);
+          }
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+          alert.show("aldaa");
+        });
+    }
+    loadDataSecond({
+      Education: dataSecond?.Education.filter(
+        (element, index) => index !== indexParam
+      ),
+    });
+    forceRender();
   }
 
   let listItems;
-  if (data?.Education !== undefined) {
+  if (data?.Education !== undefined && dataSecond?.Education !== undefined) {
     listItems = (
       <div
         className="box"
@@ -300,7 +368,7 @@ function Bolowsrol(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 className="buttonTsenkher"
                 onClick={() => {
@@ -346,6 +414,9 @@ function Bolowsrol(props) {
                     </td>
                     <td>
                       <span className="textSaaral">Төгссөн он,сар</span>
+                    </td>
+                    <td>
+                      <span className="textSaaral">Мэргэжил</span>
                     </td>
                     <td>
                       <span className="textSaaral">Эзэмшсэн мэргэжил</span>
@@ -405,7 +476,7 @@ function Bolowsrol(props) {
                         />
                       </td>
                       <td>
-                        <input
+                        <textarea
                           style={{ width: "110px" }}
                           disabled={edit}
                           className="Borderless"
@@ -424,7 +495,7 @@ function Bolowsrol(props) {
                         />
                       </td>
                       <td>
-                        <input
+                        <textarea
                           style={{ width: "110px" }}
                           disabled={edit}
                           className="Borderless"
@@ -485,7 +556,16 @@ function Bolowsrol(props) {
                         />
                       </td>
                       <td>
-                        <input
+                        <Profession
+                          personChild={data.Education[index]}
+                          setPersonChild={setProfession}
+                          index={index}
+                          width={true}
+                          edit={edit}
+                        />
+                      </td>
+                      <td>
+                        <textarea
                           style={{ width: "100px" }}
                           disabled={edit}
                           className="Borderless"
@@ -523,7 +603,7 @@ function Bolowsrol(props) {
                         />
                       </td>
                       <td>
-                        <input
+                        <textarea
                           style={{ width: "100px" }}
                           disabled={edit}
                           className="Borderless"
@@ -542,7 +622,7 @@ function Bolowsrol(props) {
                         />
                       </td>
                       <td>
-                        <input
+                        <textarea
                           style={{ width: "80px" }}
                           disabled={edit}
                           className="Borderless"
@@ -706,8 +786,8 @@ function Bolowsrol(props) {
                         />
                       </td>
                       <td>
-                        <input
-                          style={{ width: "100px" }}
+                        <textarea
+                          style={{ width: "100%" }}
                           disabled={edit}
                           className="Borderless"
                           placeholder="утгаа оруулна уу"
@@ -805,8 +885,8 @@ function Bolowsrol(props) {
                         />
                       </td> */}
                       <td>
-                        <input
-                          style={{ width: "80px" }}
+                        <textarea
+                          style={{ width: "100%" }}
                           disabled={edit}
                           className="Borderless"
                           placeholder="утгаа оруулна уу"
@@ -843,8 +923,8 @@ function Bolowsrol(props) {
                         />
                       </td> */}
                       <td>
-                        <input
-                          style={{ width: "90px" }}
+                        <textarea
+                          style={{ width: "100%" }}
                           disabled={edit}
                           className="Borderless"
                           placeholder="утгаа оруулна уу"
@@ -872,7 +952,7 @@ function Bolowsrol(props) {
                             src={Delete}
                             width="30px"
                             height="30px"
-                            onClick={() => removeRow(index, value)}
+                            onClick={() => removeRowSecond(index, value)}
                           />
                           <input
                             style={{ width: "30px", visibility: "hidden" }}

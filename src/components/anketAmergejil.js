@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 import { Subfametype, Fametype } from "./library";
@@ -241,7 +241,7 @@ function Mergeshliin(props) {
             </div>
 
             <div className="column is-1">
-              {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
                 <button
                   className="buttonTsenkher"
                   onClick={() => {
@@ -341,10 +341,10 @@ function Mergeshliin(props) {
                           <span className="textSaaral">{index + 1}</span>
                         </td>
                         <td>
-                          <input
+                          <textarea
                             disabled={edit}
                             className="Borderless"
-                            style={{ width: "100px" }}
+                            style={{ width: "100%" }}
                             placeholder="утгаа оруулна уу"
                             value={data.Profession[index]?.PROFESSION_COUNTRY}
                             onChange={(text) => {
@@ -361,11 +361,11 @@ function Mergeshliin(props) {
                           />
                         </td>
                         <td>
-                          <input
+                          <textarea
                             disabled={edit}
                             placeholder="утгаа оруулна уу"
                             className="Borderless"
-                            style={{ width: "100px" }}
+                            style={{ width: "100%" }}
                             value={data.Profession[index]?.PROFESSION_ORG}
                             onChange={(text) => {
                               let value = [...data?.Profession];
@@ -380,11 +380,11 @@ function Mergeshliin(props) {
                           />
                         </td>
                         <td>
-                          <input
+                          <textarea
                             disabled={edit}
                             placeholder="утгаа оруулна уу"
                             className="Borderless"
-                            style={{ width: "100px" }}
+                            style={{ width: "100%" }}
                             value={data.Profession[index]?.PROFESSION_NAME}
                             onChange={(text) => {
                               let value = [...data?.Profession];
@@ -462,8 +462,9 @@ function Mergeshliin(props) {
                           />
                         </td>
                         <td>
-                          <input
+                          <textarea
                             disabled={edit}
+                            style={{ width: "100%" }}
                             placeholder="утгаа оруулна уу"
                             className="Borderless"
                             value={data.Profession[index]?.PROFESSION_DIRECTION}
@@ -481,11 +482,11 @@ function Mergeshliin(props) {
                           />
                         </td>
                         <td>
-                          <input
+                          <textarea
                             disabled={edit}
                             placeholder="утгаа оруулна уу"
                             className="Borderless"
-                            style={{ width: "70px" }}
+                            style={{ width: "100%" }}
                             value={data.Profession[index]?.DIPLOM_NO}
                             onChange={(text) => {
                               let value = [...data?.Profession];
@@ -780,7 +781,7 @@ function ZeregTsol(props) {
             </span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 className="buttonTsenkher"
                 onClick={() => {
@@ -859,8 +860,9 @@ function ZeregTsol(props) {
                       />
                     </td>
                     <td>
-                      <input
+                      <textarea
                         disabled={edit}
+                        style={{ width: "100%" }}
                         placeholder="утгаа оруулна уу"
                         className="Borderless"
                         value={data.Fame[index]?.FAME_ORG}

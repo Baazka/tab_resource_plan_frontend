@@ -1,12 +1,4 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import Header from "../components/header";
-import AnketNeg from "../components/anketNeg";
-import Footer from "../components/footer";
-import SideBar from "../components/sidebar";
-import { DataRequest } from "../functions/DataApi";
-import DataTable, { createTheme } from "react-data-table-component";
-import { Search, Filter } from "../assets/images/zurag";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Iframe from "react-iframe";
 
@@ -22,7 +14,6 @@ const Dashboard = (props) => {
           position: "absolute",
           left: "20%",
           width: "50%",
-          left: "7%",
           zIndex: 1,
           top: "20px",
         }}
@@ -45,9 +36,9 @@ const Dashboard = (props) => {
         }}
       >
         <Iframe
-          url="https://app.powerbi.com/view?r=eyJrIjoiNmZmNjcxMTEtMzQxMC00ODM1LWI2ZWUtNWUwNjA2Y2I1ODgyIiwidCI6ImI0MDYwNDEyLTEwM2MtNDBlNy05YzExLTBhNjBkY2NhZjVhZCIsImMiOjEwfQ%3D%3D"
+          url="https://app.powerbi.com/view?r=eyJrIjoiNWExZjEwMTItMTUwZS00MjRhLTlkYWItOTI2ZjNiYTRiYzkwIiwidCI6ImI0MDYwNDEyLTEwM2MtNDBlNy05YzExLTBhNjBkY2NhZjVhZCIsImMiOjEwfQ%3D%3D"
           width="93%"
-          height="900px"
+          height={window.innerHeight - 100}
           id="myId"
           className="myClassname"
           position="relative"

@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
-import { Oathtype, Language, Languagetype } from "./library";
+import { Language, Languagetype } from "./library";
 import { Add, Delete } from "../assets/images/zurag";
 import { Office } from "./library";
 
@@ -25,7 +25,7 @@ function UrChadvar(props) {
       console.log(temp, "testm1");
       if (temp !== undefined && temp.length > 0) {
         console.log(temp, "testm");
-        if (temp.length == 2) {
+        if (temp.length === 2) {
           loadData({
             Exam: temp.sort(function (a, b) {
               return a.EXAM_TYPE_ID - b.EXAM_TYPE_ID;
@@ -106,9 +106,7 @@ function UrChadvar(props) {
 
   function saveToDB() {
     props.loading(true);
-    let newRow = data.Exam.filter(
-      (value) => value.ROWTYPE === "NEW" && value.IS_EXAM !== 0
-    );
+    let newRow = data.Exam.filter((value) => value.ROWTYPE === "NEW");
     let oldRow = data.Exam.filter(
       (value) =>
         value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
@@ -207,7 +205,7 @@ function UrChadvar(props) {
               </span>
             </div>
             <div className="column is -1">
-              {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
                 <button
                   className="buttonTsenkher"
                   onClick={() => setEdit(!edit)}
@@ -730,7 +728,7 @@ function TangaragBurtgel(props) {
             <span className="headerTextBold">2.Тангаргийн бүртгэл</span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 className="buttonTsenkher"
                 onClick={() => {
@@ -1133,7 +1131,7 @@ function GadaadKhel(props) {
             <span className="headerTextBold">3.Гадаад хэлний мэдлэг</span>
           </div>
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
                 className="buttonTsenkher"
                 onClick={() => {

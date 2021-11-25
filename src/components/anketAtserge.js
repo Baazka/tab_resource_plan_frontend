@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 
@@ -254,7 +254,7 @@ function TsergiinAlba(props) {
             >
               Хэвлэх
             </button> */}
-              {userDetils?.USER_TYPE_NAME.includes("BRANCH_DIRECTOR") ? null : (
+              {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
                 <button className="buttonTsenkher" onClick={saveToDB}>
                   Хадгалах
                 </button>
