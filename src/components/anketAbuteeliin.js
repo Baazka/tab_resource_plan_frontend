@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
-import { Literaturetype } from "./library";
 import { Add, Delete } from "../assets/images/zurag";
 const axios = require("axios");
 var dateFormat = require("dateformat");
@@ -275,11 +274,12 @@ function Buteeliin(props) {
                       <span className="textSaaral">{index + 1}</span>
                     </td>
                     <td>
-                      <input
-                        disabled={edit}
+                      <textarea
+                        textarea={edit}
                         className="Borderless"
                         placeholder="утгаа оруулна уу"
                         value={data.Literature[index]?.LITERATURE_NAME}
+                        style={{ width: "100%" }}
                         onChange={(text) => {
                           let value = [...data?.Literature];
                           value[index].LITERATURE_NAME = text.target.value;
@@ -294,8 +294,9 @@ function Buteeliin(props) {
                     </td>
 
                     <td>
-                      <input
+                      <textarea
                         disabled={edit}
+                        style={{ width: "100%" }}
                         className="Borderless"
                         placeholder="утгаа оруулна уу"
                         value={data.Literature[index]?.LITERATURE_TYPE}

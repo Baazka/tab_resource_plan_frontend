@@ -2,15 +2,7 @@ import "./App.css";
 
 import React, { useEffect, useState } from "react";
 
-import {
-  BrowserRouter,
-  Route,
-  Link,
-  useHistory,
-  useLocation,
-  Switch,
-  useParams,
-} from "react-router-dom";
+import { Route, useHistory, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import { useAlert } from "react-alert";
 import AnketA from "./components/anketNeg";
@@ -21,17 +13,21 @@ import Dashboard from "./pages/Dashboard";
 import Baiguullaga from "./pages/Baiguullaga";
 import TushaalShiidver from "./pages/TushaalShiidver";
 import Tailan from "./pages/Tailan";
+import Survey from "./pages/Survey";
+import SurveyFin from "./pages/SurveyFin";
+import SurveyNAG from "./pages/SurveyNAG";
 import HuilTogtoomj from "./pages/HuilTogtoomj";
 import AnketAtailan from "./pages/AnketAtailan";
-import { HashRouter, Redirect, withRouter } from "react-router-dom";
+import { HashRouter, Redirect } from "react-router-dom";
 import AlbanTushaalBurtgel from "./components/AlbanTushaalBurtgel";
 import Nuur from "./components/aTailan";
-import { LogoB } from "../src/assets/images/zurag";
 import EmployeeInformation from "./pages/EmployeeInformation";
-import { UserB, Noti, BackButton } from "./assets/images/zurag";
+import { UserB, BackButton } from "./assets/images/zurag";
 import Background from "./assets/images/background.png";
-import { LogoBottom, Filter } from "./assets/images/zurag";
+import { LogoBottom } from "./assets/images/zurag";
 import { DataRequest } from "./functions/DataApi";
+import Shalgalt1 from "./components/shalgalt";
+import Bolowsrol1 from "./components/bolowsrol";
 const axios = require("axios");
 const fakeAuth = {
   isAuthenticated: false,
@@ -67,7 +63,6 @@ const Header = (props) => {
         width: "100vw",
         minHeight: "70px",
         backgroundColor: "#f1f1f1",
-        width: "100%",
         display: "flex",
         zIndex: "1",
       }}
@@ -76,6 +71,7 @@ const Header = (props) => {
         {props.back ? (
           <img
             src={BackButton}
+            alt=""
             height="25"
             width="25"
             onClick={() => props.butsakh()}
@@ -97,7 +93,7 @@ const Header = (props) => {
       <div class="navbar-menu" id="nav-links" style={{ marginTop: "15px" }}>
         <div class="navbar-end">
           <div>
-            <img src={UserB} width="45" height="45" />
+            <img src={UserB} width="45" height="45" alt="" />
           </div>
 
           <select
@@ -143,7 +139,6 @@ function Login(props) {
   const [nuutsUg, setNuutsUg] = useState();
   const [sanuulakh, setSanuulakh] = useState(false);
   const alert = useAlert();
-  const history = useHistory();
   const { state } = useLocation();
   const [login, setLogin] = useState();
   // let location = useLocation();
@@ -163,7 +158,6 @@ function Login(props) {
       nevtrekh();
     }
   }
-
   function nevtrekh() {
     if (ner !== undefined && nuutsUg !== undefined) {
       axios.defaults.headers["Content-Type"] =
@@ -201,7 +195,9 @@ function Login(props) {
             DataRequest({
               url:
                 "http://hr.audit.mn/reg/api/v1/profile/" +
-                response?.data?.USER_ID,
+                response?.data?.USER_ID +
+                "/" +
+                1,
               method: "GET",
               data: {},
             })
@@ -211,6 +207,29 @@ function Login(props) {
                   "userDetails",
                   JSON.stringify(response?.data)
                 );
+                // DataRequest({
+                //   url: "http://hr.audit.mn/hr/api/v1/election/",
+                //   method: "GET",
+                //   data: {},
+                // })
+                //   .then(function (response) {
+                //     console.log("elid", response.data);
+                //     localStorage.setItem(
+                //       "elid",
+                //       JSON.stringify(response?.data.ELECTION_ID)
+                //     );
+
+                //     // auth.signin(() => {
+                //     // history.push("/web/dashboard/");
+                //     // fakeAuth.authenticate(() => {
+                //     //   setLogin(true);
+                //     // });
+
+                //     // });
+                //   })
+                //   .catch(function (error) {
+                //     //alert(error.response.data.error.message);
+                //   });
                 // auth.signin(() => {
                 // history.push("/web/dashboard/");
                 fakeAuth.authenticate(() => {
@@ -230,8 +249,12 @@ function Login(props) {
         });
     }
   }
-  if (fakeAuth.isAuthenticated === true)
-    return <Redirect to={state?.form || "/web/dashboard/"} />;
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
+  if (fakeAuth.isAuthenticated === true) {
+    if (userDetils?.USER_TYPE_NAME === "SURVEY")
+      return <Redirect to={state?.form || "/web/surveyFin/"} />;
+    else return <Redirect to={state?.form || "/web/dashboard/"} />;
+  }
   return (
     <div
       style={{
@@ -389,11 +412,7 @@ function App() {
           component={AlbanTushaal}
           exact
         />
-        <PrivateRoute
-          path="/web/TushaalShiidver/"
-          component={TushaalShiidver}
-          exact
-        />
+
         <PrivateRoute path="/web/Tailan/" component={Tailan} exact />
         <PrivateRoute
           path="/web/HuilTogtoomj/"
@@ -405,7 +424,7 @@ function App() {
           component={TushaalShiidver}
           exact
         />
-        <PrivateRoute path="/web/Tailan/" component={Tailan} exact />
+
         <PrivateRoute
           path="/web/EmployeeInformation/"
           component={EmployeeInformation}
@@ -421,7 +440,20 @@ function App() {
           component={AnketAtailan}
           exact
         />
+        <PrivateRoute path="/web/Survey" component={Survey} exact />
+        <PrivateRoute path="/web/SurveyNAG" component={SurveyNAG} exact />
+        <PrivateRoute path="/web/SurveyFin" component={SurveyFin} exact />
         <Route path="/print/anket/" component={Nuur} exact />
+        <PrivateRoute
+          path="/web/Shalgalt/shalgalt1/"
+          component={Shalgalt1}
+          exact
+        />
+        <PrivateRoute
+          path="/web/Bolowsrol1/bolowsrol/"
+          component={Bolowsrol1}
+          exact
+        />
 
         {/* ) : (
             <div

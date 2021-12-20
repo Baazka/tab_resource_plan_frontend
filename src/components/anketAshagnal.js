@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
-import { Edutype } from "./library";
 import { Add, Delete } from "../assets/images/zurag";
 const axios = require("axios");
 var dateFormat = require("dateformat");
@@ -339,6 +338,7 @@ function Shagnaliin(props) {
                       }}
                     >
                       <img
+                        alt=""
                         src={Add}
                         width="30px"
                         height="30px"
@@ -376,10 +376,11 @@ function Shagnaliin(props) {
                       />
                     </td>
                     <td>
-                      <input
+                      <textarea
                         disabled={edit}
                         placeholder="утгаа оруулна уу"
                         className="Borderless"
+                        style={{ width: "100%" }}
                         value={data.Award[index]?.AWARD_NAME}
                         onChange={(text) => {
                           let value = [...data?.Award];
@@ -394,8 +395,9 @@ function Shagnaliin(props) {
                       />
                     </td>
                     <td>
-                      <input
+                      <textarea
                         disabled={edit}
+                        style={{ width: "100%" }}
                         placeholder="утгаа оруулна уу"
                         className="Borderless"
                         value={data.Award[index]?.DECISION_NO}
@@ -434,10 +436,11 @@ function Shagnaliin(props) {
                       />
                     </td>
                     <td>
-                      <input
+                      <textarea
                         disabled={edit}
                         placeholder="утгаа оруулна уу"
                         className="Borderless"
+                        style={{ width: "100%" }}
                         value={data.Award[index]?.AWARD_DESC}
                         onChange={(text) => {
                           let value = [...data?.Award];
@@ -460,6 +463,7 @@ function Shagnaliin(props) {
                         }}
                       >
                         <img
+                          alt=""
                           src={Delete}
                           width="30px"
                           height="30px"

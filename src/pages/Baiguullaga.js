@@ -1,30 +1,16 @@
 import React, { useEffect, useState, useReducer } from "react";
-import Header from "../components/header";
 import Footer from "../components/footer";
 import { DataRequest } from "../functions/DataApi";
 import dateFormat from "dateformat";
 import { useAlert } from "react-alert";
-import {
-  Search,
-  Filter,
-  Add,
-  Excel,
-  AddBlue,
-  DownArrow,
-  Edit,
-  Delete,
-} from "../assets/images/zurag";
-import { useHistory } from "react-router-dom";
-import { Suboffice, Office } from "../components/library";
+import { Add, Edit, Delete } from "../assets/images/zurag";
+import { Office } from "../components/library";
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
-
-const axios = require("axios");
 
 function Subdepartment(props) {
   const [data, loadData] = useState([]);
   const [subDepId, setSubDepId] = useState(null);
   const [show, setShow] = useState(false);
-  const [type, setType] = useState("Sub_Department");
 
   useEffect(() => {
     async function test() {
@@ -82,6 +68,7 @@ function Subdepartment(props) {
               <div className="column is-4"></div>
               <div className="column is-4 has-text-right">
                 <img
+                  alt=""
                   src={Add}
                   width="30px"
                   height="25px"
@@ -135,7 +122,6 @@ function Subdepartment(props) {
                         "/null/"
                       }
                       SUB_DEPARTMENT_ID={value.SUB_DEPARTMENT_ID}
-                      COMPARTMENT_ID={props?.deparment_ID}
                       COMPARTMENT_ID={props?.deparment_ID}
                       DEPARTMENT_ID={null}
                     />

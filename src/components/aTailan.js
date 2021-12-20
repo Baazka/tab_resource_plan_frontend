@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 
 var dateFormat = require("dateformat");
 const axios = require("axios");
@@ -23,7 +23,7 @@ function Nvvr(props) {
   //   );
 
   return (
-    <div style={{ marginLeft: "0%", marginRight: "0%" }}>
+    <div style={{ marginLeft: "1%", marginRight: "1%", overflow: "hidden" }}>
       <div style={{}}>
         <Yrunkhii />
         <Gerbul />

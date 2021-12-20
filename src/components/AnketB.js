@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Header from "../components/header";
 import { DataRequest } from "../functions/DataApi";
 import {
   AvatarB,
@@ -8,7 +7,6 @@ import {
   Warning,
   Add,
   Delete,
-  M,
   BNegB,
   BNeg,
   BGuravB,
@@ -23,7 +21,6 @@ import {
   BDoloo,
   BNaimB,
   BNaim,
-  Search,
 } from "../assets/images/zurag";
 import { useAlert } from "react-alert";
 import ScaleLoader from "react-spinners/ScaleLoader";

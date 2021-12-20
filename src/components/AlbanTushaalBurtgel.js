@@ -9,35 +9,17 @@ import {
   Positionorder,
   Edutype,
   Profession,
-  Office,
 } from "../components/library";
-import Header from "../components/header";
 import { DataRequest } from "../functions/DataApi";
 import {
-  AvatarB,
-  Face,
-  Trush,
-  Warning,
   BlackNeg,
   BlackKhoyor,
-  BlackGurav,
   BlackDuruv,
-  BlackTav,
-  BlackZurgaa,
-  BlackDoloo,
-  BlackNaim,
   Add,
   BlueNeg,
   BlueKhoyor,
-  BlueKGurav,
   BlueDuruv,
-  BlueTav,
-  BlueZurgaa,
-  BlueDoloo,
-  BlueNaim,
-  BlueGurav,
   Delete,
-  M,
 } from "../assets/images/zurag";
 import { useAlert } from "react-alert";
 import ScaleLoader from "react-spinners/ScaleLoader";
@@ -67,7 +49,7 @@ function AlbanTushaalBurtgel(props) {
           position: "absolute",
           left: "20%",
           width: "50%",
-          left: "7%",
+
           zIndex: 1,
           top: "20px",
         }}
@@ -120,6 +102,7 @@ function AlbanTushaalBurtgel(props) {
 
         <div className="AnketList" style={{ marginTop: "3rem" }}>
           <img
+            alt=""
             src={menu === 1 ? BlueNeg : BlackNeg}
             width="45px"
             height="45px"
@@ -145,6 +128,7 @@ function AlbanTushaalBurtgel(props) {
           <div>
             <div className="AnketList">
               <img
+                alt=""
                 src={menu === 2 ? BlueKhoyor : BlackKhoyor}
                 width="45px"
                 height="45px"
@@ -168,6 +152,7 @@ function AlbanTushaalBurtgel(props) {
             </div>
             <div className="AnketList">
               <img
+                alt=""
                 src={menu === 2 ? BlueDuruv : BlackDuruv}
                 width="45px"
                 height="45px"
