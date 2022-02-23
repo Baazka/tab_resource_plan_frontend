@@ -67,6 +67,7 @@ import BNaim from "../images/icons/BNaim.png";
 import Edit from "../images/icons/edit.png";
 import DownArrow from "../images/icons/downarrow.png";
 import Print from "../images/icons/print.png";
+import ahmad from "../images/ahmad.svg";
 
 export {
   LeftArrow,
@@ -134,4 +135,5 @@ export {
   Edit,
   DownArrow,
   Print,
+  ahmad,
 };

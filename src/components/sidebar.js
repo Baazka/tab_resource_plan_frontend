@@ -60,6 +60,7 @@ const SideBar = (props) => {
       menu5: false,
       // menu6: false,
       // menu7: false,
+      menu10: false,
     };
     setMenuClick({ ...temp, ...value });
     if (value?.menu0) {
@@ -91,6 +92,9 @@ const SideBar = (props) => {
       setMenuCollapse(true);
     } else if (value?.menu9) {
       history.push("/web/SurveyFin/");
+      setMenuCollapse(true);
+    } else if (value?.menu10) {
+      history.push("/web/Elders/");
       setMenuCollapse(true);
     }
     // else if (value?.menu7) {
@@ -291,6 +295,29 @@ const SideBar = (props) => {
                     </div>
                   </MenuItem>
                 )}
+
+                <MenuItem active={menuClick.menu10}>
+                  <div
+                    className="CustomMenu"
+                    onClick={() => SelectMenu({ menu10: !menuClick.menu10 })}
+                  >
+                    <img
+                      src={menuClick.menu10 ? BagB : Bag}
+                      width="40"
+                      height="30"
+                    />
+                    <p
+                      className="MenuText"
+                      style={{
+                        color: `${menuClick.menu10 ? "#418ee6" : "white"}`,
+                      }}
+                    >
+                      {" "}
+                      Ахмадын бүртгэл
+                    </p>
+                  </div>
+                </MenuItem>
+
                 {/* <MenuItem active={menuClick.menu7}>
                 <div
                   className="CustomMenu"

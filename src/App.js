@@ -28,6 +28,7 @@ import { LogoBottom } from "./assets/images/zurag";
 import { DataRequest } from "./functions/DataApi";
 import Shalgalt1 from "./components/shalgalt";
 import Bolowsrol1 from "./components/bolowsrol";
+import Elders from "./pages/Elders";
 const axios = require("axios");
 const fakeAuth = {
   isAuthenticated: false,
@@ -454,6 +455,7 @@ function App() {
           component={Bolowsrol1}
           exact
         />
+        <PrivateRoute path="/web/Elders" component={Elders} exact />
 
         {/* ) : (
             <div
