@@ -9,7 +9,7 @@ const Header = (props) => {
   function onSelect(option) {
     if (option === "2") {
       localStorage.removeItem("userDetails");
-      props.setSignin(false);
+
       history.push("/");
       window.location.reload();
     }
