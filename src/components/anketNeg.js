@@ -59,41 +59,65 @@ function AnketNeg(props) {
   const history = useHistory();
   const alert = useAlert();
   const [loading, setLoading] = useState(true);
+  const [avatar, setAvatar] = useState({});
 
   function saveAvatar(file) {
-    if (
+    if (avatar.FILE_PATH !== undefined && avatar.FILE_PATH !== null) {
+      alert.show("аватар зургаа устгана уу");
+    } else if (
       localStorage.getItem("personDetail")?.includes("person_id") &&
       JSON.parse(localStorage.getItem("personDetail")).person_id !== "0"
     ) {
-      // "userid",JSON.parse(localStorage.getItem("personDetail")).person_id, file.target.files[0].name
-      console.log("imageName", file.target.files[0].name);
       const formData = new FormData();
-      formData.append("image", file.target.files[0], file.target.files[0].name);
-      // axios({
-      //   method: "post",
-      //   url: "http://hr.audit.mn/hr/api/v1/avatar/",
-      //   data: formData,
-      //   headers: { "Content-Type": "multipart/form-data" },
-      // })
-      //   .then(function (response) {
-      //     //handle success
-      //     console.log(response);
-      //   })
-      //   .catch(function (response) {
-      //     //handle error
-      //     console.log(response);
-      //   });
-      fetch("http://hr.audit.mn/hr/api/v1/avatar/", {
-        mode: "no-cors",
-        method: "POST",
+      formData.append(
+        "data",
+        JSON.stringify({
+          type: "avatar",
+          person_id: JSON.parse(localStorage.getItem("personDetail")).person_id,
+          CREATED_BY: userDetils.USER_ID,
+        })
+      );
+      formData.append("files", file.target.files[0]);
 
-        body: formData,
-      }).then(function (res) {
-        console.log(res);
+      DataRequest({
+        url: "http://hr.audit.mn/hr/api/v1/" + "fileUpload",
+        method: "POST",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }).then(function (response) {
+        if (response?.data?.message === "success") {
+          alert.show("амжилттай хадгаллаа");
+          setAvatar(response?.data);
+        } else {
+          alert.show("Системийн алдаа");
+        }
+        //history.push('/sample')
       });
     } else {
       alert.show("Ерөнхий мэдээлэл бөгөлнө үү");
     }
+  }
+
+  function DeleteAvatar() {
+    DataRequest({
+      url: "http://hr.audit.mn/hr/api/v1/" + "avatar",
+      method: "POST",
+      data: avatar,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }).then(function (response) {
+      if (response?.data?.message === "success") {
+        alert.show("амжилттай устлаа");
+        setAvatar({});
+        fetchData();
+      } else {
+        alert.show("Системийн алдаа");
+      }
+      //history.push('/sample')
+    });
   }
 
   function requiredField(param) {
@@ -138,62 +162,63 @@ function AnketNeg(props) {
     }
     return returnValue;
   }
-
-  useEffect(() => {
-    async function fetchData() {
-      if (localStorage.getItem("personDetail")?.includes("person_id")) {
+  async function fetchData() {
+    if (localStorage.getItem("personDetail")?.includes("person_id")) {
+      if (JSON.parse(localStorage.getItem("personDetail")).person_id === "0") {
+        loadData({
+          PERSON_REGISTER_NO: "",
+          PERSON_LASTNAME: "",
+          PERSON_FIRSTNAME: "",
+          PERSON_BORNDATE: dateFormat(new Date(), "yyyy-mm-dd"),
+          PERSON_GENDER: 1,
+          PERSON_PHONE: "",
+          PERSON_NATIONAL_ID: 1,
+          PERSON_EMAIL: "",
+          NATIONAL_ID: 1,
+          DYNASTY_ID: 1,
+          BIRTH_OFFICE_ID: 1,
+          BIRTH_SUBOFFICE_ID: 1,
+          SURNAME: "",
+          BIRTH_PLACE: "",
+          IS_MARRIED: 0,
+          IS_ACTIVE: 1,
+          CREATED_BY: userDetils?.USER_ID,
+          CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+          PERSON_ID: 0,
+        });
+        setLoading(false);
+      } else {
         if (
-          JSON.parse(localStorage.getItem("personDetail")).person_id === "0"
+          JSON.parse(localStorage.getItem("personDetail")).type === "employ"
         ) {
-          loadData({
-            PERSON_REGISTER_NO: "",
-            PERSON_LASTNAME: "",
-            PERSON_FIRSTNAME: "",
-            PERSON_BORNDATE: dateFormat(new Date(), "yyyy-mm-dd"),
-            PERSON_GENDER: 1,
-            PERSON_PHONE: "",
-            PERSON_NATIONAL_ID: 1,
-            PERSON_EMAIL: "",
-            NATIONAL_ID: 1,
-            DYNASTY_ID: 1,
-            BIRTH_OFFICE_ID: 1,
-            BIRTH_SUBOFFICE_ID: 1,
-            SURNAME: "",
-            BIRTH_PLACE: "",
-            IS_MARRIED: 0,
-            IS_ACTIVE: 1,
-            CREATED_BY: userDetils?.USER_ID,
-            CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-            PERSON_ID: 0,
-          });
+          let listItems = await axios(
+            "http://hr.audit.mn/hr/api/v1/person/0/" +
+              JSON.parse(localStorage.getItem("personDetail")).person_id
+          );
+          console.log("amjilttai", listItems.data);
+          loadData(listItems?.data);
           setLoading(false);
-        } else {
-          if (
-            JSON.parse(localStorage.getItem("personDetail")).type === "employ"
-          ) {
-            let listItems = await axios(
-              "http://hr.audit.mn/hr/api/v1/person/0/" +
-                JSON.parse(localStorage.getItem("personDetail")).person_id
-            );
-            console.log("amjilttai", listItems.data);
-            loadData(listItems?.data);
-            setLoading(false);
-          } else if (
-            JSON.parse(localStorage.getItem("personDetail")).type ===
-            "newPerson"
-          ) {
-            let listItems = await axios(
-              "http://hr.audit.mn/hr/api/v1/person/1/" +
-                JSON.parse(localStorage.getItem("personDetail")).person_id
-            );
-            console.log("amjilttai", listItems.data);
-            loadData(listItems?.data);
-            setLoading(false);
-          }
+          let avatarImg = await axios(
+            "http://hr.audit.mn/hr/api/v1/avatar/" +
+              JSON.parse(localStorage.getItem("personDetail")).person_id
+          );
+          if (avatarImg.data !== undefined && avatarImg.data.length > 0)
+            setAvatar(avatarImg.data[avatarImg.data.length - 1]);
+        } else if (
+          JSON.parse(localStorage.getItem("personDetail")).type === "newPerson"
+        ) {
+          let listItems = await axios(
+            "http://hr.audit.mn/hr/api/v1/person/1/" +
+              JSON.parse(localStorage.getItem("personDetail")).person_id
+          );
+          console.log("amjilttai", listItems.data);
+          loadData(listItems?.data);
+          setLoading(false);
         }
       }
     }
-
+  }
+  useEffect(() => {
     fetchData();
   }, [props]);
 
@@ -279,7 +304,7 @@ function AnketNeg(props) {
         <div
           style={{
             position: "absolute",
-            left: "20%",
+            left: "9%",
             width: "50%",
             zIndex: 1,
             top: "20px",
@@ -331,8 +356,20 @@ function AnketNeg(props) {
               {"<  Буцах"}
             </button>
           </div>
+
           <div style={{ marginTop: "1rem" }}>
-            <img src={AvatarB} width="120px" height="120px" alt="" />
+            <img
+              src={
+                avatar.FILE_PATH !== undefined && avatar.FILE_PATH !== null
+                  ? "http://hr.audit.mn/hr/api/v1/".replace("api/v1/", "") +
+                    "static" +
+                    avatar?.FILE_PATH.replace("uploads", "")
+                  : AvatarB
+              }
+              width="120px"
+              height="120px"
+              alt="avatar"
+            />
           </div>
 
           <div
@@ -361,7 +398,14 @@ function AnketNeg(props) {
               onClick={() => refContainer.current.click()}
             />
 
-            <img alt="" src={Trush} width="40px" height="40px" />
+            <img
+              style={{ cursor: "pointer" }}
+              alt="trush"
+              src={Trush}
+              width="40px"
+              height="40px"
+              onClick={() => DeleteAvatar()}
+            />
             <img
               alt=""
               src={Warning}

@@ -2,7 +2,18 @@ import React, { useEffect, useState, useRef, useReducer } from "react";
 import Footer from "../components/footer";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Search, AddBlue, Excel, Print } from "../assets/images/zurag";
+
+import { FiMail, FiPhone } from "react-icons/fi";
+import {
+  Search,
+  AddBlue,
+  Excel,
+  Print,
+  fourbox,
+  list,
+  male,
+  female,
+} from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
@@ -10,7 +21,7 @@ import dateFormat from "dateformat";
 import { css } from "@emotion/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import AnketAPrint from "./AnketAPrint";
-import { DepartmentID } from "../components/library";
+import { DepartmentID, Subdepartment } from "../components/library";
 
 import { useReactToPrint } from "react-to-print";
 
@@ -70,12 +81,12 @@ const customStyles = {
 
 function Home(props) {
   const history = useHistory();
-  const [jagsaalt, setJagsaalt] = useState();
+  const [jagsaalt, setJagsaalt] = useState([]);
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, setData] = useState();
   const [search, setSearch] = useState("");
   const [searchType, setSearchType] = useState("PERSON_FIRSTNAME");
-  const [found, setFound] = useState();
+  const [found, setFound] = useState([]);
   const alert = useAlert();
   const [loading, setLoading] = useState(true);
   const [buttonValue, setButtonValue] = useState(1);
@@ -87,12 +98,15 @@ function Home(props) {
     emp_ID: null,
     buttonValue: 1,
   });
-  const [draw, setDraw] = useState();
+  const [view, setView] = useState(false);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
   const [departmentID, setDepartmentID] = useState({
     DEPARTMENT_ID: 0,
+  });
+  const [subdepartment, setSubdepartment] = useState({
+    SUB_DEPARTMENT_ID: "null",
   });
   const override = css`
     display: block;
@@ -119,7 +133,8 @@ function Home(props) {
         SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
       },
     });
-    setJagsaalt(jagsaalts?.data);
+    if (jagsaalts.data !== undefined && jagsaalts.data.length > 0)
+      setJagsaalt(jagsaalts.data);
     setLoading(false);
     setButtonValue(2);
     setDepartmentID({ DEPARTMENT_ID: 0 });
@@ -129,10 +144,6 @@ function Home(props) {
     setLoading(true);
     let jagsaalts = await DataRequest({
       url: "http://hr.audit.mn/hr/api/v1/employees",
-      // /1/" +
-      // userDetils?.USER_DEPARTMENT_ID +
-      // "/" +
-      // userDetils?.USER_TYPE_NAME.toUpperCase(),
       method: "POST",
       data: {
         IS_ACTIVE: 1,
@@ -141,7 +152,8 @@ function Home(props) {
         SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
       },
     });
-    setJagsaalt(jagsaalts?.data);
+    if (jagsaalts.data !== undefined && jagsaalts.data.length > 0)
+      setJagsaalt(jagsaalts?.data);
     setLoading(false);
     setButtonValue(1);
     setDepartmentID({ DEPARTMENT_ID: 0 });
@@ -154,85 +166,80 @@ function Home(props) {
       method: "GET",
       data: {},
     });
-    setJagsaalt(jagsaalts?.data);
+    if (jagsaalts.data !== undefined && jagsaalts.data.length > 0)
+      setJagsaalt(jagsaalts?.data);
     setLoading(false);
     setButtonValue(3);
     setSearch("");
   }
+  async function fetchData() {
+    if (
+      props.match?.params != undefined &&
+      JSON.parse(props.match?.params?.search)?.buttonValue === 2
+    ) {
+      let jagsaalts = await DataRequest({
+        url: "http://hr.audit.mn/hr/api/v1/employees",
 
-  useEffect(() => {
-    async function test() {
+        method: "POST",
+        data: {
+          IS_ACTIVE: 0,
+          USER_DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
+          USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
+          SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
+        },
+      });
+      if (jagsaalts.data !== undefined && jagsaalts.data.length > 0)
+        setJagsaalt(jagsaalts?.data);
+      setLoading(false);
+      setButtonValue(2);
       if (
-        props.match?.params != undefined &&
-        JSON.parse(props.match?.params?.search)?.buttonValue === 2
+        props.match.params.search != undefined &&
+        props.match.params.search != "null"
       ) {
-        let jagsaalts = await DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/employees",
-          // /0/" +
-          // userDetils?.USER_DEPARTMENT_ID +
-          // "/" +
-          // userDetils?.USER_TYPE_NAME.toUpperCase(),
-          method: "POST",
-          data: {
-            IS_ACTIVE: 0,
-            USER_DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
-            USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
-            SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
-          },
-        });
-        setJagsaalt(jagsaalts?.data);
-        setLoading(false);
-        setButtonValue(2);
-        if (
-          props.match.params.search != undefined &&
-          props.match.params.search != "null"
-        ) {
-          let ob = JSON.parse(props.match.params.search);
+        let ob = JSON.parse(props.match.params.search);
 
-          setSearchType(ob.searchType);
-          makeSearch(ob.search, jagsaalts?.data, ob.searchType);
-        }
-        console.log(jagsaalts);
-      } else if (
-        props.match?.params != undefined &&
-        JSON.parse(props.match?.params?.search)?.buttonValue === 3
+        setSearchType(ob.searchType);
+        makeSearch(ob.search, jagsaalts?.data, ob.searchType);
+      }
+      console.log(jagsaalts);
+    } else if (
+      props.match?.params != undefined &&
+      JSON.parse(props.match?.params?.search)?.buttonValue === 3
+    ) {
+      let jagsaalts = await DataRequest({
+        url: "http://hr.audit.mn/hr/api/v1/person/1/",
+        method: "GET",
+        data: {},
+      });
+      if (jagsaalts.data !== undefined && jagsaalts.data.length > 0)
+        setJagsaalt(jagsaalts?.data);
+      setLoading(false);
+      setButtonValue(3);
+      if (
+        props.match.params.search != undefined &&
+        props.match.params.search != "null"
       ) {
-        let jagsaalts = await DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/person/1/",
-          method: "GET",
-          data: {},
-        });
-        setJagsaalt(jagsaalts?.data);
-        setLoading(false);
-        setButtonValue(3);
-        if (
-          props.match.params.search != undefined &&
-          props.match.params.search != "null"
-        ) {
-          let ob = JSON.parse(props.match?.params.search);
+        let ob = JSON.parse(props.match?.params.search);
 
-          setSearchType(ob.searchType);
-          makeSearch(ob.search, jagsaalts?.data, ob.searchType);
-        }
-        console.log(jagsaalts);
-      } else {
-        let jagsaalts = await DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/employees",
-          // /1/" +
-          // userDetils?.USER_DEPARTMENT_ID +
-          // "/" +
-          // userDetils?.USER_TYPE_NAME.toUpperCase(),
-          method: "POST",
-          data: {
-            IS_ACTIVE: 1,
-            USER_DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
-            USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
-            SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
-          },
-        });
-        setLoading(false);
+        setSearchType(ob.searchType);
+        makeSearch(ob.search, jagsaalts?.data, ob.searchType);
+      }
+      console.log(jagsaalts);
+    } else {
+      let jagsaalts = await DataRequest({
+        url: "http://hr.audit.mn/hr/api/v1/employees",
+        method: "POST",
+        data: {
+          IS_ACTIVE: 1,
+          USER_DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID,
+          USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
+          SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
+        },
+      });
+      setLoading(false);
+      if (jagsaalts.data !== undefined && jagsaalts.data.length > 0) {
         setJagsaalt(jagsaalts?.data);
-        console.log("ob", props);
+
         if (
           props.match?.params.search != undefined &&
           props.match?.params.search != "null"
@@ -244,8 +251,9 @@ function Home(props) {
         }
       }
     }
-
-    test();
+  }
+  useEffect(() => {
+    fetchData();
     setDepartmentID({ DEPARTMENT_ID: userDetils?.USER_DEPARTMENT_ID });
   }, [props]);
 
@@ -278,6 +286,38 @@ function Home(props) {
       setData({ checked: false });
     }
   };
+  useEffect(() => {
+    if (subdepartment.SUB_DEPARTMENT_ID !== "null")
+      subDepartmentSearch({ DEPARTMENT_ID: 101 });
+    else fetchData();
+  }, [subdepartment]);
+
+  async function subDepartmentSearch(value) {
+    setLoading(true);
+    let jagsaalts = await DataRequest({
+      url: "http://hr.audit.mn/hr/api/v1/employees",
+      method: "POST",
+      data: {
+        IS_ACTIVE: buttonValue === 1 ? 1 : 0,
+        DEPARTMENT_ID: value.DEPARTMENT_ID,
+        USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
+        SUB_DEPARTMENT_ID: subdepartment.SUB_DEPARTMENT_ID,
+        USER_DEPARTMENT_ID: userDetils.USER_DEPARTMENT_ID,
+      },
+    });
+    console.log("departmentSearch", {
+      IS_ACTIVE: buttonValue === 1 ? 1 : 0,
+      DEPARTMENT_ID: value.DEPARTMENT_ID,
+      USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
+      SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
+    });
+    if (jagsaalts.data !== undefined && jagsaalts.data.length > 0)
+      setJagsaalt(jagsaalts?.data);
+    setLoading(false);
+    setSearch("");
+    setDepartmentID(value);
+  }
+
   async function departmentSearch(value) {
     setLoading(true);
     let jagsaalts = await DataRequest({
@@ -297,7 +337,8 @@ function Home(props) {
       USER_TYPE_NAME: userDetils?.USER_TYPE_NAME.toUpperCase(),
       SUB_DEPARTMENT_ID: userDetils.USER_SUB_DEPARTMENT_ID,
     });
-    setJagsaalt(jagsaalts?.data);
+    if (jagsaalts.data !== undefined && jagsaalts.data.length > 0)
+      setJagsaalt(jagsaalts?.data);
     setLoading(false);
     setSearch("");
     setDepartmentID(value);
@@ -348,18 +389,16 @@ function Home(props) {
   }
 
   function makeSearch(value, list, stype) {
-    setSearch(value);
+    console.log(value, "found");
+    console.log(list, "found");
+    console.log(stype, "stype");
 
-    let found;
-    if (jagsaalt != undefined) {
-      found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
-    } else {
-      console.log("searchjagsaalt", searchType);
-      found = list?.filter((obj) => equalStr(obj[stype], value));
-    }
-    console.log(found);
-    if (found != undefined && found.length > 0) setFound(found);
-    else setFound([]);
+    console.log(
+      "filteredValue",
+      list?.filter((obj) => equalStr(obj[searchType], value))
+    );
+    setFound(list?.filter((obj) => equalStr(obj[stype], value)));
+    setSearch(value);
   }
   function equalStr(value1, value2) {
     if (
@@ -377,7 +416,10 @@ function Home(props) {
           )
         )
           return true;
-      } else if (value1.includes(value2)) return true;
+      } else if (value1.includes(value2)) {
+        console.log(true, "sonin");
+        return true;
+      }
     return false;
   }
   useEffect(() => {
@@ -769,7 +811,9 @@ function Home(props) {
             Шинэ
           </button>
           {
-            <div style={{ position: "absolute", right: "3rem" }}>
+            <div
+              style={{ position: "absolute", right: "3rem", display: "flex" }}
+            >
               <button
                 className="button is-focused"
                 style={{
@@ -810,6 +854,24 @@ function Home(props) {
                   АНКЕТ Б ХЭСЭГ
                 </button>
               ) : null}
+              <div>
+                <img
+                  src={fourbox}
+                  width="30px"
+                  height={"30px"}
+                  alt="fourbox"
+                  style={{ margin: "0 8px", cursor: "pointer" }}
+                  onClick={() => setView(false)}
+                />
+                <img
+                  src={list}
+                  width="30px"
+                  height={"30px"}
+                  alt="list"
+                  style={{ margin: "0 2px", cursor: "pointer" }}
+                  onClick={() => setView(true)}
+                />
+              </div>
             </div>
           }
         </div>
@@ -837,7 +899,15 @@ function Home(props) {
                 />
               </div>
             ) : null}
-
+            {buttonValue === 1 && userDetils.USER_DEPARTMENT_ID === 101 ? (
+              <div className="select is-small">
+                <Subdepartment
+                  personChild={subdepartment}
+                  setPersonChild={setSubdepartment}
+                  edit={false}
+                />
+              </div>
+            ) : null}
             <div
               className="select is-small"
               style={{ marginRight: "10px", marginLeft: "10px" }}
@@ -886,7 +956,9 @@ function Home(props) {
                 type="email"
                 placeholder="хайлт хийх утгаа оруулна уу"
                 value={search}
-                onChange={(e) => makeSearch(e.target.value)}
+                onChange={(e) =>
+                  makeSearch(e.target.value, jagsaalt, searchType)
+                }
                 style={{
                   borderRadius: "5px",
                   width: "18rem",
@@ -948,30 +1020,116 @@ function Home(props) {
             position: "absolute",
           }}
         ></iframe>
-        <DataTable
-          columns={columns}
-          data={search === "" ? jagsaalt : found}
-          theme="solarized"
-          customStyles={customStyles}
-          noDataComponent="мэдээлэл байхгүй байна"
-          selectableRows // add for checkbox selection
-          Clicked
-          onSelectedRowsChange={handleChange}
-          noHeader={true}
-          fixedHeader={true}
-          responsive={true}
-          overflowY={true}
-          overflowYOffset={"390px"}
-          pagination={true}
-          paginationPerPage={10}
-          paginationComponentOptions={{
-            rowsPerPageText: "Хуудас:",
-            rangeSeparatorText: "нийт:",
-            noRowsPerPage: false,
-            selectAllRowsItem: false,
-            selectAllRowsItemText: "All",
-          }}
-        />
+        {view ? (
+          <DataTable
+            columns={columns}
+            data={search === "" ? jagsaalt : found}
+            theme="solarized"
+            customStyles={customStyles}
+            noDataComponent="мэдээлэл байхгүй байна"
+            selectableRows // add for checkbox selection
+            Clicked
+            onSelectedRowsChange={handleChange}
+            noHeader={true}
+            fixedHeader={true}
+            responsive={true}
+            overflowY={true}
+            overflowYOffset={"390px"}
+            pagination={true}
+            paginationPerPage={10}
+            paginationComponentOptions={{
+              rowsPerPageText: "Хуудас:",
+              rangeSeparatorText: "нийт:",
+              noRowsPerPage: false,
+              selectAllRowsItem: false,
+              selectAllRowsItemText: "All",
+            }}
+          />
+        ) : (
+          <div id="user_box_lis" className="box_list_container">
+            {(search === "" ? jagsaalt : found).map((value, index) => (
+              <div
+                className="box_list_item"
+                style={
+                  index === (search === "" ? jagsaalt : found).length - 1
+                    ? { marginBottom: "3rem" }
+                    : { marginBottom: 0 }
+                }
+              >
+                <div style={{ display: "flex", alignContent: "baseline" }}>
+                  <div
+                    style={{
+                      width: "90px",
+                      height: "118px",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <img
+                      src={
+                        value.FILE_PATH !== undefined &&
+                        value.FILE_PATH !== null
+                          ? "http://hr.audit.mn/hr/api/v1/".replace(
+                              "api/v1/",
+                              ""
+                            ) +
+                            "static" +
+                            value?.FILE_PATH.replace("uploads", "")
+                          : value.PERSON_GENDER === "1"
+                          ? male
+                          : female
+                      }
+                      style={{
+                        objectFit: "fit",
+
+                        width: "100%",
+                        height: "100%",
+                      }}
+                      alt="avatar"
+                    />
+                  </div>
+                  <div
+                    style={{
+                      paddingLeft: "10px",
+                      flexWrap: "wrap",
+                      width: "280px",
+                    }}
+                  >
+                    <span>
+                      {value.PERSON_LASTNAME + " "}
+                      {value.PERSON_FIRSTNAME.toUpperCase()}
+                    </span>
+                    <br />
+                    <textarea
+                      style={{
+                        color: "#418ee6",
+                        fontSize: "0.7rem",
+                        border: "none",
+                        width: "100%",
+                      }}
+                      value={value.POSITION_NAME}
+                    ></textarea>
+                    <br />
+                    <span style={{ fontSize: "0.7rem" }}>
+                      <FiPhone /> {value.PERSON_PHONE}
+                    </span>
+                    <br />
+
+                    <div
+                      style={{
+                        fontSize: "0.7rem",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <FiMail style={{ marginRight: "5px" }} />{" "}
+                      {value.PERSON_EMAIL}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
         {/* <table {...getTableProps()} style={{ border: "solid 1px blue" }}>
           <thead>
             {headerGroups.map((headerGroup) => (

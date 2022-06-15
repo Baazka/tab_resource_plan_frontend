@@ -91,7 +91,11 @@ const Header = (props) => {
         </span>
       </div>
 
-      <div class="navbar-menu" id="nav-links" style={{ marginTop: "15px" }}>
+      <div
+        class="navbar-menu"
+        id="nav-links"
+        style={{ marginTop: "15px", marginRight: "10px" }}
+      >
         <div class="navbar-end">
           <div>
             <img src={UserB} width="45" height="45" alt="" />

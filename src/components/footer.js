@@ -12,7 +12,14 @@ const Header = (props) => {
         borderTopLeftRadius: "8% 55%",
       }}
     >
-      <div style={{ position: "absolute", top: "25%", right: "30%" }}>
+      <div
+        style={{
+          position: "absolute",
+          top: "25%",
+          right: "35%",
+          fontSize: "0.8rem",
+        }}
+      >
         <p>© 2022 Үндэсний аудитын газрын Мэдээллийн технологийн төв</p>
       </div>
     </div>

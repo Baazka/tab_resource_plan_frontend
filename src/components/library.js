@@ -671,6 +671,7 @@ function DepartmentID(props) {
   }
   return listItems;
 }
+
 function Subdepartment(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
@@ -680,7 +681,8 @@ function Subdepartment(props) {
       );
       if (
         props.personChild.DEPARTMENT_ID !== null &&
-        props.personChild.DEPARTMENT_ID !== ""
+        props.personChild.DEPARTMENT_ID !== "" &&
+        props.personChild.DEPARTMENT_ID !== undefined
       ) {
         loadData(
           listItems.data?.filter(
@@ -714,7 +716,7 @@ function Subdepartment(props) {
           })
         }
       >
-        <option value={"null"}>Сонгоно уу</option>
+        <option value={"null"}>Харъяа газар сонгоно уу</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.SUB_DEPARTMENT_ID}>
             {nation.SUB_DEPARTMENT_NAME}

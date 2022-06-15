@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/core": "7.12.3",
+    "@babel/core": "^7.12.3",
+    "@craco/craco": "^6.4.3",
     "@pmmmwh/react-refresh-webpack-plugin": "0.4.3",
     "@svgr/webpack": "5.5.0",
     "@testing-library/jest-dom": "^5.12.0",
@@ -28,7 +29,6 @@
     "dotenv": "8.2.0",
     "dotenv-expand": "5.1.0",
     "eslint": "^7.11.0",
-    "eslint-config-react-app": "^6.0.0",
     "eslint-plugin-flowtype": "^5.2.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jest": "^24.1.0",
@@ -63,11 +63,13 @@
     "react-dev-utils": "^11.0.3",
     "react-dom": "^17.0.2",
     "react-html-table-to-excel": "^2.0.0",
+    "react-icons": "^4.4.0",
     "react-iframe": "^1.8.0",
     "react-pro-sidebar": "^0.6.0",
     "react-redux": "^7.2.4",
     "react-refresh": "^0.8.3",
     "react-router-dom": "^5.2.0",
+    "react-scripts": "^5.0.1",
     "react-spinners": "^0.11.0",
     "react-table": "^7.7.0",
     "react-to-print": "^2.13.0",
@@ -87,9 +89,10 @@
     "workbox-webpack-plugin": "5.1.4"
   },
   "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -165,5 +168,9 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "eslint-config-react": "^1.1.7",
+    "eslint-config-react-app": "^7.0.1"
   }
 }

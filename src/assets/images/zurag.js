@@ -68,6 +68,10 @@ import Edit from "../images/icons/edit.png";
 import DownArrow from "../images/icons/downarrow.png";
 import Print from "../images/icons/print.png";
 import ahmad from "../images/ahmad.svg";
+import fourbox from "../images/icons/fourbox.svg";
+import list from "../images/icons/list.svg";
+import male from "../images/icons/male.png";
+import female from "../images/icons/female.png";
 
 export {
   LeftArrow,
@@ -136,4 +140,8 @@ export {
   DownArrow,
   Print,
   ahmad,
+  fourbox,
+  list,
+  male,
+  female,
 };

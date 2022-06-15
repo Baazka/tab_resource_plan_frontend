@@ -865,7 +865,7 @@ function GuitsetgeliinTuluvluguu(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://localhost:3002/api/v1/contrgctor_plan"
+        "http://hr.audit.mn/hr/api/v1/contrgctor_plan"
       );
       console.log(listItems?.data, "getData");
       loadData(listItems?.data);

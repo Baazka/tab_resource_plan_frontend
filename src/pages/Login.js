@@ -82,7 +82,7 @@ function Login(props) {
         "application/x-www-form-urlencoded;charset=UTF-8";
       axios({
         method: "post", //put
-        url: "http://hr.audit.mn/reg/api/v1/login",
+        url: "https://localhost:3001/api/v1/login",
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json",
@@ -112,7 +112,7 @@ function Login(props) {
             }
             DataRequest({
               url:
-                "http://hr.audit.mn/reg/api/v1/profile/" +
+                "https://localhost:3001/api/v1/profile/" +
                 response?.data?.USER_ID,
               method: "GET",
               data: {},

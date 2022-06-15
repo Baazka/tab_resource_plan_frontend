@@ -33,8 +33,8 @@
 
   width: -webkit-fill-available;
 }
-.Borderless:focus-visible {
-  border: none;
+.Borderless :hover {
+  background-color: red;
 }
 
 .headerTextBold {
@@ -70,4 +70,19 @@
 
 .control:global(.js-focus-visible) :focus:not(.focus-visible) {
   outline: none;
+}
+
+.box_list_container {
+  display: flex;
+  justify-content: space-evenly;
+  height: 730px;
+  overflow: scroll;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+.box_list_item {
+  flex-basis: 350px;
+  margin-top: 3rem;
 }

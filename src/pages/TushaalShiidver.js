@@ -182,24 +182,29 @@ const Home = (props) => {
     tushaalUstgakh: false,
   });
   const [buttonValue, setButtonValue] = useState(1);
+  const [lib, setLib] = useState([]);
   const alert = useAlert();
-
+  async function fetchData() {
+    setSearch("");
+    let jagsaalts = await DataRequest({
+      url:
+        "http://hr.audit.mn/hr/api/v1/decision/1/" +
+        userDetils?.USER_DEPARTMENT_ID +
+        "/" +
+        userDetils?.USER_TYPE_NAME.toUpperCase(),
+      method: "GET",
+      data: {},
+    });
+    setJagsaalt(jagsaalts?.data);
+    let lib = await DataRequest({
+      url: "http://hr.audit.mn/hr/api/v1/library/commandType",
+      method: "GET",
+      data: {},
+    });
+    setLib(lib?.data);
+  }
   useEffect(() => {
-    async function test() {
-      setSearch("");
-      let jagsaalts = await DataRequest({
-        url:
-          "http://hr.audit.mn/hr/api/v1/decision/1/" +
-          userDetils?.USER_DEPARTMENT_ID +
-          "/" +
-          userDetils?.USER_TYPE_NAME.toUpperCase(),
-        method: "GET",
-        data: {},
-      });
-      setJagsaalt(jagsaalts?.data);
-      console.log(jagsaalts, "jagsaalts");
-    }
-    test();
+    fetchData();
   }, [props]);
 
   async function unActive() {
@@ -616,9 +621,9 @@ const Home = (props) => {
               }}
               onClick={() => setNuutsiinBvrtgel({ tsonkh: true, type: 1 })}
             >
-              Томилох
+              Үүсгэх
             </button>
-            <button
+            {/* <button
               class="button  ml-3"
               style={{
                 borderRadius: "6px",
@@ -629,12 +634,13 @@ const Home = (props) => {
               onClick={() => setNuutsiinBvrtgel({ tsonkh: true, type: 2 })}
             >
               Чөлөөлөх
-            </button>
+            </button> */}
           </div>
         </div>
         {NuutsiinBvrtgel?.tsonkh ? (
           <div>
             <TushaalAjiltan
+              lib={lib}
               setNuutsiinBvrtgel={setNuutsiinBvrtgel}
               type={NuutsiinBvrtgel.type}
             />
@@ -651,6 +657,7 @@ const Home = (props) => {
         {tushaal?.tushaalUstgakh ? (
           <UstgakhTsonkh
             tushaal={tushaal}
+            fetchData={fetchData}
             setTushaal={setTushaal}
             jagsaalt={jagsaalt}
             setJagsaalt={setJagsaalt}
@@ -722,12 +729,12 @@ function TushaalAjiltan(props) {
   const [tsonkhnuud, setTsonkhnuud] = useState(1);
   const [worker, setWorker] = useState();
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
-  useEffect(() => {
-    async function fetchData() {
-      let listItems = await axios("http://hr.audit.mn/hr/api/v1/personall");
+  async function fetchData() {
+    let listItems = await axios("http://hr.audit.mn/hr/api/v1/personall");
 
-      setJagsaalt(listItems?.data);
-    }
+    setJagsaalt(listItems?.data);
+  }
+  useEffect(() => {
     fetchData();
   }, [props]);
 
@@ -861,7 +868,9 @@ function TushaalAjiltan(props) {
           ) : tsonkhnuud === 2 ? (
             <Khoyor
               worker={worker}
+              lib={props.lib}
               type={props.type}
+              fetchData={fetchData}
               close={props.setNuutsiinBvrtgel}
             />
           ) : null}
@@ -877,7 +886,8 @@ function TushaalAjiltan(props) {
 
 function Khoyor(props) {
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
-  const [tsalinKhuls, setTsalin] = useState(false);
+  const [file, setFiles] = useState(new FormData());
+  const [fileName, setFileName] = useState("");
   const alert = useAlert();
   const [button, setbutton] = useState(1);
   const [EMPLOYEE_ID, setEMPLOYEE_ID] = useState();
@@ -896,57 +906,121 @@ function Khoyor(props) {
     START_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
     REGISTER_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
     SHEET_NO: 0,
+    COMMAND_TYPE_ID: 999,
+    IS_SALARY: false,
   });
   const [, forceRender] = useReducer((s) => s + 1, 0);
+
   useEffect(() => {
     forceRender();
   }, [data]);
-  function saveToDB() {
-    if (props.type === 2) {
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/decision",
-        method: "PUT",
-        data: data,
-      })
-        .then(function (response) {
-          console.log("tushaalResponse", response);
-          if (response?.data?.message === "success") {
-            setEMPLOYEE_ID(response?.data?.EMPLOYEE_ID);
-            alert.show("амжилттай хадгаллаа");
-            props.close(false);
-          } else {
-            alert.show("Системийн алдаа");
-          }
-          //history.push('/sample')
-        })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-          alert.show("Системийн алдаа");
-        });
+
+  function requiredField() {
+    if (data.COMMAND_TYPE_ID === 999 || data.COMMAND_TYPE_ID === "999") {
+      alert.show("Тушаалын төрөл сонгоно уу!!!");
+      return false;
     } else {
-      console.log("tushaalshiidverData", data);
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/decision",
-        method: "POST",
-        data: data,
-      })
-        .then(function (response) {
-          console.log("tushaalResponse", response);
-          if (response?.data?.message === "success") {
-            setEMPLOYEE_ID(response?.data?.EMPLOYEE_ID);
-            alert.show("амжилттай хадгаллаа");
-            if (props.type !== 2) setbutton(2);
-          } else {
-            alert.show("Системийн алдаа");
-          }
-          //history.push('/sample')
+      return true;
+    }
+  }
+
+  function saveToDB() {
+    if (requiredField()) {
+      if (props.type === 2) {
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/decision",
+          method: "PUT",
+          data: data,
         })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-          alert.show("Системийн алдаа");
-        });
+          .then(function (response) {
+            console.log("tushaalResponse", response);
+            if (response?.data?.message === "success") {
+              setEMPLOYEE_ID(response?.data?.EMPLOYEE_ID);
+              alert.show("амжилттай хадгаллаа");
+              props.close(false);
+            } else {
+              alert.show("Системийн алдаа");
+            }
+            //history.push('/sample')
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            alert.show("Системийн алдаа");
+          });
+      } else {
+        if (file.get("files") !== undefined && file.get("files") !== null) {
+          console.log("files", file.get("files"));
+          let formDataTemp = file;
+          formDataTemp.delete("Decision");
+          formDataTemp.append("Decision", JSON.stringify(data));
+          DataRequest({
+            url: "http://hr.audit.mn/hr/api/v1/" + "fileUpload",
+            method: "POST",
+            data: formDataTemp,
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }).then(function (response) {
+            if (response?.data?.message === "success") {
+              setEMPLOYEE_ID(response?.data?.EMPLOYEE_ID);
+              alert.show("амжилттай хадгаллаа");
+              if (props.type !== 2 && data.IS_SALARY === true) setbutton(2);
+              else {
+                props.close(false);
+                props.fetchData();
+              }
+            } else {
+              alert.show("Системийн алдаа");
+            }
+            //history.push('/sample')
+          });
+        } else {
+          console.log("datatatata", data);
+          DataRequest({
+            url: "http://hr.audit.mn/hr/api/v1/decision",
+            method: "POST",
+            data: data,
+          })
+            .then(function (response) {
+              console.log("tushaalResponse", response);
+              if (response?.data?.message === "success") {
+                setEMPLOYEE_ID(response?.data?.EMPLOYEE_ID);
+                alert.show("амжилттай хадгаллаа");
+                if (props.type !== 2 && data.IS_SALARY === true) setbutton(2);
+                else {
+                  props.close(false);
+                  props.fetchData();
+                }
+              } else {
+                alert.show("Системийн алдаа");
+              }
+              //history.push('/sample')
+            })
+            .catch(function (error) {
+              //alert(error.response.data.error.message);
+              console.log(error.response);
+              alert.show("Системийн алдаа");
+            });
+        }
+      }
+    }
+  }
+  async function saveFILE(file) {
+    if (file.target.files[0].name.split(".").pop().toLowerCase() !== "pdf") {
+      alert("Зөвхөн pdf файл оруулна уу!");
+    } else {
+      const formData = new FormData();
+      setFileName(file.target.files[0].name);
+      formData.append(
+        "data",
+        JSON.stringify({
+          type: "decision",
+        })
+      );
+
+      formData.append("files", file.target.files[0]);
+      setFiles(formData);
     }
   }
   function salary() {
@@ -994,17 +1068,53 @@ function Khoyor(props) {
         </div>
 
         <div className="column is-6"></div>
-        <div className="column is-2 has-text-right">
-          {/* <button
-            onClick={() => setTsalin(!tsalinKhuls)}
-            className="buttonTsenkher"
-          >
-            Засварлах
-          </button> */}
-        </div>
+        <div className="column is-2 has-text-right"></div>
       </div>
       {button === 1 ? (
         <div>
+          <div className="columns">
+            <div className="column column is-8">
+              <select
+                className="Borderless"
+                value={data.COMMAND_TYPE_ID}
+                onChange={(text) => {
+                  loadData({
+                    ...data,
+                    ...{
+                      COMMAND_TYPE_ID: text.target.value,
+                    },
+                  });
+                }}
+              >
+                <option key={999} value={999}>
+                  Тушаалын төрөл сонгоно уу
+                </option>
+                {props.lib?.map((nation, index) => (
+                  <option key={index} value={nation.COMMAND_TYPE_ID}>
+                    {nation.COMMAND_TYPE_NAME}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="column is-4" style={{ marginLeft: "2rem" }}>
+              <label htmlFor="salary">Цалин хөлс тооцох эсэх</label>
+              <input
+                id="salary"
+                type="checkbox"
+                style={{ marginLeft: "20px" }}
+                checked={data.IS_SALARY}
+                onChange={() => {
+                  let temp = data;
+                  if (document.getElementById("salary").checked) {
+                    temp.IS_SALARY = true;
+                  } else {
+                    temp.IS_SALARY = false;
+                  }
+                  loadData({ ...temp });
+                }}
+              />
+            </div>
+          </div>
           <div className="columns  ">
             <div className="column is-3">
               <h1>Ажилтны нэр</h1>
@@ -1103,7 +1213,7 @@ function Khoyor(props) {
             <div className="columns">
               {props.type === 1 ? (
                 <div className="column is-6">
-                  <h1>Албан хэлтэс</h1>
+                  <h1>Алба хэлтэс</h1>
                   <Compartment personChild={data} setPersonChild={loadData} />
                 </div>
               ) : null}
@@ -1181,16 +1291,6 @@ function Khoyor(props) {
                   />
                 </div>
               ) : null}
-
-              {/* <div className="column  is-1">
-                <h1>
-                  <span style={{ color: "red" }}>*</span>Тушаал
-                </h1>
-              </div>
-              <div className="column  is-1 ">
-                <img alt="" src={M} width="20px" height="20px" />
-                <img alt="" src={Trush} width="20px" height="20px" />
-              </div> */}
             </div>
           </div>
           <div>
@@ -1203,6 +1303,83 @@ function Khoyor(props) {
                   </h1>
                   <Position personChild={data} setPersonChild={loadData} />
                 </div>
+              ) : null}
+            </div>
+          </div>
+          <div className="columns">
+            <div className="column is-6">
+              <form className="uploadButton mr-3">
+                <label
+                  htmlFor="file-upload"
+                  className="custom-file-upload text-white"
+                  style={{
+                    backgroundColor: "#418ee6",
+                    borderRadius: "5px",
+                    padding: "4px",
+                    color: "white",
+                  }}
+                >
+                  <i class="fa fa-cloud-upload"></i> Хавсралт оруулах
+                </label>
+                <input
+                  style={{ display: "none" }}
+                  id="file-upload"
+                  type="file"
+                  accept=".pdf"
+                  onChange={(file) => saveFILE(file)}
+                />
+                {fileName !== "" ? (
+                  <span style={{ paddingLeft: "1rem" }}>{fileName}</span>
+                ) : null}
+              </form>
+
+              {file.FILE_PATH !== undefined ? (
+                <a
+                  href={
+                    "http://localhost:3001/api/v1/".replace("api/v1/", "") +
+                    "static" +
+                    file?.FILE_PATH.replace("uploads", "")
+                  }
+                  without
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <button
+                    className="inline-flex items-center rounded"
+                    style={{
+                      border: "1.5px solid #2684fe",
+                    }}
+                  >
+                    <div className="bg-white">
+                      <svg
+                        width="20px"
+                        height="20px "
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="mx-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        color="#2684fe"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+                        />
+                      </svg>
+                    </div>
+                    <div
+                      style={{
+                        backgroundColor: "white",
+                        paddingBottom: "0.01rem",
+                      }}
+                      className="px-2"
+                    >
+                      <p>Хавсралт харах</p>
+                    </div>
+                  </button>
+                </a>
               ) : null}
             </div>
           </div>
@@ -1229,7 +1406,11 @@ function Khoyor(props) {
           // }}
           className="p-6"
         >
-          <Salary EMPLOYEE_ID={EMPLOYEE_ID} close={props.close} />
+          <Salary
+            EMPLOYEE_ID={EMPLOYEE_ID}
+            close={props.close}
+            fetchData={() => props.fetchData()}
+          />
         </div>
       )}
     </div>
@@ -1247,32 +1428,35 @@ function Salary(props) {
         "http://hr.audit.mn/hr/api/v1/salary/" + props?.EMPLOYEE_ID
       );
       console.log(listItems, "EMPLOYEE_ID");
-      loadData(listItems?.data);
+      if (listItems.data !== undefined && listItems.data.length > 0) {
+        loadData(listItems?.data);
+      } else {
+        loadData({
+          salary: [
+            {
+              SALARY_TYPE_ID: 1,
+              SALARY_SUPPLEMENT: "",
+              SALARY_MOTIVE: "",
+              SALARY_DESC: "",
+              SALARY_AMOUNT: 0,
+              TOTAL: 0,
+              EMPLOYEE_ID: props.EMPLOYEE_ID,
+              IS_ACTIVE: 1,
+              CREATED_BY: userDetils?.USER_ID,
+              CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+              ROWTYPE: "NEW",
+            },
+          ],
+        });
+      }
     }
     fetchData();
   }, [props]);
 
-  useEffect(() => {
-    console.log("userSalary", userDetils);
-    if (data?.salary === undefined || data?.salary.length === 0)
-      loadData({
-        salary: [
-          {
-            SALARY_TYPE_ID: 1,
-            SALARY_SUPPLEMENT: "",
-            SALARY_MOTIVE: "",
-            SALARY_DESC: "",
-            SALARY_AMOUNT: 0,
-            TOTAL: 0,
-            EMPLOYEE_ID: props.EMPLOYEE_ID,
-            IS_ACTIVE: 1,
-            CREATED_BY: userDetils?.USER_ID,
-            CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-            ROWTYPE: "NEW",
-          },
-        ],
-      });
-  }, [data]);
+  // useEffect(() => {
+  //   console.log("userSalary", userDetils);
+
+  // }, [data]);
 
   function saveToDB() {
     if (requiredField(data) === true) {
@@ -1298,6 +1482,7 @@ function Salary(props) {
                 alert.show("амжилттай хадгаллаа");
                 setEdit(!edit);
                 props.close(false);
+                props.fetchData();
               }
             } else {
               alert.show("Системийн алдаа");
@@ -1431,17 +1616,18 @@ function Salary(props) {
           <div className="column is-11">
             <span className="headerTextBold">Цалингийн мэдээлэл</span>
           </div>
+
           <div className="column is-1">
-            {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
-              <button
-                className="buttonTsenkher"
-                onClick={() => {
-                  setEdit(!edit);
-                }}
-              >
-                Засварлах
-              </button>
-            )}
+            {/* {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : ( */}
+            <button
+              className="buttonTsenkher"
+              onClick={() => {
+                setEdit(!edit);
+              }}
+            >
+              Засварлах
+            </button>
+            {/* )} */}
           </div>
         </div>
         <div className="table-container">
@@ -1674,7 +1860,7 @@ function TushaalKharakh(props) {
         style={{
           position: "absolute",
           width: "60%",
-          height: "auto",
+          height: "85%",
           left: "25%",
           top: "10%",
           borderRadius: "6px",
@@ -1705,6 +1891,18 @@ function TushaalKharakh(props) {
         </div>
 
         <div>
+          {data.COMMAND_TYPE_NAME !== undefined &&
+          data.COMMAND_TYPE_NAME !== null ? (
+            <div className="columns">
+              <div className="column is-7">
+                <input
+                  class="input  is-size-7"
+                  disabled
+                  value={data?.COMMAND_TYPE_NAME}
+                ></input>
+              </div>
+            </div>
+          ) : null}
           <div className="columns  ">
             <div className="column is-3">
               <h1>Ажилтны нэр</h1>
@@ -1921,6 +2119,61 @@ function TushaalKharakh(props) {
           </div>
         </div>
         <SalaryKaruulakh EMPLOYEE_ID={data.EMPLOYEE_ID} />
+        <div className="columns">
+          <div className="column is-7">
+            {data?.FILE_PATH !== undefined && data?.FILE_PATH !== null ? (
+              <a
+                href={
+                  "http://hr.audit.mn/hr/api/v1/".replace("api/v1/", "") +
+                  "static" +
+                  data?.FILE_PATH.replace("uploads", "")
+                }
+                w
+                without
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <button
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    borderRadius: "6px",
+                    border: "1.5px solid #2684fe",
+                  }}
+                >
+                  <div className="bg-white">
+                    <svg
+                      width="20px"
+                      height="20px "
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="mx-1"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      color="#2684fe"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    style={{
+                      backgroundColor: "white",
+                      paddingBottom: "0.01rem",
+                    }}
+                    className="px-2"
+                  >
+                    <p>Хавсралт харах</p>
+                  </div>
+                </button>
+              </a>
+            ) : null}
+          </div>
+        </div>
       </div>
     );
   } else {
@@ -2142,6 +2395,7 @@ function UstgakhTsonkh(props) {
             )
           );
           props.setTushaal({ tushaalKharakh: false, tushaalUstgakh: false });
+          props.fetchData();
           alert.show("амжилттай устлаа");
         }
       })
