@@ -908,6 +908,10 @@ function Khoyor(props) {
         : props.worker.COMPARTMENT_ID,
     POSITION_ID:
       props.worker.POSITION_ID === null ? "null" : props.worker.POSITION_ID,
+    POSITION_LEVEL_ID:
+      props.worker.POSITION_LEVEL_ID === null
+        ? "null"
+        : props.worker.POSITION_LEVEL_ID,
     IS_ACTIVE: 1,
     CREATED_BY: 1,
     CREATED_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
@@ -1917,7 +1921,7 @@ function TushaalKharakh(props) {
         </div>
 
         <div>
-          {data.COMMAND_TYPE_NAME !== undefined &&
+          {/* {data.COMMAND_TYPE_NAME !== undefined &&
           data.COMMAND_TYPE_NAME !== null ? (
             <div className="columns">
               <div className="column is-7">
@@ -1928,7 +1932,7 @@ function TushaalKharakh(props) {
                 ></input>
               </div>
             </div>
-          ) : null}
+          ) : null} */}
           <div className="columns  ">
             <div className="column is-3">
               <h1>Ажилтны нэр</h1>
@@ -1954,12 +1958,12 @@ function TushaalKharakh(props) {
               <input
                 class="input  is-size-7"
                 disabled
-                value={data?.DECISION_TYPE_NAME}
+                value={data?.COMMAND_TYPE_NAME}
                 onChange={(e) => {
                   loadData({
                     ...data,
                     ...{
-                      DECISION_TYPE_NAME: e.target.value,
+                      COMMAND_TYPE_NAME: e.target.value,
                     },
                   });
                 }}
