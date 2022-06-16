@@ -258,7 +258,7 @@ function Login(props) {
   if (fakeAuth.isAuthenticated === true) {
     if (userDetils?.USER_TYPE_NAME === "SURVEY")
       return <Redirect to={state?.form || "/web/surveyFin/"} />;
-    else return <Redirect to={state?.form || "/web/workerList/"} />;
+    else return <Redirect to={state?.form || "/web/workerList/null"} />;
   }
   return (
     <div
