@@ -1119,6 +1119,7 @@ function Home(props) {
                         checked={
                           checkBox.index === index ? checkBox.value : false
                         }
+                        onChange={(e) => console.log(e.target.value)}
                       />
                     </div>
 

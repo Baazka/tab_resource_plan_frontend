@@ -213,7 +213,7 @@ function Login(props) {
                   JSON.stringify(response?.data)
                 );
                 // DataRequest({
-                //   url: "http://hr.audit.mn/hr/api/v1/election/",
+                //   url: "http://hr.audit.mn/reg/hr/api/v1/election/",
                 //   method: "GET",
                 //   data: {},
                 // })
