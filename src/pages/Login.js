@@ -124,7 +124,7 @@ function Login(props) {
                   JSON.stringify(response?.data)
                 );
                 // auth.signin(() => {
-                history.push("/web/dashboard/");
+                history.push("/web/workerlist/");
 
                 // });
               })
