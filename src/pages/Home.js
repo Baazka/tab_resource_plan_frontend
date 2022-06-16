@@ -99,6 +99,7 @@ function Home(props) {
     buttonValue: 1,
   });
   const [view, setView] = useState(false);
+  const [checkBox, setCheckBox] = useState({ index: "", value: false });
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
@@ -1052,9 +1053,17 @@ function Home(props) {
                 className="box_list_item"
                 style={
                   index === (search === "" ? jagsaalt : found).length - 1
-                    ? { marginBottom: "3rem" }
-                    : { marginBottom: 0 }
+                    ? { marginBottom: "3rem", cursor: "pointer" }
+                    : { marginBottom: 0, cursor: "pointer" }
                 }
+                onClick={() => {
+                  if (checkBox.index === index) {
+                    setCheckBox({ index: "", value: false });
+                  } else {
+                    setCheckBox({ index: index, value: true });
+                    handleChange({ selectedRows: [value] });
+                  }
+                }}
               >
                 <div style={{ display: "flex", alignContent: "baseline" }}>
                   <div
@@ -1094,17 +1103,33 @@ function Home(props) {
                       width: "280px",
                     }}
                   >
-                    <span>
-                      {value.PERSON_LASTNAME + " "}
-                      {value.PERSON_FIRSTNAME.toUpperCase()}
-                    </span>
-                    <br />
+                    <div
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span>
+                        {value.PERSON_LASTNAME + " "}
+                        {value.PERSON_FIRSTNAME.toUpperCase()}
+                      </span>
+                      <input
+                        type="checkbox"
+                        checked={
+                          checkBox.index === index ? checkBox.value : false
+                        }
+                      />
+                    </div>
+
                     <textarea
+                      disabled
                       style={{
                         color: "#418ee6",
                         fontSize: "0.7rem",
                         border: "none",
                         width: "100%",
+                        background: "none",
                       }}
                       value={value.POSITION_NAME}
                     ></textarea>
@@ -1113,7 +1138,6 @@ function Home(props) {
                       <FiPhone /> {value.PERSON_PHONE}
                     </span>
                     <br />
-
                     <div
                       style={{
                         fontSize: "0.7rem",

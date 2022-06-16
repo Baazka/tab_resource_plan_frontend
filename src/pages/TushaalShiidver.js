@@ -4,6 +4,7 @@ import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
 import { useAlert } from "react-alert";
 import { Search, Add, Delete, Eye } from "../assets/images/zurag";
+import CurrencyInput from "react-currency-input-field";
 import {
   DepartmentID,
   Subdepartment,
@@ -273,46 +274,46 @@ const Home = (props) => {
       } else if (value1.includes(value2)) return true;
     return false;
   }
-  function deleteDecision() {
-    if (
-      deleteList?.DECISION_ID !== undefined &&
-      deleteList?.DECISION_ID !== "" &&
-      deleteList?.DECISION_ID !== null
-    ) {
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/decisionDelete/",
+  // function deleteDecision() {
+  //   if (
+  //     deleteList?.DECISION_ID !== undefined &&
+  //     deleteList?.DECISION_ID !== "" &&
+  //     deleteList?.DECISION_ID !== null
+  //   ) {
+  //     DataRequest({
+  //       url: "http://hr.audit.mn/hr/api/v1/decisionDelete/",
 
-        method: "POST",
-        data: {
-          DECISION_ID: deleteList?.DECISION_ID,
-          IS_ACTIVE: 1,
-          UPDATED_BY: userDetils?.USER_ID,
-          UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-        },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          //history.push('/sample')
-          if (response?.data?.message === "success") {
-            setJagsaalt(
-              jagsaalt?.filter(
-                (element, index) =>
-                  element.DECISION_ID !== deleteList?.DECISION_ID
-              )
-            );
-            forceRender();
-            alert.show("амжилттай устлаа");
-          }
-        })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-          alert.show("aldaa");
-        });
-    } else {
-      alert.show("устгах өгөгдлөө сонгон уу?");
-    }
-  }
+  //       method: "POST",
+  //       data: {
+  //         DECISION_ID: deleteList?.DECISION_ID,
+  //         IS_ACTIVE: 1,
+  //         UPDATED_BY: userDetils?.USER_ID,
+  //         UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+  //       },
+  //     })
+  //       .then(function (response) {
+  //         console.log("UpdateResponse", response);
+  //         //history.push('/sample')
+  //         if (response?.data?.message === "success") {
+  //           setJagsaalt(
+  //             jagsaalt?.filter(
+  //               (element, index) =>
+  //                 element.DECISION_ID !== deleteList?.DECISION_ID
+  //             )
+  //           );
+  //           forceRender();
+  //           alert.show("амжилттай устлаа");
+  //         }
+  //       })
+  //       .catch(function (error) {
+  //         //alert(error.response.data.error.message);
+  //         console.log(error.response);
+  //         alert.show("aldaa");
+  //       });
+  //   } else {
+  //     alert.show("устгах өгөгдлөө сонгон уу?");
+  //   }
+  // }
   const columns =
     buttonValue === 1
       ? [
@@ -355,7 +356,7 @@ const Home = (props) => {
           },
           {
             name: "Тушаалын төрөл",
-            selector: "DECISION_TYPE_NAME",
+            selector: "COMMAND_TYPE_NAME",
             sortable: true,
             center: true,
           },
@@ -715,7 +716,7 @@ const bagana = [
     sortable: true,
   },
   {
-    name: "регистрийн дугаар",
+    name: "Регистрийн дугаар",
     selector: "PERSON_REGISTER_NO",
     sortable: true,
     center: true,
@@ -893,10 +894,20 @@ function Khoyor(props) {
   const [EMPLOYEE_ID, setEMPLOYEE_ID] = useState();
   const [data, loadData] = useState({
     PERSON_ID: props.worker.PERSON_ID,
-    DEPARTMENT_ID: userDetils.USER_DEPARTMENT_ID,
-    SUB_DEPARTMENT_ID: "null",
-    COMPARTMENT_ID: "null",
-    POSITION_ID: "",
+    DEPARTMENT_ID:
+      props.worker.DEPARTMENT_ID === null
+        ? userDetils.USER_DEPARTMENT_ID
+        : props.worker.DEPARTMENT_ID,
+    SUB_DEPARTMENT_ID:
+      props.worker.SUB_DEPARTMENT_ID === null
+        ? "null"
+        : props.worker.SUB_DEPARTMENT_ID,
+    COMPARTMENT_ID:
+      props.worker.COMPARTMENT_ID === null
+        ? "null"
+        : props.worker.COMPARTMENT_ID,
+    POSITION_ID:
+      props.worker.POSITION_ID === null ? "null" : props.worker.POSITION_ID,
     IS_ACTIVE: 1,
     CREATED_BY: 1,
     CREATED_DATE: dateFormat(new Date(), "yyyy-mm-dd"),
@@ -1133,7 +1144,7 @@ function Khoyor(props) {
               />
             </div>
             <div className="column is-6">
-              <h1>
+              {/* <h1>
                 {" "}
                 <span style={{ color: "red" }}>*</span>Тушаалын төрөл
               </h1>
@@ -1149,7 +1160,7 @@ function Khoyor(props) {
                     },
                   });
                 }}
-              />
+              /> */}
             </div>
           </div>
 
@@ -1422,6 +1433,7 @@ function Salary(props) {
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
   const alert = useAlert();
+
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
@@ -1452,11 +1464,6 @@ function Salary(props) {
     }
     fetchData();
   }, [props]);
-
-  // useEffect(() => {
-  //   console.log("userSalary", userDetils);
-
-  // }, [data]);
 
   function saveToDB() {
     if (requiredField(data) === true) {
@@ -1741,21 +1748,40 @@ function Salary(props) {
                         />
                       </td>
                       <td>
-                        <input
+                        {/* <input
                           disabled={edit}
                           type="number"
                           className="Borderless"
                           placeholder="утгаа оруулна уу"
                           value={data.salary[index]?.SALARY_AMOUNT}
-                          onChange={(text) => {
+                          onChange={(text) => {}}
+                        /> */}
+                        <CurrencyInput
+                          disabled={edit}
+                          decimalScale="2"
+                          name="input-name"
+                          placeholder="0"
+                          value={data.salary[index]?.SALARY_AMOUNT}
+                          onValueChange={(numbert, name) => {
                             let value = [...data?.salary];
-                            value[index].SALARY_AMOUNT = text.target.value;
+                            if (numbert !== null && numbert.includes(".")) {
+                              value[index].SALARY_AMOUNT = numbert;
+                            } else {
+                              value[index].SALARY_AMOUNT = numbert + ".00";
+                            }
                             value[index].UPDATED_BY = userDetils?.USER_ID;
                             value[index].UPDATED_DATE = dateFormat(
                               new Date(),
                               "dd-mmm-yy"
                             );
+
                             loadData({ salary: value });
+                          }}
+                          style={{
+                            backgroundColor: "transparent",
+                            border: "none",
+                            textAlign: "right",
+                            width: "100%",
                           }}
                         />
                       </td>
@@ -2298,8 +2324,22 @@ function SalaryKaruulakh(props) {
                       />
                     </td>
                     <td>
-                      <input
+                      <CurrencyInput
                         disabled={edit}
+                        decimalScale="2"
+                        id={value.IND_NAME}
+                        name="input-name"
+                        placeholder="0"
+                        value={data.salary[index]?.SALARY_AMOUNT}
+                        style={{
+                          backgroundColor: "transparent",
+                          border: "none",
+                          textAlign: "right",
+                          width: "100%",
+                        }}
+                      />
+                      {/* <input
+                        
                         type="number"
                         className="Borderless"
                         placeholder="утгаа оруулна уу"
@@ -2314,7 +2354,7 @@ function SalaryKaruulakh(props) {
                           );
                           loadData({ salary: value });
                         }}
-                      />
+                      /> */}
                     </td>
 
                     <td>
