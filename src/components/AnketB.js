@@ -35,8 +35,25 @@ function AnketB(props) {
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [menu, setMenu] = useState(1);
   const [loading, setLoading] = useState(false);
-
+  const [avatar, setAvatar] = useState({});
   const history = useHistory();
+
+  useEffect(() => {
+    async function fetchData() {
+      let avatarImg = await axios(
+        "http://hr.audit.mn/hr/api/v1/avatar/" +
+          JSON.parse(
+            localStorage.getItem("personDetail") === undefined
+              ? "{}"
+              : localStorage.getItem("personDetail")
+          )?.person_id
+      );
+      console.log(avatarImg, "avatarImg");
+      if (avatarImg.data !== undefined && avatarImg.data.length > 0)
+        setAvatar(avatarImg.data[avatarImg.data.length - 1]);
+    }
+    fetchData();
+  }, [props]);
 
   return (
     <div
@@ -102,8 +119,19 @@ function AnketB(props) {
             {"<  Буцах"}
           </button>
         </div>
-        <div style={{ marginTop: "10%" }}>
-          <img src={AvatarB} width="120px" height="120px" />
+        <div style={{ marginTop: "1rem" }}>
+          <img
+            src={
+              avatar.FILE_PATH !== undefined && avatar.FILE_PATH !== null
+                ? "http://hr.audit.mn/hr/api/v1/".replace("api/v1/", "") +
+                  "static" +
+                  avatar?.FILE_PATH.replace("uploads", "")
+                : AvatarB
+            }
+            width="120px"
+            height="120px"
+            alt="avatar"
+          />
         </div>
         <div
           style={{
@@ -112,9 +140,9 @@ function AnketB(props) {
             marginTop: "-0.4rem",
           }}
         >
-          <img src={Face} width="40px" height="40px" />
+          {/* <img src={Face} width="40px" height="40px" />
           <img src={Trush} width="40px" height="40px" />
-          <img src={Warning} width="40px" height="40px" />
+          <img src={Warning} width="40px" height="40px" /> */}
         </div>
         <div style={{ marginTop: "1.5rem" }}>
           <span
