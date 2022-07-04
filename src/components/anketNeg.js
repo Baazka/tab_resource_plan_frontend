@@ -44,6 +44,7 @@ import { useAlert } from "react-alert";
 import { useHistory } from "react-router-dom";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import override from "../css/override";
+import AvatarEditor from "react-avatar-editor";
 
 var dateFormat = require("dateformat");
 
@@ -60,6 +61,49 @@ function AnketNeg(props) {
   const alert = useAlert();
   const [loading, setLoading] = useState(true);
   const [avatar, setAvatar] = useState({});
+  const [avatarImg, setAvatarImg] = useState();
+  const avatarRef = useRef(null);
+  const [editTypes, setEditTypes] = useState({
+    allowZoomOut: false,
+    position: { x: 0.5, y: 0.5 },
+    scale: 1,
+    rotate: 0,
+    borderRadius: 0,
+    preview: undefined,
+    width: 200,
+    height: 200,
+    disableCanvasRotation: false,
+    isTransparent: false,
+    backgroundColor: undefined,
+  });
+
+  function handleScale(e) {
+    const scale = parseFloat(e.target.value);
+    setEditTypes({ ...editTypes, scale });
+  }
+
+  function rotateScale(e) {
+    e.preventDefault();
+    setEditTypes({ ...editTypes, ...{ rotate: parseFloat(e.target.value) } });
+  }
+
+  function rotateLeft(e) {
+    e.preventDefault();
+
+    setEditTypes({
+      ...editTypes,
+      ...{ rotate: (editTypes.rotate - 90) % 360 },
+    });
+  }
+
+  function rotateRight(e) {
+    e.preventDefault();
+
+    setEditTypes({
+      ...editTypes,
+      ...{ rotate: (editTypes.rotate + 90) % 360 },
+    });
+  }
 
   function saveAvatar(file) {
     if (avatar.FILE_PATH !== undefined && avatar.FILE_PATH !== null) {
@@ -68,33 +112,7 @@ function AnketNeg(props) {
       localStorage.getItem("personDetail")?.includes("person_id") &&
       JSON.parse(localStorage.getItem("personDetail")).person_id !== "0"
     ) {
-      const formData = new FormData();
-      formData.append(
-        "data",
-        JSON.stringify({
-          type: "avatar",
-          person_id: JSON.parse(localStorage.getItem("personDetail")).person_id,
-          CREATED_BY: userDetils.USER_ID,
-        })
-      );
-      formData.append("files", file.target.files[0]);
-
-      DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/" + "fileUpload",
-        method: "POST",
-        data: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }).then(function (response) {
-        if (response?.data?.message === "success") {
-          alert.show("амжилттай хадгаллаа");
-          setAvatar(response?.data);
-        } else {
-          alert.show("Системийн алдаа");
-        }
-        //history.push('/sample')
-      });
+      setAvatarImg(file.target.files[0]);
     } else {
       alert.show("Ерөнхий мэдээлэл бөгөлнө үү");
     }
@@ -287,6 +305,20 @@ function AnketNeg(props) {
       }
     }
   }
+  function dataURLtoFile(dataurl, filename) {
+    var arr = dataurl.split(","),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = atob(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+
+    return new File([u8arr], filename, { type: mime });
+  }
+
   function onInputClick(event) {
     event.target.value = "";
   }
@@ -356,65 +388,166 @@ function AnketNeg(props) {
               {"<  Буцах"}
             </button>
           </div>
-
-          <div style={{ marginTop: "1rem" }}>
-            <img
-              src={
-                avatar.FILE_PATH !== undefined && avatar.FILE_PATH !== null
-                  ? "http://hr.audit.mn/hr/api/v1/".replace("api/v1/", "") +
-                    "static" +
-                    avatar?.FILE_PATH.replace("uploads", "")
-                  : AvatarB
-              }
-              width="120px"
-              height="120px"
-              alt="avatar"
-            />
-          </div>
-
-          <div
-            className="container"
-            style={{
-              justifyContent: "center",
-              marginTop: "-0.4rem",
-            }}
-          >
-            <div style={{ visibility: "hidden" }}>
-              <input
-                ref={refContainer}
-                class="file-input"
-                accept="image/*"
-                type="file"
-                onClick={onInputClick}
-                onChange={(file) => saveAvatar(file)}
+          {avatarImg !== undefined ? (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                position: "relative",
+                alignItems: "center",
+              }}
+            >
+              <AvatarEditor
+                ref={avatarRef}
+                image={avatarImg}
+                width={100}
+                height={125}
+                border={20}
+                scale={editTypes.scale}
+                rotate={editTypes.rotate}
               />
-            </div>
-            <img
-              alt=""
-              src={Face}
-              width="40px"
-              height="40px"
-              style={{ cursor: "pointer" }}
-              onClick={() => refContainer.current.click()}
-            />
+              <div style={{ padding: "3px" }}>
+                <input
+                  id="typeinp"
+                  type="range"
+                  min={editTypes.allowZoomOut ? "0.1" : "1"}
+                  max="2"
+                  step="0.01"
+                  defaultValue="1"
+                  value={editTypes.scale}
+                  onChange={handleScale}
+                />
+              </div>
+              <div style={{ padding: "4px" }}>
+                <button onClick={rotateLeft}>Зүүн</button>
+                <button onClick={rotateRight}>Баруун</button>
+              </div>
 
-            <img
-              style={{ cursor: "pointer" }}
-              alt="trush"
-              src={Trush}
-              width="40px"
-              height="40px"
-              onClick={() => DeleteAvatar()}
-            />
-            <img
-              alt=""
-              src={Warning}
-              style={{ cursor: "pointer" }}
-              width="40px"
-              height="40px"
-              onClick={() => alert.show("test")}
-            />
-          </div>
+              <button
+                onClick={() => {
+                  if (avatarRef) {
+                    // This returns a HTMLCanvasElement, it can be made into a data URL or a blob,
+                    // drawn on another canvas, or added to the DOM.
+                    // const canvas = avatarRef.current.getImage();
+
+                    // If you want the image resized to the canvas size (also a HTMLCanvasElement)
+                    const canvasScaled = avatarRef.current
+                      .getImageScaledToCanvas()
+                      .toDataURL();
+
+                    const formData = new FormData();
+                    formData.append(
+                      "data",
+                      JSON.stringify({
+                        type: "avatar",
+                        person_id: JSON.parse(
+                          localStorage.getItem("personDetail")
+                        ).person_id,
+                        CREATED_BY: userDetils.USER_ID,
+                      })
+                    );
+                    formData.append(
+                      "files",
+                      dataURLtoFile(canvasScaled, avatarImg.originalname)
+                    );
+                    DataRequest({
+                      url: "http://hr.audit.mn/hr/api/v1/" + "fileUpload",
+                      method: "POST",
+                      data: formData,
+                      headers: {
+                        "Content-Type": "multipart/form-data",
+                      },
+                    }).then(function (response) {
+                      if (response?.data?.message === "success") {
+                        alert.show("амжилттай хадгаллаа");
+                        setAvatar(response?.data);
+                        setAvatarImg();
+                      } else {
+                        alert.show("Системийн алдаа");
+                      }
+                      //history.push('/sample')
+                    });
+
+                    console.log("canvasScaled", canvasScaled);
+                  }
+                }}
+              >
+                Хадгалах
+              </button>
+
+              {/* <input
+                name="scale"
+                type="range"
+                onChange={handleScale}
+                value={editTypes.scale}
+                min={editTypes.allowZoomOut ? "0.1" : "1"}
+                max="2"
+                // step="0.01"
+                // defaultValue="1"
+              /> */}
+            </div>
+          ) : (
+            <>
+              <div style={{ marginTop: "1rem" }}>
+                <img
+                  src={
+                    avatar.FILE_PATH !== undefined && avatar.FILE_PATH !== null
+                      ? "http://hr.audit.mn/hr/api/v1/".replace("api/v1/", "") +
+                        "static" +
+                        avatar?.FILE_PATH.replace("uploads", "")
+                      : AvatarB
+                  }
+                  width="120px"
+                  height="120px"
+                  alt="avatar"
+                />
+              </div>
+              <div
+                className="container"
+                style={{
+                  justifyContent: "center",
+                  marginTop: "-0.4rem",
+                }}
+              >
+                <div style={{ visibility: "hidden" }}>
+                  <input
+                    ref={refContainer}
+                    class="file-input"
+                    accept="image/*"
+                    type="file"
+                    onClick={onInputClick}
+                    onChange={(file) => saveAvatar(file)}
+                  />
+                </div>
+                <img
+                  alt=""
+                  src={Face}
+                  width="40px"
+                  height="40px"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => refContainer.current.click()}
+                />
+
+                <img
+                  style={{ cursor: "pointer" }}
+                  alt="trush"
+                  src={Trush}
+                  width="40px"
+                  height="40px"
+                  onClick={() => DeleteAvatar()}
+                />
+                <img
+                  alt=""
+                  src={Warning}
+                  style={{ cursor: "pointer" }}
+                  width="40px"
+                  height="40px"
+                  onClick={() => alert.show("test")}
+                />
+              </div>
+            </>
+          )}
+
           <div style={{ marginTop: "1.5rem" }}>
             <span
               style={{
@@ -685,6 +818,7 @@ function AnketNeg(props) {
                         loading={setLoading}
                         person_id={data?.PERSON_ID}
                       />
+
                       <GerBul
                         person={data}
                         person_id={data?.PERSON_ID}

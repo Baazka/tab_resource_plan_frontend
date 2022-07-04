@@ -650,9 +650,11 @@ const Home = (props) => {
         {tushaal?.tushaalKharakh ? (
           <TushaalKharakh
             tushaal={tushaal}
+            lib={lib}
             setTushaal={setTushaal}
             edit={false}
             buttonValue={buttonValue === 1 ? 1 : 0}
+            fetchData={fetchData}
           />
         ) : null}
         {tushaal?.tushaalUstgakh ? (
@@ -1281,7 +1283,7 @@ function Khoyor(props) {
                   <Positionlevel personChild={data} setPersonChild={loadData} />
                 </div>
               ) : null}
-              {props.type === 2 ? (
+              {data?.COMMAND_TYPE_ID === 2 ? (
                 <div className="column is-3">
                   <h1>
                     {" "}
@@ -1290,7 +1292,7 @@ function Khoyor(props) {
                   </h1>
                 </div>
               ) : null}
-              {props.type === 2 ? (
+              {data?.COMMAND_TYPE_ID === 2 ? (
                 <div className="column  is-2 ">
                   <input
                     class="input  is-size-7"
@@ -1864,6 +1866,81 @@ function Salary(props) {
 function TushaalKharakh(props) {
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState();
+  const [file, setFiles] = useState(new FormData());
+  const [fileName, setFileName] = useState("");
+  const alert = useAlert();
+
+  async function saveFILE(file) {
+    if (file.target.files[0].name.split(".").pop().toLowerCase() !== "pdf") {
+      alert("Зөвхөн pdf файл оруулна уу!");
+    } else {
+      const formData = new FormData();
+      setFileName(file.target.files[0].name);
+      formData.append(
+        "data",
+        JSON.stringify({
+          type: "decision",
+        })
+      );
+
+      formData.append("files", file.target.files[0]);
+      setFiles(formData);
+    }
+  }
+  async function saveToDBDecition() {
+    console.log(data, "sendDecision");
+    if (file.get("files") !== undefined && file.get("files") !== null) {
+      console.log("files", file.get("files"));
+      let formDataTemp = file;
+      formDataTemp.delete("Decision");
+
+      formDataTemp.append("Decision", JSON.stringify(data));
+      if (data?.FILE_PATH !== undefined && data?.FILE_PATH !== null)
+        formDataTemp.append("oldFile", data.FILE_PATH);
+      DataRequest({
+        url: "http://hr.audit.mn/hr/api/v1/" + "fileUpload",
+        method: "POST",
+        data: formDataTemp,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }).then(function (response) {
+        if (response?.data?.message === "success") {
+          alert.show("амжилттай хадгаллаа");
+
+          props.setTushaal({ tushaalKharakh: false });
+          props.fetchData();
+        } else {
+          alert.show("Системийн алдаа");
+        }
+        //history.push('/sample')
+      });
+    } else {
+      console.log("datatatata", data);
+      DataRequest({
+        url: "http://hr.audit.mn/hr/api/v1/decision",
+        method: "POST",
+        data: data,
+      })
+        .then(function (response) {
+          console.log("tushaalResponse", response);
+          if (response?.data?.message === "success") {
+            alert.show("амжилттай хадгаллаа");
+
+            props.setTushaal({ tushaalKharakh: false });
+            props.fetchData();
+          } else {
+            alert.show("Системийн алдаа");
+          }
+          //history.push('/sample')
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+          alert.show("Системийн алдаа");
+        });
+    }
+  }
 
   useEffect(() => {
     async function fetchData() {
@@ -1878,7 +1955,8 @@ function TushaalKharakh(props) {
           props.tushaal?.decision_ID
       );
       console.log("TushaalKharakh", listItems);
-      loadData(listItems?.data);
+      if (listItems.data !== undefined && listItems.data.length > 0)
+        loadData(listItems?.data[0]);
     }
     fetchData();
   }, [props]);
@@ -1892,7 +1970,7 @@ function TushaalKharakh(props) {
           width: "60%",
           height: "85%",
           left: "25%",
-          top: "10%",
+          top: "6%",
           borderRadius: "6px",
           backgroundColor: "white",
           boxShadow:
@@ -1955,19 +2033,27 @@ function TushaalKharakh(props) {
                 {" "}
                 <span style={{ color: "red" }}>*</span>Тушаалын төрөл
               </h1>
-              <input
-                class="input  is-size-7"
-                disabled
-                value={data?.COMMAND_TYPE_NAME}
-                onChange={(e) => {
+              <select
+                className="Borderless"
+                value={data.COMMAND_TYPE_ID}
+                onChange={(text) => {
                   loadData({
                     ...data,
                     ...{
-                      COMMAND_TYPE_NAME: e.target.value,
+                      COMMAND_TYPE_ID: text.target.value,
                     },
                   });
                 }}
-              />
+              >
+                <option key={999} value={999}>
+                  Тушаалын төрөл сонгоно уу
+                </option>
+                {props.lib?.map((nation, index) => (
+                  <option key={index} value={nation.COMMAND_TYPE_ID}>
+                    {nation.COMMAND_TYPE_NAME}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -1975,11 +2061,7 @@ function TushaalKharakh(props) {
             <div className="columns">
               <div className="column is-6">
                 <h1>Байгууллага нэр</h1>
-                <input
-                  disabled
-                  className="Borderless"
-                  value={data.DEPARTMENT_NAME}
-                />
+                <DepartmentID personChild={data} setPersonChild={loadData} />
               </div>
               <div className="column is-6">
                 <h1>
@@ -1988,7 +2070,6 @@ function TushaalKharakh(props) {
                 </h1>
                 <input
                   class="input  is-size-7"
-                  disabled
                   value={data?.DECISION_NO}
                   onChange={(e) => {
                     loadData({
@@ -2006,11 +2087,7 @@ function TushaalKharakh(props) {
             <div className="columns">
               <div className="column is-6">
                 <h1>Газар нэгж</h1>
-                <input
-                  disabled
-                  className="Borderless"
-                  value={data.SUB_DEPARTMENT_NAME}
-                />
+                <Subdepartment personChild={data} setPersonChild={loadData} />
               </div>
               <div className="column is-6">
                 <h1>
@@ -2020,7 +2097,6 @@ function TushaalKharakh(props) {
                 <input
                   class="input  is-size-7"
                   value={data?.DECISION_DESC}
-                  disabled
                   onChange={(e) => {
                     loadData({
                       ...data,
@@ -2037,11 +2113,7 @@ function TushaalKharakh(props) {
             <div className="columns">
               <div className="column is-6">
                 <h1>Албан хэлтэс</h1>
-                <input
-                  disabled
-                  className="Borderless"
-                  value={data.COMPARTMENT_NAME}
-                />
+                <Compartment personChild={data} setPersonChild={loadData} />
               </div>
 
               <div className="column is-3">
@@ -2066,7 +2138,6 @@ function TushaalKharakh(props) {
                 <h1>Бүртгэсэн огноо</h1>
                 <input
                   type="date"
-                  disabled
                   className="anketInput"
                   value={dateFormat(data?.REGISTER_DATE, "yyyy-mm-dd")}
                   onChange={(e) => {
@@ -2088,13 +2159,9 @@ function TushaalKharakh(props) {
                   {" "}
                   <span style={{ color: "red" }}>*</span>Албан тушаалын түвшин{" "}
                 </h1>
-                <Positionlevel
-                  personChild={data}
-                  setPersonChild={loadData}
-                  edit={true}
-                />
+                <Positionlevel personChild={data} setPersonChild={loadData} />
               </div>
-              {data?.SHEET_NO ? (
+              {data?.COMMAND_TYPE_ID === 2 ? (
                 <div className="column is-3">
                   <h1>
                     {" "}
@@ -2103,11 +2170,10 @@ function TushaalKharakh(props) {
                   </h1>
                 </div>
               ) : null}
-              {data?.SHEET_NO ? (
+              {data?.COMMAND_TYPE_ID === 2 ? (
                 <div className="column  is-2 ">
                   <input
                     class="input  is-size-7"
-                    disabled
                     value={data?.SHEET_NO}
                     onChange={(e) => {
                       loadData({
@@ -2139,18 +2205,41 @@ function TushaalKharakh(props) {
                   {" "}
                   <span style={{ color: "red" }}>*</span>Албан тушаал
                 </h1>
-                <input
-                  disabled
-                  className="Borderless"
-                  value={data.POSITION_NAME}
-                />
+                <Position personChild={data} setPersonChild={loadData} />
               </div>
             </div>
           </div>
         </div>
-        <SalaryKaruulakh EMPLOYEE_ID={data.EMPLOYEE_ID} />
+        <SalaryKaruulakh
+          EMPLOYEE_ID={data.EMPLOYEE_ID}
+          saveToDBDecition={saveToDBDecition}
+        />
         <div className="columns">
           <div className="column is-7">
+            <form className="uploadButton mr-3">
+              <label
+                htmlFor="file-upload"
+                className="custom-file-upload text-white"
+                style={{
+                  backgroundColor: "#418ee6",
+                  borderRadius: "5px",
+                  padding: "4px",
+                  color: "white",
+                }}
+              >
+                <i class="fa fa-cloud-upload"></i> Хавсралт оруулах
+              </label>
+              <input
+                style={{ display: "none" }}
+                id="file-upload"
+                type="file"
+                accept=".pdf"
+                onChange={(file) => saveFILE(file)}
+              />
+              {fileName !== "" ? (
+                <span style={{ paddingLeft: "1rem" }}>{fileName}</span>
+              ) : null}
+            </form>
             {data?.FILE_PATH !== undefined && data?.FILE_PATH !== null ? (
               <a
                 href={
@@ -2169,6 +2258,7 @@ function TushaalKharakh(props) {
                     alignItems: "center",
                     borderRadius: "6px",
                     border: "1.5px solid #2684fe",
+                    marginTop: "1rem",
                   }}
                 >
                   <div className="bg-white">
@@ -2215,7 +2305,7 @@ function TushaalKharakh(props) {
 function SalaryKaruulakh(props) {
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState(null);
-  const [edit, setEdit] = useState(true);
+
   const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
@@ -2229,6 +2319,150 @@ function SalaryKaruulakh(props) {
     fetchData();
   }, [props]);
 
+  function saveToDB() {
+    if (requiredField(data) === true) {
+      props.saveToDBDecition();
+      let newRow = data?.salary?.filter((value) => value.ROWTYPE === "NEW");
+      let oldRow = data?.salary?.filter(
+        (value) =>
+          value.ROWTYPE !== "NEW" && value.UPDATED_BY === userDetils?.USER_ID
+      );
+      let message = 0;
+
+      if (newRow?.length > 0) {
+        console.log("insert", JSON.stringify(newRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/salary/",
+          method: "POST",
+          data: { salary: newRow, UPDATED_BY: userDetils.USER_ID },
+        })
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 1;
+              if (message !== 2) {
+                props.close(false);
+                props.fetchData();
+              }
+            } else {
+              //alert.show("Системийн алдаа");
+            }
+            //history.push('/sample')
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            //      alert.show("Системийн алдаа");
+          });
+      }
+      if (oldRow?.length > 0) {
+        console.log("update", JSON.stringify(oldRow));
+        DataRequest({
+          url: "http://hr.audit.mn/hr/api/v1/salary/",
+          method: "PUT",
+          data: { salary: oldRow, UPDATED_BY: userDetils.USER_ID },
+        })
+          .then(function (response) {
+            console.log("UpdateResponse", response);
+            if (response?.data?.message === "success") {
+              message = 2;
+
+              if (message !== 1) {
+                //  alert.show("амжилттай хадгаллаа");
+
+                props.close(false);
+              }
+            } else {
+              // alert.show("Системийн алдаа");
+            }
+          })
+          .catch(function (error) {
+            //alert(error.response.data.error.message);
+            console.log(error.response);
+            // alert.show("Системийн алдаа");
+          });
+      }
+    }
+  }
+
+  function requiredField() {
+    for (let i = 0; i < data.salary.length; i++) {
+      if (
+        data.salary[i].SALARY_MOTIVE === null ||
+        data.salary[i].SALARY_MOTIVE === ""
+      ) {
+        alert.show("Цалин хөлс өөрчилсөн үндэслэл");
+        return false;
+      } else if (
+        data.salary[i].SALARY_SUPPLEMENT === null ||
+        data.salary[i].SALARY_SUPPLEMENT === ""
+      ) {
+        alert.show("Цалин хөлс нэмэгдлийн нэр оруулна уу");
+      } else if (i === data.salary.length - 1) {
+        return true;
+      }
+    }
+  }
+
+  async function addRow() {
+    let value = data.salary;
+    value.push({
+      SALARY_TYPE_ID: 1,
+      SALARY_SUPPLEMENT: "",
+      SALARY_MOTIVE: "",
+      SALARY_DESC: "",
+      EMPLOYEE_ID: props.EMPLOYEE_ID,
+      SALARY_AMOUNT: 0,
+      TOTAL: 0,
+      IS_ACTIVE: "1",
+      CREATED_BY: userDetils?.USER_ID,
+      CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+      ROWTYPE: "NEW",
+    });
+
+    await loadData({ salary: value });
+  }
+  function removeRow(indexParam, value) {
+    console.log(indexParam, "index");
+    if (value?.ROWTYPE !== "NEW") {
+      DataRequest({
+        url: "http://hr.audit.mn/hr/api/v1/salaryDelete",
+        method: "POST",
+        data: {
+          salary: {
+            ...value,
+            ...{
+              IS_ACTIVE: 1,
+              UPDATED_BY: userDetils?.USER_ID,
+              UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+            },
+          },
+        },
+      })
+        .then(function (response) {
+          console.log("UpdateResponse", response);
+          //history.push('/sample')
+          if (response?.data?.message === "success") {
+            alert.show("амжилттай устлаа");
+          }
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+          alert.show("aldaa");
+        });
+    }
+    loadData({
+      salary: data?.salary.filter((element, index) => index !== indexParam),
+    }); //splice(indexParam, 0)
+  }
+  function salaryType(Pvalue) {
+    let value = [...data?.salary];
+    value[Pvalue.index].SALARY_TYPE_ID = Pvalue.SALARY_TYPE_ID;
+    value[Pvalue.index].UPDATED_BY = userDetils?.USER_ID;
+    value[Pvalue.index].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
+    loadData({ salary: value });
+  }
   let listItems;
   if (data?.salary !== undefined || data?.salary.length !== 0) {
     listItems = (
@@ -2237,157 +2471,214 @@ function SalaryKaruulakh(props) {
           <div className="column is-11">
             <span className="headerTextBold">Цалингийн мэдээлэл</span>
           </div>
-          <div className="column is-1"></div>
+
+          <div className="column is-1">
+            {/* {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : ( */}
+
+            {/* )} */}
+          </div>
         </div>
-        <div className="columns">
-          <div className="column is-12">
-            <table className="table is-bordered ">
-              <thead>
-                <tr>
-                  <td>
-                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      №
-                    </span>
-                  </td>
-                  <td>
-                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      Цалингийн төрөл
-                    </span>
-                  </td>
-                  <td>
-                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      Цалин хөлс нэмэгдлийн нэр
-                    </span>
-                  </td>
-                  <td>
-                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      Цалин хөлс өөрчилсөн үндэслэл
-                    </span>
-                  </td>
-                  <td>
-                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      Дүн
-                    </span>
-                  </td>
-                  <td>
-                    <span className="textSaaral" style={{ fontSize: "1rem" }}>
-                      Тайлбар
-                    </span>
-                  </td>
-                </tr>
-              </thead>
-              <tbody>
-                {data?.salary?.map((value, index) => (
+        <div className="table-container">
+          <div className="columns">
+            <div className="column is-12">
+              <table className="table is-bordered ">
+                <thead>
                   <tr>
                     <td>
-                      <span className="textSaaral">{index + 1}</span>
+                      <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                        №
+                      </span>
                     </td>
                     <td>
-                      <input
-                        disabled
-                        value={data.salary[index].SALARY_TYPE_NAME}
-                        className="Borderless"
-                      />
-                    </td>
-
-                    <td>
-                      <input
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={data.salary[index]?.SALARY_SUPPLEMENT}
-                        onChange={(text) => {
-                          let value = [...data?.salary];
-                          value[index].SALARY_SUPPLEMENT = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ salary: value });
-                        }}
-                      />
-                    </td>
-
-                    <td>
-                      <input
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={data.salary[index]?.SALARY_MOTIVE}
-                        onChange={(text) => {
-                          let value = [...data?.salary];
-                          value[index].SALARY_MOTIVE = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ salary: value });
-                        }}
-                      />
+                      <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                        Цалингийн төрөл
+                      </span>
                     </td>
                     <td>
-                      <CurrencyInput
-                        disabled={edit}
-                        decimalScale="2"
-                        id={value.IND_NAME}
-                        name="input-name"
-                        placeholder="0"
-                        value={data.salary[index]?.SALARY_AMOUNT}
-                        style={{
-                          backgroundColor: "transparent",
-                          border: "none",
-                          textAlign: "right",
-                          width: "100%",
-                        }}
-                      />
-                      {/* <input
-                        
-                        type="number"
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={data.salary[index]?.SALARY_AMOUNT}
-                        onChange={(text) => {
-                          let value = [...data?.salary];
-                          value[index].SALARY_AMOUNT = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ salary: value });
-                        }}
-                      /> */}
+                      <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                        Цалин хөлс нэмэгдлийн нэр
+                      </span>
+                    </td>
+                    <td>
+                      <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                        Цалин хөлс өөрчилсөн үндэслэл
+                      </span>
+                    </td>
+                    <td>
+                      <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                        Дүн
+                      </span>
+                    </td>
+                    <td>
+                      <span className="textSaaral" style={{ fontSize: "1rem" }}>
+                        Тайлбар
+                      </span>
                     </td>
 
-                    <td>
-                      <input
-                        disabled={edit}
-                        className="Borderless"
-                        placeholder="утгаа оруулна уу"
-                        value={data.salary[index]?.SALARY_DESC}
-                        onChange={(text) => {
-                          let value = [...data?.salary];
-                          value[index].SALARY_DESC = text.target.value;
-                          value[index].UPDATED_BY = userDetils?.USER_ID;
-                          value[index].UPDATED_DATE = dateFormat(
-                            new Date(),
-                            "dd-mmm-yy"
-                          );
-                          loadData({ salary: value });
-                        }}
+                    <td
+                      style={{
+                        borderColor: "transparent",
+                        border: "none",
+                        paddingLeft: 0,
+                      }}
+                    >
+                      <img
+                        alt=""
+                        src={Add}
+                        width="30px"
+                        height="30px"
+                        onClick={() => addRow()}
                       />
+                      <input
+                        style={{ width: "30px", visibility: "hidden" }}
+                      ></input>
                     </td>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {data?.salary?.map((value, index) => (
+                    <tr>
+                      <td>
+                        <span className="textSaaral">{index + 1}</span>
+                      </td>
+                      <td>
+                        <Salarytype
+                          personChild={value}
+                          setPersonChild={salaryType}
+                          index={index}
+                        />
+                      </td>
+
+                      <td>
+                        <input
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={data.salary[index]?.SALARY_SUPPLEMENT}
+                          onChange={(text) => {
+                            let value = [...data?.salary];
+                            value[index].SALARY_SUPPLEMENT = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData({ salary: value });
+                          }}
+                        />
+                      </td>
+
+                      <td>
+                        <input
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={data.salary[index]?.SALARY_MOTIVE}
+                          onChange={(text) => {
+                            let value = [...data?.salary];
+                            value[index].SALARY_MOTIVE = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData({ salary: value });
+                          }}
+                        />
+                      </td>
+                      <td>
+                        {/* <input
+                          disabled={edit}
+                          type="number"
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={data.salary[index]?.SALARY_AMOUNT}
+                          onChange={(text) => {}}
+                        /> */}
+                        <CurrencyInput
+                          decimalScale="2"
+                          name="input-name"
+                          placeholder="0"
+                          value={data.salary[index]?.SALARY_AMOUNT}
+                          onValueChange={(numbert, name) => {
+                            let value = [...data?.salary];
+                            if (numbert !== null && numbert.includes(".")) {
+                              value[index].SALARY_AMOUNT = numbert;
+                            } else {
+                              value[index].SALARY_AMOUNT = numbert + ".00";
+                            }
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+
+                            loadData({ salary: value });
+                          }}
+                          style={{
+                            backgroundColor: "transparent",
+                            border: "none",
+                            textAlign: "right",
+                            width: "100%",
+                          }}
+                        />
+                      </td>
+
+                      <td>
+                        <input
+                          className="Borderless"
+                          placeholder="утгаа оруулна уу"
+                          value={data.salary[index]?.SALARY_DESC}
+                          onChange={(text) => {
+                            let value = [...data?.salary];
+                            value[index].SALARY_DESC = text.target.value;
+                            value[index].UPDATED_BY = userDetils?.USER_ID;
+                            value[index].UPDATED_DATE = dateFormat(
+                              new Date(),
+                              "dd-mmm-yy"
+                            );
+                            loadData({ salary: value });
+                          }}
+                        />
+                      </td>
+
+                      <td
+                        style={{
+                          paddingLeft: "0px",
+                          borderColor: "transparent",
+                        }}
+                      >
+                        <img
+                          alt=""
+                          src={Delete}
+                          width="30px"
+                          height="30px"
+                          onClick={() => removeRow(index, value)}
+                        />
+                        <input
+                          style={{ width: "30px", visibility: "hidden" }}
+                        ></input>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
         <div className="columns">
           <div className="column is-11"></div>
+
+          <div className="column is-1 ">
+            {/* <button
+              className="buttonTsenkher"
+              style={{ marginRight: "0.4rem" }}
+            >
+              Хэвлэх
+            </button> */}
+            <button className="buttonTsenkher" onClick={() => saveToDB()}>
+              Хадгалах
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -2396,6 +2687,344 @@ function SalaryKaruulakh(props) {
   }
   return listItems;
 }
+
+// function TushaalKharakh(props) {
+//   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
+//   const [data, loadData] = useState();
+
+//   useEffect(() => {
+//     async function fetchData() {
+//       let listItems = await axios(
+//         "http://hr.audit.mn/hr/api/v1/decision/" +
+//           props.buttonValue +
+//           "/" +
+//           userDetils?.USER_DEPARTMENT_ID +
+//           "/" +
+//           userDetils?.USER_TYPE_NAME.toUpperCase() +
+//           "/" +
+//           props.tushaal?.decision_ID
+//       );
+//       console.log("TushaalKharakh", listItems);
+//       loadData(listItems?.data);
+//     }
+//     fetchData();
+//   }, [props]);
+
+//   let listItems;
+//   if (data != undefined || data != null) {
+//     listItems = (
+//       <div
+//         style={{
+//           position: "absolute",
+//           width: "60%",
+//           height: "85%",
+//           left: "25%",
+//           top: "6%",
+//           borderRadius: "6px",
+//           backgroundColor: "white",
+//           boxShadow:
+//             "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+//           zIndex: "1",
+//           padding: "15px 15px 35px 15px",
+//           overflow: "scroll",
+//         }}
+//       >
+//         <div className="columns">
+//           <div className="column is-4">ҮНДСЭН МЭДЭЭЛЭЛ</div>
+
+//           <div className="column is-6"></div>
+//           <div className="column is-2 has-text-right">
+//             <span
+//               style={{
+//                 fontWeight: "bold",
+//                 cursor: " -webkit-grab",
+//                 cursor: "grab",
+//               }}
+//               onClick={() => props.setTushaal({ tushaalKharakh: false })}
+//             >
+//               X
+//             </span>
+//           </div>
+//         </div>
+
+//         <div>
+//           {/* {data.COMMAND_TYPE_NAME !== undefined &&
+//           data.COMMAND_TYPE_NAME !== null ? (
+//             <div className="columns">
+//               <div className="column is-7">
+//                 <input
+//                   class="input  is-size-7"
+//                   disabled
+//                   value={data?.COMMAND_TYPE_NAME}
+//                 ></input>
+//               </div>
+//             </div>
+//           ) : null} */}
+//           <div className="columns  ">
+//             <div className="column is-3">
+//               <h1>Ажилтны нэр</h1>
+//               <input
+//                 class="input  is-size-7"
+//                 value={data?.PERSON_FIRSTNAME}
+//                 disabled={true}
+//               />
+//             </div>
+//             <div className="column is-3">
+//               <h1>Ажилтны овог</h1>
+//               <input
+//                 class="input  is-size-7"
+//                 value={data?.PERSON_LASTNAME}
+//                 disabled={true}
+//               />
+//             </div>
+//             <div className="column is-6">
+//               <h1>
+//                 {" "}
+//                 <span style={{ color: "red" }}>*</span>Тушаалын төрөл
+//               </h1>
+//               <select
+//                 className="Borderless"
+//                 value={data.COMMAND_TYPE_ID}
+//                 onChange={(text) => {
+//                   loadData({
+//                     ...data,
+//                     ...{
+//                       COMMAND_TYPE_ID: text.target.value,
+//                     },
+//                   });
+//                 }}
+//               >
+//                 <option key={999} value={999}>
+//                   Тушаалын төрөл сонгоно уу
+//                 </option>
+//                 {props.lib?.map((nation, index) => (
+//                   <option key={index} value={nation.COMMAND_TYPE_ID}>
+//                     {nation.COMMAND_TYPE_NAME}
+//                   </option>
+//                 ))}
+//               </select>
+//             </div>
+//           </div>
+
+//           <div>
+//             <div className="columns">
+//               <div className="column is-6">
+//                 <h1>Байгууллага нэр</h1>
+//                 <DepartmentID personChild={data} setPersonChild={loadData} />
+//               </div>
+//               <div className="column is-6">
+//                 <h1>
+//                   {" "}
+//                   <span style={{ color: "red" }}>*</span>Тушаалын дугаар
+//                 </h1>
+//                 <input
+//                   class="input  is-size-7"
+//                   value={data?.DECISION_NO}
+//                   onChange={(e) => {
+//                     loadData({
+//                       ...data,
+//                       ...{
+//                         DECISION_NO: e.target.value,
+//                       },
+//                     });
+//                   }}
+//                 />
+//               </div>
+//             </div>
+//           </div>
+//           <div>
+//             <div className="columns">
+//               <div className="column is-6">
+//                 <h1>Газар нэгж</h1>
+//                 <Subdepartment personChild={data} setPersonChild={loadData} />
+//               </div>
+//               <div className="column is-6">
+//                 <h1>
+//                   {" "}
+//                   <span style={{ color: "red" }}>*</span>Тайлбар
+//                 </h1>
+//                 <input
+//                   class="input  is-size-7"
+//                   value={data?.DECISION_DESC}
+//                   onChange={(e) => {
+//                     loadData({
+//                       ...data,
+//                       ...{
+//                         DECISION_DESC: e.target.value,
+//                       },
+//                     });
+//                   }}
+//                 />
+//               </div>
+//             </div>
+//           </div>
+//           <div>
+//             <div className="columns">
+//               <div className="column is-6">
+//                 <h1>Албан хэлтэс</h1>
+//                 <Compartment personChild={data} setPersonChild={loadData} />
+//               </div>
+
+//               <div className="column is-3">
+//                 <h1>Хэрэгжих огноо</h1>
+//                 <input
+//                   type="date"
+//                   disabled={props.edit}
+//                   className="anketInput"
+//                   value={dateFormat(data?.START_DATE, "yyyy-mm-dd")}
+//                   onChange={(e) => {
+//                     loadData({
+//                       ...data,
+//                       ...{
+//                         START_DATE: e.target.value,
+//                       },
+//                     });
+//                   }}
+//                 ></input>
+//               </div>
+
+//               <div className="column is-3">
+//                 <h1>Бүртгэсэн огноо</h1>
+//                 <input
+//                   type="date"
+//                   className="anketInput"
+//                   value={dateFormat(data?.REGISTER_DATE, "yyyy-mm-dd")}
+//                   onChange={(e) => {
+//                     loadData({
+//                       ...data,
+//                       ...{
+//                         REGISTER_DATE: e.target.value,
+//                       },
+//                     });
+//                   }}
+//                 ></input>
+//               </div>
+//             </div>
+//           </div>
+//           <div>
+//             <div className="columns ">
+//               <div className="column is-6">
+//                 <h1>
+//                   {" "}
+//                   <span style={{ color: "red" }}>*</span>Албан тушаалын түвшин{" "}
+//                 </h1>
+//                 <Positionlevel personChild={data} setPersonChild={loadData} />
+//               </div>
+//               {data?.SHEET_NO ? (
+//                 <div className="column is-3">
+//                   <h1>
+//                     {" "}
+//                     <span style={{ color: "red" }}>*</span>Тойрох хуудасны
+//                     дугаар
+//                   </h1>
+//                 </div>
+//               ) : null}
+//               {data?.SHEET_NO ? (
+//                 <div className="column  is-2 ">
+//                   <input
+//                     class="input  is-size-7"
+//                     disabled
+//                     value={data?.SHEET_NO}
+//                     onChange={(e) => {
+//                       loadData({
+//                         ...data,
+//                         ...{
+//                           SHEET_NO: e.target.value,
+//                         },
+//                       });
+//                     }}
+//                   />
+//                 </div>
+//               ) : null}
+
+//               {/* <div className="column  is-1">
+//                 <h1>
+//                   <span style={{ color: "red" }}>*</span>Тушаал
+//                 </h1>
+//               </div>
+//               <div className="column  is-1 ">
+//                 <img alt="" src={M} width="20px" height="20px" />
+//                 <img alt="" src={Trush} width="20px" height="20px" />
+//               </div> */}
+//             </div>
+//           </div>
+//           <div>
+//             <div className="columns ">
+//               <div className="column is-6  ">
+//                 <h1>
+//                   {" "}
+//                   <span style={{ color: "red" }}>*</span>Албан тушаал
+//                 </h1>
+//                 <Position personChild={data} setPersonChild={loadData} />
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//         <SalaryKaruulakh EMPLOYEE_ID={data.EMPLOYEE_ID} />
+//         <div className="columns">
+//           <div className="column is-7">
+//             {data?.FILE_PATH !== undefined && data?.FILE_PATH !== null ? (
+//               <a
+//                 href={
+//                   "http://hr.audit.mn/hr/api/v1/".replace("api/v1/", "") +
+//                   "static" +
+//                   data?.FILE_PATH.replace("uploads", "")
+//                 }
+//                 w
+//                 without
+//                 rel="noopener noreferrer"
+//                 target="_blank"
+//               >
+//                 <button
+//                   style={{
+//                     display: "inline-flex",
+//                     alignItems: "center",
+//                     borderRadius: "6px",
+//                     border: "1.5px solid #2684fe",
+//                   }}
+//                 >
+//                   <div className="bg-white">
+//                     <svg
+//                       width="20px"
+//                       height="20px "
+//                       xmlns="http://www.w3.org/2000/svg"
+//                       class="mx-1"
+//                       fill="none"
+//                       viewBox="0 0 24 24"
+//                       stroke="currentColor"
+//                       color="#2684fe"
+//                     >
+//                       <path
+//                         stroke-linecap="round"
+//                         stroke-linejoin="round"
+//                         stroke-width="2"
+//                         d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"
+//                       />
+//                     </svg>
+//                   </div>
+//                   <div
+//                     style={{
+//                       backgroundColor: "white",
+//                       paddingBottom: "0.01rem",
+//                     }}
+//                     className="px-2"
+//                   >
+//                     <p>Хавсралт харах</p>
+//                   </div>
+//                 </button>
+//               </a>
+//             ) : null}
+//           </div>
+//         </div>
+//       </div>
+//     );
+//   } else {
+//     listItems = <p>ачаалж байна...</p>;
+//   }
+
+//   return listItems;
+// }
+
 function UstgakhTsonkh(props) {
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [data, loadData] = useState({

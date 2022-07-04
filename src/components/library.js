@@ -827,7 +827,8 @@ function Position(props) {
         props.personChild?.DEPARTMENT_ID !== "null" &&
         props.personChild?.DEPARTMENT_ID !== "" &&
         props.personChild?.COMPARTMENT_ID !== "null" &&
-        props.personChild?.COMPARTMENT_ID !== ""
+        props.personChild?.COMPARTMENT_ID !== "" &&
+        props.personChild?.COMPARTMENT_ID !== null
       ) {
         loadData(
           listItems.data?.filter(
