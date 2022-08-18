@@ -86,3 +86,14 @@
   flex-basis: 350px;
   margin-top: 3rem;
 }
+.urilgaInput {
+  border: 1px solid #919090;
+  border-radius: 5px;
+  font-size: 2rem;
+  font-weight: bold;
+  width: 60%;
+  text-align: center;
+  letter-spacing: 0.3em;
+  padding-bottom: 0.4rem;
+  color: #919090;
+}

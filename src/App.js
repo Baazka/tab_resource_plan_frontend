@@ -29,6 +29,7 @@ import { DataRequest } from "./functions/DataApi";
 import Shalgalt1 from "./components/shalgalt";
 import Bolowsrol1 from "./components/bolowsrol";
 import Elders from "./pages/Elders";
+import Urilga from "./components/urigla";
 const axios = require("axios");
 const fakeAuth = {
   isAuthenticated: false,
@@ -401,7 +402,9 @@ function App() {
           <Login />
         </Route>
         {/* {userDetail != undefined ? ( */}
-
+        <Route path="/urilga" exact>
+          <Urilga />
+        </Route>
         <Route path="/web">
           <Header />
           <SideBar />
