@@ -199,7 +199,7 @@ const Urilga = (props) => {
                   <AiOutlineIdcard />
                   <p style={{ marginLeft: "0.5rem" }}>Иргэний үнэмлэх</p>
                 </div>
-                <div style={{ display: "flex", alignItems: "start" }}>
+                <div style={{ display: "flex", alignItems: "center" }}>
                   <GiShirt />
                   <span style={{ marginLeft: "0.5rem" }}>
                     Ёслол хүндэтгэлийн хувцас
