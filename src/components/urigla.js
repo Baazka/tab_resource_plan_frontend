@@ -4,6 +4,9 @@ import jilLogo from "../assets/images/jilLogo.gif";
 import Styled from "styled-components";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
+
+import { AiOutlineIdcard } from "react-icons/ai";
+import { GiShirt } from "react-icons/gi";
 const Urilga = (props) => {
   const [kod, setKod] = useState();
   const [ner, setNer] = useState({});
@@ -24,7 +27,7 @@ const Urilga = (props) => {
   function saveToDB() {
     if (kod !== undefined && 0 < parseInt(kod) && parseInt(kod) < 1000) {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/IS_ARRIVE/",
+        url: "http://hr.audit.mn/reg/api/v1/IS_ARRIVE/",
         method: "POST",
         data: { IS_ARRIVE: kod },
       })
@@ -33,7 +36,9 @@ const Urilga = (props) => {
           if (response?.data?.message === "success") {
             setNer(response?.data.data);
           } else {
-            alert.show("Системийн алдаа");
+            if (response.data.description !== undefined)
+              alert.show(response.data.description);
+            else alert.show("Системийн алдаа");
           }
         })
         .catch(function (error) {
@@ -43,6 +48,11 @@ const Urilga = (props) => {
         });
     } else {
       alert.show("зөв R.S.V.P код оруулна уу");
+    }
+  }
+  function downHandler(e) {
+    if (e.key === "Enter") {
+      saveToDB();
     }
   }
   return (
@@ -99,6 +109,7 @@ const Urilga = (props) => {
             <div style={{ textAlign: "center" }}>
               <input
                 className="urilgaInput"
+                onKeyDown={downHandler}
                 maxlength="3"
                 type="number"
                 value={kod}
@@ -136,14 +147,64 @@ const Urilga = (props) => {
                 width: "60%",
                 color: "#919090",
                 fontWeight: "bold",
-                lineHeight: "1rem",
+                lineHeight: "1.8",
                 fontSize: "1.1rem",
                 fontFamily: "Roboto",
               }}
             >
-              <strong>{ner.LAST_NAME + " " + ner.FIRST_NAME + " "}</strong>танд
-              баярлалаа
+              <strong>
+                {ner.LAST_NAME !== null &&
+                ner.LAST_NAME !== undefined &&
+                ner.LAST_NAME !== "null"
+                  ? ner.LAST_NAME
+                  : " " + " " + ner.FIRST_NAME !== null &&
+                    ner.FIRST_NAME !== undefined &&
+                    ner.FIRST_NAME !== "null"
+                  ? ner.FIRST_NAME
+                  : " " + " "}
+              </strong>
+              &nbsp;танд баярлалаа
             </p>
+            <div
+              style={{
+                color: "black",
+                lineHeight: "1.8",
+                fontSize: "1rem",
+                marginTop: "8rem",
+                textAlign: "left",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                fontFamily: "roboto",
+                padding: "0.8rem",
+                width: "80%",
+                backgroundColor: "rgba(145,	144	,144, 0.4)",
+                borderRadius: "20px",
+              }}
+            >
+              <div>
+                <p>
+                  <strong>Санамж:</strong> Шаардлагатай зүйлс
+                </p>
+              </div>
+              <div
+                style={{
+                  paddingLeft: "0.8rem",
+                  textAlign: "left",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <AiOutlineIdcard />
+                  <p style={{ marginLeft: "0.5rem" }}>Иргэний үнэмлэх</p>
+                </div>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <GiShirt />
+                  <span style={{ marginLeft: "0.5rem" }}>
+                    Ёслол хүндэтгэлийн хувцас
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>
