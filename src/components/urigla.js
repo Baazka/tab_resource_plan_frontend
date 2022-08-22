@@ -153,12 +153,12 @@ const Urilga = (props) => {
               }}
             >
               <strong>
-                {ner.LAST_NAME !== null &&
+                {/* {ner.LAST_NAME !== null &&
                 ner.LAST_NAME !== undefined &&
                 ner.LAST_NAME !== "null"
                   ? ner.LAST_NAME
-                  : " "}
-                &nbsp;
+                  : " "} */}
+                {/* &nbsp; */}
                 {" " + ner.FIRST_NAME !== null &&
                 ner.FIRST_NAME !== undefined &&
                 ner.FIRST_NAME !== "null"
