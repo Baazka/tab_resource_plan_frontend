@@ -157,11 +157,13 @@ const Urilga = (props) => {
                 ner.LAST_NAME !== undefined &&
                 ner.LAST_NAME !== "null"
                   ? ner.LAST_NAME
-                  : " " + " " + ner.FIRST_NAME !== null &&
-                    ner.FIRST_NAME !== undefined &&
-                    ner.FIRST_NAME !== "null"
+                  : " "}
+                &nbsp;
+                {" " + ner.FIRST_NAME !== null &&
+                ner.FIRST_NAME !== undefined &&
+                ner.FIRST_NAME !== "null"
                   ? ner.FIRST_NAME
-                  : " " + " "}
+                  : " "}
               </strong>
               &nbsp;танд баярлалаа
             </p>
@@ -169,7 +171,7 @@ const Urilga = (props) => {
               style={{
                 color: "black",
                 lineHeight: "1.8",
-                fontSize: "1rem",
+                fontSize: "0.9rem",
                 marginTop: "8rem",
                 textAlign: "left",
                 display: "flex",
@@ -197,7 +199,7 @@ const Urilga = (props) => {
                   <AiOutlineIdcard />
                   <p style={{ marginLeft: "0.5rem" }}>Иргэний үнэмлэх</p>
                 </div>
-                <div style={{ display: "flex", alignItems: "center" }}>
+                <div style={{ display: "flex", alignItems: "start" }}>
                   <GiShirt />
                   <span style={{ marginLeft: "0.5rem" }}>
                     Ёслол хүндэтгэлийн хувцас
