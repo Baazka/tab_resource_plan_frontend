@@ -27,7 +27,7 @@ const Urilga = (props) => {
   function saveToDB() {
     if (kod !== undefined && 0 < parseInt(kod) && parseInt(kod) < 1000) {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/IS_ARRIVE_CONFRENCE/",
+        url: "http://localhost:3002/api/v1/IS_ARRIVE_CONFRENCE/",
         method: "POST",
         data: { IS_ARRIVE: kod },
       })
@@ -182,7 +182,7 @@ const Urilga = (props) => {
                 fontStyle: "italic",
                 fontSize: "2rem",
                 fontFamily: "Aboreto",
-                padding: "1rem",
+                padding: "0.5rem",
               }}
             >
               Эрхэм хүндэт &nbsp;
@@ -202,7 +202,7 @@ const Urilga = (props) => {
                 fontSize: "1.5rem",
                 fontFamily: "Roboto",
                 marginTop: "4rem",
-                padding: "1rem",
+                padding: "0.5rem",
               }}
             >
               Монгол Улсын Төрийн хяналтын тогтолцоо үүсэж <br />
