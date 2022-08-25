@@ -199,7 +199,7 @@ const Urilga = (props) => {
               style={{
                 color: "#3e3e5c",
                 fontStyle: "italic",
-                fontSize: "1.5rem",
+                fontSize: "1.2rem",
                 fontFamily: "Roboto",
                 marginTop: "4rem",
                 padding: "0.5rem",
