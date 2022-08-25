@@ -27,7 +27,7 @@ const Urilga = (props) => {
   function saveToDB() {
     if (kod !== undefined && 0 < parseInt(kod) && parseInt(kod) < 1000) {
       DataRequest({
-        url: "http://localhost:3002/api/v1/IS_ARRIVE_CONFRENCE/",
+        url: "http://hr.audit.mn/hr/api/v1/IS_ARRIVE_CONFRENCE/",
         method: "POST",
         data: { IS_ARRIVE: kod },
       })
