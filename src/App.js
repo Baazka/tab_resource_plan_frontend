@@ -30,6 +30,8 @@ import Shalgalt1 from "./components/shalgalt";
 import Bolowsrol1 from "./components/bolowsrol";
 import Elders from "./pages/Elders";
 import Urilga from "./components/urigla";
+import Confrence from "./components/confrence";
+import Schedule from "./components/schedule";
 const axios = require("axios");
 const fakeAuth = {
   isAuthenticated: false,
@@ -404,6 +406,12 @@ function App() {
         {/* {userDetail != undefined ? ( */}
         <Route path="/urilga" exact>
           <Urilga />
+        </Route>
+        <Route path="/conference" exact>
+          <Confrence />
+        </Route>
+        <Route path="/schedule" exact>
+          <Schedule />
         </Route>
         <Route path="/web">
           <Header />
