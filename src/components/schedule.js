@@ -5,25 +5,12 @@ import Styled from "styled-components";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 import "./table.css";
-import { AiOutlineIdcard } from "react-icons/ai";
-import { GiShirt } from "react-icons/gi";
+
 const Schedule = (props) => {
   const [kod, setKod] = useState();
   const [ner, setNer] = useState({});
   const alert = useAlert();
 
-  const ImgLogo = Styled.img`
-        width: 250px;
-        @media (min-width: 625px) {
-            width: 350px;
-        }
-        @media (min-width: 400px) {
-            width: 250px;
-        }
-        @media (min-width: 850px) {
-            width: 450px;
-        }
-`;
   function saveToDB() {
     if (kod !== undefined && 0 < parseInt(kod) && parseInt(kod) < 1000) {
       DataRequest({
@@ -66,7 +53,7 @@ const Schedule = (props) => {
         backgroundRepeat: "no-repeat",
         justifyContent: "center",
         alignItems: "center",
-        padding: "2rem",
+        padding: "1rem",
       }}
     >
       <div
@@ -76,7 +63,6 @@ const Schedule = (props) => {
           border: "4px solid #e89f0f",
           borderRadius: "15px",
           overflowY: "scroll",
-          scrollbarColor: "#919090 white",
         }}
       >
         <div>

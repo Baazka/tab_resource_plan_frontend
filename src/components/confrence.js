@@ -66,7 +66,7 @@ const Urilga = (props) => {
         backgroundRepeat: "no-repeat",
         height: "100vh",
         justifyContent: "center",
-        overflow: "hidden",
+        overflow: "scroll",
         alignItems: "center",
         padding: "2rem",
       }}
@@ -101,7 +101,6 @@ const Urilga = (props) => {
             <div
               style={{
                 textAlign: "center",
-                paddingTop: "2rem",
                 fontStyle: "italic",
               }}
             >
@@ -147,7 +146,7 @@ const Urilga = (props) => {
             <div
               style={{
                 textAlign: "center",
-                paddingTop: "10rem",
+                paddingTop: "5rem",
               }}
             >
               <button
