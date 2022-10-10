@@ -4,6 +4,7 @@ import { useAlert } from "react-alert";
 import { Language, Languagetype } from "./library";
 import { Add, Delete } from "../assets/images/zurag";
 import { Office } from "./library";
+import hrUrl from "../hrUrl";
 
 const axios = require("axios");
 var dateFormat = require("dateformat");
@@ -16,9 +17,7 @@ function UrChadvar(props) {
   useEffect(() => {
     async function fetchData() {
       let temp;
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/exam/" + props.person_id
-      );
+      let listItems = await axios(hrUrl + "/exam/" + props.person_id);
       console.log("urchadavarlistItemlength", listItems.data?.Exam.length);
       console.log("urchadavarlistItem", listItems.data?.Exam);
       temp = listItems.data?.Exam.filter((item) => item.EXAM_TYPE_ID !== 2);
@@ -118,7 +117,7 @@ function UrChadvar(props) {
     if (newRow?.length > 0) {
       console.log("insert", JSON.stringify(newRow));
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/exam/",
+        url: hrUrl + "/exam/",
         method: "POST",
         data: { exam: newRow },
       })
@@ -147,7 +146,7 @@ function UrChadvar(props) {
     if (oldRow?.length > 0) {
       console.log("update", JSON.stringify(oldRow));
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/exam/",
+        url: hrUrl + "/exam/",
         method: "PUT",
         data: { exam: oldRow },
       })
@@ -538,9 +537,7 @@ function TangaragBurtgel(props) {
   const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/oath/" + props.person_id
-      );
+      let listItems = await axios(hrUrl + "/oath/" + props.person_id);
       console.log(listItems, "Tangarag");
       loadData(listItems?.data);
     }
@@ -560,7 +557,7 @@ function TangaragBurtgel(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/oath/",
+          url: hrUrl + "/oath/",
           method: "POST",
           data: { oath: newRow },
         })
@@ -589,7 +586,7 @@ function TangaragBurtgel(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/oath/",
+          url: hrUrl + "/oath/",
           method: "PUT",
           data: { oath: oldRow },
         })
@@ -679,7 +676,7 @@ function TangaragBurtgel(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/oathDelete",
+        url: hrUrl + "/oathDelete",
         method: "POST",
         data: {
           oath: {
@@ -777,6 +774,7 @@ function TangaragBurtgel(props) {
                         width="30px"
                         height="30px"
                         onClick={() => addRow()}
+                        alt=""
                       />
                       <input
                         style={{ width: "40px", visibility: "hidden" }}
@@ -881,6 +879,7 @@ function TangaragBurtgel(props) {
                           width="30px"
                           height="30px"
                           onClick={() => removeRow(index, value)}
+                          alt=""
                         />
                         <input
                           style={{ width: "40px", visibility: "hidden" }}
@@ -926,9 +925,7 @@ function GadaadKhel(props) {
   const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/language/" + props.person_id
-      );
+      let listItems = await axios(hrUrl + "/language/" + props.person_id);
       console.log(listItems, "Tangarag");
       loadData(listItems?.data);
     }
@@ -948,7 +945,7 @@ function GadaadKhel(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Language/",
+          url: hrUrl + "/Language/",
           method: "POST",
           data: { language: newRow, PERSON_ID: props.person_id },
         })
@@ -977,7 +974,7 @@ function GadaadKhel(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Language/",
+          url: hrUrl + "/Language/",
           method: "PUT",
           data: { language: oldRow, PERSON_ID: props.person_id },
         })
@@ -1081,7 +1078,7 @@ function GadaadKhel(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/languageDelete",
+        url: hrUrl + "/languageDelete",
         method: "POST",
         data: {
           language: {
@@ -1191,6 +1188,7 @@ function GadaadKhel(props) {
                         width="30px"
                         height="30px"
                         onClick={() => addRow()}
+                        alt=""
                       />
                       <input
                         style={{ width: "30px", visibility: "hidden" }}
@@ -1349,6 +1347,7 @@ function GadaadKhel(props) {
                           width="30px"
                           height="30px"
                           onClick={() => removeRow(index, value)}
+                          alt=""
                         />
                         <input
                           style={{ width: "30px", visibility: "hidden" }}

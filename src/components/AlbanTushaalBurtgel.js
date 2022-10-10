@@ -25,6 +25,7 @@ import { useAlert } from "react-alert";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import override from "../css/override";
 import { useHistory } from "react-router-dom";
+import hrUrl from "../hrUrl";
 const axios = require("axios");
 
 var dateFormat = require("dateformat");
@@ -124,7 +125,7 @@ function AlbanTushaalBurtgel(props) {
             I.ЕРӨНХИЙ МЭДЭЭЛЭЛ
           </button>
         </div>
-        {POSITION_ID != undefined ? (
+        {POSITION_ID !== undefined ? (
           <div>
             <div className="AnketList">
               <img
@@ -254,27 +255,23 @@ function YurunkhiiMedeelel(props) {
 
   useEffect(() => {
     async function fetchData() {
-      if (data == null || data == undefined)
-        if (props?.positionId !== "undefined" && props?.positionId != null) {
-          console.log("bolohgui bn bod", props?.positionId);
+      if (data === null || data === undefined)
+        if (props?.positionId !== "undefined" && props?.positionId !== null) {
+          //console.log("bolohgui bn bod", props?.positionId);
           let listItems;
-          console.log("searchsearch", props);
+          //console.log("searchsearch", props);
           if (
-            props.search != undefined &&
+            props.search !== undefined &&
             JSON.parse(props.search)?.buttonValue === 2
           )
-            listItems = await axios(
-              "http://hr.audit.mn/hr/api/v1/position/0/" + props?.positionId
-            );
+            listItems = await axios(hrUrl + "/position/0/" + props?.positionId);
           else
-            listItems = await axios(
-              "http://hr.audit.mn/hr/api/v1/position/1/" + props?.positionId
-            );
-          console.log(listItems, "position");
+            listItems = await axios(hrUrl + "/position/1/" + props?.positionId);
+          //console.log(listItems, "position");
           loadData(listItems?.data);
           props.setPOSITION_ID(props?.positionId);
         } else if (data === "undefined" || data === null) {
-          console.log("boljil bn bod");
+          //console.log("boljil bn bod");
           loadData({
             COMPARTMENT_ID: "null",
             COMPARTMENT_NAME: "",
@@ -305,16 +302,16 @@ function YurunkhiiMedeelel(props) {
     fetchData();
   }, [props]);
   // useEffect(() => {
-  //   if (props?.positionId !== "undefined" && props?.positionId != null) {
+  //   if (props?.positionId !== "undefined" && props?.positionId !== null) {
   //   }
   // }, [data]);
 
   function saveToDB() {
     if (requiredField(data) === true) {
       props.setLoading(true);
-      if (props?.positionId !== "undefined" && props?.positionId != null) {
+      if (props?.positionId !== "undefined" && props?.positionId !== null) {
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/position/",
+          url: hrUrl + "/position/",
           method: "PUT",
           data: data,
         })
@@ -341,7 +338,7 @@ function YurunkhiiMedeelel(props) {
           });
       } else {
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/position/",
+          url: hrUrl + "/position/",
           method: "POST",
           data: data,
         })
@@ -587,9 +584,9 @@ function TavigdahTusgai(props) {
   useEffect(() => {
     async function fetchData() {
       console.log("POSITION_ID", props?.POSITION_ID);
-      if (props?.POSITION_ID !== "undefined" && props?.POSITION_ID != null) {
+      if (props?.POSITION_ID !== "undefined" && props?.POSITION_ID !== null) {
         let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/requirement/" + props?.POSITION_ID
+          hrUrl + "/requirement/" + props?.POSITION_ID
         );
         console.log(listItems?.data, "requirement");
         loadData(listItems?.data);
@@ -623,7 +620,7 @@ function TavigdahTusgai(props) {
       console.log("postRequirment1", data);
       if (data?.REQUIREMENT_ID !== 0 && data?.REQUIREMENT_ID !== undefined) {
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/requirement/",
+          url: hrUrl + "/requirement/",
           method: "PUT",
           data: data,
         })
@@ -650,7 +647,7 @@ function TavigdahTusgai(props) {
       } else {
         console.log("postRequirment", data);
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/requirement/",
+          url: hrUrl + "/requirement/",
           method: "post",
           data: data,
         })
@@ -858,9 +855,9 @@ function ChigUureg(props) {
       let listItems;
       if (data.length === 0) {
         listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/positionrole/:1/" + props?.positionId
+          hrUrl + "/positionrole/:1/" + props?.positionId
         );
-        if (listItems.data != undefined && listItems.data.length > 0)
+        if (listItems.data !== undefined && listItems.data.length > 0)
           loadData(listItems.data);
         else
           loadData([
@@ -882,10 +879,9 @@ function ChigUureg(props) {
   function saveToDB() {
     if (requiredField(data) === true) {
       props.setLoading(true);
-      if (props?.positionId !== "undefined" && props?.positionId != null) {
+      if (props?.positionId !== "undefined" && props?.positionId !== null) {
         DataRequest({
-          url:
-            "http://hr.audit.mn/hr/api/v1/positionrole/:1/" + props?.positionId,
+          url: hrUrl + "/positionrole/:1/" + props?.positionId,
           method: "POST",
           data: data,
         })
@@ -930,8 +926,7 @@ function ChigUureg(props) {
   function removeRow(indexParam, value) {
     if (value?.POSITION_ROLE_ID !== null) {
       DataRequest({
-        url:
-          "http://hr.audit.mn/hr/api/v1/positionrole/:1/" + props?.positionId,
+        url: hrUrl + "/positionrole/:1/" + props?.positionId,
         method: "POST",
         data: {
           POSITION_ROLE_ID: value?.POSITION_ROLE_ID,
@@ -1021,6 +1016,7 @@ function ChigUureg(props) {
                         width="30px"
                         height="30px"
                         onClick={() => addRow()}
+                        alt=""
                       />
                     </td>
                   ) : null}
@@ -1103,6 +1099,7 @@ function ChigUureg(props) {
                           width="30px"
                           height="30px"
                           onClick={() => removeRow(index, value)}
+                          alt=""
                         />
                       </td>
                     ) : null}

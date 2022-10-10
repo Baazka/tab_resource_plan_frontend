@@ -3,6 +3,7 @@ import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 import { Edutype, Profession } from "./library";
 import { Add, Delete } from "../assets/images/zurag";
+import hrUrl from "../hrUrl";
 const axios = require("axios");
 var dateFormat = require("dateformat");
 
@@ -16,9 +17,7 @@ function Bolowsrol(props) {
 
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/education/" + props.person_id
-      );
+      let listItems = await axios(hrUrl + "/education/" + props.person_id);
       console.log("listItems?.data?.Education", listItems?.data?.Education);
       loadData({
         Education: listItems?.data?.Education.filter(
@@ -122,7 +121,7 @@ function Bolowsrol(props) {
         if (newRow?.length > 0) {
           console.log("insert", JSON.stringify(newRow));
           DataRequest({
-            url: "http://hr.audit.mn/hr/api/v1/education/",
+            url: hrUrl + "/education/",
             method: "POST",
             data: { education: newRow, PERSON_ID: props.person_id },
           })
@@ -152,7 +151,7 @@ function Bolowsrol(props) {
         if (oldRow?.length > 0) {
           console.log("update", JSON.stringify(oldRow));
           DataRequest({
-            url: "http://hr.audit.mn/hr/api/v1/education/",
+            url: hrUrl + "/education/",
             method: "PUT",
             data: { education: oldRow, PERSON_ID: props.person_id },
           })
@@ -205,7 +204,7 @@ function Bolowsrol(props) {
     loadDataSecond({ Education: arr });
   }
   function requiredField(value) {
-    let found = value.filter((a) => a.IS_PRIMARY == 1);
+    let found = value.filter((a) => a.IS_PRIMARY === 1);
 
     if (found.length > 1) {
       alert.show("Үндсэн нэг мэргэжилээ тохируулна уу!!!");
@@ -274,7 +273,7 @@ function Bolowsrol(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/educationDelete",
+        url: hrUrl + "/educationDelete",
         method: "POST",
         data: {
           education: {
@@ -313,7 +312,7 @@ function Bolowsrol(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/educationDelete",
+        url: hrUrl + "/educationDelete",
         method: "POST",
         data: {
           education: {
@@ -453,6 +452,7 @@ function Bolowsrol(props) {
                           width="30px"
                           height="30px"
                           onClick={() => addRow()}
+                          alt=""
                         />
                         <input
                           style={{ width: "30px", visibility: "hidden" }}
@@ -685,6 +685,7 @@ function Bolowsrol(props) {
                             width="30px"
                             height="30px"
                             onClick={() => removeRow(index, value)}
+                            alt=""
                           />
                           <input
                             style={{ width: "30px", visibility: "hidden" }}
@@ -763,6 +764,7 @@ function Bolowsrol(props) {
                           width="30px"
                           height="30px"
                           onClick={() => addRowSecond()}
+                          alt=""
                         />
                         <input
                           style={{ width: "30px", visibility: "hidden" }}
@@ -953,6 +955,7 @@ function Bolowsrol(props) {
                             width="30px"
                             height="30px"
                             onClick={() => removeRowSecond(index, value)}
+                            alt=""
                           />
                           <input
                             style={{ width: "30px", visibility: "hidden" }}

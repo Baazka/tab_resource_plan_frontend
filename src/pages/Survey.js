@@ -1,18 +1,10 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import Header from "../components/header";
-import AnketNeg from "../components/anketNeg";
-import Footer from "../components/footer";
-import SideBar from "../components/sidebar";
 import { DataRequest } from "../functions/DataApi";
-import DataTable, { createTheme } from "react-data-table-component";
-import { useHistory } from "react-router-dom";
-import Iframe from "react-iframe";
 import { useAlert } from "react-alert";
+import hrUrl from "../hrUrl";
 
 var dateFormat = require("dateformat");
 const Survey = (props) => {
-  const history = useHistory();
   const [jagsaalt, setJagsaalt] = useState();
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [selected, setSelected] = useState({
@@ -27,19 +19,16 @@ const Survey = (props) => {
   useEffect(() => {
     async function test() {
       let jagsaaltsHEAD = await DataRequest({
-        url:
-          "http://hr.audit.mn/hr/api/v1/electionAttandee/" + 1 + "/" + "HEAD",
+        url: hrUrl + "/electionAttandee/" + 1 + "/HEAD",
         method: "GET",
         data: {},
       });
       setJagsaalt(jagsaaltsHEAD?.data);
-      console.log(jagsaaltsHEAD);
     }
     test();
     setTimeout(() => {
       onlyHeadCheckBox();
     }, 500);
-    console.log("jagsaalt", jagsaalt);
   }, [props]);
 
   function onlyHeadCheckBox() {
@@ -50,8 +39,8 @@ const Survey = (props) => {
     for (var i = 0; i < checkboxgroup.length; i++) {
       checkboxgroup[i].onclick = function () {
         var checkedcount = 0;
-        for (var i = 0; i < checkboxgroup.length; i++) {
-          checkedcount += checkboxgroup[i].checked ? 1 : 0;
+        for (var j = 0; j < checkboxgroup.length; j++) {
+          checkedcount += checkboxgroup[j].checked ? 1 : 0;
         }
         if (checkedcount > limit) {
           console.log("You can select maximum of " + limit + " checkbox.");
@@ -80,36 +69,35 @@ const Survey = (props) => {
     ar1 = [];
     for (var i = 0; i < checkboxgroup.length; i++) {
       var checkedcount = 0;
-      for (var i = 0; i < checkboxgroup.length; i++) {
-        checkedcount += checkboxgroup[i].checked ? 1 : 0;
+      for (var j = 0; j < checkboxgroup.length; j++) {
+        checkedcount += checkboxgroup[j].checked ? 1 : 0;
 
-        if (checkboxgroup[i].checked) ar1.push(checkboxgroup[i].value);
+        if (checkboxgroup[j].checked) ar1.push(checkboxgroup[j].value);
       }
       c1 = checkedcount;
     }
     ar2 = [];
     for (var i = 0; i < checkboxgroupMAN.length; i++) {
       var checkedcount = 0;
-      for (var i = 0; i < checkboxgroupMAN.length; i++) {
-        checkedcount += checkboxgroupMAN[i].checked ? 1 : 0;
-        if (checkboxgroupMAN[i].checked) ar2.push(checkboxgroupMAN[i].value);
+      for (var j = 0; j < checkboxgroupMAN.length; j++) {
+        checkedcount += checkboxgroupMAN[j].checked ? 1 : 0;
+        if (checkboxgroupMAN[j].checked) ar2.push(checkboxgroupMAN[j].value);
       }
       c2 = checkedcount;
     }
     ar3 = [];
     for (var i = 0; i < checkboxgroupSEN.length; i++) {
       var checkedcount = 0;
-      for (var i = 0; i < checkboxgroupSEN.length; i++) {
-        checkedcount += checkboxgroupSEN[i].checked ? 1 : 0;
-        if (checkboxgroupSEN[i].checked) ar3.push(checkboxgroupSEN[i].value);
+      for (var j = 0; j < checkboxgroupSEN.length; j++) {
+        checkedcount += checkboxgroupSEN[j].checked ? 1 : 0;
+        if (checkboxgroupSEN[j].checked) ar3.push(checkboxgroupSEN[j].value);
       }
       c3 = checkedcount;
     }
 
-    console.log(ar1, ar2, ar3, "Baaz");
-    if (c1 == 0) alert.show("сонгоно уу.");
-    else if (c2 == 0) alert.show("Менежер сонгоно уу.");
-    else if (c3 == 0) alert.show("Ахлах аудитор сонгоно уу.");
+    if (c1 === 0) alert.show("сонгоно уу.");
+    else if (c2 === 0) alert.show("Менежер сонгоно уу.");
+    else if (c3 === 0) alert.show("Ахлах аудитор сонгоно уу.");
     else return true;
   }
   function onlyManCheckBox() {
@@ -120,8 +108,8 @@ const Survey = (props) => {
     for (var i = 0; i < checkboxgroup.length; i++) {
       checkboxgroup[i].onclick = function () {
         var checkedcount = 0;
-        for (var i = 0; i < checkboxgroup.length; i++) {
-          checkedcount += checkboxgroup[i].checked ? 1 : 0;
+        for (var j = 0; j < checkboxgroup.length; j++) {
+          checkedcount += checkboxgroup[j].checked ? 1 : 0;
         }
         if (checkedcount > limit) {
           console.log("You can select maximum of " + limit + " checkbox.");
@@ -140,8 +128,8 @@ const Survey = (props) => {
     for (var i = 0; i < checkboxgroup.length; i++) {
       checkboxgroup[i].onclick = function () {
         var checkedcount = 0;
-        for (var i = 0; i < checkboxgroup.length; i++) {
-          checkedcount += checkboxgroup[i].checked ? 1 : 0;
+        for (var j = 0; j < checkboxgroup.length; j++) {
+          checkedcount += checkboxgroup[j].checked ? 1 : 0;
         }
         if (checkedcount > limit) {
           console.log("You can select maximum of " + limit + " checkbox.");
@@ -220,8 +208,7 @@ const Survey = (props) => {
     console.log("end", selected);
     if (CheckBox()) {
       DataRequest({
-        url:
-          "http://hr.audit.mn/hr/api/v1/electionCheck/1/" + userDetails.USER_ID,
+        url: hrUrl + "/electionCheck/1/" + userDetails.USER_ID,
         method: "GET",
         data: {},
       })
@@ -230,7 +217,7 @@ const Survey = (props) => {
           console.log(response?.data?.CNT);
           if (response?.data?.CNT === 0) {
             DataRequest({
-              url: "http://hr.audit.mn/hr/api/v1/electionAttandee/1/",
+              url: hrUrl + "/electionAttandee/1/",
               method: "POST",
               data: {
                 ELECTION_ID: 1,
@@ -292,7 +279,7 @@ const Survey = (props) => {
   useEffect(() => {
     async function test() {
       let jagsaaltsMAN = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/electionAttandee/" + 1 + "/" + "MAN",
+        url: hrUrl + "/electionAttandee/" + 1 + "/" + "MAN",
         method: "GET",
         data: {},
       });
@@ -382,18 +369,18 @@ const Survey = (props) => {
   useEffect(() => {
     async function test() {
       let jagsaaltsSEN = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/electionAttandee/" + 1 + "/" + "SEN",
+        url: hrUrl + "/electionAttandee/" + 1 + "/SEN",
         method: "GET",
         data: {},
       });
       setJagsaaltSen(jagsaaltsSEN?.data);
-      console.log(jagsaaltsSEN);
+      //console.log(jagsaaltsSEN);
     }
     test();
     setTimeout(() => {
       onlySenCheckBox();
     }, 500);
-    console.log("jagsaalt", jagsaaltsen);
+    //console.log("jagsaalt", jagsaaltsen);
   }, [props]);
 
   var colsSen = [];

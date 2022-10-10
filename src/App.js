@@ -216,7 +216,7 @@ function Login(props) {
                   JSON.stringify(response?.data)
                 );
                 // DataRequest({
-                //   url: "http://hr.audit.mn/reg/hr/api/v1/election/",
+                //   url: "http://10.10.10.46:3001/hr/api/v1/election/",
                 //   method: "GET",
                 //   data: {},
                 // })
@@ -304,6 +304,7 @@ function Login(props) {
           }}
           src={LogoBottom}
           width="210px"
+          alt=""
         />
 
         <div class="wrap-input100 mb-3 ">
@@ -317,7 +318,6 @@ function Login(props) {
               width: "300px",
             }}
             value={ner}
-            placeholder="Нэвтрэх нэр"
             onChange={(text) => setNer(text.target.value)}
           />
           <span class="symbol-input100">
@@ -335,7 +335,6 @@ function Login(props) {
             onKeyDown={downHandler}
             style={{ width: "300px" }}
             value={nuutsUg}
-            placeholder="Нууц үг"
             onChange={(text) => setNuutsUg(text.target.value)}
           />
           <span class="symbol-input100">
@@ -403,7 +402,6 @@ function App() {
         <Route path="/" exact>
           <Login />
         </Route>
-        {/* {userDetail != undefined ? ( */}
         <Route path="/urilga" exact>
           <Urilga />
         </Route>

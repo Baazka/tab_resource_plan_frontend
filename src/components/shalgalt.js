@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Excel } from "../assets/images/zurag";
-import { useAlert } from "react-alert";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import Header from "../components/header";
 
 import { useHistory } from "react-router-dom";
+import hrUrl from "../hrUrl";
 const axios = require("axios");
 
 function Shalgalt1(props) {
@@ -13,19 +13,11 @@ function Shalgalt1(props) {
     history.goBack();
   }
   const [data, loadData] = useState([]);
-  const [grouplist, setGroupList] = useState([]);
-  const [department, setDepartment] = useState({
-    DEPARTMENT_ID: 1,
-    check: true,
-  });
   let too = 0;
-  const alert = useAlert();
 
   useEffect(() => {
     async function fetchdata() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/reportEmpAward"
-      );
+      let listItems = await axios(hrUrl + "/reportEmpAward");
       let temp = "";
       let arr = [];
       listItems?.data.map((value, index) => {

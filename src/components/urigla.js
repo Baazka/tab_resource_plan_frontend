@@ -1,33 +1,21 @@
 import React, { useState } from "react";
 import urilgaBack from "../assets/images/urilgaBack.jpg";
 import jilLogo from "../assets/images/jilLogo.gif";
-import Styled from "styled-components";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 
 import { AiOutlineIdcard } from "react-icons/ai";
 import { GiShirt } from "react-icons/gi";
+import hrUrl from "../hrUrl";
 const Urilga = (props) => {
   const [kod, setKod] = useState();
   const [ner, setNer] = useState({});
   const alert = useAlert();
 
-  const ImgLogo = Styled.img`
-        width: 250px;
-        @media (min-width: 625px) {
-            width: 350px;
-        }
-        @media (min-width: 400px) {
-            width: 250px;
-        }
-        @media (min-width: 850px) {
-            width: 450px;
-        }
-`;
   function saveToDB() {
     if (kod !== undefined && 0 < parseInt(kod) && parseInt(kod) < 1000) {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/IS_ARRIVE/",
+        url: hrUrl + "/IS_ARRIVE/",
         method: "POST",
         data: { IS_ARRIVE: kod },
       })

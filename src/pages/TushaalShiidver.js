@@ -14,6 +14,7 @@ import {
   Salarytype,
   Reasonsdecision,
 } from "../components/library";
+import hrUrl from "../hrUrl";
 
 var dateFormat = require("dateformat");
 const axios = require("axios");
@@ -94,40 +95,40 @@ const ButtonsColumn = ({
   setTushaal,
   buttonValue,
 }) => {
-  const alert = useAlert();
-  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
-  function deleteDecision() {
-    DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/decisionDelete/",
-      method: "POST",
-      data: {
-        DECISION_ID: row?.DECISION_ID,
-        REASON_ID: 1,
-        REASON_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-        REASON_DESC: "",
-        UPDATED_BY: userDetils?.USER_ID,
-        UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
-      },
-    })
-      .then(function (response) {
-        console.log("UpdateResponse", response);
+  // const alert = useAlert();
+  // const userDetils = JSON.parse(localStorage.getItem("userDetails"));
+  // function deleteDecision() {
+  //   DataRequest({
+  //     url: hrUrl + "/decisionDelete/",
+  //     method: "POST",
+  //     data: {
+  //       DECISION_ID: row?.DECISION_ID,
+  //       REASON_ID: 1,
+  //       REASON_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+  //       REASON_DESC: "",
+  //       UPDATED_BY: userDetils?.USER_ID,
+  //       UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
+  //     },
+  //   })
+  //     .then(function (response) {
+  //       console.log("UpdateResponse", response);
 
-        if (response?.data?.message === "success") {
-          setJagsaalt(
-            jagsaalt?.filter(
-              (element, index) => element.DECISION_ID !== row?.DECISION_ID
-            )
-          );
+  //       if (response?.data?.message === "success") {
+  //         setJagsaalt(
+  //           jagsaalt?.filter(
+  //             (element, index) => element.DECISION_ID !== row?.DECISION_ID
+  //           )
+  //         );
 
-          alert.show("амжилттай устлаа");
-        }
-      })
-      .catch(function (error) {
-        //alert(error.response.data.error.message);
-        console.log(error.response);
-        alert.show("aldaa");
-      });
-  }
+  //         alert.show("амжилттай устлаа");
+  //       }
+  //     })
+  //     .catch(function (error) {
+  //       //alert(error.response.data.error.message);
+  //       console.log(error.response);
+  //       alert.show("aldaa");
+  //     });
+  // }
   function tushaalUstgakh() {
     setTushaal({
       tushaalKharakh: false,
@@ -166,10 +167,10 @@ const ButtonsColumn = ({
 };
 
 const Home = (props) => {
-  const [jagsaalt, setJagsaalt] = useState();
+  const [jagsaalt, setJagsaalt] = useState([]);
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [searchType, setSearchType] = useState("PERSON_FIRSTNAME");
-  const [, forceRender] = useReducer((s) => s + 1, 0);
+
   const [found, setFound] = useState();
   const [search, setSearch] = useState("");
   const [NuutsiinBvrtgel, setNuutsiinBvrtgel] = useState({
@@ -184,26 +185,29 @@ const Home = (props) => {
   });
   const [buttonValue, setButtonValue] = useState(1);
   const [lib, setLib] = useState([]);
-  const alert = useAlert();
+
   async function fetchData() {
     setSearch("");
     let jagsaalts = await DataRequest({
       url:
-        "http://hr.audit.mn/hr/api/v1/decision/1/" +
+        hrUrl +
+        "/decision/1/" +
         userDetils?.USER_DEPARTMENT_ID +
         "/" +
         userDetils?.USER_TYPE_NAME.toUpperCase(),
       method: "GET",
       data: {},
     });
-    setJagsaalt(jagsaalts?.data);
+    if (jagsaalts.data !== undefined && jagsaalts.data.length > 0)
+      setJagsaalt(jagsaalts?.data);
     let lib = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/library/commandType",
+      url: hrUrl + "/library/commandType",
       method: "GET",
       data: {},
     });
-    setLib(lib?.data);
+    if (lib.data !== undefined) setLib(lib?.data);
   }
+
   useEffect(() => {
     fetchData();
   }, [props]);
@@ -212,7 +216,8 @@ const Home = (props) => {
     setSearch("");
     let jagsaalts = await DataRequest({
       url:
-        "http://hr.audit.mn/hr/api/v1/decision/0/" +
+        hrUrl +
+        "/decision/0/" +
         userDetils?.USER_DEPARTMENT_ID +
         "/" +
         userDetils?.USER_TYPE_NAME.toUpperCase(),
@@ -225,7 +230,8 @@ const Home = (props) => {
   async function Active() {
     let jagsaalts = await DataRequest({
       url:
-        "http://hr.audit.mn/hr/api/v1/decision/1/" +
+        hrUrl +
+        "/decision/1/" +
         userDetils?.USER_DEPARTMENT_ID +
         "/" +
         userDetils?.USER_TYPE_NAME.toUpperCase(),
@@ -237,7 +243,7 @@ const Home = (props) => {
   }
 
   const handleChange = (state) => {
-    console.log("Selected Rows: ", state.selectedRows);
+    //console.log("Selected Rows: ", state.selectedRows);
     if (
       state.selectedRows !== undefined &&
       state.selectedRows !== null &&
@@ -250,8 +256,8 @@ const Home = (props) => {
   function makeSearch(value) {
     setSearch(value);
     let found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
-    console.log(found);
-    if (found != undefined && found.length > 0) setFound(found);
+    //console.log(found);
+    if (found !== undefined && found.length > 0) setFound(found);
     else setFound([]);
   }
 
@@ -281,7 +287,7 @@ const Home = (props) => {
   //     deleteList?.DECISION_ID !== null
   //   ) {
   //     DataRequest({
-  //       url: "http://hr.audit.mn/hr/api/v1/decisionDelete/",
+  //       url: hrUrl + "/decisionDelete/",
 
   //       method: "POST",
   //       data: {
@@ -496,7 +502,6 @@ const Home = (props) => {
       <div
         style={{
           position: "absolute",
-          left: "20%",
           width: "50%",
           left: "7%",
           zIndex: 1,
@@ -731,9 +736,8 @@ function TushaalAjiltan(props) {
   const [search, setSearch] = useState("");
   const [tsonkhnuud, setTsonkhnuud] = useState(1);
   const [worker, setWorker] = useState();
-  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   async function fetchData() {
-    let listItems = await axios("http://hr.audit.mn/hr/api/v1/personall");
+    let listItems = await axios(hrUrl + "/personall");
 
     setJagsaalt(listItems?.data);
   }
@@ -748,7 +752,7 @@ function TushaalAjiltan(props) {
       equalStr(obj.PERSON_FIRSTNAME, value)
     );
 
-    if (found != undefined || found.length > 0) setFound(found);
+    if (found !== undefined || found.length > 0) setFound(found);
     else setFound([]);
   }
   function equalStr(value1, value2) {
@@ -814,7 +818,6 @@ function TushaalAjiltan(props) {
             <span
               style={{
                 fontWeight: "bold",
-                cursor: " -webkit-grab",
                 cursor: "grab",
               }}
               onClick={() => props.setNuutsiinBvrtgel(false)}
@@ -945,7 +948,7 @@ function Khoyor(props) {
     if (requiredField()) {
       if (props.type === 2) {
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/decision",
+          url: hrUrl + "/decision",
           method: "PUT",
           data: data,
         })
@@ -972,7 +975,7 @@ function Khoyor(props) {
           formDataTemp.delete("Decision");
           formDataTemp.append("Decision", JSON.stringify(data));
           DataRequest({
-            url: "http://hr.audit.mn/hr/api/v1/" + "fileUpload",
+            url: hrUrl + "/" + "fileUpload",
             method: "POST",
             data: formDataTemp,
             headers: {
@@ -995,7 +998,7 @@ function Khoyor(props) {
         } else {
           console.log("datatatata", data);
           DataRequest({
-            url: "http://hr.audit.mn/hr/api/v1/decision",
+            url: hrUrl + "/decision",
             method: "POST",
             data: data,
           })
@@ -1442,9 +1445,7 @@ function Salary(props) {
 
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/salary/" + props?.EMPLOYEE_ID
-      );
+      let listItems = await axios(hrUrl + "/salary/" + props?.EMPLOYEE_ID);
       console.log(listItems, "EMPLOYEE_ID");
       if (listItems.data !== undefined && listItems.data.length > 0) {
         loadData(listItems?.data);
@@ -1483,7 +1484,7 @@ function Salary(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/salary/",
+          url: hrUrl + "/salary/",
           method: "POST",
           data: { salary: newRow },
         })
@@ -1513,7 +1514,7 @@ function Salary(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/salary/",
+          url: hrUrl + "/salary/",
           method: "PUT",
           data: { salary: oldRow },
         })
@@ -1583,7 +1584,7 @@ function Salary(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/salaryDelete",
+        url: hrUrl + "/salaryDelete",
         method: "POST",
         data: {
           salary: {
@@ -1888,9 +1889,9 @@ function TushaalKharakh(props) {
     }
   }
   async function saveToDBDecition() {
-    console.log(data, "sendDecision");
+    //console.log(data, "sendDecision");
     if (file.get("files") !== undefined && file.get("files") !== null) {
-      console.log("files", file.get("files"));
+      //console.log("files", file.get("files"));
       let formDataTemp = file;
       formDataTemp.delete("Decision");
 
@@ -1898,7 +1899,7 @@ function TushaalKharakh(props) {
       if (data?.FILE_PATH !== undefined && data?.FILE_PATH !== null)
         formDataTemp.append("oldFile", data.FILE_PATH);
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/" + "fileUpload",
+        url: hrUrl + "/fileUpload",
         method: "POST",
         data: formDataTemp,
         headers: {
@@ -1918,7 +1919,7 @@ function TushaalKharakh(props) {
     } else {
       console.log("datatatata", data);
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/decision",
+        url: hrUrl + "/decision",
         method: "POST",
         data: data,
       })
@@ -1945,7 +1946,8 @@ function TushaalKharakh(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/decision/" +
+        hrUrl +
+          "/decision/" +
           props.buttonValue +
           "/" +
           userDetils?.USER_DEPARTMENT_ID +
@@ -1962,7 +1964,7 @@ function TushaalKharakh(props) {
   }, [props]);
 
   let listItems;
-  if (data != undefined || data != null) {
+  if (data !== undefined || data !== null) {
     listItems = (
       <div
         style={{
@@ -1988,7 +1990,6 @@ function TushaalKharakh(props) {
             <span
               style={{
                 fontWeight: "bold",
-                cursor: " -webkit-grab",
                 cursor: "grab",
               }}
               onClick={() => props.setTushaal({ tushaalKharakh: false })}
@@ -2243,7 +2244,8 @@ function TushaalKharakh(props) {
             {data?.FILE_PATH !== undefined && data?.FILE_PATH !== null ? (
               <a
                 href={
-                  "http://hr.audit.mn/hr/api/v1/".replace("api/v1/", "") +
+                  hrUrl +
+                  "/".replace("api/v1/", "") +
                   "static" +
                   data?.FILE_PATH.replace("uploads", "")
                 }
@@ -2310,9 +2312,7 @@ function SalaryKaruulakh(props) {
   useEffect(() => {
     async function fetchData() {
       console.log("salaryKharakh", props.EMPLOYEE_ID);
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/salary/" + props.EMPLOYEE_ID
-      );
+      let listItems = await axios(hrUrl + "/salary/" + props.EMPLOYEE_ID);
       console.log(listItems, "SalaryKaruulakh");
       loadData(listItems?.data);
     }
@@ -2332,7 +2332,7 @@ function SalaryKaruulakh(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/salary/",
+          url: hrUrl + "/salary/",
           method: "POST",
           data: { salary: newRow, UPDATED_BY: userDetils.USER_ID },
         })
@@ -2358,7 +2358,7 @@ function SalaryKaruulakh(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/salary/",
+          url: hrUrl + "/salary/",
           method: "PUT",
           data: { salary: oldRow, UPDATED_BY: userDetils.USER_ID },
         })
@@ -2426,7 +2426,7 @@ function SalaryKaruulakh(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/salaryDelete",
+        url: hrUrl + "/salaryDelete",
         method: "POST",
         data: {
           salary: {
@@ -2695,7 +2695,7 @@ function SalaryKaruulakh(props) {
 //   useEffect(() => {
 //     async function fetchData() {
 //       let listItems = await axios(
-//         "http://hr.audit.mn/hr/api/v1/decision/" +
+//         hrUrl + "/decision/" +
 //           props.buttonValue +
 //           "/" +
 //           userDetils?.USER_DEPARTMENT_ID +
@@ -2711,7 +2711,7 @@ function SalaryKaruulakh(props) {
 //   }, [props]);
 
 //   let listItems;
-//   if (data != undefined || data != null) {
+//   if (data !== undefined || data !== null) {
 //     listItems = (
 //       <div
 //         style={{
@@ -2737,7 +2737,6 @@ function SalaryKaruulakh(props) {
 //             <span
 //               style={{
 //                 fontWeight: "bold",
-//                 cursor: " -webkit-grab",
 //                 cursor: "grab",
 //               }}
 //               onClick={() => props.setTushaal({ tushaalKharakh: false })}
@@ -2966,7 +2965,7 @@ function SalaryKaruulakh(props) {
 //             {data?.FILE_PATH !== undefined && data?.FILE_PATH !== null ? (
 //               <a
 //                 href={
-//                   "http://hr.audit.mn/hr/api/v1/".replace("api/v1/", "") +
+//                   hrUrl + "/".replace("api/v1/", "") +
 //                   "static" +
 //                   data?.FILE_PATH.replace("uploads", "")
 //                 }
@@ -3046,7 +3045,7 @@ function UstgakhTsonkh(props) {
       UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
     });
     DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/decisionDelete/",
+      url: hrUrl + "/decisionDelete/",
       method: "POST",
       data: {
         DECISION_ID: props.tushaal?.decision_ID,
@@ -3058,9 +3057,9 @@ function UstgakhTsonkh(props) {
       },
     })
       .then(function (response) {
-        console.log("gegewgwegwegw", response);
+        //console.log("gegewgwegwegw", response);
 
-        if (response?.data?.message == "success") {
+        if (response?.data?.message === "success") {
           props.setJagsaalt(
             props.jagsaalt?.filter(
               (element, index) =>
@@ -3081,7 +3080,7 @@ function UstgakhTsonkh(props) {
   // useEffect(() => {
   //   async function fetchData() {
   //     let listItems = await axios(
-  //       "http://hr.audit.mn/hr/api/v1/decision/" +
+  //       hrUrl + "/decision/" +
   //         props.tushaalKharakh?.decision_ID
   //     );
 
@@ -3116,7 +3115,6 @@ function UstgakhTsonkh(props) {
           <span
             style={{
               fontWeight: "bold",
-              cursor: " -webkit-grab",
               cursor: "grab",
             }}
             onClick={() =>

@@ -1,18 +1,10 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
-import Header from "../components/header";
-import AnketNeg from "../components/anketNeg";
-import Footer from "../components/footer";
-import SideBar from "../components/sidebar";
 import { DataRequest } from "../functions/DataApi";
-import DataTable, { createTheme } from "react-data-table-component";
-import { useHistory } from "react-router-dom";
-import Iframe from "react-iframe";
 import { useAlert } from "react-alert";
+import hrUrl from "../hrUrl";
 
 var dateFormat = require("dateformat");
 const SurveyNAG = (props) => {
-  const history = useHistory();
   const [jagsaalt, setJagsaalt] = useState();
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [selected, setSelected] = useState({
@@ -22,23 +14,21 @@ const SurveyNAG = (props) => {
   });
   const alert = useAlert();
   let ar1 = [];
-  let ar2 = [];
-  let ar3 = [];
   useEffect(() => {
     async function test() {
       let jagsaaltsHEAD = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/electionAttandee/" + 2,
+        url: hrUrl + "/electionAttandee/" + 2,
         method: "GET",
         data: {},
       });
       setJagsaalt(jagsaaltsHEAD?.data);
-      console.log(jagsaaltsHEAD);
+      //console.log(jagsaaltsHEAD);
     }
     test();
     setTimeout(() => {
       onlyHeadCheckBox();
     }, 500);
-    console.log("jagsaalt", jagsaalt);
+    //console.log("jagsaalt", jagsaalt);
   }, [props]);
 
   function onlyHeadCheckBox() {
@@ -49,11 +39,11 @@ const SurveyNAG = (props) => {
     for (var i = 0; i < checkboxgroup.length; i++) {
       checkboxgroup[i].onclick = function () {
         var checkedcount = 0;
-        for (var i = 0; i < checkboxgroup.length; i++) {
-          checkedcount += checkboxgroup[i].checked ? 1 : 0;
+        for (var j = 0; j < checkboxgroup.length; j++) {
+          checkedcount += checkboxgroup[j].checked ? 1 : 0;
         }
         if (checkedcount > limit) {
-          console.log("You can select maximum of " + limit + " checkbox.");
+          //console.log("You can select maximum of " + limit + " checkbox.");
           alert.show(limit + " -өөс дээш хүн сонгох боломжгүй.");
           //alert.show("өгөгдөл байхгүй байна");
           this.checked = false;
@@ -66,94 +56,70 @@ const SurveyNAG = (props) => {
       .getElementById("HEAD")
       .getElementsByTagName("input");
 
-    let c1, c2, c3;
+    let c1;
 
     ar1 = [];
     for (var i = 0; i < checkboxgroup.length; i++) {
       var checkedcount = 0;
-      for (var i = 0; i < checkboxgroup.length; i++) {
-        checkedcount += checkboxgroup[i].checked ? 1 : 0;
+      for (var j = 0; j < checkboxgroup.length; j++) {
+        checkedcount += checkboxgroup[j].checked ? 1 : 0;
 
-        if (checkboxgroup[i].checked) ar1.push(checkboxgroup[i].value);
+        if (checkboxgroup[j].checked) ar1.push(checkboxgroup[j].value);
       }
       c1 = checkedcount;
     }
 
-    //console.log(ar1, ar2, ar3, "Baaz");
-    if (c1 == 0) alert.show("сонгоно уу.");
-    // else if (c2 == 0) alert("Менежер сонгоно уу.");
-    // else if (c3 == 0) alert("Ахлах аудитор сонгоно уу.");
+    if (c1 === 0) alert.show("сонгоно уу.");
     else return true;
   }
   var cols = [];
   for (let index = 0; index < jagsaalt?.length; index++) {
-    {
-      cols.push(
-        <div class="column is-3">
-          <div class="card is-clickable" style={{ height: 120 }}>
-            <div class="card-content">
-              <div class="media">
-                {/* <div class="media-left">
-                  <figure
-                    class="image"
-                    style={{
-                      width: 90,
-                      height: 120,
+    cols.push(
+      <div class="column is-3">
+        <div class="card is-clickable" style={{ height: 120 }}>
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p style={{ fontSize: "18px" }}>{jagsaalt[index].USER_NAME}</p>
+                <p style={{ fontSize: "12px" }}>
+                  {jagsaalt[index].USER_POSITION}
+                </p>
+                <div style={{ position: "absolute", bottom: 20 }}>
+                  <input
+                    type="checkbox"
+                    id={jagsaalt[index].ID}
+                    value={jagsaalt[index].ID}
+                    onChange={(value) => {
+                      if (document.getElementById(jagsaalt[index].ID).checked) {
+                        let temp = selected;
+                        selected.darga.push(jagsaalt[index]);
+                        setSelected(temp);
+                      } else {
+                        let temp = selected;
+                        temp.darga = selected.darga.filter(
+                          (a, ind) => a.ID !== jagsaalt[index].ID
+                        );
+                        setSelected(temp);
+                      }
                     }}
-                  >
-                    <img
-                      src=""
-                      alt=""
-                    />
-                  </figure>
-                </div> */}
-                <div class="media-content">
-                  <p style={{ fontSize: "18px" }}>
-                    {jagsaalt[index].USER_NAME}
-                  </p>
-                  <p style={{ fontSize: "12px" }}>
-                    {jagsaalt[index].USER_POSITION}
-                  </p>
-                  <div style={{ position: "absolute", bottom: 20 }}>
-                    <input
-                      type="checkbox"
-                      id={jagsaalt[index].ID}
-                      value={jagsaalt[index].ID}
-                      onChange={(value) => {
-                        if (
-                          document.getElementById(jagsaalt[index].ID).checked
-                        ) {
-                          let temp = selected;
-                          selected.darga.push(jagsaalt[index]);
-                          setSelected(temp);
-                        } else {
-                          let temp = selected;
-                          temp.darga = selected.darga.filter(
-                            (a, ind) => a.ID !== jagsaalt[index].ID
-                          );
-                          setSelected(temp);
-                        }
-                      }}
-                    />
-                    <label for={jagsaalt[index].ID} style={{ marginLeft: 5 }}>
-                      сонгох
-                    </label>
-                  </div>
+                  />
+                  <label for={jagsaalt[index].ID} style={{ marginLeft: 5 }}>
+                    сонгох
+                  </label>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      );
-    }
+      </div>
+    );
   }
 
   function saveToDB() {
     console.log("end", selected);
     if (CheckBox()) {
       DataRequest({
-        url:
-          "http://hr.audit.mn/hr/api/v1/electionCheck/2/" + userDetails.USER_ID,
+        url: hrUrl + "/electionCheck/2/" + userDetails.USER_ID,
         method: "GET",
         data: {},
       })
@@ -162,7 +128,7 @@ const SurveyNAG = (props) => {
           console.log(response?.data?.CNT);
           if (response?.data?.CNT === 0) {
             DataRequest({
-              url: "http://hr.audit.mn/hr/api/v1/electionAttandee/2/",
+              url: hrUrl + "/electionAttandee/2/",
               method: "POST",
               data: {
                 ELECTION_ID: 2,

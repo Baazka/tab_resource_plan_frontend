@@ -2,9 +2,6 @@ import React, { useState, useEffect } from "react";
 import { DataRequest } from "../functions/DataApi";
 import {
   AvatarB,
-  Face,
-  Trush,
-  Warning,
   Add,
   Delete,
   BNegB,
@@ -27,12 +24,12 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 import override from "../css/override";
 import { useHistory } from "react-router-dom";
 import { Salarytype } from "./library";
+import hrUrl from "../hrUrl";
 const axios = require("axios");
 
 var dateFormat = require("dateformat");
 
 function AnketB(props) {
-  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [menu, setMenu] = useState(1);
   const [loading, setLoading] = useState(false);
   const [avatar, setAvatar] = useState({});
@@ -41,14 +38,14 @@ function AnketB(props) {
   useEffect(() => {
     async function fetchData() {
       let avatarImg = await axios(
-        "http://hr.audit.mn/hr/api/v1/avatar/" +
+        hrUrl +
+          "/avatar/" +
           JSON.parse(
             localStorage.getItem("personDetail") === undefined
               ? "{}"
               : localStorage.getItem("personDetail")
           )?.person_id
       );
-      console.log(avatarImg, "avatarImg");
       if (avatarImg.data !== undefined && avatarImg.data.length > 0)
         setAvatar(avatarImg.data[avatarImg.data.length - 1]);
     }
@@ -123,7 +120,8 @@ function AnketB(props) {
           <img
             src={
               avatar.FILE_PATH !== undefined && avatar.FILE_PATH !== null
-                ? "http://hr.audit.mn/hr/api/v1/".replace("api/v1/", "") +
+                ? hrUrl +
+                  "/".replace("api/v1/", "") +
                   "static" +
                   avatar?.FILE_PATH.replace("uploads", "")
                 : AvatarB
@@ -139,11 +137,7 @@ function AnketB(props) {
             justifyContent: "center",
             marginTop: "-0.4rem",
           }}
-        >
-          {/* <img src={Face} width="40px" height="40px" />
-          <img src={Trush} width="40px" height="40px" />
-          <img src={Warning} width="40px" height="40px" /> */}
-        </div>
+        ></div>
         <div style={{ marginTop: "1.5rem" }}>
           <span
             style={{
@@ -166,7 +160,12 @@ function AnketB(props) {
           </span>
         </div>
         <div className="AnketList" style={{ marginTop: "3rem" }}>
-          <img src={menu === 1 ? BNegB : BNeg} width="45px" height="45px" />
+          <img
+            src={menu === 1 ? BNegB : BNeg}
+            width="45px"
+            height="45px"
+            alt=""
+          />
           <button
             className="button"
             style={{
@@ -186,7 +185,12 @@ function AnketB(props) {
         </div>
 
         <div className="AnketList">
-          <img src={menu === 3 ? BGuravB : BGurav} width="45px" height="45px" />
+          <img
+            src={menu === 3 ? BGuravB : BGurav}
+            width="45px"
+            height="45px"
+            alt=""
+          />
           <button
             className="button"
             style={{
@@ -205,7 +209,12 @@ function AnketB(props) {
           </button>
         </div>
         <div className="AnketList">
-          <img src={menu === 4 ? BDuruvB : BDuruv} width="45px" height="45px" />
+          <img
+            src={menu === 4 ? BDuruvB : BDuruv}
+            width="45px"
+            height="45px"
+            alt=""
+          />
           <button
             className="button"
             style={{
@@ -224,7 +233,12 @@ function AnketB(props) {
           </button>
         </div>
         <div className="AnketList">
-          <img src={menu === 5 ? BTavB : BTav} width="45px" height="45px" />
+          <img
+            src={menu === 5 ? BTavB : BTav}
+            width="45px"
+            height="45px"
+            alt=""
+          />
           <button
             className="button"
             style={{
@@ -247,6 +261,7 @@ function AnketB(props) {
             src={menu === 6 ? BZurgaaB : BZurgaa}
             width="45px"
             height="45px"
+            alt=""
           />
           <button
             className="button"
@@ -266,7 +281,12 @@ function AnketB(props) {
           </button>
         </div>
         <div className="AnketList">
-          <img src={menu === 7 ? BDolooB : BDoloo} width="45px" height="45px" />
+          <img
+            src={menu === 7 ? BDolooB : BDoloo}
+            width="45px"
+            height="45px"
+            alt=""
+          />
           <button
             className="button"
             style={{
@@ -285,7 +305,12 @@ function AnketB(props) {
           </button>
         </div>
         <div className="AnketList">
-          <img src={menu === 8 ? BNaimB : BNaim} width="45px" height="45px" />
+          <img
+            src={menu === 8 ? BNaimB : BNaim}
+            width="45px"
+            height="45px"
+            alt=""
+          />
           <button
             className="button"
             style={{
@@ -400,21 +425,19 @@ function AnketB(props) {
 
 function AlbanTushaal(props) {
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
-  const [turul, setTurul] = useState("urdun");
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
-  const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/positionEmployee/" +
+        hrUrl +
+          "/positionEmployee/" +
           JSON.parse(
             localStorage.getItem("personDetail") === undefined
               ? "{}"
               : localStorage.getItem("personDetail")
           )?.emp_id
       );
-      console.log(listItems, "salary");
       loadData(
         listItems?.data.sort(function sortFunction(a, b) {
           var dateA = new Date(a.CREATED_DATE).getTime();
@@ -954,11 +977,11 @@ function TsalinHuls(props) {
   const [zasakhTowch, setZasakhTowch] = useState(false);
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
-  const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/salary/" +
+        hrUrl +
+          "/salary/" +
           JSON.parse(
             localStorage.getItem("personDetail") === undefined
               ? "{}"
@@ -972,7 +995,7 @@ function TsalinHuls(props) {
   }, [props]);
 
   let listItems;
-  if (data?.salary != undefined && data?.salary.length !== 0) {
+  if (data?.salary !== undefined && data?.salary.length !== 0) {
     listItems = (
       <div
         className="box"
@@ -1236,7 +1259,8 @@ function Uramshuulal(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/Promotion/" +
+        hrUrl +
+          "/Promotion/" +
           JSON.parse(
             localStorage.getItem("personDetail") === undefined
               ? "{}"
@@ -1304,7 +1328,7 @@ function Uramshuulal(props) {
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/PromotionDelete",
+        url: hrUrl + "/PromotionDelete",
         method: "POST",
         data: {
           Promotion: {
@@ -1349,14 +1373,12 @@ function Uramshuulal(props) {
       let message = 0;
 
       if (newRow?.length > 0) {
-        console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Promotion",
+          url: hrUrl + "/Promotion",
           method: "POST",
           data: { Promotion: newRow },
         })
           .then(function (response) {
-            console.log("UpdateResponse", response);
             if (response?.data?.message === "success") {
               message = 1;
               if (message !== 2) alert.show("амжилттай хадгаллаа");
@@ -1371,16 +1393,14 @@ function Uramshuulal(props) {
           })
           .catch(function (error) {
             //alert(error.response.data.error.message);
-            console.log(error.response);
             alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
           });
       }
       if (oldRow?.length > 0) {
-        console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Promotion",
+          url: hrUrl + "/Promotion",
           method: "PUT",
           data: {
             Promotion: oldRow,
@@ -1516,6 +1536,7 @@ function Uramshuulal(props) {
                     width="30px"
                     height="30px"
                     onClick={() => addRow()}
+                    alt=""
                   />
                   <input
                     style={{ width: "40px", visibility: "hidden" }}
@@ -1680,6 +1701,7 @@ function Uramshuulal(props) {
                       width="30px"
                       height="30px"
                       onClick={() => removeRow(index, value)}
+                      alt=""
                     />
                     <input
                       style={{ width: "40px", visibility: "hidden" }}
@@ -1722,7 +1744,8 @@ function NuhuhMulbur(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/amends/" +
+        hrUrl +
+          "/amends/" +
           JSON.parse(
             localStorage.getItem("personDetail") === undefined
               ? "{}"
@@ -1730,7 +1753,6 @@ function NuhuhMulbur(props) {
           )?.emp_id
         // + props.person_id
       );
-      console.log(listItems, "amends");
       loadData(listItems?.data);
     }
     fetchData();
@@ -1790,7 +1812,7 @@ function NuhuhMulbur(props) {
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/amendsDelete",
+        url: hrUrl + "/amendsDelete",
         method: "POST",
         data: {
           Amends: {
@@ -1804,7 +1826,6 @@ function NuhuhMulbur(props) {
         },
       })
         .then(function (response) {
-          console.log("UpdateResponse", response);
           //history.push('/sample')
           if (response?.data?.message === "success") {
             alert.show("амжилттай устлаа");
@@ -1833,14 +1854,12 @@ function NuhuhMulbur(props) {
       let message = 0;
 
       if (newRow?.length > 0) {
-        console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/amends",
+          url: hrUrl + "/amends",
           method: "POST",
           data: { Amends: newRow },
         })
           .then(function (response) {
-            console.log("UpdateResponse", response);
             if (response?.data?.message === "success") {
               message = 1;
               if (message !== 2) alert.show("амжилттай хадгаллаа");
@@ -1862,9 +1881,8 @@ function NuhuhMulbur(props) {
           });
       }
       if (oldRow?.length > 0) {
-        console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/amends",
+          url: hrUrl + "/amends",
           method: "PUT",
           data: {
             Amends: oldRow,
@@ -1873,7 +1891,6 @@ function NuhuhMulbur(props) {
           },
         })
           .then(function (response) {
-            console.log("UpdateResponse", response);
             if (response?.data?.message === "success") {
               message = 2;
               //history.push('/sample')
@@ -1888,7 +1905,6 @@ function NuhuhMulbur(props) {
           })
           .catch(function (error) {
             //alert(error.response.data.error.message);
-            console.log(error.response);
             alert.show("Системийн алдаа");
             setZasakhTowch(!zasakhTowch);
             props.loading(false);
@@ -1997,6 +2013,7 @@ function NuhuhMulbur(props) {
                     width="30px"
                     height="30px"
                     onClick={() => addRow()}
+                    alt=""
                   />
                   <input
                     style={{ width: "40px", visibility: "hidden" }}
@@ -2167,6 +2184,7 @@ function NuhuhMulbur(props) {
                       width="30px"
                       height="30px"
                       onClick={() => removeRow(index, value)}
+                      alt=""
                     />
                     <input
                       style={{ width: "40px", visibility: "hidden" }}
@@ -2208,7 +2226,8 @@ function Tuslamj(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/Aid/" +
+        hrUrl +
+          "/Aid/" +
           JSON.parse(
             localStorage.getItem("personDetail") === undefined
               ? "{}"
@@ -2216,7 +2235,6 @@ function Tuslamj(props) {
           )?.emp_id
         // + props.person_id
       );
-      console.log(listItems?.data.Aid, "Aid");
       loadData(listItems?.data);
     }
     fetchData();
@@ -2276,7 +2294,7 @@ function Tuslamj(props) {
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/AidDelete",
+        url: hrUrl + "/AidDelete",
         method: "POST",
         data: {
           Aid: {
@@ -2290,7 +2308,6 @@ function Tuslamj(props) {
         },
       })
         .then(function (response) {
-          console.log("UpdateResponse", response);
           //history.push('/sample')
           if (response?.data?.message === "success") {
             alert.show("амжилттай устлаа");
@@ -2319,9 +2336,8 @@ function Tuslamj(props) {
       let message = 0;
 
       if (newRow?.length > 0) {
-        console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Aid",
+          url: hrUrl + "/Aid",
           method: "POST",
           data: { Aid: newRow },
         })
@@ -2348,9 +2364,8 @@ function Tuslamj(props) {
           });
       }
       if (oldRow?.length > 0) {
-        console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Aid",
+          url: hrUrl + "/Aid",
           method: "PUT",
           data: {
             Aid: oldRow,
@@ -2359,7 +2374,6 @@ function Tuslamj(props) {
           },
         })
           .then(function (response) {
-            console.log("UpdateResponse", response);
             if (response?.data?.message === "success") {
               message = 2;
               //history.push('/sample')
@@ -2487,6 +2501,7 @@ function Tuslamj(props) {
                     width="30px"
                     height="30px"
                     onClick={() => addRow()}
+                    alt=""
                   />
                   <input
                     style={{ width: "30px", visibility: "hidden" }}
@@ -2656,6 +2671,7 @@ function Tuslamj(props) {
                       width="30px"
                       height="30px"
                       onClick={() => removeRow(index, value)}
+                      alt=""
                     />
                     <input
                       style={{ width: "30px", visibility: "hidden" }}
@@ -2697,7 +2713,8 @@ function Surgalt(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/training/" +
+        hrUrl +
+          "/training/" +
           JSON.parse(
             localStorage.getItem("personDetail") === undefined
               ? "{}"
@@ -2705,7 +2722,6 @@ function Surgalt(props) {
           )?.emp_id
         // + props.person_id
       );
-      console.log(listItems, "Training");
       loadData(listItems?.data);
     }
     fetchData();
@@ -2763,7 +2779,7 @@ function Surgalt(props) {
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/TrainingDelete",
+        url: hrUrl + "/TrainingDelete",
         method: "POST",
         data: {
           Training: {
@@ -2805,9 +2821,8 @@ function Surgalt(props) {
       let message = 0;
 
       if (newRow?.length > 0) {
-        console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Training",
+          url: hrUrl + "/Training",
           method: "POST",
           data: { Training: newRow },
         })
@@ -2834,9 +2849,8 @@ function Surgalt(props) {
           });
       }
       if (oldRow?.length > 0) {
-        console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Training",
+          url: hrUrl + "/Training",
           method: "PUT",
           data: {
             Training: oldRow,
@@ -2845,7 +2859,6 @@ function Surgalt(props) {
           },
         })
           .then(function (response) {
-            console.log("UpdateResponse", response);
             if (response?.data?.message === "success") {
               message = 2;
               //history.push('/sample')
@@ -2975,6 +2988,7 @@ function Surgalt(props) {
                     width="30px"
                     height="30px"
                     onClick={() => addRow()}
+                    alt=""
                   />
                   <input
                     style={{ width: "40px", visibility: "hidden" }}
@@ -3145,6 +3159,7 @@ function Surgalt(props) {
                       width="30px"
                       height="30px"
                       onClick={() => removeRow(index, value)}
+                      alt=""
                     />
                     <input
                       style={{ width: "40px", visibility: "hidden" }}
@@ -3187,7 +3202,8 @@ function Shiitgel(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/Punishment/" +
+        hrUrl +
+          "/Punishment/" +
           JSON.parse(
             localStorage.getItem("personDetail") === undefined
               ? "{}"
@@ -3195,7 +3211,6 @@ function Shiitgel(props) {
           )?.emp_id
         // + props.person_id
       );
-      console.log(listItems, "Punishment");
       loadData(listItems?.data);
     }
     fetchData();
@@ -3250,7 +3265,7 @@ function Shiitgel(props) {
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/PunishmentDelete",
+        url: hrUrl + "/PunishmentDelete",
         method: "POST",
         data: {
           Punishment: {
@@ -3264,7 +3279,6 @@ function Shiitgel(props) {
         },
       })
         .then(function (response) {
-          console.log("UpdateResponse", response);
           //history.push('/sample')
           if (response?.data?.message === "success") {
             alert.show("амжилттай устлаа");
@@ -3295,14 +3309,12 @@ function Shiitgel(props) {
       let message = 0;
 
       if (newRow?.length > 0) {
-        console.log("insertPunishment", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Punishment",
+          url: hrUrl + "/Punishment",
           method: "POST",
           data: { Punishment: newRow },
         })
           .then(function (response) {
-            console.log("UpdateResponse", response);
             if (response?.data?.message === "success") {
               message = 1;
               if (message !== 2) alert.show("амжилттай хадгаллаа");
@@ -3324,9 +3336,8 @@ function Shiitgel(props) {
           });
       }
       if (oldRow?.length > 0) {
-        console.log("updatePunishment", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Punishment",
+          url: hrUrl + "/Punishment",
           method: "PUT",
           data: {
             Punishment: oldRow,
@@ -3335,7 +3346,6 @@ function Shiitgel(props) {
           },
         })
           .then(function (response) {
-            console.log("UpdateResponse", response);
             if (response?.data?.message === "success") {
               message = 2;
               //history.push('/sample')
@@ -3484,6 +3494,7 @@ function Shiitgel(props) {
                     width="30px"
                     height="30px"
                     onClick={() => addRow()}
+                    alt=""
                   />
                   <input
                     style={{ width: "40px", visibility: "hidden" }}
@@ -3611,6 +3622,7 @@ function Shiitgel(props) {
                       width="30px"
                       height="30px"
                       onClick={() => removeRow(index, value)}
+                      alt=""
                     />
                     <input
                       style={{ width: "40px", visibility: "hidden" }}
@@ -3653,7 +3665,8 @@ function HuwiinHereg(props) {
   useEffect(() => {
     async function fetchData() {
       let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/document/" +
+        hrUrl +
+          "/document/" +
           JSON.parse(
             localStorage.getItem("personDetail") === undefined
               ? "{}"
@@ -3661,7 +3674,6 @@ function HuwiinHereg(props) {
           )?.emp_id
         // + props.person_id
       );
-      console.log(listItems, "Tangarag");
       loadData(listItems?.data);
     }
     fetchData();
@@ -3723,7 +3735,7 @@ function HuwiinHereg(props) {
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/documentDelete",
+        url: hrUrl + "/documentDelete",
         method: "POST",
         data: {
           Document: {
@@ -3737,7 +3749,6 @@ function HuwiinHereg(props) {
         },
       })
         .then(function (response) {
-          console.log("UpdateResponse", response);
           //history.push('/sample')
           if (response?.data?.message === "success") {
             alert.show("амжилттай устлаа");
@@ -3766,14 +3777,12 @@ function HuwiinHereg(props) {
       let message = 0;
 
       if (newRow?.length > 0) {
-        console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/document",
+          url: hrUrl + "/document",
           method: "POST",
           data: { Document: newRow },
         })
           .then(function (response) {
-            console.log("UpdateResponse", response);
             if (response?.data?.message === "success") {
               message = 1;
               if (message !== 2) alert.show("амжилттай хадгаллаа");
@@ -3795,9 +3804,8 @@ function HuwiinHereg(props) {
           });
       }
       if (oldRow?.length > 0) {
-        console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/document",
+          url: hrUrl + "/document",
           method: "PUT",
           data: {
             Document: oldRow,
@@ -3911,6 +3919,7 @@ function HuwiinHereg(props) {
                     width="30px"
                     height="30px"
                     onClick={() => addRow()}
+                    alt=""
                   />
                   <input
                     style={{ width: "30px", visibility: "hidden" }}
@@ -4060,6 +4069,7 @@ function HuwiinHereg(props) {
                       width="30px"
                       height="30px"
                       onClick={() => removeRow(index, value)}
+                      alt=""
                     />
                     <input
                       style={{ width: "40px", visibility: "hidden" }}
@@ -4093,8 +4103,6 @@ function HuwiinHereg(props) {
   return listItems;
 }
 function BusadMedeelel(props) {
-  const [edit, setEdit] = useState(true);
-  const [zeel, setZeel] = useState(true);
   return (
     <div>
       <div

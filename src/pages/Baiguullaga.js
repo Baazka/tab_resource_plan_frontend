@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useReducer } from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../components/footer";
 import { DataRequest } from "../functions/DataApi";
 import dateFormat from "dateformat";
 import { useAlert } from "react-alert";
 import { Add, Edit, Delete } from "../assets/images/zurag";
 import { Office } from "../components/library";
+import hrUrl from "../hrUrl";
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
 function Subdepartment(props) {
@@ -15,8 +16,7 @@ function Subdepartment(props) {
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url:
-          "http://hr.audit.mn/hr/api/v1/subdepartment/" + props?.deparment_ID,
+        url: hrUrl + "/subdepartment/" + props?.deparment_ID,
         method: "GET",
         data: {},
       });
@@ -28,7 +28,7 @@ function Subdepartment(props) {
 
   return (
     <div>
-      {props?.show == true && props?.deparment_ID === props.depId ? (
+      {props?.show === true && props?.deparment_ID === props.depId ? (
         <div style={{ marginLeft: "2%" }}>
           <div
             style={{
@@ -164,9 +164,7 @@ function Compartment(props) {
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url:
-          "http://hr.audit.mn/hr/api/v1/compartment/" +
-          props?.deparment_id_path,
+        url: hrUrl + "/compartment/" + props?.deparment_id_path,
         method: "GET",
         data: {},
       });
@@ -177,7 +175,7 @@ function Compartment(props) {
 
   return (
     <div>
-      {props?.show == true && props?.deparment_ID === props.subDepId ? (
+      {props?.show === true && props?.deparment_ID === props.subDepId ? (
         <div style={{ marginLeft: "2%" }}>
           <div
             style={{
@@ -232,6 +230,7 @@ function Compartment(props) {
                       subType: props.subType,
                     })
                   }
+                  alt=""
                 />
               </div>
             </div>
@@ -295,12 +294,11 @@ const Baiguullaga = (props) => {
   const [depId, setDepId] = useState(null);
   const [show, setShow] = useState(false);
   const [add, setAdd] = useState({ type: 0, id: 0, subid: 0 });
-  const alert = useAlert();
 
   useEffect(() => {
     async function test() {
       let jagsaalts = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/department/",
+        url: hrUrl + "/department/",
         method: "GET",
         data: {},
       });
@@ -323,7 +321,6 @@ const Baiguullaga = (props) => {
       <div
         style={{
           position: "absolute",
-          left: "20%",
           width: "50%",
           left: "7%",
           zIndex: 1,
@@ -396,11 +393,12 @@ const Baiguullaga = (props) => {
                 onClick={() =>
                   setAdd({ type: 1, deparment_ID: "new", path: "department/" })
                 }
+                alt=""
               />
             </div>
           </div>
         </div>
-        {add?.type != 0 ? <AddDialog setAdd={setAdd} add={add} /> : null}
+        {add?.type !== 0 ? <AddDialog setAdd={setAdd} add={add} /> : null}
         <div style={{ display: "flex", flexDirection: "column" }}>
           {jagsaalt.map((value, index) => (
             <div
@@ -438,6 +436,7 @@ const Baiguullaga = (props) => {
                         path: "/department/" + value.DEPARTMENT_ID,
                       })
                     }
+                    alt=""
                   />
                 </div>
                 <div className="column is-2" />
@@ -472,19 +471,18 @@ const Baiguullaga = (props) => {
 function AddDialog(props) {
   const alert = useAlert();
   const [data, loadData] = useState();
-  const [, forceRender] = useReducer((s) => s + 1, 0);
 
   useEffect(() => {
-    console.log("jagsaaltBaaaaaaaaprops", props);
+    //console.log("jagsaaltBaaaaaaaaprops", props);
     async function test() {
-      if (data == undefined || data == null) {
+      if (data === undefined || data === null) {
         if (props.add.deparment_ID !== "new") {
           let jagsaalts = await DataRequest({
-            url: "http://hr.audit.mn/hr/api/v1/" + props?.add.path,
+            url: hrUrl + "/" + props?.add.path,
             method: "GET",
             data: {},
           });
-          console.log("jagsaaltBaaaaaaaa", jagsaalts);
+          //console.log("jagsaaltBaaaaaaaa", jagsaalts);
           if (jagsaalts.data !== undefined && jagsaalts.data.length !== 0)
             loadData(jagsaalts?.data[0]);
           else
@@ -524,9 +522,8 @@ function AddDialog(props) {
   }, [props]);
 
   function saveToDB() {
-    console.log("testAddDepartment", data);
     DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/" + props.add.path,
+      url: hrUrl + "/" + props.add.path,
       method: "POST",
       data: data,
     })
@@ -546,7 +543,7 @@ function AddDialog(props) {
   }
 
   let design;
-  if (data != undefined && data !== null) {
+  if (data !== undefined && data !== null) {
     design = (
       <div>
         <div
@@ -582,7 +579,6 @@ function AddDialog(props) {
               <span
                 style={{
                   fontWeight: "bold",
-                  cursor: " -webkit-grab",
                   cursor: "grab",
                 }}
                 onClick={() => props.setAdd({ type: 0, id: 0 })}
@@ -775,13 +771,11 @@ function ChigUureg(props) {
     async function test() {
       if (data.length === 0) {
         let jagsaalts = await DataRequest({
-          url:
-            "http://hr.audit.mn/hr/api/v1/organizationrole/" +
-            props?.deparment_id_path,
+          url: hrUrl + "/organizationrole/" + props?.deparment_id_path,
           method: "GET",
           data: {},
         });
-        if (jagsaalts.data !== undefined && jagsaalts.data.length != 0)
+        if (jagsaalts.data !== undefined && jagsaalts.data.length !== 0)
           loadData(jagsaalts?.data);
         else addRow();
       }
@@ -791,14 +785,12 @@ function ChigUureg(props) {
   function saveToDB() {
     if (requiredField(data) === true) {
       DataRequest({
-        url:
-          "http://hr.audit.mn/hr/api/v1/organizationrole/" +
-          props?.deparment_id_path,
+        url: hrUrl + "/organizationrole/" + props?.deparment_id_path,
         method: "POST",
         data: data,
       })
         .then(function (response) {
-          console.log("UpdateResponse", response);
+          //console.log("UpdateResponse", response);
 
           if (response?.data?.message === "success") {
             alert.show("амжилттай хадгаллаа");
@@ -850,9 +842,7 @@ function ChigUureg(props) {
   function removeRow(indexParam, value) {
     if (value?.ORGANIZATION_ROLE_ID !== null) {
       DataRequest({
-        url:
-          "http://hr.audit.mn/hr/api/v1/organizationrole/" +
-          props?.deparment_id_path,
+        url: hrUrl + "/organizationrole/" + props?.deparment_id_path,
         method: "POST",
         data: {
           ...value,
@@ -905,6 +895,7 @@ function ChigUureg(props) {
                   width="30px"
                   height="30px"
                   onClick={() => addRow()}
+                  alt=""
                 />
               </td>
             ) : null}
@@ -948,6 +939,7 @@ function ChigUureg(props) {
                     width="30px"
                     height="30px"
                     onClick={() => removeRow(index, value)}
+                    alt=""
                   />
                 </td>
               ) : null}

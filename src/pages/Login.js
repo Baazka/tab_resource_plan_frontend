@@ -180,6 +180,7 @@ function Login(props) {
           }}
           src={LogoBottom}
           width="210px"
+          alt=""
         />
 
         <div class="wrap-input100 mb-3 ">
@@ -193,7 +194,6 @@ function Login(props) {
               width: "300px",
             }}
             value={ner}
-            placeholder="Нэвтрэх нэр"
             onChange={(text) => setNer(text.target.value)}
           />
           <span class="symbol-input100">
@@ -211,7 +211,6 @@ function Login(props) {
             onKeyDown={downHandler}
             style={{ width: "300px" }}
             value={nuutsUg}
-            placeholder="Нууц үг"
             onChange={(text) => setNuutsUg(text.target.value)}
           />
           <span class="symbol-input100">

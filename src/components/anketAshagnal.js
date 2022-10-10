@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 import { Add, Delete } from "../assets/images/zurag";
+import hrUrl from "../hrUrl";
 const axios = require("axios");
 var dateFormat = require("dateformat");
 
@@ -89,10 +90,7 @@ function Shagnaliin(props) {
   const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/Award/" + props.person_id
-      );
-      console.log(listItems, "Tangarag");
+      let listItems = await axios(hrUrl + "/Award/" + props.person_id);
       loadData({
         Award: listItems?.data.Award.sort(function sortFunction(a, b) {
           var dateA = new Date(a.DECISION_DATE).getTime();
@@ -137,7 +135,7 @@ function Shagnaliin(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Award/",
+          url: hrUrl + "/Award/",
           method: "POST",
           data: { award: newRow },
         })
@@ -166,7 +164,7 @@ function Shagnaliin(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Award/",
+          url: hrUrl + "/Award/",
           method: "PUT",
           data: { award: oldRow },
         })
@@ -195,11 +193,6 @@ function Shagnaliin(props) {
     } else {
       props.loading(false);
     }
-  }
-  function setAward(value) {
-    let arr = data.Award;
-    arr[value.index] = value;
-    loadData({ Award: arr });
   }
   function requiredField() {
     // emergency.forEach((a, index) => {
@@ -238,7 +231,7 @@ function Shagnaliin(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/awardDelete",
+        url: hrUrl + "/awardDelete",
         method: "POST",
         data: {
           award: {

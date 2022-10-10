@@ -1,47 +1,7 @@
-import React, { useState } from "react";
-import urilgaBack from "../assets/images/urilgaBack.jpg";
-import jilLogo from "../assets/images/jilLogo.gif";
-import Styled from "styled-components";
-import { DataRequest } from "../functions/DataApi";
-import { useAlert } from "react-alert";
+import React from "react";
 import "./table.css";
 
 const Schedule = (props) => {
-  const [kod, setKod] = useState();
-  const [ner, setNer] = useState({});
-  const alert = useAlert();
-
-  function saveToDB() {
-    if (kod !== undefined && 0 < parseInt(kod) && parseInt(kod) < 1000) {
-      DataRequest({
-        url: "http://localhost:3002/api/v1/IS_ARRIVE_CONFRENCE/",
-        method: "POST",
-        data: { IS_ARRIVE: kod },
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") {
-            setNer(response?.data.data);
-          } else {
-            if (response.data.description !== undefined)
-              alert.show(response.data.description);
-            else alert.show("Системийн алдаа");
-          }
-        })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-          alert.show("Системийн алдаа");
-        });
-    } else {
-      alert.show("зөв R.S.V.P код оруулна уу");
-    }
-  }
-  function downHandler(e) {
-    if (e.key === "Enter") {
-      saveToDB();
-    }
-  }
   return (
     <div
       style={{

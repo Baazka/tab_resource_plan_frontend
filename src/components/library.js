@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useReducer } from "react";
+import hrUrl from "../hrUrl";
 const axios = require("axios");
 var dateFormat = require("dateformat");
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
@@ -7,9 +8,7 @@ function National(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/national"
-      );
+      let listItems = await axios(hrUrl + "/library/national");
       loadData(listItems.data);
     }
     fetchData();
@@ -49,9 +48,7 @@ function Subnational(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/surname"
-      );
+      let listItems = await axios(hrUrl + "/library/surname");
       loadData(listItems.data);
     }
     fetchData();
@@ -111,9 +108,7 @@ function Dynasty(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/dynasty"
-      );
+      let listItems = await axios(hrUrl + "/library/dynasty");
       loadData(listItems.data);
     }
     fetchData();
@@ -152,9 +147,7 @@ function Office(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/office"
-      );
+      let listItems = await axios(hrUrl + "/library/office");
       loadData(listItems.data);
     }
     fetchData();
@@ -197,9 +190,7 @@ function Suboffice(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/suboffice"
-      );
+      let listItems = await axios(hrUrl + "/library/suboffice");
 
       loadData(
         listItems.data?.filter(
@@ -245,9 +236,7 @@ function Edutype(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/edutype"
-      );
+      let listItems = await axios(hrUrl + "/library/edutype");
       loadData(listItems.data);
     }
     fetchData();
@@ -288,9 +277,7 @@ function FamilyArray(props) {
   const [data, loadData] = useState();
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/family"
-      );
+      let listItems = await axios(hrUrl + "/library/family");
       loadData(listItems.data);
     }
     fetchData();
@@ -332,9 +319,7 @@ function Examtype(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/examtype"
-      );
+      let listItems = await axios(hrUrl + "/library/examtype");
       loadData(listItems.data);
     }
     fetchData();
@@ -374,9 +359,7 @@ function Fametype(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/fametype"
-      );
+      let listItems = await axios(hrUrl + "/library/fametype");
       loadData(listItems.data);
     }
     fetchData();
@@ -416,9 +399,7 @@ function Subfametype(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/subfametype"
-      );
+      let listItems = await axios(hrUrl + "/library/subfametype");
       loadData(listItems.data);
     }
     fetchData();
@@ -458,9 +439,7 @@ function Forcetype(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/forcetype"
-      );
+      let listItems = await axios(hrUrl + "/library/forcetype");
       loadData(listItems.data);
     }
     fetchData();
@@ -500,9 +479,7 @@ function Language(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/language"
-      );
+      let listItems = await axios(hrUrl + "/library/language");
       loadData(listItems.data);
     }
     fetchData();
@@ -543,9 +520,7 @@ function Languagetype(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/languagetype"
-      );
+      let listItems = await axios(hrUrl + "/library/languagetype");
       loadData(listItems.data);
     }
     fetchData();
@@ -587,9 +562,7 @@ function Literaturetype(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/literaturetype"
-      );
+      let listItems = await axios(hrUrl + "/library/literaturetype");
       loadData(listItems.data);
     }
     fetchData();
@@ -629,9 +602,7 @@ function DepartmentID(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/department"
-      );
+      let listItems = await axios(hrUrl + "/library/department");
       loadData(listItems.data);
     }
     fetchData();
@@ -676,9 +647,7 @@ function Subdepartment(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/subdepartment"
-      );
+      let listItems = await axios(hrUrl + "/library/subdepartment");
       if (
         props.personChild.DEPARTMENT_ID !== null &&
         props.personChild.DEPARTMENT_ID !== "" &&
@@ -733,9 +702,7 @@ function Compartment(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/compartment"
-      );
+      let listItems = await axios(hrUrl + "/library/compartment");
 
       if (
         props.personChild.SUB_DEPARTMENT_ID !== "null" &&
@@ -817,9 +784,7 @@ function Position(props) {
   useEffect(() => {
     console.log("positionT", props);
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/position"
-      );
+      let listItems = await axios(hrUrl + "/library/position");
 
       if (
         props.personChild?.SUB_DEPARTMENT_ID !== "null" &&
@@ -848,15 +813,15 @@ function Position(props) {
         loadData(
           listItems.data?.filter(
             (a) =>
-              parseInt(a.DEPARTMENT_ID) ==
+              parseInt(a.DEPARTMENT_ID) ===
                 parseInt(props.personChild.DEPARTMENT_ID) &&
-              parseInt(a.SUB_DEPARTMENT_ID) ==
+              parseInt(a.SUB_DEPARTMENT_ID) ===
                 parseInt(props.personChild.SUB_DEPARTMENT_ID)
           )
         );
       } else if (
-        props.personChild.COMPARTMENT_ID != "null" &&
-        props.personChild.COMPARTMENT_ID != ""
+        props.personChild.COMPARTMENT_ID !== "null" &&
+        props.personChild.COMPARTMENT_ID !== ""
       ) {
         loadData(
           listItems.data?.filter(
@@ -868,7 +833,7 @@ function Position(props) {
           )
         );
       } else {
-        console.log("positionEnd", props);
+        //console.log("positionEnd", props);
         loadData(
           listItems.data?.filter(
             (a) =>
@@ -918,9 +883,7 @@ function Salarytype(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/salarytype"
-      );
+      let listItems = await axios(hrUrl + "/library/salarytype");
       loadData(listItems.data);
     }
     fetchData();
@@ -963,9 +926,7 @@ function Decisiontype(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/decisiontype"
-      );
+      let listItems = await axios(hrUrl + "/library/decisiontype");
       loadData(listItems.data);
     }
     fetchData();
@@ -1008,9 +969,7 @@ function Positionlevel(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/positionlevel"
-      );
+      let listItems = await axios(hrUrl + "/library/positionlevel");
       loadData(listItems.data);
     }
     fetchData();
@@ -1053,9 +1012,7 @@ function Positioncategorytype(props) {
 
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/positioncategorytype"
-      );
+      let listItems = await axios(hrUrl + "/library/positioncategorytype");
       loadData(listItems.data);
     }
     fetchData();
@@ -1100,9 +1057,7 @@ function Positioncategory(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/positioncategory"
-      );
+      let listItems = await axios(hrUrl + "/library/positioncategory");
       if (
         props.personChild.POSITION_CATEGORY_TYPE_ID !== null &&
         props.personChild.POSITION_CATEGORY_TYPE_ID !== ""
@@ -1202,7 +1157,6 @@ function DateInputArray(props) {
   if (dateShow !== undefined) {
     listItems = (
       <input
-        className=""
         type="date"
         id="start"
         disabled={props.edit}
@@ -1225,9 +1179,7 @@ function Positionorder(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/positionorder"
-      );
+      let listItems = await axios(hrUrl + "/library/positionorder");
       loadData(listItems.data);
     }
     fetchData();
@@ -1269,9 +1221,7 @@ function Profession(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/profession"
-      );
+      let listItems = await axios(hrUrl + "/library/profession");
       loadData(listItems.data);
     }
     fetchData();
@@ -1317,9 +1267,7 @@ function Reasonsposition(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/reasonsposition"
-      );
+      let listItems = await axios(hrUrl + "/library/reasonsposition");
       loadData(listItems.data);
     }
     fetchData();
@@ -1361,9 +1309,7 @@ function Reasonsdecision(props) {
   const [data, loadData] = useState(null);
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/library/reasonsdecision"
-      );
+      let listItems = await axios(hrUrl + "/library/reasonsdecision");
       loadData(listItems.data);
     }
     fetchData();

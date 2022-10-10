@@ -3,6 +3,7 @@ import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 import { Add, Delete } from "../assets/images/zurag";
 import { Office, Positioncategorytype } from "./library";
+import hrUrl from "../hrUrl";
 
 const axios = require("axios");
 var dateFormat = require("dateformat");
@@ -14,9 +15,7 @@ function Turshlgin(props) {
   const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/Experience/" + props.person_id
-      );
+      let listItems = await axios(hrUrl + "/Experience/" + props.person_id);
       console.log(listItems, "turshlaga");
       loadData({
         Experience: listItems?.data?.Experience.sort(function sortFunction(
@@ -67,14 +66,12 @@ function Turshlgin(props) {
       let message = 0;
 
       if (newRow?.length > 0) {
-        console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/experience/",
+          url: hrUrl + "/experience/",
           method: "POST",
           data: { experience: newRow },
         })
           .then(function (response) {
-            console.log("UpdateResponse", response);
             if (response?.data?.message === "success") {
               message = 1;
               if (message !== 2) alert.show("амжилттай хадгаллаа");
@@ -89,21 +86,18 @@ function Turshlgin(props) {
           })
           .catch(function (error) {
             //alert(error.response.data.error.message);
-            console.log(error.response);
             alert.show("Системийн алдаа");
             setEdit(!edit);
             props.loading(false);
           });
       }
       if (oldRow?.length > 0) {
-        console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/experience/",
+          url: hrUrl + "/experience/",
           method: "PUT",
           data: { experience: oldRow },
         })
           .then(function (response) {
-            console.log("UpdateResponse", response);
             if (response?.data?.message === "success") {
               message = 2;
               //history.push('/sample')
@@ -127,11 +121,6 @@ function Turshlgin(props) {
     } else {
       props.loading(false);
     }
-  }
-  function setExperience(value) {
-    let arr = data.Experience;
-    arr[value.index] = value;
-    loadData({ Experience: arr });
   }
   function requiredField() {
     for (let i = 0; i < data.Experience.length; i++) {
@@ -187,10 +176,9 @@ function Turshlgin(props) {
     await loadData({ Experience: value });
   }
   function removeRow(indexParam, value) {
-    console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/experienceDelete",
+        url: hrUrl + "/experienceDelete",
         method: "POST",
         data: {
           experience: {
@@ -204,7 +192,6 @@ function Turshlgin(props) {
         },
       })
         .then(function (response) {
-          console.log("deleteResponse", response);
           //history.push('/sample')
           if (response?.data?.message === "success") {
             alert.show("амжилттай устлаа");
@@ -226,13 +213,6 @@ function Turshlgin(props) {
   function setOfficeId(value) {
     let temp = [...data?.Experience];
     temp[value.index].OFFICE_ID = value.OFFICE_ID;
-    temp[value.index].UPDATED_BY = userDetils?.USER_ID;
-    temp[value.index].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
-    loadData({ Experience: temp });
-  }
-  function setSubOfficeId(value) {
-    let temp = [...data?.Experience];
-    temp[value.index].SUB_OFFICE_ID = value.SUB_OFFICE_ID;
     temp[value.index].UPDATED_BY = userDetils?.USER_ID;
     temp[value.index].UPDATED_DATE = dateFormat(new Date(), "dd-mmm-yy");
     loadData({ Experience: temp });

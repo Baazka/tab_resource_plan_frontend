@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
+import hrUrl from "../hrUrl";
 
 const axios = require("axios");
 var dateFormat = require("dateformat");
@@ -12,9 +13,7 @@ function TsergiinAlba(props) {
   const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/force/" + props.person_id
-      );
+      let listItems = await axios(hrUrl + "/force/" + props.person_id);
 
       if (
         listItems?.data?.Force !== undefined &&
@@ -68,7 +67,7 @@ function TsergiinAlba(props) {
     if (requiredField(data) === true) {
       if (data.Force[0].ROWTYPE === "NEW") {
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/force/",
+          url: hrUrl + "/force/",
           method: "POST",
           data: { force: data.Force[0] },
         })
@@ -94,7 +93,7 @@ function TsergiinAlba(props) {
           });
       } else {
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/force/",
+          url: hrUrl + "/force/",
           method: "PUT",
           data: { force: data.Force[0] },
         })

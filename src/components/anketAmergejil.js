@@ -3,6 +3,7 @@ import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 import { Subfametype, Fametype } from "./library";
 import { Add, Delete } from "../assets/images/zurag";
+import hrUrl from "../hrUrl";
 const axios = require("axios");
 var dateFormat = require("dateformat");
 
@@ -13,9 +14,7 @@ function Mergeshliin(props) {
   const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/profession/" + props.person_id
-      );
+      let listItems = await axios(hrUrl + "/profession/" + props.person_id);
       console.log(listItems, "Tangarag");
       loadData(listItems?.data);
     }
@@ -35,7 +34,7 @@ function Mergeshliin(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Profession/",
+          url: hrUrl + "/Profession/",
           method: "POST",
           data: { profession: newRow },
         })
@@ -64,7 +63,7 @@ function Mergeshliin(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/Profession/",
+          url: hrUrl + "/Profession/",
           method: "PUT",
           data: { profession: oldRow },
         })
@@ -188,7 +187,7 @@ function Mergeshliin(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/ProfessionDelete",
+        url: hrUrl + "/ProfessionDelete",
         method: "POST",
         data: {
           profession: {
@@ -326,6 +325,7 @@ function Mergeshliin(props) {
                             width="30px"
                             height="30px"
                             onClick={() => addRow()}
+                            alt=""
                           />
                           <input
                             style={{ width: "30px", visibility: "hidden" }}
@@ -535,6 +535,7 @@ function Mergeshliin(props) {
                               width="30px"
                               height="30px"
                               onClick={() => removeRow(index, value)}
+                              alt=""
                             />
                             <input
                               style={{ width: "30px", visibility: "hidden" }}
@@ -582,9 +583,7 @@ function ZeregTsol(props) {
 
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/Fame/" + props.person_id
-      );
+      let listItems = await axios(hrUrl + "/Fame/" + props.person_id);
       console.log(listItems, "Tangarag");
       loadData(listItems?.data);
     }
@@ -626,7 +625,7 @@ function ZeregTsol(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/fame/",
+          url: hrUrl + "/fame/",
           method: "POST",
           data: { fame: newRow },
         })
@@ -655,7 +654,7 @@ function ZeregTsol(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/fame/",
+          url: hrUrl + "/fame/",
           method: "PUT",
           data: { fame: oldRow },
         })
@@ -729,7 +728,7 @@ function ZeregTsol(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/FameDelete",
+        url: hrUrl + "/FameDelete",
         method: "POST",
         data: {
           fame: {
@@ -832,6 +831,7 @@ function ZeregTsol(props) {
                         width="30px"
                         height="30px"
                         onClick={() => addRow()}
+                        alt=""
                       />
                     </td>
                   ) : null}
@@ -932,6 +932,7 @@ function ZeregTsol(props) {
                           width="30px"
                           height="30px"
                           onClick={() => removeRow(index, value)}
+                          alt=""
                         />
                       </td>
                     ) : null}

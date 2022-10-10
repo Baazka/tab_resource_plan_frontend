@@ -17,15 +17,13 @@ import {
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
-import dateFormat from "dateformat";
 import { css } from "@emotion/react";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import AnketAPrint from "./AnketAPrint";
 import { DepartmentID, Subdepartment } from "../components/library";
 
 import { useReactToPrint } from "react-to-print";
-
-const axios = require("axios");
+import hrUrl from "../hrUrl";
 
 class ComponentToPrint extends React.PureComponent {
   render() {
@@ -121,7 +119,7 @@ function Home(props) {
   async function unActive() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/employees",
+      url: hrUrl + "/employees",
       // /0/" +
       // userDetils?.USER_DEPARTMENT_ID +
       // "/" +
@@ -144,7 +142,7 @@ function Home(props) {
   async function Active() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/employees",
+      url: hrUrl + "/employees",
       method: "POST",
       data: {
         IS_ACTIVE: 1,
@@ -163,7 +161,7 @@ function Home(props) {
   async function newPeople() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/person/1/",
+      url: hrUrl + "/person/1/",
       method: "GET",
       data: {},
     });
@@ -175,11 +173,11 @@ function Home(props) {
   }
   async function fetchData() {
     if (
-      props.match?.params != undefined &&
+      props.match?.params !== undefined &&
       JSON.parse(props.match?.params?.search)?.buttonValue === 2
     ) {
       let jagsaalts = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/employees",
+        url: hrUrl + "/employees",
 
         method: "POST",
         data: {
@@ -194,8 +192,8 @@ function Home(props) {
       setLoading(false);
       setButtonValue(2);
       if (
-        props.match.params.search != undefined &&
-        props.match.params.search != "null"
+        props.match.params.search !== undefined &&
+        props.match.params.search !== "null"
       ) {
         let ob = JSON.parse(props.match.params.search);
 
@@ -204,11 +202,11 @@ function Home(props) {
       }
       console.log(jagsaalts);
     } else if (
-      props.match?.params != undefined &&
+      props.match?.params !== undefined &&
       JSON.parse(props.match?.params?.search)?.buttonValue === 3
     ) {
       let jagsaalts = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/person/1/",
+        url: hrUrl + "/person/1/",
         method: "GET",
         data: {},
       });
@@ -217,8 +215,8 @@ function Home(props) {
       setLoading(false);
       setButtonValue(3);
       if (
-        props.match.params.search != undefined &&
-        props.match.params.search != "null"
+        props.match.params.search !== undefined &&
+        props.match.params.search !== "null"
       ) {
         let ob = JSON.parse(props.match?.params.search);
 
@@ -228,7 +226,7 @@ function Home(props) {
       console.log(jagsaalts);
     } else {
       let jagsaalts = await DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/employees",
+        url: hrUrl + "/employees",
         method: "POST",
         data: {
           IS_ACTIVE: 1,
@@ -242,8 +240,8 @@ function Home(props) {
         setJagsaalt(jagsaalts?.data);
 
         if (
-          props.match?.params.search != undefined &&
-          props.match?.params.search != "null"
+          props.match?.params.search !== undefined &&
+          props.match?.params.search !== "null"
         ) {
           let ob = JSON.parse(props.match.params.search);
 
@@ -296,7 +294,7 @@ function Home(props) {
   async function subDepartmentSearch(value) {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/employees",
+      url: hrUrl + "/employees",
       method: "POST",
       data: {
         IS_ACTIVE: buttonValue === 1 ? 1 : 0,
@@ -322,7 +320,7 @@ function Home(props) {
   async function departmentSearch(value) {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/employees",
+      url: hrUrl + "/employees",
       method: "POST",
       data: {
         IS_ACTIVE: buttonValue === 1 ? 1 : 0,
@@ -371,7 +369,7 @@ function Home(props) {
   }
 
   async function anketANew() {
-    if (localStorage?.getItem("person_id") != undefined) {
+    if (localStorage?.getItem("person_id") !== undefined) {
       localStorage.removeItem("person_id");
     }
     localStorage.setItem(
@@ -390,14 +388,14 @@ function Home(props) {
   }
 
   function makeSearch(value, list, stype) {
-    console.log(value, "found");
-    console.log(list, "found");
-    console.log(stype, "stype");
+    // console.log(value, "found");
+    // console.log(list, "found");
+    // console.log(stype, "stype");
 
-    console.log(
-      "filteredValue",
-      list?.filter((obj) => equalStr(obj[searchType], value))
-    );
+    // console.log(
+    //   "filteredValue",
+    //   list?.filter((obj) => equalStr(obj[searchType], value))
+    // );
     setFound(list?.filter((obj) => equalStr(obj[stype], value)));
     setSearch(value);
   }
@@ -418,7 +416,7 @@ function Home(props) {
         )
           return true;
       } else if (value1.includes(value2)) {
-        console.log(true, "sonin");
+        //console.log(true, "sonin");
         return true;
       }
     return false;
@@ -426,7 +424,7 @@ function Home(props) {
   useEffect(() => {
     if (print.print !== 0) {
       window.setTimeout(handlePrint(), 3000);
-      console.log("itworket", print);
+      //console.log("itworket", print);
     }
   }, [print]);
 
@@ -498,7 +496,7 @@ function Home(props) {
                     setPrint({
                       print: 1,
                       person_ID:
-                        row?.EMP_PERSON_ID != undefined &&
+                        row?.EMP_PERSON_ID !== undefined &&
                         row?.EMP_PERSON_ID !== null
                           ? row?.EMP_PERSON_ID
                           : row?.PERSON_ID,
@@ -640,7 +638,7 @@ function Home(props) {
                     setPrint({
                       print: 1,
                       person_ID:
-                        row?.EMP_PERSON_ID != undefined &&
+                        row?.EMP_PERSON_ID !== undefined &&
                         row?.EMP_PERSON_ID !== null
                           ? row?.EMP_PERSON_ID
                           : row?.PERSON_ID,
@@ -657,44 +655,6 @@ function Home(props) {
           },
         ];
 
-  const columnsReactTable = React.useMemo(() => [
-    {
-      Header: "Төрийн аудитын байгууллага",
-      accessor: "DEPARTMENT_NAME",
-    },
-    {
-      Header: "Харъяа газар",
-      accessor: "SUB_DEPARTMENT_NAME",
-    },
-    {
-      Header: "Дотоод бүтцийн нэгж",
-      accessor: "COMPARTMENT_NAME",
-    },
-    {
-      Header: "Албан тушаалын нэр",
-      accessor: "POSITION_NAME",
-    },
-    {
-      Header: "Ажилтны нэр",
-      accessor: "PERSON_FIRSTNAME",
-    },
-    {
-      Header: "Ажилтны овог",
-      accessor: "PERSON_LASTNAME",
-    },
-    {
-      Header: "Утасны дугаар",
-      accessor: "PERSON_PHONE",
-    },
-    {
-      Header: "Имэйл",
-      accessor: "PERSON_EMAIL",
-    },
-  ]);
-
-  // const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-  //   useTable({ columns, jagsaalt });
-
   return (
     <div
       style={{
@@ -707,7 +667,6 @@ function Home(props) {
       <div
         style={{
           position: "absolute",
-          left: "20%",
           width: "50%",
           left: "7%",
           zIndex: 1,
@@ -951,9 +910,9 @@ function Home(props) {
               </span> */}
             </div>
 
-            <div class="control has-icons-left has-icons-right">
+            <div className="control has-icons-left has-icons-right">
               <input
-                class="input is-small is-gray"
+                className="input is-small is-gray"
                 type="email"
                 placeholder="хайлт хийх утгаа оруулна уу"
                 value={search}
@@ -966,15 +925,15 @@ function Home(props) {
                 }}
               />
 
-              <span class="icon is-small is-right">
+              <span className="icon is-small is-right">
                 <img alt="" src={Search} />
               </span>
-              <span class="icon is-small is-right"></span>
+              <span className="icon is-small is-right"></span>
             </div>
 
             {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
               <button
-                class="text"
+                className="text"
                 style={{
                   marginLeft: "1%",
                   borderRadius: "5px",
@@ -988,14 +947,15 @@ function Home(props) {
               >
                 {" "}
                 <span style={{ display: "flex", paddingRight: "22px" }}>
-                  <img src={AddBlue} width="20px" height="20px "></img>Нэмэх
+                  <img src={AddBlue} width="20px" height="20px " alt="" />
+                  Нэмэх
                 </span>
               </button>
             )}
 
             {buttonValue === 1 ? (
               <button
-                class="text"
+                className="text"
                 style={{
                   marginLeft: "1%",
                   borderRadius: "5px",
@@ -1006,7 +966,8 @@ function Home(props) {
                 onClick={() => document.getElementById("emergencyXLS").click()}
               >
                 <span style={{ display: "flex", paddingRight: "22px" }}>
-                  <img src={Excel} width="20px" height="20px "></img>Excel
+                  <image src={Excel} width="20px" height="20px " />
+                  Excel
                 </span>
               </button>
             ) : null}
@@ -1014,6 +975,7 @@ function Home(props) {
           </div>
         </div>
         <iframe
+          title="title"
           id="ifmcontentstoprint"
           style={{
             height: "0px",
@@ -1077,10 +1039,8 @@ function Home(props) {
                       src={
                         value.FILE_PATH !== undefined &&
                         value.FILE_PATH !== null
-                          ? "http://hr.audit.mn/hr/api/v1/".replace(
-                              "api/v1/",
-                              ""
-                            ) +
+                          ? hrUrl +
+                            "/".replace("api/v1/", "") +
                             "static" +
                             value?.FILE_PATH.replace("uploads", "")
                           : value.PERSON_GENDER === "1"

@@ -174,6 +174,7 @@ const SideBar = (props) => {
                       src={menuClick.menu0 ? Dashboard : DashboardW}
                       width="40"
                       height="30"
+                      alt=""
                     />
                     <p
                       className="MenuText"
@@ -194,6 +195,7 @@ const SideBar = (props) => {
                       src={menuClick.menu1 ? UserB : User}
                       width="40"
                       height="30"
+                      alt=""
                     />
                     <p
                       className="MenuText"
@@ -215,6 +217,7 @@ const SideBar = (props) => {
                         src={menuClick.menu2 ? GroupB : Group}
                         width="40"
                         height="30"
+                        alt=""
                       />
                       <p
                         className="MenuText"
@@ -222,7 +225,6 @@ const SideBar = (props) => {
                           color: `${menuClick.menu2 ? "#418ee6" : "white"}`,
                         }}
                       >
-                        {" "}
                         Байгууллагын бүтцийн бүртгэл
                       </p>
                     </div>
@@ -238,6 +240,7 @@ const SideBar = (props) => {
                         src={menuClick.menu3 ? BagB : Bag}
                         width="40"
                         height="30"
+                        alt=""
                       />
                       <p
                         className="MenuText"
@@ -245,7 +248,6 @@ const SideBar = (props) => {
                           color: `${menuClick.menu3 ? "#418ee6" : "white"}`,
                         }}
                       >
-                        {" "}
                         Албан тушаалын бүртгэл
                       </p>
                     </div>
@@ -260,6 +262,7 @@ const SideBar = (props) => {
                       src={menuClick.menu4 ? DocumentsB : Documents}
                       width="40"
                       height="30"
+                      alt=""
                     />
                     <p
                       className="MenuText"
@@ -267,7 +270,6 @@ const SideBar = (props) => {
                         color: `${menuClick.menu4 ? "#418ee6" : "white"}`,
                       }}
                     >
-                      {" "}
                       Шийдвэр, тушаалын бүртгэл
                     </p>
                   </div>
@@ -282,6 +284,7 @@ const SideBar = (props) => {
                         src={menuClick.menu5 ? TailanB : Tailan}
                         width="40"
                         height="30"
+                        alt=""
                       />
                       <p
                         className="MenuText"
@@ -289,7 +292,6 @@ const SideBar = (props) => {
                           color: `${menuClick.menu5 ? "#418ee6" : "white"}`,
                         }}
                       >
-                        {" "}
                         Судалгаа
                       </p>
                     </div>
@@ -305,6 +307,7 @@ const SideBar = (props) => {
                       src={menuClick.menu10 ? BagB : Bag}
                       width="40"
                       height="30"
+                      alt=""
                     />
                     <p
                       className="MenuText"
@@ -312,7 +315,6 @@ const SideBar = (props) => {
                         color: `${menuClick.menu10 ? "#418ee6" : "white"}`,
                       }}
                     >
-                      {" "}
                       Ахмадын бүртгэл
                     </p>
                   </div>

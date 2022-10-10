@@ -45,6 +45,7 @@ import { useHistory } from "react-router-dom";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import override from "../css/override";
 import AvatarEditor from "react-avatar-editor";
+import hrUrl from "../hrUrl";
 
 var dateFormat = require("dateformat");
 
@@ -82,11 +83,6 @@ function AnketNeg(props) {
     setEditTypes({ ...editTypes, scale });
   }
 
-  function rotateScale(e) {
-    e.preventDefault();
-    setEditTypes({ ...editTypes, ...{ rotate: parseFloat(e.target.value) } });
-  }
-
   function rotateLeft(e) {
     e.preventDefault();
 
@@ -120,7 +116,7 @@ function AnketNeg(props) {
 
   function DeleteAvatar() {
     DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/" + "avatar",
+      url: hrUrl + "/" + "avatar",
       method: "POST",
       data: avatar,
       headers: {
@@ -210,14 +206,16 @@ function AnketNeg(props) {
           JSON.parse(localStorage.getItem("personDetail")).type === "employ"
         ) {
           let listItems = await axios(
-            "http://hr.audit.mn/hr/api/v1/person/0/" +
+            hrUrl +
+              "/person/0/" +
               JSON.parse(localStorage.getItem("personDetail")).person_id
           );
           console.log("amjilttai", listItems.data);
           loadData(listItems?.data);
           setLoading(false);
           let avatarImg = await axios(
-            "http://hr.audit.mn/hr/api/v1/avatar/" +
+            hrUrl +
+              "/avatar/" +
               JSON.parse(localStorage.getItem("personDetail")).person_id
           );
           if (avatarImg.data !== undefined && avatarImg.data.length > 0)
@@ -226,7 +224,8 @@ function AnketNeg(props) {
           JSON.parse(localStorage.getItem("personDetail")).type === "newPerson"
         ) {
           let listItems = await axios(
-            "http://hr.audit.mn/hr/api/v1/person/1/" +
+            hrUrl +
+              "/person/1/" +
               JSON.parse(localStorage.getItem("personDetail")).person_id
           );
           console.log("amjilttai", listItems.data);
@@ -248,7 +247,7 @@ function AnketNeg(props) {
           JSON.parse(localStorage.getItem("personDetail")).person_id === "0"
         ) {
           DataRequest({
-            url: "http://hr.audit.mn/hr/api/v1/person/",
+            url: hrUrl + "/person/",
             method: "post",
             data: { person: data },
           })
@@ -284,7 +283,7 @@ function AnketNeg(props) {
             });
         } else {
           DataRequest({
-            url: "http://hr.audit.mn/hr/api/v1/updatePerson/",
+            url: hrUrl + "/updatePerson/",
             method: "post",
             data: { person: data },
           })
@@ -451,7 +450,7 @@ function AnketNeg(props) {
                       dataURLtoFile(canvasScaled, avatarImg.originalname)
                     );
                     DataRequest({
-                      url: "http://hr.audit.mn/hr/api/v1/" + "fileUpload",
+                      url: hrUrl + "/" + "fileUpload",
                       method: "POST",
                       data: formData,
                       headers: {
@@ -492,7 +491,8 @@ function AnketNeg(props) {
                 <img
                   src={
                     avatar.FILE_PATH !== undefined && avatar.FILE_PATH !== null
-                      ? "http://hr.audit.mn/hr/api/v1/".replace("api/v1/", "") +
+                      ? hrUrl +
+                        "/".replace("api/v1/", "") +
                         "static" +
                         avatar?.FILE_PATH.replace("uploads", "")
                       : AvatarB
@@ -602,6 +602,7 @@ function AnketNeg(props) {
                     src={menu === 2 ? BlueKhoyor : BlackKhoyor}
                     width="45px"
                     height="45px"
+                    alt=""
                   />
                   <button
                     className="button"
@@ -651,6 +652,7 @@ function AnketNeg(props) {
                     src={menu === 4 ? BlueDuruv : BlackDuruv}
                     width="45px"
                     height="45px"
+                    alt=""
                   />
                   <button
                     className="button"
@@ -675,6 +677,7 @@ function AnketNeg(props) {
                     src={menu === 5 ? BlueTav : BlackTav}
                     width="45px"
                     height="45px"
+                    alt=""
                   />
                   <button
                     className="button"
@@ -698,6 +701,7 @@ function AnketNeg(props) {
                     src={menu === 6 ? BlueZurgaa : BlackZurgaa}
                     width="45px"
                     height="45px"
+                    alt=""
                   />
                   <button
                     className="button"
@@ -722,6 +726,7 @@ function AnketNeg(props) {
                     src={menu === 7 ? BlueDoloo : BlackDoloo}
                     width="45px"
                     height="45px"
+                    alt=""
                   />
                   <button
                     className="button"
@@ -746,6 +751,7 @@ function AnketNeg(props) {
                     src={menu === 8 ? BlueNaim : BlackNaim}
                     width="45px"
                     height="45px"
+                    alt=""
                   />
                   <button
                     className="button"
@@ -905,8 +911,6 @@ function AnketNeg(props) {
 }
 
 function Yrunkhii(props) {
-  const alert = useAlert();
-  const [data, loadData] = useState();
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [register, setRegister] = useState(0);
   const cyrillicPattern = /^[\u0400-\u04FF]+$/;
@@ -915,7 +919,7 @@ function Yrunkhii(props) {
     console.log(registerT, "registerTT");
     let listItems = await axios({
       method: "POST",
-      url: "http://hr.audit.mn/hr/api/v1/personNoCheck",
+      url: hrUrl + "/personNoCheck",
       headers: {
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/json",
@@ -1201,7 +1205,6 @@ function Yrunkhii(props) {
             {register > 0 || register === false ? (
               <button
                 style={{
-                  border: "none",
                   fontFamily: "RalewayRegular",
                   border: "#418ee6",
                   borderRadius: "5px",
@@ -1236,7 +1239,8 @@ function Kayag(props) {
           JSON.parse(localStorage.getItem("personDetail")).type === "employ"
         ) {
           let listItems = await axios(
-            "http://hr.audit.mn/hr/api/v1/person/0/" +
+            hrUrl +
+              "/person/0/" +
               JSON.parse(localStorage.getItem("personDetail")).person_id
           );
           console.log("amjilttai", listItems.data);
@@ -1245,7 +1249,8 @@ function Kayag(props) {
           JSON.parse(localStorage.getItem("personDetail")).type === "newPerson"
         ) {
           let listItems = await axios(
-            "http://hr.audit.mn/hr/api/v1/person/1/" +
+            hrUrl +
+              "/person/1/" +
               JSON.parse(localStorage.getItem("personDetail")).person_id
           );
           console.log("amjilttai", listItems.data);
@@ -1295,7 +1300,7 @@ function Kayag(props) {
     if (requiredField() === true) {
       console.log("test", person);
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/updatePersonAddress/",
+        url: hrUrl + "/updatePersonAddress/",
         method: "post",
         data: { person: person },
       })
@@ -1461,7 +1466,6 @@ function Kayag(props) {
             <em className="utas m-3">Утасны дугаар:</em>
             <input
               className="anketInput"
-              placeholder="утгаа оруулна уу"
               disabled={edit}
               value={person?.PERSON_PHONE}
               placeholder="Утас1"
@@ -1474,7 +1478,6 @@ function Kayag(props) {
             />
             <input
               className="anketInput"
-              placeholder="утгаа оруулна уу"
               disabled={edit}
               value={person?.PERSON_PHONE2}
               placeholder="Утас2"
@@ -1488,7 +1491,6 @@ function Kayag(props) {
             <em className="mail ml-1 m-3">И-мэйл хаяг:</em>
             <input
               className="anketInput"
-              placeholder="утгаа оруулна уу"
               disabled={edit}
               value={person?.PERSON_EMAIL}
               placeholder="И-мэйл хаяг1"
@@ -1500,7 +1502,6 @@ function Kayag(props) {
               }
             />
             <input
-              placeholder="утгаа оруулна уу"
               className="anketInput"
               disabled={edit}
               style={{ marginLeft: "10px" }}
@@ -1548,10 +1549,8 @@ function HolbooBarikhHun(props) {
 
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/emergency/" + props.person_id
-      );
-      console.log("emergency", listItems?.data?.Emergency);
+      let listItems = await axios(hrUrl + "/emergency/" + props.person_id);
+      //console.log("emergency", listItems?.data?.Emergency);
       setEmergency(listItems?.data?.Emergency);
     }
     fetchData();
@@ -1599,7 +1598,7 @@ function HolbooBarikhHun(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/emergencyDelete",
+        url: hrUrl + "/emergencyDelete",
         method: "POST",
         data: {
           emergency: {
@@ -1613,7 +1612,6 @@ function HolbooBarikhHun(props) {
         },
       })
         .then(function (response) {
-          console.log("UpdateResponse", response);
           //history.push('/sample')
           if (response?.data?.message === "success") {
             alert.show("амжилттай устлаа");
@@ -1622,7 +1620,6 @@ function HolbooBarikhHun(props) {
         })
         .catch(function (error) {
           //alert(error.response.data.error.message);
-          console.log(error.response);
           alert.show("aldaa");
         });
     }
@@ -1668,9 +1665,8 @@ function HolbooBarikhHun(props) {
       let message = 0;
 
       if (newRow?.length > 0) {
-        console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/emergency/",
+          url: hrUrl + "/emergency/",
           method: "POST",
           data: { emergency: newRow },
         })
@@ -1699,7 +1695,7 @@ function HolbooBarikhHun(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/emergency/",
+          url: hrUrl + "/emergency/",
           method: "PUT",
           data: { emergency: oldRow },
         })
@@ -1784,6 +1780,7 @@ function HolbooBarikhHun(props) {
                         width="30px"
                         height="30px"
                         onClick={() => addRowKholbooBarikh()}
+                        alt=""
                       />
                       <input
                         style={{ width: "40px", visibility: "hidden" }}
@@ -1873,6 +1870,7 @@ function HolbooBarikhHun(props) {
                           width="30px"
                           height="30px"
                           onClick={() => removeEmergency(index, value)}
+                          alt=""
                         />
                         <input
                           style={{ width: "30px", visibility: "hidden" }}
@@ -1922,9 +1920,7 @@ function GerBul(props) {
 
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/family/" + props.person_id
-      );
+      let listItems = await axios(hrUrl + "/family/" + props.person_id);
       console.log("listItems.data.Family?", listItems.data.Family);
       // listItems.data.Family?.map((value, index) => {
       //   listItems.data.Family[index].MEMBER_BIRTHDATE = new Date(
@@ -2080,7 +2076,7 @@ function GerBul(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/familyDelete",
+        url: hrUrl + "/familyDelete",
         method: "POST",
         data: {
           family: {
@@ -2114,7 +2110,7 @@ function GerBul(props) {
     console.log(indexParam, "index");
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/familyDelete",
+        url: hrUrl + "/familyDelete",
         method: "POST",
         data: {
           family: {
@@ -2159,7 +2155,7 @@ function GerBul(props) {
 
       if (newRow?.length > 0) {
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/family/",
+          url: hrUrl + "/family/",
           method: "POST",
           data: { family: newRow },
         })
@@ -2188,7 +2184,7 @@ function GerBul(props) {
       if (oldRow?.length > 0) {
         console.log("updateGerBul.", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/family/",
+          url: hrUrl + "/family/",
           method: "PUT",
           data: { family: oldRow },
         })
@@ -2318,6 +2314,7 @@ function GerBul(props) {
                           width="`15px"
                           height="15px"
                           onClick={() => addRowFamily()}
+                          alt=""
                         />
                       </div>
                     </td>
@@ -2393,7 +2390,7 @@ function GerBul(props) {
                         className="anketInputWidth"
                         value={value.MEMBER_BIRTHDATE}
                         onChange={(e) => {
-                          if (e.target.value != "") {
+                          if (e.target.value !== "") {
                             console.log("testInput", e.target.value);
                             if (parseInt(e.target.value) <= parseInt(2100)) {
                               family[index].MEMBER_BIRTHDATE = e.target.value;
@@ -2486,6 +2483,7 @@ function GerBul(props) {
                           width="30px"
                           height="30px"
                           onClick={() => removeFamily(index, value)}
+                          alt=""
                         />
                         <input
                           style={{ width: "30px", visibility: "hidden" }}
@@ -2555,6 +2553,7 @@ function GerBul(props) {
                           width="`30px"
                           height="30px"
                           onClick={() => addRowFamily2()}
+                          alt=""
                         />
                       </div>
                     </td>
@@ -2572,11 +2571,9 @@ function GerBul(props) {
                 {family2?.map((value, index) => (
                   <tr>
                     <td>
-                      {" "}
                       <span className="textSaaral">{index + 1}</span>
                     </td>
                     <td>
-                      {" "}
                       <FamilyArray
                         personChild={value}
                         setPersonChild={setFamily2}
@@ -2632,7 +2629,7 @@ function GerBul(props) {
                         className="anketInputWidth"
                         value={value.MEMBER_BIRTHDATE}
                         onChange={(e) => {
-                          if (e.target.value != "") {
+                          if (e.target.value !== "") {
                             if (parseInt(e.target.value) <= parseInt(2100)) {
                               family2[index].MEMBER_BIRTHDATE = e.target.value;
                               family2[index].UPDATED_BY = userDetils?.USER_ID;
@@ -2725,6 +2722,7 @@ function GerBul(props) {
                           width="40px"
                           height="40px"
                           onClick={() => removeFamily2(index, value)}
+                          alt=""
                         />
                       </td>
                     ) : null}

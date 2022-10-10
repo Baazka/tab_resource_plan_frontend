@@ -1,11 +1,7 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import React from "react";
 import Iframe from "react-iframe";
 
-const Dashboard = (props) => {
-  const history = useHistory();
-  const [jagsaalt, setJagsaalt] = useState();
-
+const Dashboard = () => {
   return (
     <div>
       {/* <Header title="Дашбоард" /> */}

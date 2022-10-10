@@ -8,6 +8,7 @@ import { Search, AddBlue, Excel, Delete, Edit } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { Reasonsposition } from "../components/library";
+import hrUrl from "../hrUrl";
 const axios = require("axios");
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -58,15 +59,7 @@ const customStyles = {
   },
 };
 
-const ButtonsColumn = ({
-  row,
-  setJagsaalt,
-  jagsaalt,
-  setTushaal,
-  search,
-  setTsonkh,
-  buttonValue,
-}) => {
+const ButtonsColumn = ({ row, search, setTsonkh, buttonValue }) => {
   const history = useHistory();
   function deleteAlbanTushaal() {
     setTsonkh({ ustgakh: true, POSITION_ID: row?.POSITION_ID });
@@ -146,7 +139,7 @@ const AlbanTushaal = (props) => {
     async function test() {
       if (JSON.parse(props.match.params.search)?.buttonValue === 2) {
         let jagsaalts = await DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/position/0/",
+          url: hrUrl + "/position/0/",
           method: "GET",
           data: {},
         });
@@ -160,10 +153,10 @@ const AlbanTushaal = (props) => {
           setSearchType(ob.searchType);
           makeSearch(ob.search, jagsaalts?.data, ob.searchType);
         }
-        console.log(jagsaalts);
+        //console.log(jagsaalts);
       } else {
         let jagsaalts = await DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/position/1/",
+          url: hrUrl + "/position/1/",
           method: "GET",
           data: {},
         });
@@ -176,15 +169,13 @@ const AlbanTushaal = (props) => {
           setSearchType(ob.searchType);
           makeSearch(ob.search, jagsaalts?.data, ob.searchType);
         }
-        console.log(jagsaalts);
       }
     }
     test();
-    console.log("jagsaalt", jagsaalt);
   }, [props]);
   async function unActive() {
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/position/0/",
+      url: hrUrl + "/position/0/",
       method: "GET",
       data: {},
     });
@@ -193,7 +184,7 @@ const AlbanTushaal = (props) => {
   }
   async function Active() {
     let jagsaalts = await DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/position/1/",
+      url: hrUrl + "/position/1/",
       method: "GET",
       data: {},
     });
@@ -228,14 +219,14 @@ const AlbanTushaal = (props) => {
     setSearch(value);
 
     let found;
-    if (jagsaalt != undefined) {
+    if (jagsaalt !== undefined) {
       found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
     } else {
       console.log("searchjagsaalt", searchType);
       found = list?.filter((obj) => equalStr(obj[stype], value));
     }
     console.log(found);
-    if (found != undefined && found.length > 0) setFound(found);
+    if (found !== undefined && found.length > 0) setFound(found);
     else setFound([]);
   }
   function equalStr(value1, value2) {
@@ -476,7 +467,6 @@ const AlbanTushaal = (props) => {
       <div
         style={{
           position: "absolute",
-          left: "20%",
           width: "50%",
           left: "7%",
           zIndex: 1,
@@ -599,7 +589,7 @@ const AlbanTushaal = (props) => {
                 }}
               />
               <span class="icon is-small is-right">
-                <img src={Search} />
+                <img src={Search} alt="" />
               </span>
               <span class="icon is-small is-right"></span>
             </div>
@@ -617,7 +607,7 @@ const AlbanTushaal = (props) => {
             >
               {" "}
               <span style={{ display: "flex", paddingRight: "22px" }}>
-                <img src={AddBlue} width="20px" height="20px "></img>
+                <img src={AddBlue} width="20px" height="20px " alt=""></img>
                 Нэмэх
               </span>
             </button>
@@ -696,7 +686,7 @@ function EmployExcel(props) {
 
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios("http://hr.audit.mn/hr/api/v1/excelPerson/");
+      let listItems = await axios(hrUrl + "/excelPerson/");
       console.log(listItems, "tailan");
       loadData(listItems?.data);
     }
@@ -707,7 +697,7 @@ function EmployExcel(props) {
   if (data !== undefined || data.length !== 0) {
     listItems = (
       <div style={{ width: "30px", height: "30px" }}>
-        <img src={Excel} height="30px" width="30px" />
+        <img src={Excel} height="30px" width="30px" alt="" />
         <div style={{ display: "none" }}>
           <ReactHTMLTableToExcel
             id="test-table-xls-button"
@@ -798,7 +788,7 @@ function UstgakhTsonkh(props) {
       UPDATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
     });
     DataRequest({
-      url: "http://hr.audit.mn/hr/api/v1/positionDelete/",
+      url: hrUrl + "/positionDelete/",
       method: "POST",
       data: {
         POSITION_ID: props.tsonkh?.POSITION_ID,
@@ -812,7 +802,7 @@ function UstgakhTsonkh(props) {
       .then(function (response) {
         console.log("gegewgwegwegw", response);
 
-        if (response?.data?.message == "success") {
+        if (response?.data?.message === "success") {
           props.setJagsaalt(
             props.jagsaalt?.filter(
               (element, index) =>
@@ -832,7 +822,7 @@ function UstgakhTsonkh(props) {
   // useEffect(() => {
   //   async function fetchData() {
   //     let listItems = await axios(
-  //       "http://hr.audit.mn/hr/api/v1/decision/" +
+  //       hrUrl + "/decision/" +
   //         props.tushaalKharakh?.decision_ID
   //     );
 
@@ -867,7 +857,6 @@ function UstgakhTsonkh(props) {
           <span
             style={{
               fontWeight: "bold",
-              cursor: " -webkit-grab",
               cursor: "grab",
             }}
             onClick={() =>

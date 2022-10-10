@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 import { Add, Delete } from "../assets/images/zurag";
+import hrUrl from "../hrUrl";
 const axios = require("axios");
 var dateFormat = require("dateformat");
 
@@ -12,9 +13,7 @@ function Buteeliin(props) {
   const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/Literature/" + props.person_id
-      );
+      let listItems = await axios(hrUrl + "/Literature/" + props.person_id);
       console.log(listItems, "Tangarag");
       loadData(listItems?.data);
     }
@@ -53,7 +52,7 @@ function Buteeliin(props) {
       if (newRow?.length > 0) {
         console.log("insert", JSON.stringify(newRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/literature/",
+          url: hrUrl + "/literature/",
           method: "POST",
           data: { literature: newRow },
         })
@@ -82,7 +81,7 @@ function Buteeliin(props) {
       if (oldRow?.length > 0) {
         console.log("update", JSON.stringify(oldRow));
         DataRequest({
-          url: "http://hr.audit.mn/hr/api/v1/literature/",
+          url: hrUrl + "/literature/",
           method: "PUT",
           data: { literature: oldRow },
         })
@@ -159,7 +158,7 @@ function Buteeliin(props) {
   function removeRow(indexParam, value) {
     if (value?.ROWTYPE !== "NEW") {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/literatureDelete",
+        url: hrUrl + "/literatureDelete",
         method: "POST",
         data: {
           literature: {
@@ -262,6 +261,7 @@ function Buteeliin(props) {
                         width="30px"
                         height="30px"
                         onClick={() => addRow()}
+                        alt=""
                       />
                     </td>
                   ) : null}
@@ -365,6 +365,7 @@ function Buteeliin(props) {
                           width="30px"
                           height="30px"
                           onClick={() => removeRow(index, value)}
+                          alt=""
                         />
                       </td>
                     ) : null}

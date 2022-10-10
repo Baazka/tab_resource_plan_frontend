@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import DataTable, { createTheme } from "react-data-table-component";
-import { useAlert } from "react-alert";
-import { Search, Add, Delete, Eye, DocumentsB } from "../assets/images/zurag";
+import { Search, Eye, DocumentsB } from "../assets/images/zurag";
 import { DataRequest } from "../functions/DataApi";
-import { ahmad } from "../assets/images/zurag";
-var dateFormat = require("dateformat");
+import hrUrl from "../hrUrl";
 
 const axios = require("axios");
 createTheme("solarized", {
@@ -57,20 +55,17 @@ const customStyles = {
 };
 const Elders = (props) => {
   const [jagsaalt, setJagsaalt] = useState([]);
-  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [searchType, setSearchType] = useState("FIRST_NAME");
-  const [, forceRender] = useReducer((s) => s + 1, 0);
   const [found, setFound] = useState();
   const [search, setSearch] = useState("");
   const [show, setShow] = useState({ display: false, path: null });
 
   async function fetchData() {
-    let listItems = await axios("http://hr.audit.mn/hr/api/v1/elders/");
+    let listItems = await axios(hrUrl + "/elders/");
     if (listItems.data !== undefined && listItems.data.length > 0) {
       setJagsaalt([...listItems.data]);
       setSearch("");
     }
-    console.log("elders", listItems);
   }
   const columns = [
     {
@@ -148,13 +143,13 @@ const Elders = (props) => {
   function hideElder(value) {
     if (window.confirm("Мэдээлэлийг нуухдаа итгэлтэй байна уу?")) {
       DataRequest({
-        url: "http://hr.audit.mn/hr/api/v1/elders/",
+        url: hrUrl + "/elders/",
         method: "POST",
         data: value,
       })
         .then(function (response) {
           console.log("elderScroll", response);
-          if (response?.data?.message == "success") {
+          if (response?.data?.message === "success") {
             fetchData();
           }
         })
@@ -168,8 +163,8 @@ const Elders = (props) => {
   function makeSearch(value) {
     setSearch(value);
     let found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
-    console.log(found);
-    if (found != undefined && found.length > 0) setFound(found);
+
+    if (found !== undefined && found.length > 0) setFound(found);
     else setFound([]);
   }
 
@@ -315,15 +310,13 @@ function Elder(props) {
     >
       <div style={{ position: "relative" }}>
         <img
-          src={
-            "http://hr.audit.mn/hr/static/elders/" + props.show.path + ".svg"
-          }
+          src={hrUrl + "/static/elders/" + props.show.path + ".svg"}
+          alt=""
         />
         <div style={{ position: "absolute", top: "0.8rem", right: "1rem" }}>
           <span
             style={{
               fontWeight: "bold",
-              cursor: " -webkit-grab",
               cursor: "grab",
             }}
             onClick={() => props.setShow({ display: false, path: "" })}

@@ -20,7 +20,7 @@ import {
 import { useAlert } from "react-alert";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import override from "../css/override";
-import { useHistory } from "react-router-dom";
+import hrUrl from "../hrUrl";
 const axios = require("axios");
 
 var dateFormat = require("dateformat");
@@ -29,7 +29,6 @@ const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 function EmployeeInformation(props) {
   const [menu, setMenu] = useState(1);
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
   const [POSITION_ID, setPOSITION_ID] = useState();
 
   return (
@@ -403,27 +402,21 @@ function YurunkhiiMedeelel(props) {
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
 
-  const alert = useAlert();
-
   useEffect(() => {
     async function fetchData() {
-      if (data == null || data == undefined)
-        if (props?.positionId !== "undefined" && props?.positionId != null) {
-          console.log("bolohgui bn bod", props?.positionId);
+      if (data === null || data === undefined)
+        if (props?.positionId !== "undefined" && props?.positionId !== null) {
+          //console.log("bolohgui bn bod", props?.positionId);
           let listItems;
-          console.log("searchsearch", props);
+          //console.log("searchsearch", props);
           if (
-            props.search != undefined &&
+            props.search !== undefined &&
             JSON.parse(props.search)?.buttonValue === 2
           )
-            listItems = await axios(
-              "http://hr.audit.mn/hr/api/v1/position/0/" + props?.positionId
-            );
+            listItems = await axios(hrUrl + "/position/0/" + props?.positionId);
           else
-            listItems = await axios(
-              "http://hr.audit.mn/hr/api/v1/position/1/" + props?.positionId
-            );
-          console.log(listItems, "position");
+            listItems = await axios(hrUrl + "/position/1/" + props?.positionId);
+          //console.log(listItems, "position");
           loadData(listItems?.data);
           props.setPOSITION_ID(props?.positionId);
         } else if (data === "undefined" || data === null) {
@@ -458,14 +451,6 @@ function YurunkhiiMedeelel(props) {
     fetchData();
   }, [props]);
 
-  function requiredField() {
-    if (data.POSITION_NAME === null || data.POSITION_NAME === "") {
-      alert.show("Албан тушаалын нэр оруулан уу");
-      return false;
-    } else {
-      return true;
-    }
-  }
   let listItems;
   if (data !== undefined && data !== null) {
     listItems = (
@@ -649,17 +634,13 @@ function YurunkhiiMedeelel(props) {
 function TavigdahTusgai(props) {
   const [data, loadData] = useState(null);
   const [edit, setEdit] = useState(true);
-  console.log("POSITION_ID", props?.POSITION_ID);
-  const alert = useAlert();
 
   useEffect(() => {
     async function fetchData() {
-      console.log("POSITION_ID", props?.POSITION_ID);
-      if (props?.POSITION_ID !== "undefined" && props?.POSITION_ID != null) {
+      if (props?.POSITION_ID !== "undefined" && props?.POSITION_ID !== null) {
         let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/requirement/" + props?.POSITION_ID
+          hrUrl + "/requirement/" + props?.POSITION_ID
         );
-        console.log(listItems?.data, "requirement");
         loadData(listItems?.data);
       }
     }
@@ -668,7 +649,6 @@ function TavigdahTusgai(props) {
 
   useEffect(() => {
     if (data?.REQUIREMENT_ID === undefined) {
-      console.log(data?.REQUIREMENT_ID, "orsooon");
       loadData({
         REQUIREMENT_ID: 0,
         EDUCATION_TYPE_ID: 1,
@@ -685,17 +665,6 @@ function TavigdahTusgai(props) {
     }
   }, [data]);
 
-  function requiredField() {
-    if (
-      data.REQUIREMENT_EDUCATION === null ||
-      data.REQUIREMENT_EDUCATION === ""
-    ) {
-      alert.show("Боловсрол оруулан уу");
-      return false;
-    } else {
-      return true;
-    }
-  }
   let listItems;
   if (data !== undefined && data !== null) {
     listItems = (
@@ -855,7 +824,6 @@ function TavigdahTusgai(props) {
 }
 function GuitsetgeliinTuluvluguu(props) {
   const [data, loadData] = useState(null);
-  const [edit, setEdit] = useState(true);
   const alert = useAlert();
   const [NuutsiinBvrtgel, setNuutsiinBvrtgel] = useState({
     tsonkh: false,
@@ -864,10 +832,7 @@ function GuitsetgeliinTuluvluguu(props) {
 
   useEffect(() => {
     async function fetchData() {
-      let listItems = await axios(
-        "http://hr.audit.mn/hr/api/v1/contrgctor_plan"
-      );
-      console.log(listItems?.data, "getData");
+      let listItems = await axios(hrUrl + "/contrgctor_plan");
       loadData(listItems?.data);
     }
     fetchData();
@@ -875,7 +840,6 @@ function GuitsetgeliinTuluvluguu(props) {
 
   useEffect(() => {
     if (data?.REQUIREMENT_ID === undefined) {
-      console.log(data?.REQUIREMENT_ID, "orsooon");
       loadData({
         REQUIREMENT_ID: 0,
         EDUCATION_TYPE_ID: 1,
@@ -988,12 +952,6 @@ function GuitsetgeliinTuluvluguu(props) {
 }
 
 function TuluvluguUNemeh(props) {
-  const [jagsaalt, setJagsaalt] = useState();
-  const [found, setFound] = useState();
-  const [search, setSearch] = useState("");
-  const [tsonkhnuud, setTsonkhnuud] = useState(1);
-  const [worker, setWorker] = useState();
-  const alert = useAlert();
   const [data, loadData] = useState({
     ID: 0,
     MANAGER_ID: 0,
@@ -1011,9 +969,7 @@ function TuluvluguUNemeh(props) {
   });
 
   function saveToDB() {
-    console.log("depid", data);
-    // DataRequest({
-    //   url: "http://hr.audit.mn/hr/api/v1/decision",
+    //   url: hrUrl + "/decision",
     //   method: "POST",
     //   data: data,
     // })
@@ -1021,7 +977,6 @@ function TuluvluguUNemeh(props) {
     //     console.log("tushaalResponse", response);
     //     if (response?.data?.message === "success") {
     //       alert.show("амжилттай хадгаллаа");
-
     //     } else {
     //       alert.show("амжилтгүй алдаа");
     //     }
@@ -1070,7 +1025,6 @@ function TuluvluguUNemeh(props) {
           <span
             style={{
               fontWeight: "bold",
-              cursor: " -webkit-grab",
               cursor: "grab",
             }}
             onClick={() => props.setNuutsiinBvrtgel(false)}

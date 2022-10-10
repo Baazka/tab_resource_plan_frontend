@@ -4,7 +4,7 @@ import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { Excel } from "../assets/images/zurag";
 import { useHistory } from "react-router-dom";
 import { DepartmentID } from "../components/library";
-import { useAlert } from "react-alert";
+import hrUrl from "../hrUrl";
 var dateFormat = require("dateformat");
 
 const axios = require("axios");
@@ -69,15 +69,13 @@ function Emergency(props) {
   });
 
   let too = 0;
-  const alert = useAlert();
   const [register, setRegister] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportEmergency/" +
-            department.DEPARTMENT_ID
+          hrUrl + "/reportEmergency/" + department.DEPARTMENT_ID
         );
 
         let temp = "";
@@ -95,9 +93,7 @@ function Emergency(props) {
         });
         loadData(arr);
       } else {
-        let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportEmergency/"
-        );
+        let listItems = await axios(hrUrl + "/reportEmergency/");
 
         let temp = "";
         let arr = [];
@@ -275,14 +271,12 @@ function GerBvl(props) {
   });
 
   let too = 0;
-  const alert = useAlert();
   const [register, setRegister] = useState(true);
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportFamily/1/" +
-            department.DEPARTMENT_ID
+          hrUrl + "/reportFamily/1/" + department.DEPARTMENT_ID
         );
 
         let temp = "";
@@ -300,9 +294,7 @@ function GerBvl(props) {
         });
         loadData(arr);
       } else {
-        let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportFamily/1/"
-        );
+        let listItems = await axios(hrUrl + "/reportFamily/1/");
 
         let temp = "";
         let arr = [];
@@ -467,7 +459,6 @@ function GerBvl(props) {
                     {data.map((value, index) =>
                       value.isGroup === true ? (
                         <tr>
-                          {" "}
                           <td
                             style={{
                               borderTop: "1.1px solid #f1f1f1",
@@ -567,14 +558,12 @@ function Sadan(props) {
     check: true,
   });
   let too = 0;
-  const alert = useAlert();
   const [register, setRegister] = useState(true);
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportFamily/2/" +
-            department.DEPARTMENT_ID
+          hrUrl + "/reportFamily/2/" + department.DEPARTMENT_ID
         );
 
         let temp = "";
@@ -592,9 +581,7 @@ function Sadan(props) {
         });
         loadData(arr);
       } else {
-        let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportFamily/2/"
-        );
+        let listItems = await axios(hrUrl + "/reportFamily/2/");
 
         let temp = "";
         let arr = [];
@@ -838,12 +825,11 @@ function ShalgaltiinTalaarkhMedeelel(props) {
     check: true,
   });
   let too = 0;
-  const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportExam/" + department.DEPARTMENT_ID
+          hrUrl + "/reportExam/" + department.DEPARTMENT_ID
         );
 
         let temp = "";
@@ -861,7 +847,7 @@ function ShalgaltiinTalaarkhMedeelel(props) {
         });
         loadData(arr);
       } else {
-        let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportExam/");
+        let listItems = await axios(hrUrl + "/reportExam/");
 
         let temp = "";
         let arr = [];
@@ -1076,12 +1062,11 @@ function TangaragiinBvrtgel(props) {
   });
 
   let too = 0;
-  const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportOath/" + department.DEPARTMENT_ID
+          hrUrl + "/reportOath/" + department.DEPARTMENT_ID
         );
 
         let temp = "";
@@ -1099,7 +1084,7 @@ function TangaragiinBvrtgel(props) {
         });
         loadData(arr);
       } else {
-        let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportOath/");
+        let listItems = await axios(hrUrl + "/reportOath/");
 
         let temp = "";
         let arr = [];
@@ -1188,7 +1173,7 @@ function TangaragiinBvrtgel(props) {
                 <table
                   id={"tangaragiinBvrtgelXls"}
                   className="table is-bordered is-flex-wrap-wrap"
-                  id="table-to-xls"
+                  //id="table-to-xls"
                 >
                   <thead style={{ backgroundColor: "#f1f1f1" }}>
                     <tr>
@@ -1297,13 +1282,11 @@ function GadaadHelniiMedleg(props) {
     check: true,
   });
   let too = 0;
-  const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportLanguage/" +
-            department.DEPARTMENT_ID
+          hrUrl + "/reportLanguage/" + department.DEPARTMENT_ID
         );
 
         let temp = "";
@@ -1321,9 +1304,7 @@ function GadaadHelniiMedleg(props) {
         });
         loadData(arr);
       } else {
-        let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportLanguage/"
-        );
+        let listItems = await axios(hrUrl + "/reportLanguage/");
 
         let temp = "";
         let arr = [];
@@ -1518,13 +1499,11 @@ function Bolowsrol(props) {
     check: true,
   });
   let too = 0;
-  const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportEducation/1/" +
-            department.DEPARTMENT_ID
+          hrUrl + "/reportEducation/1/" + department.DEPARTMENT_ID
         );
 
         let temp = "";
@@ -1542,9 +1521,7 @@ function Bolowsrol(props) {
         });
         loadData(arr);
       } else {
-        let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportEducation/1/"
-        );
+        let listItems = await axios(hrUrl + "/reportEducation/1/");
 
         let temp = "";
         let arr = [];
@@ -1764,13 +1741,11 @@ function BolowsrolDoktor(props) {
     check: true,
   });
   let too = 0;
-  const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportEducation/2/" +
-            department.DEPARTMENT_ID
+          hrUrl + "/reportEducation/2/" + department.DEPARTMENT_ID
         );
 
         let temp = "";
@@ -1788,9 +1763,7 @@ function BolowsrolDoktor(props) {
         });
         loadData(arr);
       } else {
-        let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportEducation/2/"
-        );
+        let listItems = await axios(hrUrl + "/reportEducation/2/");
 
         let temp = "";
         let arr = [];
@@ -2000,13 +1973,11 @@ function MergeshliinBeltgel(props) {
     check: true,
   });
   let too = 0;
-  const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportProfession/" +
-            department.DEPARTMENT_ID
+          hrUrl + "/reportProfession/" + department.DEPARTMENT_ID
         );
 
         let temp = "";
@@ -2024,9 +1995,7 @@ function MergeshliinBeltgel(props) {
         });
         loadData(arr);
       } else {
-        let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportProfession/"
-        );
+        let listItems = await axios(hrUrl + "/reportProfession/");
 
         let temp = "";
         let arr = [];
@@ -2257,12 +2226,11 @@ function ErdmiinTsol(props) {
     check: true,
   });
   let too = 0;
-  const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportFame/" + department.DEPARTMENT_ID
+          hrUrl + "/reportFame/" + department.DEPARTMENT_ID
         );
 
         let temp = "";
@@ -2280,7 +2248,7 @@ function ErdmiinTsol(props) {
         });
         loadData(arr);
       } else {
-        let listItems = await axios("http://hr.audit.mn/hr/api/v1/reportFame/");
+        let listItems = await axios(hrUrl + "/reportFame/");
 
         let temp = "";
         let arr = [];
@@ -2553,12 +2521,11 @@ function TsergiinAlba(props) {
     check: true,
   });
   let too = 0;
-  const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportForce/" + department.DEPARTMENT_ID
+          hrUrl + "/reportForce/" + department.DEPARTMENT_ID
         );
 
         let temp = "";
@@ -2576,9 +2543,7 @@ function TsergiinAlba(props) {
         });
         loadData(arr);
       } else {
-        let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportForce/"
-        );
+        let listItems = await axios(hrUrl + "/reportForce/");
 
         let temp = "";
         let arr = [];
@@ -2756,12 +2721,11 @@ function ShagnaliinTalaarhMedeelel(props) {
     check: true,
   });
   let too = 0;
-  const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportAward/" + department.DEPARTMENT_ID
+          hrUrl + "/reportAward/" + department.DEPARTMENT_ID
         );
 
         let temp = "";
@@ -2779,9 +2743,7 @@ function ShagnaliinTalaarhMedeelel(props) {
         });
         loadData(arr);
       } else {
-        let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportAward/"
-        );
+        let listItems = await axios(hrUrl + "/reportAward/");
 
         let temp = "";
         let arr = [];
@@ -3090,13 +3052,11 @@ function TurshlagiinTalaarhMedeelel(props) {
     check: true,
   });
   let too = 0;
-  const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportExperience/" +
-            department.DEPARTMENT_ID
+          hrUrl + "/reportExperience/" + department.DEPARTMENT_ID
         );
 
         let temp = "";
@@ -3114,9 +3074,7 @@ function TurshlagiinTalaarhMedeelel(props) {
         });
         loadData(arr);
       } else {
-        let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportExperience/"
-        );
+        let listItems = await axios(hrUrl + "/reportExperience/");
 
         let temp = "";
         let arr = [];
@@ -3445,13 +3403,11 @@ function BvteeliinJagsaalt(props) {
     check: true,
   });
   let too = 0;
-  const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
       if (department.check !== true) {
         let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportLiterature/" +
-            department.DEPARTMENT_ID
+          hrUrl + "/reportLiterature/" + department.DEPARTMENT_ID
         );
 
         let temp = "";
@@ -3469,9 +3425,7 @@ function BvteeliinJagsaalt(props) {
         });
         loadData(arr);
       } else {
-        let listItems = await axios(
-          "http://hr.audit.mn/hr/api/v1/reportLiterature/"
-        );
+        let listItems = await axios(hrUrl + "/reportLiterature/");
 
         let temp = "";
         let arr = [];
