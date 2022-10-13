@@ -38,7 +38,7 @@ function Yrunkhii(props) {
   const [data, loadData] = useState();
   useEffect(() => {
     async function fetchdata() {
-      let listItems = await axios(hrUrl + "/person/0/9269");
+      let listItems = await axios(hrUrl + "/person/9269");
       console.log("listItems", listItems.data.person);
       loadData(listItems?.data);
     }

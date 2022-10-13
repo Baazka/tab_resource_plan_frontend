@@ -207,7 +207,7 @@ function AnketNeg(props) {
         ) {
           let listItems = await axios(
             hrUrl +
-              "/person/0/" +
+              "/person/" +
               JSON.parse(localStorage.getItem("personDetail")).person_id
           );
           console.log("amjilttai", listItems.data);
@@ -225,7 +225,7 @@ function AnketNeg(props) {
         ) {
           let listItems = await axios(
             hrUrl +
-              "/person/1/" +
+              "/person/" +
               JSON.parse(localStorage.getItem("personDetail")).person_id
           );
           console.log("amjilttai", listItems.data);

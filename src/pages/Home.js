@@ -161,7 +161,7 @@ function Home(props) {
   async function newPeople() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: hrUrl + "/person/1/",
+      url: hrUrl + "/person/",
       method: "GET",
       data: {},
     });
@@ -206,7 +206,7 @@ function Home(props) {
       JSON.parse(props.match?.params?.search)?.buttonValue === 3
     ) {
       let jagsaalts = await DataRequest({
-        url: hrUrl + "/person/1/",
+        url: hrUrl + "/person/",
         method: "GET",
         data: {},
       });
