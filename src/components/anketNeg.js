@@ -211,7 +211,8 @@ function AnketNeg(props) {
               JSON.parse(localStorage.getItem("personDetail")).person_id
           );
           console.log("amjilttai", listItems.data);
-          loadData(listItems?.data);
+          if (listItems.data !== undefined && listItems.data.length > 0)
+            loadData(listItems.data[0]);
           setLoading(false);
           let avatarImg = await axios(
             hrUrl +
@@ -229,7 +230,8 @@ function AnketNeg(props) {
               JSON.parse(localStorage.getItem("personDetail")).person_id
           );
           console.log("amjilttai", listItems.data);
-          loadData(listItems?.data);
+          if (listItems.data !== undefined && listItems.data.length > 0)
+            loadData(listItems?.data);
           setLoading(false);
         }
       }
@@ -1240,21 +1242,23 @@ function Kayag(props) {
         ) {
           let listItems = await axios(
             hrUrl +
-              "/person/0/" +
+              "/person/" +
               JSON.parse(localStorage.getItem("personDetail")).person_id
           );
           console.log("amjilttai", listItems.data);
-          setPerson(listItems?.data);
+          if (listItems.data !== undefined && listItems.data.length > 0)
+            setPerson(listItems?.data[0]);
         } else if (
           JSON.parse(localStorage.getItem("personDetail")).type === "newPerson"
         ) {
           let listItems = await axios(
             hrUrl +
-              "/person/1/" +
+              "/person/" +
               JSON.parse(localStorage.getItem("personDetail")).person_id
           );
           console.log("amjilttai", listItems.data);
-          setPerson(listItems?.data);
+          if (listItems.data !== undefined && listItems.data.length > 0)
+            setPerson(listItems?.data[0]);
         }
       }
     }
@@ -1298,11 +1302,24 @@ function Kayag(props) {
   function khadgalakhYo() {
     props.loading(true);
     if (requiredField() === true) {
-      console.log("test", person);
+      console.log("test", {
+        ...person,
+        ...{
+          PERSON_ID: JSON.parse(localStorage.getItem("personDetail")).person_id,
+        },
+      });
       DataRequest({
         url: hrUrl + "/updatePersonAddress/",
         method: "post",
-        data: { person: person },
+        data: {
+          person: {
+            ...person,
+            ...{
+              PERSON_ID: JSON.parse(localStorage.getItem("personDetail"))
+                .person_id,
+            },
+          },
+        },
       })
         .then(function (response) {
           console.log("UpdateResponse", response);

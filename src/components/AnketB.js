@@ -436,7 +436,7 @@ function AlbanTushaal(props) {
             localStorage.getItem("personDetail") === undefined
               ? "{}"
               : localStorage.getItem("personDetail")
-          )?.emp_id
+          )?.person_id
       );
       loadData(
         listItems?.data.sort(function sortFunction(a, b) {
@@ -986,7 +986,7 @@ function TsalinHuls(props) {
             localStorage.getItem("personDetail") === undefined
               ? "{}"
               : localStorage.getItem("personDetail")
-          )?.emp_id
+          )?.person_id
       );
       console.log(listItems, "salary");
       loadData(listItems?.data);
@@ -1265,7 +1265,7 @@ function Uramshuulal(props) {
             localStorage.getItem("personDetail") === undefined
               ? "{}"
               : localStorage.getItem("personDetail")
-          )?.emp_id
+          )?.person_id
         // + props.person_id
       );
       console.log(listItems, "Tangarag");
@@ -1291,11 +1291,11 @@ function Uramshuulal(props) {
             CREATED_BY: userDetils?.USER_ID,
             CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
             ROWTYPE: "NEW",
-            EMP_ID: JSON.parse(
+            person_id: JSON.parse(
               localStorage.getItem("personDetail") === undefined
                 ? "{}"
                 : localStorage.getItem("personDetail")
-            )?.emp_id,
+            )?.person_id,
           },
         ],
       });
@@ -1316,11 +1316,11 @@ function Uramshuulal(props) {
       CREATED_BY: userDetils?.USER_ID,
       CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
       ROWTYPE: "NEW",
-      EMP_ID: JSON.parse(
+      person_id: JSON.parse(
         localStorage.getItem("personDetail") === undefined
           ? "{}"
           : localStorage.getItem("personDetail")
-      )?.emp_id,
+      )?.person_id,
     });
 
     await loadData({ Promotion: value });
@@ -1750,7 +1750,7 @@ function NuhuhMulbur(props) {
             localStorage.getItem("personDetail") === undefined
               ? "{}"
               : localStorage.getItem("personDetail")
-          )?.emp_id
+          )?.person_id
         // + props.person_id
       );
       loadData(listItems?.data);
@@ -1775,11 +1775,11 @@ function NuhuhMulbur(props) {
             CREATED_BY: userDetils?.USER_ID,
             CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
             ROWTYPE: "NEW",
-            EMP_ID: JSON.parse(
+            person_id: JSON.parse(
               localStorage.getItem("personDetail") === undefined
                 ? "{}"
                 : localStorage.getItem("personDetail")
-            )?.emp_id,
+            )?.person_id,
           },
         ],
       });
@@ -1800,11 +1800,11 @@ function NuhuhMulbur(props) {
       CREATED_BY: userDetils?.USER_ID,
       CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
       ROWTYPE: "NEW",
-      EMP_ID: JSON.parse(
+      person_id: JSON.parse(
         localStorage.getItem("personDetail") === undefined
           ? "{}"
           : localStorage.getItem("personDetail")
-      )?.emp_id,
+      )?.person_id,
     });
 
     await loadData({ Amends: value });
@@ -2232,7 +2232,7 @@ function Tuslamj(props) {
             localStorage.getItem("personDetail") === undefined
               ? "{}"
               : localStorage.getItem("personDetail")
-          )?.emp_id
+          )?.person_id
         // + props.person_id
       );
       loadData(listItems?.data);
@@ -2257,11 +2257,11 @@ function Tuslamj(props) {
             CREATED_BY: userDetils?.USER_ID,
             CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
             ROWTYPE: "NEW",
-            EMP_ID: JSON.parse(
+            person_id: JSON.parse(
               localStorage.getItem("personDetail") === undefined
                 ? "{}"
                 : localStorage.getItem("personDetail")
-            )?.emp_id,
+            )?.person_id,
           },
         ],
       });
@@ -2282,11 +2282,11 @@ function Tuslamj(props) {
       CREATED_BY: userDetils?.USER_ID,
       CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
       ROWTYPE: "NEW",
-      EMP_ID: JSON.parse(
+      person_id: JSON.parse(
         localStorage.getItem("personDetail") === undefined
           ? "{}"
           : localStorage.getItem("personDetail")
-      )?.emp_id,
+      )?.person_id,
     });
 
     await loadData({ Aid: value });
@@ -2719,7 +2719,7 @@ function Surgalt(props) {
             localStorage.getItem("personDetail") === undefined
               ? "{}"
               : localStorage.getItem("personDetail")
-          )?.emp_id
+          )?.person_id
         // + props.person_id
       );
       loadData(listItems?.data);
@@ -2743,11 +2743,11 @@ function Surgalt(props) {
             CREATED_BY: userDetils?.USER_ID,
             CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
             ROWTYPE: "NEW",
-            EMP_ID: JSON.parse(
+            person_id: JSON.parse(
               localStorage.getItem("personDetail") === undefined
                 ? "{}"
                 : localStorage.getItem("personDetail")
-            )?.emp_id,
+            )?.person_id,
           },
         ],
       });
@@ -2767,11 +2767,11 @@ function Surgalt(props) {
       CREATED_BY: userDetils?.USER_ID,
       CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
       ROWTYPE: "NEW",
-      EMP_ID: JSON.parse(
+      person_id: JSON.parse(
         localStorage.getItem("personDetail") === undefined
           ? "{}"
           : localStorage.getItem("personDetail")
-      )?.emp_id,
+      )?.person_id,
     });
 
     await loadData({ Training: value });
@@ -3208,7 +3208,7 @@ function Shiitgel(props) {
             localStorage.getItem("personDetail") === undefined
               ? "{}"
               : localStorage.getItem("personDetail")
-          )?.emp_id
+          )?.person_id
         // + props.person_id
       );
       loadData(listItems?.data);
@@ -3231,11 +3231,11 @@ function Shiitgel(props) {
             CREATED_BY: userDetils?.USER_ID,
             CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
             ROWTYPE: "NEW",
-            EMP_ID: JSON.parse(
+            person_id: JSON.parse(
               localStorage.getItem("personDetail") === undefined
                 ? "{}"
                 : localStorage.getItem("personDetail")
-            )?.emp_id,
+            )?.person_id,
           },
         ],
       });
@@ -3253,11 +3253,11 @@ function Shiitgel(props) {
       CREATED_BY: userDetils?.USER_ID,
       CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
       ROWTYPE: "NEW",
-      EMP_ID: JSON.parse(
+      person_id: JSON.parse(
         localStorage.getItem("personDetail") === undefined
           ? "{}"
           : localStorage.getItem("personDetail")
-      )?.emp_id,
+      )?.person_id,
     });
 
     await loadData({ Punishment: value });
@@ -3671,7 +3671,7 @@ function HuwiinHereg(props) {
             localStorage.getItem("personDetail") === undefined
               ? "{}"
               : localStorage.getItem("personDetail")
-          )?.emp_id
+          )?.person_id
         // + props.person_id
       );
       loadData(listItems?.data);
@@ -3697,11 +3697,11 @@ function HuwiinHereg(props) {
             CREATED_BY: userDetils?.USER_ID,
             CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
             ROWTYPE: "NEW",
-            EMP_ID: JSON.parse(
+            person_id: JSON.parse(
               localStorage.getItem("personDetail") === undefined
                 ? "{}"
                 : localStorage.getItem("personDetail")
-            )?.emp_id,
+            )?.person_id,
           },
         ],
       });
@@ -3723,11 +3723,11 @@ function HuwiinHereg(props) {
       CREATED_BY: userDetils?.USER_ID,
       CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
       ROWTYPE: "NEW",
-      EMP_ID: JSON.parse(
+      person_id: JSON.parse(
         localStorage.getItem("personDetail") === undefined
           ? "{}"
           : localStorage.getItem("personDetail")
-      )?.emp_id,
+      )?.person_id,
     });
 
     await loadData({ Document: value });

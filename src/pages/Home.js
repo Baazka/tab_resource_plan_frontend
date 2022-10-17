@@ -161,7 +161,7 @@ function Home(props) {
   async function newPeople() {
     setLoading(true);
     let jagsaalts = await DataRequest({
-      url: hrUrl + "/person/",
+      url: hrUrl + "/newPersonList/",
       method: "GET",
       data: {},
     });
@@ -206,7 +206,7 @@ function Home(props) {
       JSON.parse(props.match?.params?.search)?.buttonValue === 3
     ) {
       let jagsaalts = await DataRequest({
-        url: hrUrl + "/person/",
+        url: hrUrl + "/newPersonList/",
         method: "GET",
         data: {},
       });
@@ -733,7 +733,6 @@ function Home(props) {
           >
             Идэвхтэй
           </button>
-
           <button
             className="button is-focused"
             style={{
@@ -770,6 +769,10 @@ function Home(props) {
           >
             Шинэ
           </button>
+          <div style={{ padding: "0.3rem", paddingLeft: "2rem" }}>
+            <span>Нийт:</span>&nbsp;{" "}
+            <span style={{ color: "red" }}>{jagsaalt.length}</span>
+          </div>
           {
             <div
               style={{ position: "absolute", right: "3rem", display: "flex" }}

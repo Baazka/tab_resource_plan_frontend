@@ -91,16 +91,23 @@ function Bolowsrol(props) {
       });
   }, [data, dataSecond]);
   function dataCheck() {
+    let count = 0;
     for (let i = 0; i < data.Education.length; i++) {
       if (
-        data.Education[i].PROFESSION_ID === 999 ||
-        data.Education[i].PROFESSION_ID === null ||
-        data.Education[i].PROFESSION_ID === undefined
+        data.Education[i].PROFESSION_ID !== 999 &&
+        data.Education[i].PROFESSION_ID !== null &&
+        data.Education[i].PROFESSION_ID !== undefined
       ) {
-        alert.show("мэргэжил сонгоно уу");
-        return false;
-      } else if (i === data.Education.length - 1) {
-        return true;
+        count = count + 1;
+      }
+
+      if (i === data.Education.length - 1) {
+        if (count > 0) {
+          return true;
+        } else {
+          alert.show("үндсэн мэргэжил сонгоно уу");
+          return false;
+        }
       }
     }
   }
@@ -204,7 +211,7 @@ function Bolowsrol(props) {
     loadDataSecond({ Education: arr });
   }
   function requiredField(value) {
-    let found = value.filter((a) => a.IS_PRIMARY === 1);
+    let found = value.filter((a) => a.IS_PRIMARY === 1 || a.IS_PRIMARY === "1");
 
     if (found.length > 1) {
       alert.show("Үндсэн нэг мэргэжилээ тохируулна уу!!!");
@@ -389,7 +396,7 @@ function Bolowsrol(props) {
         </div>
         <div className="table-container">
           <div class="columns">
-            <div class="column is-12">
+            <div class="column is-12" style={{ overflow: "scroll" }}>
               <table className="table is-bordered p-3">
                 <thead>
                   <tr>

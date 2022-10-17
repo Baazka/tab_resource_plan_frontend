@@ -201,7 +201,7 @@ const Home = (props) => {
     if (jagsaalts.data !== undefined && jagsaalts.data.length > 0)
       setJagsaalt(jagsaalts?.data);
     let lib = await DataRequest({
-      url: hrUrl + "/library/commandType",
+      url: hrUrl + "/library/decisiontype",
       method: "GET",
       data: {},
     });
@@ -362,7 +362,7 @@ const Home = (props) => {
           },
           {
             name: "Тушаалын төрөл",
-            selector: "COMMAND_TYPE_NAME",
+            selector: "DECISION_TYPE_NAME",
             sortable: true,
             center: true,
           },
@@ -897,8 +897,11 @@ function Khoyor(props) {
   const alert = useAlert();
   const [button, setbutton] = useState(1);
   const [EMPLOYEE_ID, setEMPLOYEE_ID] = useState();
+
   const [data, loadData] = useState({
+    DECISION_ID: null,
     PERSON_ID: props.worker.PERSON_ID,
+    EMPLOYEE_ID: props.worker.EMPLOYEE_ID,
     DEPARTMENT_ID:
       props.worker.DEPARTMENT_ID === null
         ? userDetils.USER_DEPARTMENT_ID
@@ -945,85 +948,59 @@ function Khoyor(props) {
   }
 
   function saveToDB() {
-    if (requiredField()) {
-      if (props.type === 2) {
-        DataRequest({
-          url: hrUrl + "/decision",
-          method: "PUT",
-          data: data,
-        })
-          .then(function (response) {
-            console.log("tushaalResponse", response);
-            if (response?.data?.message === "success") {
-              setEMPLOYEE_ID(response?.data?.EMPLOYEE_ID);
-              alert.show("амжилттай хадгаллаа");
-              props.close(false);
-            } else {
-              alert.show("Системийн алдаа");
-            }
-            //history.push('/sample')
-          })
-          .catch(function (error) {
-            //alert(error.response.data.error.message);
-            console.log(error.response);
-            alert.show("Системийн алдаа");
-          });
-      } else {
-        if (file.get("files") !== undefined && file.get("files") !== null) {
-          console.log("files", file.get("files"));
-          let formDataTemp = file;
-          formDataTemp.delete("Decision");
-          formDataTemp.append("Decision", JSON.stringify(data));
-          DataRequest({
-            url: hrUrl + "/" + "fileUpload",
-            method: "POST",
-            data: formDataTemp,
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }).then(function (response) {
-            if (response?.data?.message === "success") {
-              setEMPLOYEE_ID(response?.data?.EMPLOYEE_ID);
-              alert.show("амжилттай хадгаллаа");
-              if (props.type !== 2 && data.IS_SALARY === true) setbutton(2);
-              else {
-                props.close(false);
-                props.fetchData();
-              }
-            } else {
-              alert.show("Системийн алдаа");
-            }
-            //history.push('/sample')
-          });
+    if (file.get("files") !== undefined && file.get("files") !== null) {
+      console.log("files", file.get("files"));
+      let formDataTemp = file;
+      formDataTemp.delete("Decision");
+      formDataTemp.append("Decision", JSON.stringify(data));
+      DataRequest({
+        url: hrUrl + "/" + "fileUpload",
+        method: "POST",
+        data: formDataTemp,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }).then(function (response) {
+        if (response?.data?.message === "success") {
+          setEMPLOYEE_ID(response?.data?.EMPLOYEE_ID);
+          alert.show("амжилттай хадгаллаа");
+          if (props.type !== 2 && data.IS_SALARY === true) setbutton(2);
+          else {
+            props.close(false);
+            props.fetchData();
+          }
         } else {
-          console.log("datatatata", data);
-          DataRequest({
-            url: hrUrl + "/decision",
-            method: "POST",
-            data: data,
-          })
-            .then(function (response) {
-              console.log("tushaalResponse", response);
-              if (response?.data?.message === "success") {
-                setEMPLOYEE_ID(response?.data?.EMPLOYEE_ID);
-                alert.show("амжилттай хадгаллаа");
-                if (props.type !== 2 && data.IS_SALARY === true) setbutton(2);
-                else {
-                  props.close(false);
-                  props.fetchData();
-                }
-              } else {
-                alert.show("Системийн алдаа");
-              }
-              //history.push('/sample')
-            })
-            .catch(function (error) {
-              //alert(error.response.data.error.message);
-              console.log(error.response);
-              alert.show("Системийн алдаа");
-            });
+          alert.show("Системийн алдаа");
         }
-      }
+        //history.push('/sample')
+      });
+    } else {
+      console.log("datatatata", data);
+      DataRequest({
+        url: hrUrl + "/decision",
+        method: "POST",
+        data: data,
+      })
+        .then(function (response) {
+          console.log("tushaalResponse", response);
+          if (response?.data?.message === "success") {
+            setEMPLOYEE_ID(response?.data?.EMPLOYEE_ID);
+            alert.show("амжилттай хадгаллаа");
+            if (props.type !== 2 && data.IS_SALARY === true) setbutton(2);
+            else {
+              props.close(false);
+              props.fetchData();
+            }
+          } else {
+            alert.show("Системийн алдаа");
+          }
+          //history.push('/sample')
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+          alert.show("Системийн алдаа");
+        });
     }
   }
   async function saveFILE(file) {
@@ -1096,12 +1073,12 @@ function Khoyor(props) {
             <div className="column column is-8">
               <select
                 className="Borderless"
-                value={data.COMMAND_TYPE_ID}
+                value={data.DECISION_TYPE_ID}
                 onChange={(text) => {
                   loadData({
                     ...data,
                     ...{
-                      COMMAND_TYPE_ID: text.target.value,
+                      DECISION_TYPE_ID: text.target.value,
                     },
                   });
                 }}
@@ -1110,8 +1087,8 @@ function Khoyor(props) {
                   Тушаалын төрөл сонгоно уу
                 </option>
                 {props.lib?.map((nation, index) => (
-                  <option key={index} value={nation.COMMAND_TYPE_ID}>
-                    {nation.COMMAND_TYPE_NAME}
+                  <option key={index} value={nation.DECISION_TYPE_ID}>
+                    {nation.DECISION_TYPE_NAME}
                   </option>
                 ))}
               </select>
@@ -1277,7 +1254,7 @@ function Khoyor(props) {
           </div>
           <div>
             <div className="columns ">
-              {props.type === 1 ? (
+              {/* {props.type === 1 ? (
                 <div className="column is-6">
                   <h1>
                     {" "}
@@ -1285,7 +1262,7 @@ function Khoyor(props) {
                   </h1>
                   <Positionlevel personChild={data} setPersonChild={loadData} />
                 </div>
-              ) : null}
+              ) : null} */}
               {data?.COMMAND_TYPE_ID === 2 ? (
                 <div className="column is-3">
                   <h1>
@@ -1866,7 +1843,7 @@ function Salary(props) {
 
 function TushaalKharakh(props) {
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
-  const [data, loadData] = useState();
+  const [data, loadData] = useState({});
   const [file, setFiles] = useState(new FormData());
   const [fileName, setFileName] = useState("");
   const alert = useAlert();
@@ -2036,12 +2013,12 @@ function TushaalKharakh(props) {
               </h1>
               <select
                 className="Borderless"
-                value={data.COMMAND_TYPE_ID}
+                value={data.DECISION_TYPE_ID}
                 onChange={(text) => {
                   loadData({
                     ...data,
                     ...{
-                      COMMAND_TYPE_ID: text.target.value,
+                      DECISION_TYPE_ID: text.target.value,
                     },
                   });
                 }}
@@ -2050,8 +2027,8 @@ function TushaalKharakh(props) {
                   Тушаалын төрөл сонгоно уу
                 </option>
                 {props.lib?.map((nation, index) => (
-                  <option key={index} value={nation.COMMAND_TYPE_ID}>
-                    {nation.COMMAND_TYPE_NAME}
+                  <option key={index} value={nation.DECISION_TYPE_ID}>
+                    {nation.DECISION_TYPE_NAME}
                   </option>
                 ))}
               </select>
@@ -2155,13 +2132,13 @@ function TushaalKharakh(props) {
           </div>
           <div>
             <div className="columns ">
-              <div className="column is-6">
+              {/* <div className="column is-6">
                 <h1>
                   {" "}
                   <span style={{ color: "red" }}>*</span>Албан тушаалын түвшин{" "}
                 </h1>
                 <Positionlevel personChild={data} setPersonChild={loadData} />
-              </div>
+              </div> */}
               {data?.COMMAND_TYPE_ID === 2 ? (
                 <div className="column is-3">
                   <h1>
@@ -2212,6 +2189,7 @@ function TushaalKharakh(props) {
           </div>
         </div>
         <SalaryKaruulakh
+          PERSON_ID={data.PERSON_ID}
           EMPLOYEE_ID={data.EMPLOYEE_ID}
           saveToDBDecition={saveToDBDecition}
         />
@@ -2311,8 +2289,8 @@ function SalaryKaruulakh(props) {
   const alert = useAlert();
   useEffect(() => {
     async function fetchData() {
-      console.log("salaryKharakh", props.EMPLOYEE_ID);
-      let listItems = await axios(hrUrl + "/salary/" + props.EMPLOYEE_ID);
+      console.log("salaryKharakh", props.PERSON_ID);
+      let listItems = await axios(hrUrl + "/salary/" + props.PERSON_ID);
       console.log(listItems, "SalaryKaruulakh");
       loadData(listItems?.data);
     }
@@ -2418,6 +2396,7 @@ function SalaryKaruulakh(props) {
       CREATED_BY: userDetils?.USER_ID,
       CREATED_DATE: dateFormat(new Date(), "dd-mmm-yy"),
       ROWTYPE: "NEW",
+      EMPLOYEE_ID: props.EMPLOYEE_ID,
     });
 
     await loadData({ salary: value });
