@@ -172,7 +172,7 @@ function Login(props) {
         "application/x-www-form-urlencoded;charset=UTF-8";
       axios({
         method: "post", //put
-        url: "http://hr.audit.mn/reg/api/v1/login",
+        url: "http://10.10.10.46:3001/api/v1/login",
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json",
@@ -202,7 +202,7 @@ function Login(props) {
             }
             DataRequest({
               url:
-                "http://hr.audit.mn/reg/api/v1/profile/" +
+                "http://10.10.10.46:3001/api/v1/profile/" +
                 response?.data?.USER_ID +
                 "/" +
                 1,
@@ -216,7 +216,7 @@ function Login(props) {
                   JSON.stringify(response?.data)
                 );
                 // DataRequest({
-                //   url: "http://hr.audit.mn/reg/hr/api/v1/election/",
+                //   url: "http://10.10.10.46:3001/hr/api/v1/election/",
                 //   method: "GET",
                 //   data: {},
                 // })

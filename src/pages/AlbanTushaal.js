@@ -2,60 +2,201 @@ import React, { useEffect, useState } from "react";
 import Footer from "../components/footer";
 import { DataRequest } from "../functions/DataApi";
 import dateFormat from "dateformat";
-import { useAlert } from "react-alert";
-import DataTable, { createTheme } from "react-data-table-component";
+import styled from "styled-components";
+import { useTable, usePagination, useSortBy } from "react-table";
 import ReactHTMLTableToExcel from "react-html-table-to-excel";
 import { Add, Edit, Delete, Excel } from "../assets/images/zurag";
 import { Office } from "../components/library";
 import hrUrl from "../hrUrl";
 const userDetils = JSON.parse(localStorage.getItem("userDetails"));
 
-createTheme("solarized", {
-  text: {
-    primary: "gray",
-    secondary: "black",
-  },
-  background: {
-    default: "white",
-  },
-  context: {
-    background: "#cb4b16",
-    text: "#FFFFFF",
-  },
-  divider: {
-    default: "white",
-  },
-  action: {
-    button: "rgba(0,0,0,.54)",
-    hover: "rgba(0,0,0,.08)",
-    disabled: "rgba(0,0,0,.12)",
-  },
-});
-const customStyles = {
-  rows: {
-    style: {
-      minHeight: "50px", // override the row height
+const Styles = styled.div`
+  padding: 1rem;
+
+  table {
+    border-spacing: 0;
+    border: 1px solid black;
+
+    tr {
+      :last-child {
+        td {
+          border-bottom: 0;
+        }
+      }
+    }
+
+    th,
+    td {
+      margin: 0;
+      padding: 0.5rem;
+      border-bottom: 1px solid black;
+      border-right: 1px solid black;
+
+      :last-child {
+        border-right: 0;
+      }
+    }
+  }
+
+  .pagination {
+    padding: 0.5rem;
+  }
+`;
+function Table({ columns, data }) {
+  // Use the state and functions returned from useTable to build your UI
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    page, // Instead of using 'rows', we'll use page,
+    // which has only the rows for the active page
+
+    // The rest of these things are super handy, too ;)
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize },
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: { pageIndex: 0, pageSize: 15 },
     },
-  },
-  headCells: {
-    style: {
-      paddingLeft: "8px", // override the cell padding for head cells
-      paddingRight: "4px",
-      fontWeight: "bold",
-      fontSize: "15px",
-      borderColor: "white",
-    },
-  },
-  cells: {
-    style: {
-      paddingLeft: "5px", // override the cell padding for data cells
-      paddingRight: "5px",
-      webkitBoxShadow: "0px 0px 3px 1px rgb(255 0 0)",
-      borderColor: "grey",
-      borderBottom: "0.5px solid",
-    },
-  },
-};
+    useSortBy,
+    usePagination
+  );
+
+  // Render the UI for your table
+  return (
+    <>
+      <table {...getTableProps()} style={{ border: "none", width: "90vw" }}>
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <th
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  style={{
+                    backgroundColor: "transparent",
+                    color: "#808080",
+                    borderTop: "none",
+                    borderRight: "none",
+                    borderLeft: "none",
+                    borderBottom: "1px solid black",
+                  }}
+                >
+                  {column.render("Header")}
+                  <span>
+                    {column.isSorted
+                      ? column.isSortedDesc
+                        ? " 🔽"
+                        : " 🔼"
+                      : ""}
+                  </span>
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody
+          {...getTableBodyProps()}
+          style={{
+            borderRight: "none",
+            borderLeft: "none",
+          }}
+        >
+          {page.map((row, i) => {
+            prepareRow(row);
+            return (
+              <tr
+                {...row.getRowProps()}
+                style={{
+                  borderRight: "none",
+                  borderLeft: "none",
+                }}
+              >
+                {row.cells.map((cell) => {
+                  return (
+                    <td
+                      {...cell.getCellProps()}
+                      style={{
+                        borderRight: "none",
+                        borderLeft: "none",
+                      }}
+                    >
+                      {cell.render("Cell")}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      {/* 
+        Pagination can be built however you'd like. 
+        This is just a very basic UI implementation:
+      */}
+      <div className="pagination" style={{ justifyContent: "end" }}>
+        <button
+          onClick={() => gotoPage(0)}
+          disabled={!canPreviousPage}
+          className="border p-1"
+        >
+          {"<<"}
+        </button>{" "}
+        <button
+          onClick={() => previousPage()}
+          disabled={!canPreviousPage}
+          className="border p-1"
+        >
+          {"<"}
+        </button>{" "}
+        <button
+          onClick={() => nextPage()}
+          disabled={!canNextPage}
+          className="border p-1"
+        >
+          {">"}
+        </button>{" "}
+        <button
+          onClick={() => gotoPage(pageCount - 1)}
+          disabled={!canNextPage}
+          className="border p-1"
+        >
+          {">>"}
+        </button>{" "}
+        <span>
+          Хуудас{" "}
+          <strong>
+            {pageIndex + 1} - {pageOptions.length}
+          </strong>{" "}
+        </span>
+        <span class="px-1"> Нийт: {rows.length}</span>
+        {/* <select
+          value={pageSize}
+          onChange={(e) => {
+            setPageSize(Number(e.target.value));
+          }}
+          className="border p-1"
+        >
+          {[10, 20, 30, 40, 50].map((pageSize) => (
+            <option key={pageSize} value={pageSize}>
+              {pageSize}
+            </option>
+          ))}
+        </select> */}
+      </div>
+    </>
+  );
+}
 
 const AlbanTushaal = (props) => {
   const [jagsaalts, setJagsaalts] = useState([]);
@@ -84,98 +225,34 @@ const AlbanTushaal = (props) => {
     fetchData();
   }, [props]);
 
-  const columns = [
-    {
-      name: "№",
-      selector: (row, index) => {
-        return index + 1;
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: "№",
+        accessor: (row, i) => i + 1,
       },
-      sortable: true,
-      width: "40px",
-    },
-    {
-      name: "Төрийн аудитын байгууллага",
-      selector: "DEPARTMENT_NAME",
-      sortable: true,
-      width: "200px",
-    },
-    {
-      name: "Харъяа газар",
-      selector: "SUB_DEPARTMENT_NAME",
-      sortable: true,
-      width: "290px",
-    },
-    {
-      name: "Дотоод бүтцийн нэгж",
-      selector: "COMPARTMENT_NAME",
-      sortable: true,
-      width: "290px",
-    },
-    {
-      name: "Албан тушаал",
-      selector: "POSITION_NAME",
-      sortable: true,
-      width: "290px",
-    },
-    // {
-    //   name: "Дотоод бүтцийн нэгж",
-    //   selector: "COMPARTMENT_NAME",
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Албан тушаалын нэр",
-    //   selector: "POSITION_NAME",
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Ажилтны нэр",
-    //   selector: "PERSON_FIRSTNAME",
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Ажилтны овог",
-    //   selector: "PERSON_LASTNAME",
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Утасны дугаар",
-    //   selector: "PERSON_PHONE",
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Имэйл",
-    //   selector: "PERSON_EMAIL",
-    //   sortable: true,
-    // },
-  ];
-  const handleChange = (state) => {
-    // You can use setState or dispatch with something like Redux so we can use the retrieved data
-    // localStorage.removeItem("personDetail");
-    // if (
-    //   state?.selectedRows !== undefined &&
-    //   state?.selectedRows?.length !== 0
-    // ) {
-    //   console.log("state?.selectRows?.length", state.selectedRows);
-    //   console.log("Selected Rows: ", state?.selectedRows[0]?.EMP_ID);
-    //   localStorage.setItem(
-    //     "personDetail",
-    //     JSON.stringify({
-    //       person_id:
-    //         state?.selectedRows[0]?.EMP_PERSON_ID !== undefined &&
-    //         state.selectedRows[0]?.EMP_PERSON_ID !== null
-    //           ? state?.selectedRows[0]?.EMP_PERSON_ID
-    //           : state?.selectedRows[0].PERSON_ID,
-    //       emp_id: state?.selectedRows[0].EMP_ID,
-    //       type: "employ",
-    //       PERSON_FIRSTNAME: state?.selectedRows[0].PERSON_FIRSTNAME,
-    //       PERSON_LASTNAME: state?.selectedRows[0].PERSON_LASTNAME,
-    //     })
-    //   );
-    //   setData({ checked: true });
-    // } else {
-    //   setData({ checked: false });
-    // }
-  };
+      {
+        Header: "Төрийн аудитын байгууллага",
+        accessor: "DEPARTMENT_NAME",
+      },
+      {
+        Header: "Харъяа газар",
+        accessor: "SUB_DEPARTMENT_NAME",
+      },
+      {
+        Header: "Дотоод бүтцийн нэгж",
+        accessor: "COMPARTMENT_NAME",
+      },
+      {
+        Header: "Албан тушаал",
+        accessor: "POSITION_NAME",
+      },
+    ],
+
+    []
+  );
+
+  const data = React.useMemo(() => jagsaalts, [jagsaalts]);
 
   return (
     <div
@@ -235,50 +312,38 @@ const AlbanTushaal = (props) => {
               </span> */}
           </div>
           <button
-            className="text"
+            className="button"
             style={{
-              marginLeft: "1%",
+              height: "1.8rem",
+              padding: "0.5rem",
               borderRadius: "5px",
               backgroundColor: "#1cc88a",
               color: "#fff",
-              border: "double",
             }}
-            onClick={() => document.getElementById("BaiguullagaXLS").click()}
+            onClick={() => document.getElementById("AlbanTushaalXLS").click()}
           >
             <span style={{ display: "flex", paddingRight: "22px" }}>
               <image src={Excel} width="20px" height="20px " />
               Excel
             </span>
           </button>
+
           <div style={{ width: "500px" }}>
             <BaiguullagaExcel data={jagsaalts} />
           </div>
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              height: "100vh !important",
+              overflow: "scroll",
+            }}
+          >
+            <Styles>
+              <Table columns={columns} data={data} />
+            </Styles>
+          </div>
         </div>
-
-        <DataTable
-          columns={columns}
-          data={search === "" ? jagsaalts : found}
-          theme="solarized"
-          customStyles={customStyles}
-          noDataComponent="мэдээлэл байхгүй байна"
-          selectableRows // add for checkbox selection
-          Clicked
-          onSelectedRowsChange={handleChange}
-          noHeader={true}
-          fixedHeader={true}
-          responsive={true}
-          overflowY={true}
-          overflowYOffset={"390px"}
-          pagination={true}
-          paginationPerPage={30}
-          paginationComponentOptions={{
-            rowsPerPageText: "Хуудас:",
-            rangeSeparatorText: "нийт:",
-            noRowsPerPage: false,
-            selectAllRowsItem: false,
-            selectAllRowsItemText: "All",
-          }}
-        />
       </div>
       <Footer />
     </div>
@@ -292,20 +357,21 @@ function BaiguullagaExcel({ data }) {
       <div style={{ width: "30px", height: "30px", display: "none" }}>
         <div>
           <ReactHTMLTableToExcel
-            id="BaiguullagaXLS"
+            id="AlbanTushaalXLS"
             className="download-table-xls-button"
-            table="baiguullga-to-xls"
+            table="albanTushaal-to-xls"
             filename="tablexls"
             sheet="tablexls"
             buttonText="XLS"
           />
 
-          <table id="baiguullga-to-xls">
+          <table id="albanTushaal-to-xls">
             <tr>
               <th>№</th>
               <th>Төрийн аудитын байгууллага</th>
               <th>Харъяа газар</th>
               <th>Дотоод бүтцийн нэгж</th>
+              <th>Албан тушаал</th>
             </tr>
             {data.map((value, index) => (
               <tr>
@@ -313,6 +379,7 @@ function BaiguullagaExcel({ data }) {
                 <td>{value.DEPARTMENT_NAME}</td>
                 <td>{value.SUB_DEPARTMENT_NAME}</td>
                 <td>{value.COMPARTMENT_NAME}</td>
+                <td>{value.POSITION_NAME}</td>
               </tr>
             ))}
           </table>
