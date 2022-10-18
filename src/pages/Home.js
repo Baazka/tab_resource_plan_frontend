@@ -1042,8 +1042,7 @@ function Home(props) {
                       src={
                         value.FILE_PATH !== undefined &&
                         value.FILE_PATH !== null
-                          ? hrUrl +
-                            "/".replace("api/v1/", "") +
+                          ? hrUrl.replace("api/v1", "") +
                             "static" +
                             value?.FILE_PATH.replace("uploads", "")
                           : value.PERSON_GENDER === "1"

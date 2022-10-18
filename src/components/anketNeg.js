@@ -493,8 +493,7 @@ function AnketNeg(props) {
                 <img
                   src={
                     avatar.FILE_PATH !== undefined && avatar.FILE_PATH !== null
-                      ? hrUrl +
-                        "/".replace("api/v1/", "") +
+                      ? hrUrl.replace("api/v1", "") +
                         "static" +
                         avatar?.FILE_PATH.replace("uploads", "")
                       : AvatarB
