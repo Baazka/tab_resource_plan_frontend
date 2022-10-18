@@ -120,8 +120,7 @@ function AnketB(props) {
           <img
             src={
               avatar.FILE_PATH !== undefined && avatar.FILE_PATH !== null
-                ? hrUrl +
-                  "/".replace("api/v1/", "") +
+                ? hrUrl.replace("api/v1", "") +
                   "static" +
                   avatar?.FILE_PATH.replace("uploads", "")
                 : AvatarB
@@ -328,7 +327,7 @@ function AnketB(props) {
             IX. ХУВИЙН ХЭРЭГ
           </button>
         </div>
-        <div className="AnketList">
+        {/* <div className="AnketList">
           <button
             className="button"
             style={{
@@ -363,7 +362,7 @@ function AnketB(props) {
           >
             ХАМГААЛАЛТЫН ХЭРЭГСЭЛ
           </button>
-        </div>
+        </div> */}
       </div>
 
       <div
@@ -412,10 +411,10 @@ function AnketB(props) {
             {menu === 6 ? <Surgalt loading={setLoading} /> : null}
             {menu === 7 ? <Shiitgel loading={setLoading} /> : null}
             {menu === 8 ? <HuwiinHereg loading={setLoading} /> : null}
-            {menu === 9 ? <BusadMedeelel loading={setLoading} /> : null}
+            {/* {menu === 9 ? <BusadMedeelel loading={setLoading} /> : null}
             {menu === 10 ? (
               <HamgaalaltiinHeregsel loading={setLoading} />
-            ) : null}
+            ) : null} */}
           </div>
         </div>
       </div>

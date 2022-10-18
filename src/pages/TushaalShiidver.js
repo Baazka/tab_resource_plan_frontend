@@ -1333,7 +1333,7 @@ function Khoyor(props) {
               {file.FILE_PATH !== undefined ? (
                 <a
                   href={
-                    "http://localhost:3001/api/v1/".replace("api/v1/", "") +
+                    hrUrl.replace("api/v1", "") +
                     "static" +
                     file?.FILE_PATH.replace("uploads", "")
                   }
@@ -2222,8 +2222,7 @@ function TushaalKharakh(props) {
             {data?.FILE_PATH !== undefined && data?.FILE_PATH !== null ? (
               <a
                 href={
-                  hrUrl +
-                  "/".replace("api/v1/", "") +
+                  hrUrl.replace("api/v1", "") +
                   "static" +
                   data?.FILE_PATH.replace("uploads", "")
                 }
