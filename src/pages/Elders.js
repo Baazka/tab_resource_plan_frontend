@@ -310,7 +310,12 @@ function Elder(props) {
     >
       <div style={{ position: "relative" }}>
         <img
-          src={hrUrl + "/static/elders/" + props.show.path + ".svg"}
+          src={
+            hrUrl.replace("api/v1", "") +
+            "/static/elders/" +
+            props.show.path +
+            ".svg"
+          }
           alt=""
         />
         <div style={{ position: "absolute", top: "0.8rem", right: "1rem" }}>
