@@ -3,7 +3,7 @@ import Footer from "../components/footer";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
 
-import { FiMail, FiPhone } from "react-icons/fi";
+import { FiCreditCard, FiMail, FiPhone } from "react-icons/fi";
 import {
   Search,
   AddBlue,
@@ -472,6 +472,11 @@ function Home(props) {
             sortable: true,
           },
           {
+            name: "Ажилтны код",
+            selector: "EMP_CODE",
+            sortable: true,
+          },
+          {
             name: "Утасны дугаар",
             selector: "PERSON_PHONE",
             sortable: true,
@@ -904,6 +909,9 @@ function Home(props) {
                   <option value={"PERSON_PHONE"}>Утасны дугаар</option>
                 )}
                 {buttonValue === 2 ? null : (
+                  <option value={"EMP_CODE"}>Ажилтны код</option>
+                )}
+                {buttonValue === 2 ? null : (
                   <option value={"PERSON_EMAIL"}>Имэйл</option>
                 )}
               </select>
@@ -1098,6 +1106,10 @@ function Home(props) {
                     ></textarea>
                     <br />
                     <span style={{ fontSize: "0.7rem" }}>
+                      <FiCreditCard /> {value.EMP_CODE}
+                    </span>
+                    <br />
+                    <span style={{ fontSize: "0.7rem" }}>
                       <FiPhone /> {value.PERSON_PHONE}
                     </span>
                     <br />
@@ -1200,6 +1212,7 @@ function EmployExcel({ data }) {
               <th>Албан тушаалын нэр</th>
               <th>Ажилтны нэр</th>
               <th>Ажилтны овог</th>
+              <th>Ажилтны код</th>
               <th>Утасны дугаар</th>
               <th>Имэйл</th>
             </tr>
@@ -1212,6 +1225,7 @@ function EmployExcel({ data }) {
                 <td>{value.POSITION_NAME}</td>
                 <td>{value.PERSON_FIRSTNAME}</td>
                 <td>{value.PERSON_LASTNAME}</td>
+                <td>{value.EMP_CODE}</td>
                 <td>{value.PERSON_PHONE}</td>
                 <td>{value.PERSON_EMAIL}</td>
               </tr>
