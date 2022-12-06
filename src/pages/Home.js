@@ -850,7 +850,7 @@ function Home(props) {
           }}
         >
           <div style={{ display: "flex" }}>
-            {(buttonValue !== 3 && userDetils?.USER_TYPE_NAME === "ADMIN") ||
+            {/* {(buttonValue !== 3 && userDetils?.USER_TYPE_NAME === "ADMIN") ||
             (buttonValue !== 3 &&
               userDetils?.USER_TYPE_NAME === "GENERAL_DIRECTOR" &&
               userDetils.USER_SUB_DEPARTMENT_ID === null &&
@@ -866,15 +866,24 @@ function Home(props) {
                   edit={false}
                 />
               </div>
-            ) : null}
+            ) : null} */}
             {buttonValue === 1 && userDetils.USER_DEPARTMENT_ID === 101 ? (
-              <div className="select is-small">
-                <Subdepartment
-                  personChild={subdepartment}
-                  setPersonChild={setSubdepartment}
-                  edit={false}
-                />
-              </div>
+              <>
+                <div className="select is-small" style={{ marginRight: "1em" }}>
+                  <DepartmentID
+                    personChild={departmentID}
+                    setPersonChild={departmentSearch}
+                    edit={false}
+                  />
+                </div>
+                <div className="select is-small">
+                  <Subdepartment
+                    personChild={subdepartment}
+                    setPersonChild={setSubdepartment}
+                    edit={false}
+                  />
+                </div>
+              </>
             ) : null}
             <div
               className="select is-small"
