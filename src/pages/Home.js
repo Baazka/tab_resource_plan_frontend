@@ -1224,6 +1224,7 @@ function EmployExcel({ data }) {
               <th>Ажилтны код</th>
               <th>Утасны дугаар</th>
               <th>Имэйл</th>
+              <th>Регистр</th>
             </tr>
             {data?.map((value, index) => (
               <tr>
@@ -1237,6 +1238,7 @@ function EmployExcel({ data }) {
                 <td>{value.EMP_CODE}</td>
                 <td>{value.PERSON_PHONE}</td>
                 <td>{value.PERSON_EMAIL}</td>
+                <td>{value.PERSON_REGISTER_NO}</td>
               </tr>
             ))}
           </table>
