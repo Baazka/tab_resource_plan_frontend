@@ -95,11 +95,11 @@ const Header = (props) => {
       </div>
 
       <div
-        class="navbar-menu"
+        className="navbar-menu"
         id="nav-links"
         style={{ marginTop: "15px", marginRight: "10px" }}
       >
-        <div class="navbar-end">
+        <div className="navbar-end">
           <div>
             <img src={UserB} width="45" height="45" alt="" />
           </div>
@@ -172,7 +172,7 @@ function Login(props) {
         "application/x-www-form-urlencoded;charset=UTF-8";
       axios({
         method: "post", //put
-        url: "http://hr.audit.mn/reg/api/v1/login",
+        url: "http://fas.audit.mn/reg/api/v1/login",
         headers: {
           "Access-Control-Allow-Origin": "*",
           "Content-Type": "application/json",
@@ -202,7 +202,7 @@ function Login(props) {
             }
             DataRequest({
               url:
-                "http://hr.audit.mn/reg/api/v1/profile/" +
+                "http://fas.audit.mn/reg/api/v1/profile/" +
                 response?.data?.USER_ID +
                 "/" +
                 1,
@@ -216,7 +216,7 @@ function Login(props) {
                   JSON.stringify(response?.data)
                 );
                 // DataRequest({
-                //   url: "http://hr.audit.mn/reg/hr/api/v1/election/",
+                //   url: "http://fas.audit.mn/reg/hr/api/v1/election/",
                 //   method: "GET",
                 //   data: {},
                 // })
@@ -307,10 +307,10 @@ function Login(props) {
           alt=""
         />
 
-        <div class="wrap-input100 mb-3 ">
+        <div className="wrap-input100 mb-3 ">
           <input
             tabIndex="1"
-            class="input is-normal"
+            className="input is-normal"
             id="UserName"
             placeholder="Нэвтрэх нэр"
             type="text"
@@ -320,14 +320,14 @@ function Login(props) {
             value={ner}
             onChange={(text) => setNer(text.target.value)}
           />
-          <span class="symbol-input100">
-            <i class="fas fa-user"></i>
+          <span className="symbol-input100">
+            <i className="fas fa-user"></i>
           </span>
         </div>
-        <div class="wrap-input100 mb-3">
+        <div className="wrap-input100 mb-3">
           <input
             tabIndex="2"
-            class="input is-normal"
+            className="input is-normal"
             id="Password"
             name="Password"
             placeholder="Нууц үг"
@@ -337,8 +337,8 @@ function Login(props) {
             value={nuutsUg}
             onChange={(text) => setNuutsUg(text.target.value)}
           />
-          <span class="symbol-input100">
-            <i class="fa fa-unlock-alt"></i>
+          <span className="symbol-input100">
+            <i className="fa fa-unlock-alt"></i>
           </span>
         </div>
         <div style={{ width: "300px" }}>
@@ -367,13 +367,13 @@ function Login(props) {
           </div>
         </div>
 
-        <div class="container">
+        <div className="container">
           <div
-            class="col-md-12  text-center"
+            className="col-md-12  text-center"
             style={{ paddingBottom: "50px", textAlign: "center" }}
           >
             <button
-              class="button"
+              className="button"
               style={{ backgroundColor: "#233772", color: "white" }}
               type="submit"
               onClick={nevtrekh}
