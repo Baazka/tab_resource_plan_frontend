@@ -1437,7 +1437,7 @@ function Kayag(props) {
                   <span className="textSaaral">2</span>
                 </th>
                 <td>
-                  <span className="textSaaral">Оршин суулгаа хаяг</span>
+                  <span className="textSaaral">Оршин суугаа хаяг</span>
                 </td>
                 <td>
                   <span className="textSaaral">
