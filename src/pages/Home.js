@@ -387,6 +387,22 @@ function Home(props) {
     );
   }
 
+  async function ableGetData() {
+    setLoading(true);
+    let resultAble = await DataRequest({
+      url: hrUrl + "/abledata",
+      method: "GET",
+    });
+
+    if (resultAble.data.messege === "success") {
+      alert.show("Амжилттай");
+      setLoading(false);
+    } else {
+      alert.show("Алдаа гарлаа.");
+      setLoading(false);
+    }
+  }
+
   function makeSearch(value, list, stype) {
     // console.log(value, "found");
     // console.log(list, "found");
@@ -952,25 +968,40 @@ function Home(props) {
             </div>
 
             {userDetils?.USER_TYPE_NAME.includes("DIRECTOR") ? null : (
-              <button
-                className="text"
-                style={{
-                  marginLeft: "1%",
-                  borderRadius: "5px",
-                  backgroundColor: "#b8e6f3",
-                  color: "#000",
-                  border: "0px",
-                }}
-                onClick={() => {
-                  anketANew();
-                }}
-              >
-                {" "}
-                <span style={{ display: "flex", paddingRight: "22px" }}>
-                  <img src={AddBlue} width="20px" height="20px " alt="" />
-                  Нэмэх
-                </span>
-              </button>
+              <>
+                <button
+                  className="text"
+                  style={{
+                    marginLeft: "1%",
+                    borderRadius: "5px",
+                    backgroundColor: "#b8e6f3",
+                    color: "#000",
+                    border: "0px",
+                  }}
+                  onClick={() => {
+                    anketANew();
+                  }}
+                >
+                  {" "}
+                  <span style={{ display: "flex", paddingRight: "22px" }}>
+                    <img src={AddBlue} width="20px" height="20px " alt="" />
+                    Нэмэх
+                  </span>
+                </button>
+                <button
+                  className="text"
+                  style={{
+                    marginLeft: "1%",
+                    borderRadius: "5px",
+                    backgroundColor: "#f52717",
+                    color: "#fff",
+                    border: "0px",
+                  }}
+                  onClick={() => ableGetData()}
+                >
+                  <span style={{ display: "flex", width: 70 }}>Абле татах</span>
+                </button>
+              </>
             )}
 
             {buttonValue === 1 ? (

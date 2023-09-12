@@ -116,7 +116,7 @@ function AnketNeg(props) {
 
   function DeleteAvatar() {
     DataRequest({
-      url: hrUrl + "/" + "avatar",
+      url: hrUrl + "/avatar",
       method: "POST",
       data: avatar,
       headers: {
@@ -452,7 +452,7 @@ function AnketNeg(props) {
                       dataURLtoFile(canvasScaled, avatarImg.originalname)
                     );
                     DataRequest({
-                      url: hrUrl + "/" + "fileUpload",
+                      url: hrUrl + "/fileUpload",
                       method: "POST",
                       data: formData,
                       headers: {
