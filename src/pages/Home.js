@@ -171,6 +171,7 @@ function Home(props) {
     setButtonValue(3);
     setSearch("");
   }
+
   async function fetchData() {
     if (
       props.match?.params !== undefined &&
@@ -1142,7 +1143,11 @@ function Home(props) {
                         width: "100%",
                         background: "none",
                       }}
-                      value={value.POSITION_NAME}
+                      value={
+                        value.POSITION_NAME === undefined
+                          ? ""
+                          : value.POSITION_NAME
+                      }
                     ></textarea>
                     <br />
                     <span style={{ fontSize: "0.7rem" }}>
