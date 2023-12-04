@@ -61,6 +61,8 @@ const SideBar = (props) => {
       // menu6: false,
       // menu7: false,
       menu10: false,
+      menu11: false,
+      menu12: false,
     };
     setMenuClick({ ...temp, ...value });
     if (value?.menu0) {
@@ -95,6 +97,12 @@ const SideBar = (props) => {
       setMenuCollapse(true);
     } else if (value?.menu10) {
       history.push("/web/Elders/");
+      setMenuCollapse(true);
+    }else if (value?.menu11) {
+      history.push("/web/AHE");
+      setMenuCollapse(true);
+    }else if (value?.menu12) {
+      history.push("/web/Hereglegch");
       setMenuCollapse(true);
     }
     // else if (value?.menu7) {
@@ -316,6 +324,50 @@ const SideBar = (props) => {
                       }}
                     >
                       Ахмадын бүртгэл
+                    </p>
+                  </div>
+                </MenuItem>
+
+                <MenuItem active={menuClick.menu11}>
+                  <div
+                    className="CustomMenu"
+                    onClick={() => SelectMenu({ menu11: !menuClick.menu11 })}
+                  >
+                    <img
+                      src={menuClick.menu11 ? BagB : Bag}
+                      width="40"
+                      height="30"
+                      alt=""
+                    />
+                    <p
+                      className="MenuText"
+                      style={{
+                        color: `${menuClick.menu11 ? "#418ee6" : "white"}`,
+                      }}
+                    >
+                      АХЭ бүртгэл
+                    </p>
+                  </div>
+                </MenuItem>
+
+                <MenuItem active={menuClick.menu12}>
+                  <div
+                    className="CustomMenu"
+                    onClick={() => SelectMenu({ menu12: !menuClick.menu12 })}
+                  >
+                    <img
+                      src={menuClick.menu12 ? BagB : Bag}
+                      width="40"
+                      height="30"
+                      alt=""
+                    />
+                    <p
+                      className="MenuText"
+                      style={{
+                        color: `${menuClick.menu12 ? "#418ee6" : "white"}`,
+                      }}
+                    >
+                      Хэрэглэгч
                     </p>
                   </div>
                 </MenuItem>

@@ -12,6 +12,8 @@ import AlbanTushaal from "./pages/AlbanTushaal";
 import Dashboard from "./pages/Dashboard";
 import Baiguullaga from "./pages/Baiguullaga";
 import TushaalShiidver from "./pages/TushaalShiidver";
+import AHE from "./pages/Ahe";
+import Hereglegch from "./pages/Hereglegch";
 import Tailan from "./pages/Tailan";
 import Survey from "./pages/Survey";
 import SurveyFin from "./pages/SurveyFin";
@@ -469,6 +471,8 @@ function App() {
           exact
         />
         <PrivateRoute path="/web/Elders" component={Elders} exact />
+        <PrivateRoute path="/web/AHE" component={AHE} exact />
+        <PrivateRoute path="/web/Hereglegch" component={Hereglegch} exact />
 
         {/* ) : (
             <div
