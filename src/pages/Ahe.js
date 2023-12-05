@@ -6,7 +6,6 @@ import {Eye, DocumentsB } from "../assets/images/zurag";
 import { DataRequest } from "../functions/DataApi";
 import hrUrl from "../hrUrl";
 
-const axios = require("axios");
 createTheme("solarized", {
   text: {
     primary: "gray",
@@ -55,18 +54,27 @@ const customStyles = {
 };
 const AHE = (props) => {
   const [jagsaalt, setJagsaalt] = useState([]);
-  const [searchType, setSearchType] = useState("FIRST_NAME");
   const [found, setFound] = useState();
   const [search, setSearch] = useState("");
   const [show, setShow] = useState({ display: false, path: null });
+  const [data, loadData] = useState([]);
 
   async function fetchData() {
-    let listItems = await axios(hrUrl + "/elders/");
+    let listItems  = await DataRequest({
+      url: hrUrl + "/compList",
+      method: "POST",
+      data: data,
+    });
     if (listItems.data !== undefined && listItems.data.length > 0) {
-      setJagsaalt([...listItems.data]);
-      setSearch("");
-    }
+          setJagsaalt([...listItems.data]);
+          setSearch("");
+        }
   }
+
+  useEffect(() => {
+    fetchData();
+  }, [props]);
+
   const columns = [
     {
       name: "№",
@@ -76,45 +84,52 @@ const AHE = (props) => {
       sortable: true,
       width: "40px",
     },
+    // {
+    //   name: "ID",
+    //   selector: "COMP_ID",
+    //   sortable: true,
+    //   expandableRows: true,
+    // },
     {
-      name: "RegisterNo",
-      selector: "REGISTER_NO",
+      name: "АХЭ регистер",
+      selector: "COMP_REGNO",
+      sortable: true,
+      expandableRows: true,
+      width: "150px",
+    },
+    {
+      name: "Region",
+      selector: "COMP_REGION",
       sortable: true,
       expandableRows: true,
     },
     {
       name: "Нэр",
-      selector: "FIRST_NAME",
+      selector: "COMP_NAME",
       sortable: true,
       expandableRows: true,
     },
     {
-        name: "Товч нэр",
-        selector: "LAST_NAME",
-        sortable: true,
-        expandableRows: true,
-    },
-    {
       name: "Утас",
-      selector: "PHONE",
+      selector: "COMP_PHONE",
       sortable: true,
       expandableRows: true,
     },
     {
       name: "И-Мэйл",
-      selector: "PHONE",
+      selector: "COMP_EMAIL",
       sortable: true,
       expandableRows: true,
     },
     {
         name: "Веб",
-        selector: "PHONE",
+        selector: "COMP_WEB",
         sortable: true,
         expandableRows: true,
     },
     {
         name: "Хаяг",
-        selector: "PHONE",
+        selector: "COMP_ADDRESS",
         sortable: true,
         expandableRows: true,
     },
@@ -146,63 +161,35 @@ const AHE = (props) => {
               cursor: "pointer",
               marginBottom: "5px",
             }}
-            onClick={() => hideElder(row)}
+            onClick={() => deleteRow(row)}
           />
         </div>
       ),
     },
   ];
-  function hideElder(value) {
+  function deleteRow(value) {
     if (window.confirm("Мэдээлэлийг нуухдаа итгэлтэй байна уу?")) {
       DataRequest({
-        url: hrUrl + "/elders/",
+        url: hrUrl + "/compDelete",
         method: "POST",
         data: value,
       })
         .then(function (response) {
-          console.log("elderScroll", response);
+          console.log("res", response);
           if (response?.data?.message === "success") {
             fetchData();
           }
         })
         .catch(function (error) {
-          //alert(error.response.data.error.message);
           console.log(error.response);
         });
     }
   }
 
-  function makeSearch(value) {
-    setSearch(value);
-    let found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
-
-    if (found !== undefined && found.length > 0) setFound(found);
-    else setFound([]);
-  }
-
-  function equalStr(value1, value2) {
-    if (
-      value1 !== undefined &&
-      value1 !== "" &&
-      value2 !== undefined &&
-      value2 !== "" &&
-      value1 !== null &&
-      value2 !== null
-    )
-      if ((searchType !== "START_DATE", searchType !== "REGISTER_DATE")) {
-        if (
-          (value1 !== null ? value1.toUpperCase() : "").includes(
-            value2.toUpperCase()
-          )
-        )
-          return true;
-      } else if (value1.includes(value2)) return true;
-    return false;
-  }
-
   useEffect(() => {
     fetchData();
   }, [props]);
+
   return (
     <div
       style={{
@@ -232,27 +219,6 @@ const AHE = (props) => {
             overflow: "hidden",
           }}
         >
-             <div
-          style={{
-            width: "20rem",
-            marginTop: "1rem",
-          }}
-        >
-          <div style={{ display: "flex" }}>
-            <button
-              class="button  ml-3"
-              style={{
-                borderRadius: "6px",
-                backgroundColor: "#418ee6",
-                color: "white",
-                height: "2rem",
-              }}
-            //   onClick={() => setNuutsiinBvrtgel({ tsonkh: true, type: 1 })}
-            >
-              Үүсгэх
-            </button>
-          </div>
-        </div>
           <DataTable
             columns={columns}
             data={search === "" ? jagsaalt : found}
@@ -280,52 +246,9 @@ const AHE = (props) => {
           />
         </div>
       </div>
-
       <Footer />
     </div>
   );
 };
-function Elder(props) {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        width: "60%",
-        height: "auto",
-        left: "25%",
-        top: "10%",
-        borderRadius: "6px",
-        backgroundColor: "white",
-        boxShadow:
-          "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-        zIndex: "1",
-        padding: "15px 15px 35px 15px",
-        overflow: "scroll",
-      }}
-    >
-      <div style={{ position: "relative" }}>
-        <img
-          src={
-            hrUrl.replace("api/v1", "") +
-            "/static/elders/" +
-            props.show.path +
-            ".svg"
-          }
-          alt=""
-        />
-        <div style={{ position: "absolute", top: "0.8rem", right: "1rem" }}>
-          <span
-            style={{
-              fontWeight: "bold",
-              cursor: "grab",
-            }}
-            onClick={() => props.setShow({ display: false, path: "" })}
-          >
-            X
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
+
 export default AHE;

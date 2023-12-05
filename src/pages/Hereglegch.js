@@ -6,7 +6,6 @@ import { Search, Eye, DocumentsB } from "../assets/images/zurag";
 import { DataRequest } from "../functions/DataApi";
 import hrUrl from "../hrUrl";
 
-const axios = require("axios");
 createTheme("solarized", {
   text: {
     primary: "gray",
@@ -59,14 +58,24 @@ const Hereglegch = (props) => {
   const [found, setFound] = useState();
   const [search, setSearch] = useState("");
   const [show, setShow] = useState({ display: false, path: null });
+  const [data, loadData] = useState([]);
 
   async function fetchData() {
-    let listItems = await axios(hrUrl + "/elders/");
+    let listItems  = await DataRequest({
+      url: hrUrl + "/compPersonList",
+      method: "POST",
+      data: data,
+    });
     if (listItems.data !== undefined && listItems.data.length > 0) {
-      setJagsaalt([...listItems.data]);
-      setSearch("");
-    }
+          setJagsaalt([...listItems.data]);
+          setSearch("");
+        }
   }
+
+  useEffect(() => {
+    fetchData();
+  }, [props]);
+
   const columns = [
     {
       name: "№",
@@ -78,49 +87,67 @@ const Hereglegch = (props) => {
     },
     {
       name: "АХЭ нэр",
-      selector: "DEPARTMENT_NAME",
+      selector: "COMP_NAME",
       sortable: true,
       expandableRows: true,
     },
     {
-      name: "Register",
-      selector: "LAST_NAME",
+      name: "АХЭ регистер",
+      selector: "COMP_REGNO",
+      sortable: true,
+      expandableRows: true,
+    },
+    {
+      name: "АХЭ ID",
+      selector: "COMP_ID",
+      sortable: true,
+      expandableRows: true,
+    },
+    {
+      name: "Хэрэглэгчийн нэр",
+      selector: "USER_NAME",
+      sortable: true,
+      expandableRows: true,
+    },
+    {
+      name: "Хэрэглэгчийн регистер",
+      selector: "PERSON_REGISTER_NO",
+      sortable: true,
+      expandableRows: true,
+    },
+    {
+      name: "Хэрэглэгчийн ID",
+      selector: "PERSON_ID",
       sortable: true,
       expandableRows: true,
     },
     {
       name: "Код",
-      selector: "FIRST_NAME",
+      selector: "USER_CODE",
       sortable: true,
       expandableRows: true,
     },
     {
       name: "Пасс",
-      selector: "PHONE",
+      selector: "USER_PASSWORD",
       sortable: true,
       expandableRows: true,
     },
-    {
-        name: "Person-Register",
-        selector: "PHONE",
-        sortable: true,
-        expandableRows: true,
-      },
-      {
-        name: "Username",
-        selector: "PHONE",
-        sortable: true,
-        expandableRows: true,
-      },
       {
         name: "Утас",
-        selector: "PHONE",
+        selector: "PERSON_PHONE",
         sortable: true,
         expandableRows: true,
       },
       {
         name: "И-Мэйл",
-        selector: "PHONE",
+        selector: "PERSON_EMAIL",
+        sortable: true,
+        expandableRows: true,
+      },
+      {
+        name: "Хаяг",
+        selector: "PERSON_ADDRESS",
         sortable: true,
         expandableRows: true,
       },
@@ -152,22 +179,22 @@ const Hereglegch = (props) => {
               cursor: "pointer",
               marginBottom: "5px",
             }}
-            onClick={() => hideElder(row)}
+            onClick={() => deleteRow(row)}
           />
         </div>
       ),
     },
   ];
   
-  function hideElder(value) {
+  function deleteRow(value) {
     if (window.confirm("Мэдээлэлийг нуухдаа итгэлтэй байна уу?")) {
       DataRequest({
-        url: hrUrl + "/elders/",
+        url: hrUrl + "/compPersonDelete",
         method: "POST",
         data: value,
       })
         .then(function (response) {
-          console.log("elderScroll", response);
+          console.log("res", response);
           if (response?.data?.message === "success") {
             fetchData();
           }
@@ -210,6 +237,7 @@ const Hereglegch = (props) => {
   useEffect(() => {
     fetchData();
   }, [props]);
+
   return (
     <div
       style={{
@@ -239,23 +267,21 @@ const Hereglegch = (props) => {
             overflow: "hidden",
           }}
         >
-          <div>
-            {show.display ? (
-              <Elder show={show} setShow={(value) => setShow(value)} />
-            ) : null}
+        <div
+          style={{
+            width: "20rem",
+            marginTop: "1rem",
+          }}
+        >
             <div style={{ display: "flex" }}>
               <div className="select is-small" style={{ marginRight: "10px" }}>
                 <select
                   value={searchType}
                   onChange={(text) => setSearchType(text.target.value)}
                 >
-                  <option value={"AHE"}>АХЭ</option>
-                  <option value={"REGISTER_NO"}>RegisterNo</option>
+                  <option value={"COMP_ID"}>АХЭ ID</option>
+                  <option value={"PERSON_REGISTER_NO"}>Хэрэглэгчийн регистер</option>
                 </select>
-                {/* 
-              <span class="icon is-small is-right">
-                <img alt="" src={Filter} />
-              </span> */}
               </div>
               <div class="control has-icons-left has-icons-right">
                 <input
@@ -315,52 +341,9 @@ const Hereglegch = (props) => {
           />
         </div>
       </div>
-
       <Footer />
     </div>
   );
 };
-function Elder(props) {
-  return (
-    <div
-      style={{
-        position: "absolute",
-        width: "60%",
-        height: "auto",
-        left: "25%",
-        top: "10%",
-        borderRadius: "6px",
-        backgroundColor: "white",
-        boxShadow:
-          "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-        zIndex: "1",
-        padding: "15px 15px 35px 15px",
-        overflow: "scroll",
-      }}
-    >
-      <div style={{ position: "relative" }}>
-        <img
-          src={
-            hrUrl.replace("api/v1", "") +
-            "/static/elders/" +
-            props.show.path +
-            ".svg"
-          }
-          alt=""
-        />
-        <div style={{ position: "absolute", top: "0.8rem", right: "1rem" }}>
-          <span
-            style={{
-              fontWeight: "bold",
-              cursor: "grab",
-            }}
-            onClick={() => props.setShow({ display: false, path: "" })}
-          >
-            X
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
+
 export default Hereglegch;
