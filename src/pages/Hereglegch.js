@@ -103,6 +103,7 @@ const Hereglegch = (props) => {
       selector: "COMP_ID",
       sortable: true,
       expandableRows: true,
+      width: "70px",
     },
     {
       name: "Хэрэглэгчийн нэр",
@@ -120,7 +121,7 @@ const Hereglegch = (props) => {
       name: "Хэрэглэгчийн ID",
       selector: "PERSON_ID",
       sortable: true,
-      expandableRows: true,
+      expandableRows: true
     },
     {
       name: "Код",
@@ -133,12 +134,13 @@ const Hereglegch = (props) => {
       selector: "USER_PASSWORD",
       sortable: true,
       expandableRows: true,
+      width: "60px",
     },
       {
         name: "Утас",
         selector: "PERSON_PHONE",
         sortable: true,
-        expandableRows: true,
+        expandableRows: true
       },
       {
         name: "И-Мэйл",
@@ -274,7 +276,10 @@ const Hereglegch = (props) => {
             width: "20rem",
             marginTop: "1rem",
           }}
-        >
+        > 
+        {show.display ? (
+          <View show={show} setShow={(value) => setShow(value)} />
+        ) : null}
             <div style={{ display: "flex" }}>
               <div className="select is-small" style={{ marginRight: "10px" }}>
                 <select
@@ -314,7 +319,7 @@ const Hereglegch = (props) => {
               Үүсгэх
             </button>
             </div>
-          </div>
+        </div>
 
           <DataTable
             columns={columns}
@@ -347,5 +352,49 @@ const Hereglegch = (props) => {
     </div>
   );
 };
+
+function View(props) {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        width: "60%",
+        height: "auto",
+        left: "25%",
+        top: "10%",
+        borderRadius: "6px",
+        backgroundColor: "white",
+        boxShadow:
+          "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+        zIndex: "1",
+        padding: "15px 15px 35px 15px",
+        overflow: "scroll",
+      }}
+    >
+      <div style={{ position: "relative" }}>
+        <img
+          src={
+            hrUrl.replace("api/v1", "") +
+            "/static/elders/" +
+            props.show.path +
+            ".svg"
+          }
+          alt=""
+        />
+        <div style={{ position: "absolute", top: "0.8rem", right: "1rem" }}>
+          <span
+            style={{
+              fontWeight: "bold",
+              cursor: "grab",
+            }}
+            onClick={() => props.setShow({ display: false, path: "" })}
+          >
+            X
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default Hereglegch;
