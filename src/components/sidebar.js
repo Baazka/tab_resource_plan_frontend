@@ -334,7 +334,7 @@ const SideBar = (props) => {
                     onClick={() => SelectMenu({ menu11: !menuClick.menu11 })}
                   >
                     <img
-                      src={menuClick.menu11 ? BagB : Bag}
+                      src={menuClick.menu11 ? Dashboard : DashboardW}
                       width="40"
                       height="30"
                       alt=""
@@ -356,7 +356,7 @@ const SideBar = (props) => {
                     onClick={() => SelectMenu({ menu12: !menuClick.menu12 })}
                   >
                     <img
-                      src={menuClick.menu12 ? BagB : Bag}
+                      src={menuClick.menu12 ? Dashboard : DashboardW}
                       width="40"
                       height="30"
                       alt=""
