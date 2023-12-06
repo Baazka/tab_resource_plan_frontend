@@ -141,7 +141,7 @@ const Elders = (props) => {
     },
   ];
   function hideElder(value) {
-    if (window.confirm("Мэдээлэлийг нуухдаа итгэлтэй байна уу?")) {
+    if (window.confirm("Мэдээллийг нуухдаа итгэлтэй байна уу?")) {
       DataRequest({
         url: hrUrl + "/elders/",
         method: "POST",

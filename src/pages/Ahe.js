@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import DataTable, { createTheme } from "react-data-table-component";
-import {Eye, DocumentsB } from "../assets/images/zurag";
+import {Eye, Delete } from "../assets/images/zurag";
 import { DataRequest } from "../functions/DataApi";
 import hrUrl from "../hrUrl";
 
@@ -53,6 +53,7 @@ const customStyles = {
   },
 };
 const AHE = (props) => {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [jagsaalt, setJagsaalt] = useState([]);
   const [found, setFound] = useState();
   const [search, setSearch] = useState("");
@@ -153,26 +154,30 @@ const AHE = (props) => {
           />
           <img
             alt=""
-            src={DocumentsB}
-            width="20px"
-            height="20px"
+            src={Delete}
+            width="30px"
+            height="30px"
             style={{
               marginLeft: "10px",
               cursor: "pointer",
-              marginBottom: "5px",
             }}
-            onClick={() => deleteRow(row)}
+            onClick={() => removeRow(row)}
           />
         </div>
       ),
     },
   ];
-  function deleteRow(value) {
-    if (window.confirm("Мэдээлэлийг нуухдаа итгэлтэй байна уу?")) {
+  
+  function removeRow(value) {
+    console.log("valueAHE", value);
+    if (window.confirm("Мэдээллийг устгахдаа итгэлтэй байна уу?")) {
       DataRequest({
         url: hrUrl + "/compDelete",
         method: "POST",
-        data: value,
+        data: {
+          COMP_ID: value?.COMP_ID,
+          CREATED_BY: userDetils?.USER_ID,
+        },
       })
         .then(function (response) {
           console.log("res", response);

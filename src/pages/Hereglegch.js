@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Search, Eye, DocumentsB } from "../assets/images/zurag";
+import { Search, Eye, Delete } from "../assets/images/zurag";
 import { DataRequest } from "../functions/DataApi";
 import hrUrl from "../hrUrl";
 
@@ -53,6 +53,7 @@ const customStyles = {
   },
 };
 const Hereglegch = (props) => {
+  const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [jagsaalt, setJagsaalt] = useState([]);
   const [searchType, setSearchType] = useState("FIRST_NAME");
   const [found, setFound] = useState();
@@ -171,27 +172,30 @@ const Hereglegch = (props) => {
           />
           <img
             alt=""
-            src={DocumentsB}
-            width="20px"
-            height="20px"
+            src={Delete}
+            width="30px"
+            height="30px"
             style={{
               marginLeft: "10px",
               cursor: "pointer",
-              marginBottom: "5px",
             }}
-            onClick={() => deleteRow(row)}
+            onClick={() => removeRow(row)}
           />
         </div>
       ),
     },
   ];
   
-  function deleteRow(value) {
-    if (window.confirm("Мэдээлэлийг нуухдаа итгэлтэй байна уу?")) {
+  function removeRow(value) {
+    console.log("valueHereglegch", value);
+    if (window.confirm("Мэдээллийг устгахдаа итгэлтэй байна уу?")) {
       DataRequest({
         url: hrUrl + "/compPersonDelete",
         method: "POST",
-        data: value,
+        data: {
+          USER_CODE: value?.USER_CODE,
+          CREATED_BY: userDetils?.USER_ID,
+        },
       })
         .then(function (response) {
           console.log("res", response);
