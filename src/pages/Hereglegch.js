@@ -187,7 +187,6 @@ const Hereglegch = (props) => {
   ];
   
   function removeRow(value) {
-    console.log("valueHereglegch", value);
     if (window.confirm("Мэдээллийг устгахдаа итгэлтэй байна уу?")) {
       DataRequest({
         url: hrUrl + "/compPersonDelete",
@@ -204,7 +203,6 @@ const Hereglegch = (props) => {
           }
         })
         .catch(function (error) {
-          //alert(error.response.data.error.message);
           console.log(error.response);
         });
     }

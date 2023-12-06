@@ -169,7 +169,6 @@ const AHE = (props) => {
   ];
   
   function removeRow(value) {
-    console.log("valueAHE", value);
     if (window.confirm("Мэдээллийг устгахдаа итгэлтэй байна уу?")) {
       DataRequest({
         url: hrUrl + "/compDelete",
