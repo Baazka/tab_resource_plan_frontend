@@ -148,12 +148,12 @@ const Hereglegch = (props) => {
         sortable: true,
         expandableRows: true,
       },
-      {
-        name: "Хаяг",
-        selector: "PERSON_ADDRESS",
-        sortable: true,
-        expandableRows: true,
-      },
+      // {
+      //   name: "Хаяг",
+      //   selector: "PERSON_ADDRESS",
+      //   sortable: true,
+      //   expandableRows: true,
+      // },
       {
       name: "",
       right: true,
@@ -314,9 +314,9 @@ const Hereglegch = (props) => {
                 color: "white",
                 height: "2rem",
               }}
-            //   onClick={() => setNuutsiinBvrtgel({ tsonkh: true, type: 1 })}
+              // onClick={() => setNuutsiinBvrtgel({ tsonkh: true, type: 1 })}
             >
-              Үүсгэх
+              Нэмэх
             </button>
             </div>
         </div>
