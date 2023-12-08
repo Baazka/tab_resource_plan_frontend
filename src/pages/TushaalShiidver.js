@@ -1028,7 +1028,7 @@ function Khoyor(props) {
     ) {
       setbutton(2);
     } else {
-      alert.show("үндсэн мэдээлэл бөглөөд хадгалана уу");
+      alert.show("үндсэн мэдээлэл бөглөөд хадгална уу");
     }
   }
   return (
