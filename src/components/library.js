@@ -1348,6 +1348,47 @@ function Reasonsdecision(props) {
   return listItems;
 }
 
+function AHEname(props) {
+  const [data, loadData] = useState(null);
+  useEffect(() => {
+    async function fetchData() {
+      let listItems = await axios(hrUrl + "/library/haklist");
+      loadData(listItems.data);
+    }
+    fetchData();
+  }, [props]);
+  let listItems;
+  if (data !== undefined) {
+    listItems = (
+      <select
+        disabled={props.edit}
+        className="anketInput"
+        value={props.personChild?.DEPARTMENT_ID}
+        onChange={(text) =>
+          props.setPersonChild({
+            ...props.personChild,
+            ...{
+              COMP_REGNO: text.target.value,
+            },
+          })
+        }
+        style={{ width: "-webkit-fill-available" }}
+      >
+        <option value={999}>Сонгоно уу</option>
+        {data?.map((value, index) => (
+          <option key={index} value={value.DEPARTMENT_REGNO}>
+            {value.DEPARTMENT_NAME}
+          </option>
+        ))}
+      </select>
+    );
+  } else {
+    listItems = <p>ачаалж байна...</p>;
+  }
+  return listItems;
+}
+
+
 export {
   National,
   Subnational,
@@ -1378,4 +1419,5 @@ export {
   Profession,
   Reasonsposition,
   Reasonsdecision,
+  AHEname
 };
