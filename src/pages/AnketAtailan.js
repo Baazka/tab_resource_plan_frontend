@@ -198,7 +198,7 @@ function Emergency(props) {
                   <tr>
                     <td>№</td>
                     <td>Ажилтны нэр</td>
-                    {register === false ? <td>Регистерийн дугаар</td> : null}
+                    {register === false ? <td>Регистрийн дугаар</td> : null}
                     <td>Овог</td>
                     <td>Нэр</td>
                     <td>Таны юу болох</td>
@@ -356,7 +356,7 @@ function GerBvl(props) {
                     onChange={() => setRegister(!register)}
                   />
                   <span style={{ marginLeft: "2px" }}>
-                    Регистерийн дугаар харах эсэх
+                    Регистрийн дугаар харах эсэх
                   </span>
                 </label>
               </div>
@@ -411,7 +411,7 @@ function GerBvl(props) {
                             rowspan="2"
                             style={{ backgroundColor: "#f1f1f1" }}
                           >
-                            Регистерийн дугаар
+                            Регистрийн дугаар
                           </td>
                         ) : null}
                         {/* <td rowspan="2" style={{ backgroundColor: "#f1f1f1" }}>
@@ -642,7 +642,7 @@ function Sadan(props) {
                     onChange={() => setRegister(!register)}
                   />
                   <span style={{ marginLeft: "2px" }}>
-                    Регистерийн дугаар харах эсэх
+                    Регистрийн дугаар харах эсэх
                   </span>
                 </label>
               </div>
@@ -694,7 +694,7 @@ function Sadan(props) {
                       </td>
                       {register === false ? (
                         <td rowspan="2" style={{ backgroundColor: "#f1f1f1" }}>
-                          Регистерийн дугаар
+                          Регистрийн дугаар
                         </td>
                       ) : null}
                       <td rowspan="2" style={{ backgroundColor: "#f1f1f1" }}>

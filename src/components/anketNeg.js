@@ -151,7 +151,7 @@ function AnketNeg(props) {
       param?.PERSON_REGISTER_NO === "" ||
       param?.PERSON_REGISTER_NO === null
     ) {
-      alert.show("регистерийн дугаар оруулна уу");
+      alert.show("регистрийн дугаар оруулна уу");
       return false;
     } else if (
       param?.PERSON_BORNDATE === undefined ||
@@ -1040,7 +1040,7 @@ function Yrunkhii(props) {
       <div className="columns" style={{ marginBottom: "0px" }}>
         <div className="column is-3 has-text-right is-narrow-tablet">
           <span style={{ color: "red" }}>*</span>
-          <span className="textSaaral">Регистерийн дугаар</span>
+          <span className="textSaaral">Регистрийн дугаар</span>
         </div>
         <div className="column is-3 is-narrow-tablet">
           <input
