@@ -110,7 +110,7 @@ function AnketNeg(props) {
     ) {
       setAvatarImg(file.target.files[0]);
     } else {
-      alert.show("Ерөнхий мэдээлэл бөгөлнө үү");
+      alert.show("Ерөнхий мэдээлэл бөглөнө үү");
     }
   }
 
@@ -158,19 +158,19 @@ function AnketNeg(props) {
       param?.PERSON_BORNDATE === "" ||
       param?.PERSON_BORNDATE === null
     ) {
-      alert.show("төрсөн он сар өдөрөө оруулна уу");
+      alert.show("төрсөн он сар өдрөө оруулна уу");
     } else if (
       param?.BIRTH_PLACE === undefined ||
       param?.BIRTH_PLACE === "" ||
       param?.BIRTH_PLACE === null
     ) {
-      alert.show("төрсөн газарын мэдээлэл оруулна уу");
+      alert.show("төрсөн газрын мэдээлэл оруулна уу");
     } else if (
       param?.BIRTH_PLACE === undefined ||
       param?.BIRTH_PLACE === "" ||
       param?.BIRTH_PLACE === null
     ) {
-      alert.show("төрсөн газарын мэдээлэл оруулна уу");
+      alert.show("төрсөн газрын мэдээлэл оруулна уу");
     } else {
       returnValue = true;
     }
@@ -1649,7 +1649,7 @@ function HolbooBarikhHun(props) {
         emergency[i].EMERGENCY_LASTNAME === null ||
         emergency[i].EMERGENCY_LASTNAME === ""
       ) {
-        alert.show("Овогоо оруулна уу");
+        alert.show("Овгоо оруулна уу");
         return false;
       } else if (
         emergency[i].EMERGENCY_FIRSTNAME === null ||
@@ -1954,7 +1954,7 @@ function GerBul(props) {
         value[i].MEMBER_LASTNAME === null ||
         value[i].MEMBER_LASTNAME === ""
       ) {
-        alert.show("Овогоо оруулна уу");
+        alert.show("Овгоо оруулна уу");
         return false;
       } else if (
         value[i].MEMBER_FIRSTNAME === null ||
