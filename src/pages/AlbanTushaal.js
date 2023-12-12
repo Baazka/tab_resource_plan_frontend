@@ -236,7 +236,7 @@ const AlbanTushaal = (props) => {
         accessor: "DEPARTMENT_NAME",
       },
       {
-        Header: "Харъяа газар",
+        Header: "Харьяа газар",
         accessor: "SUB_DEPARTMENT_NAME",
       },
       {
@@ -369,7 +369,7 @@ function BaiguullagaExcel({ data }) {
             <tr>
               <th>№</th>
               <th>Төрийн аудитын байгууллага</th>
-              <th>Харъяа газар</th>
+              <th>Харьяа газар</th>
               <th>Дотоод бүтцийн нэгж</th>
               <th>Албан тушаал</th>
             </tr>

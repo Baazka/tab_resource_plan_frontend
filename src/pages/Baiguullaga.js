@@ -238,7 +238,7 @@ const Baiguullaga = (props) => {
   //     width: "200px",
   //   },
   //   {
-  //     name: "Харъяа газар",
+  //     name: "Харьяа газар",
   //     selector: "SUB_DEPARTMENT_NAME",
   //     sortable: true,
   //     width: "290px",
@@ -292,7 +292,7 @@ const Baiguullaga = (props) => {
         accessor: "DEPARTMENT_NAME",
       },
       {
-        Header: "Харъяа газар",
+        Header: "Харьяа газар",
         accessor: "SUB_DEPARTMENT_NAME",
       },
       {
@@ -949,7 +949,7 @@ function BaiguullagaExcel({ data }) {
             <tr>
               <th>№</th>
               <th>Төрийн аудитын байгууллага</th>
-              <th>Харъяа газар</th>
+              <th>Харьяа газар</th>
               <th>Дотоод бүтцийн нэгж</th>
             </tr>
             {data.map((value, index) => (

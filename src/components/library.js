@@ -685,7 +685,7 @@ function Subdepartment(props) {
           })
         }
       >
-        <option value={"null"}>Харъяа газар сонгоно уу</option>
+        <option value={"null"}>Харьяа газар сонгоно уу</option>
         {data?.map((nation, index) => (
           <option key={index} value={nation.SUB_DEPARTMENT_ID}>
             {nation.SUB_DEPARTMENT_NAME}

@@ -463,7 +463,7 @@ function Home(props) {
             width: "200px",
           },
           {
-            name: "Харъяа газар",
+            name: "Харьяа газар",
             selector: "SUB_DEPARTMENT_NAME",
             sortable: true,
             width: "290px",
@@ -572,7 +572,7 @@ function Home(props) {
             width: "200px",
           },
           {
-            name: "Харъяа газар",
+            name: "Харьяа газар",
             selector: "SUB_DEPARTMENT_NAME",
             sortable: true,
             width: "290px",
@@ -917,7 +917,7 @@ function Home(props) {
                   </option>
                 ) : null}
                 {buttonValue !== 3 ? (
-                  <option value={"SUB_DEPARTMENT_NAME"}>Харъяа газар</option>
+                  <option value={"SUB_DEPARTMENT_NAME"}>Харьяа газар</option>
                 ) : null}
                 {buttonValue !== 3 ? (
                   <option value={"COMPARTMENT_NAME"}>
@@ -1252,7 +1252,7 @@ function EmployExcel({ data }) {
             <tr>
               <th>№</th>
               <th>Төрийн аудитын байгууллага</th>
-              <th>Харъяа газар</th>
+              <th>Харьяа газар</th>
               <th>Дотоод бүтцийн нэгж</th>
               <th>Албан тушаалын нэр</th>
               <th>Ажилтны нэр</th>

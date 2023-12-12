@@ -1755,7 +1755,7 @@ function HolbooBarikhHun(props) {
         <div className="columns">
           <div className="column is-11">
             <span className="headerTextBold">
-              зайлшгүй шаардлагатай үед холбоо барих хүний мэдээлэл
+              Зайлшгүй шаардлагатай үед холбоо барих хүний мэдээлэл
             </span>
           </div>
           <div className="column is-1">
