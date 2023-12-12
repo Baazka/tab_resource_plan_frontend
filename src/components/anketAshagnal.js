@@ -201,7 +201,7 @@ function Shagnaliin(props) {
         data.Award[i].AWARD_NAME === null ||
         data.Award[i].AWARD_NAME === ""
       ) {
-        alert.show("Шагналын нэр оруулан уу");
+        alert.show("Шагналын нэр оруулна уу");
         return false;
       } else if (i === data.Award.length - 1) {
         return true;

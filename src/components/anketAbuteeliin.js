@@ -124,13 +124,13 @@ function Buteeliin(props) {
         data.Literature[i].LITERATURE_NAME === null ||
         data.Literature[i].LITERATURE_NAME === ""
       ) {
-        alert.show("Бүтээлийн нэр оруулан уу");
+        alert.show("Бүтээлийн нэр оруулна уу");
         return false;
       } else if (
         data.Literature[i].LITERATURE_TYPE === null ||
         data.Literature[i].LITERATURE_TYPE === ""
       ) {
-        alert.show("Бүтээлийн төрөл оруулан уу");
+        alert.show("Бүтээлийн төрөл оруулна уу");
         return false;
       } else if (i === data.Literature.length - 1) {
         return true;

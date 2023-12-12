@@ -1290,9 +1290,9 @@ function Kayag(props) {
   function requiredField() {
     let returnValue = false;
     if (person.PERSON_PHONE === null || person.PERSON_PHONE === "") {
-      alert.show("утасны дугаараа оруулан уу");
+      alert.show("утасны дугаараа оруулна уу");
     } else if (person.PERSON_EMAIL === null || person.PERSON_EMAIL === "") {
-      alert.show("имэйлээ оруулан уу");
+      alert.show("имэйлээ оруулна уу");
     } else {
       returnValue = true;
     }
@@ -1649,19 +1649,19 @@ function HolbooBarikhHun(props) {
         emergency[i].EMERGENCY_LASTNAME === null ||
         emergency[i].EMERGENCY_LASTNAME === ""
       ) {
-        alert.show("Овогоо оруулан уу");
+        alert.show("Овогоо оруулна уу");
         return false;
       } else if (
         emergency[i].EMERGENCY_FIRSTNAME === null ||
         emergency[i].EMERGENCY_FIRSTNAME === ""
       ) {
-        alert.show("нэрээ оруулан уу");
+        alert.show("нэрээ оруулна уу");
         return false;
       } else if (
         emergency[i].EMERGENCY_PHONE === null ||
         emergency[i].EMERGENCY_PHONE === ""
       ) {
-        alert.show("утасны дугаар оруулан уу");
+        alert.show("утасны дугаар оруулна уу");
         return false;
       } else if (i === emergency.length - 1) {
         return true;
@@ -1954,28 +1954,28 @@ function GerBul(props) {
         value[i].MEMBER_LASTNAME === null ||
         value[i].MEMBER_LASTNAME === ""
       ) {
-        alert.show("Овогоо оруулан уу");
+        alert.show("Овогоо оруулна уу");
         return false;
       } else if (
         value[i].MEMBER_FIRSTNAME === null ||
         value[i].MEMBER_FIRSTNAME === ""
       ) {
-        alert.show("Нэр оруулан уу");
+        alert.show("Нэр оруулна уу");
         return false;
       } else if (value[i].MEMBER_ORG === null || value[i].MEMBER_ORG === "") {
-        alert.show("Байгууллагын нэр оруулан уу");
+        alert.show("Байгууллагын нэр оруулна уу");
         return false;
       } else if (
         value[i].MEMBER_POSITION === null ||
         value[i].MEMBER_POSITION === ""
       ) {
-        alert.show("Албан тушаал оруулан уу");
+        alert.show("Албан тушаал оруулна уу");
         return false;
       } else if (
         value[i].MEMBER_BIRTHDATE === null ||
         value[i].MEMBER_BIRTHDATE === ""
       ) {
-        alert.show("огноо оруулан уу");
+        alert.show("огноо оруулна уу");
         return false;
       }
       // if (

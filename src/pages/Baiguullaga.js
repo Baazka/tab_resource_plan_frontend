@@ -779,7 +779,7 @@ const Baiguullaga = (props) => {
 //         data[i].ORGANIZATION_ROLE_NAME === null ||
 //         data[i].ORGANIZATION_ROLE_NAME === ""
 //       ) {
-//         alert.show(" нэр оруулан уу");
+//         alert.show(" нэр оруулна уу");
 //         return false;
 //       } else if (i === data.length - 1) {
 //         return true;

@@ -621,13 +621,13 @@ function TangaragBurtgel(props) {
     console.log("testestsetsetsetsetsetse", data.Oath);
     for (let i = 0; i < data.Oath.length; i++) {
       if (data.Oath[i].OATH_TYPE === null || data.Oath[i].OATH_TYPE === "") {
-        alert.show("тангаргийн төрөл оруулан уу");
+        alert.show("тангаргийн төрөл оруулна уу");
         return false;
       } else if (
         data.Oath[i].DECISION_NO === null ||
         data.Oath[i].DECISION_NO === ""
       ) {
-        alert.show("тангаргийн шийдвэрийн дугаар оруулан уу");
+        alert.show("тангаргийн шийдвэрийн дугаар оруулна уу");
         return false;
       } else if (i === data.Oath.length - 1) {
         return true;
@@ -1015,13 +1015,13 @@ function GadaadKhel(props) {
         data.Language[i].EXAM_NAME === null ||
         data.Language[i].EXAM_NAME === ""
       ) {
-        alert.show("Шалгалтын Нэр оруулан уу");
+        alert.show("Шалгалтын Нэр оруулна уу");
         return false;
       } else if (
         data.Language[i].CONFIRMATION_NO === null ||
         data.Language[i].CONFIRMATION_NO === ""
       ) {
-        alert.show("Батламжийн дугаар оруулан уу");
+        alert.show("Батламжийн дугаар оруулна уу");
         return false;
       } else if (i === data.Language.length - 1) {
         return true;

@@ -369,7 +369,7 @@ function YurunkhiiMedeelel(props) {
 
   function requiredField() {
     if (data.POSITION_NAME === null || data.POSITION_NAME === "") {
-      alert.show("Албан тушаалын нэр оруулан уу");
+      alert.show("Албан тушаалын нэр оруулна уу");
       return false;
     } else {
       return true;
@@ -681,7 +681,7 @@ function TavigdahTusgai(props) {
       data.REQUIREMENT_EDUCATION === null ||
       data.REQUIREMENT_EDUCATION === ""
     ) {
-      alert.show("Боловсрол оруулан уу");
+      alert.show("Боловсрол оруулна уу");
       return false;
     } else {
       return true;
@@ -956,7 +956,7 @@ function ChigUureg(props) {
   }
   function requiredField() {
     if (data.POSITION_ROLE_NAME === null || data.POSITION_ROLE_NAME === "") {
-      alert.show("нэр оруулан уу");
+      alert.show("нэр оруулна уу");
       return false;
     } else {
       return true;

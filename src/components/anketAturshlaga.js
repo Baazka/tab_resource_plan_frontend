@@ -128,25 +128,25 @@ function Turshlgin(props) {
         data.Experience[i].EXPERIENCE_DEPARTMENT === null ||
         data.Experience[i].EXPERIENCE_DEPARTMENT === ""
       ) {
-        alert.show("Газар хэлтэс, алба оруулан уу");
+        alert.show("Газар хэлтэс, алба оруулна уу");
         return false;
       } else if (
         data.Experience[i].EXPERIENCE_ORG === null ||
         data.Experience[i].EXPERIENCE_ORG === ""
       ) {
-        alert.show("Ажилласан байгууллагынНэр оруулан уу");
+        alert.show("Ажилласан байгууллагынНэр оруулна уу");
         return false;
       } else if (
         data.Experience[i].EXPERIENCE_POSITION === null ||
         data.Experience[i].EXPERIENCE_POSITION === ""
       ) {
-        alert.show("Эрхэлсэн албан тушаал оруулан уу");
+        alert.show("Эрхэлсэн албан тушаал оруулна уу");
         return false;
       } else if (
         data.Experience[i].POSITION_CATEGORY_TYPE_ID === null ||
         data.Experience[i].POSITION_CATEGORY_TYPE_ID === ""
       ) {
-        alert.show("Албан тушаалын төрөл оруулан уу");
+        alert.show("Албан тушаалын төрөл оруулна уу");
         return false;
       } else if (i === data.Experience.length - 1) {
         return true;

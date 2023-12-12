@@ -105,31 +105,31 @@ function Mergeshliin(props) {
         data.Profession[i].PROFESSION_ORG === null ||
         data.Profession[i].PROFESSION_ORG === ""
       ) {
-        alert.show("Мэргэшүүлэх сургалтанд хамрагдсан газар оруулан уу");
+        alert.show("Мэргэшүүлэх сургалтанд хамрагдсан газар оруулна уу");
         return false;
       } else if (
         data.Profession[i].PROFESSION_COUNTRY === null ||
         data.Profession[i].PROFESSION_COUNTRY === ""
       ) {
-        alert.show("Хаана, дотоод. гадаадын ямар байгууллагад оруулан уу");
+        alert.show("Хаана, дотоод. гадаадын ямар байгууллагад оруулна уу");
         return false;
       } else if (
         data.Profession[i].PROFESSION_NAME === null ||
         data.Profession[i].PROFESSION_NAME === ""
       ) {
-        alert.show("Мэргэшүүлэх Сургуулын нэр оруулан уу");
+        alert.show("Мэргэшүүлэх Сургуулын нэр оруулна уу");
         return false;
       } else if (
         data.Profession[i].PROFESSION_DIRECTION === null ||
         data.Profession[i].PROFESSION_DIRECTION === ""
       ) {
-        alert.show("Ямар чиглэлээр оруулан уу");
+        alert.show("Ямар чиглэлээр оруулна уу");
         return false;
       } else if (
         data.Profession[i].DIPLOM_NO === null ||
         data.Profession[i].DIPLOM_NO === ""
       ) {
-        alert.show("Үнэмлэх, гэрчилгээний дугаар оруулан уу");
+        alert.show("Үнэмлэх, гэрчилгээний дугаар оруулна уу");
         return false;
       } else if (i === data.Profession.length - 1) {
         return true;
@@ -692,10 +692,10 @@ function ZeregTsol(props) {
   function requiredField() {
     for (let i = 0; i < data.Fame.length; i++) {
       if (data.Fame[i].FAME_ORG === null || data.Fame[i].FAME_ORG === "") {
-        alert.show("Цол олгосон байгууллага оруулан уу");
+        alert.show("Цол олгосон байгууллага оруулна уу");
         return false;
       } else if (data.Fame[i].FAME_NO === null || data.Fame[i].FAME_NO === "") {
-        alert.show("Гэрчилгээ дипломын дугаар оруулан уу");
+        alert.show("Гэрчилгээ дипломын дугаар оруулна уу");
         return false;
       } else if (i === data.Fame.length - 1) {
         return true;

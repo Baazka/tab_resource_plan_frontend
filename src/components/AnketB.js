@@ -1439,25 +1439,25 @@ function Uramshuulal(props) {
         data.Promotion[i].PROMOTION_NAME === null ||
         data.Promotion[i].PROMOTION_NAME === ""
       ) {
-        alert.show("Урамшууллын нэр оруулан уу");
+        alert.show("Урамшууллын нэр оруулна уу");
         return false;
       } else if (
         data.Promotion[i].DECISION_NAME === null ||
         data.Promotion[i].DECISION_NAME === ""
       ) {
-        alert.show("Шийдвэрийн нэр оруулан уу");
+        alert.show("Шийдвэрийн нэр оруулна уу");
         return false;
       } else if (
         data.Promotion[i].DECISION_NO === null ||
         data.Promotion[i].DECISION_NO === ""
       ) {
-        alert.show("Шийдвэрийн дугаар оруулан уу");
+        alert.show("Шийдвэрийн дугаар оруулна уу");
         return false;
       } else if (
         data.Promotion[i].PROMOTION_MOTIVE === null ||
         data.Promotion[i].PROMOTION_MOTIVE === ""
       ) {
-        alert.show("Урамшуулал үндэслэл оруулан уу");
+        alert.show("Урамшуулал үндэслэл оруулна уу");
         return false;
       } else if (i === data.Promotion.length - 1) {
         return true;
@@ -1919,25 +1919,25 @@ function NuhuhMulbur(props) {
         data.Amends[i].AMENDS_NAME === null ||
         data.Amends[i].AMENDS_NAME === ""
       ) {
-        alert.show("Нөхөх төлбөрийн нэр оруулан уу");
+        alert.show("Нөхөх төлбөрийн нэр оруулна уу");
         return false;
       } else if (
         data.Amends[i].DECISION_NAME === null ||
         data.Amends[i].DECISION_NAME === ""
       ) {
-        alert.show("Шийдвэрийн нэр оруулан уу");
+        alert.show("Шийдвэрийн нэр оруулна уу");
         return false;
       } else if (
         data.Amends[i].DECISION_NO === null ||
         data.Amends[i].DECISION_NO === ""
       ) {
-        alert.show("Шийдвэрийн дугаар оруулан уу");
+        alert.show("Шийдвэрийн дугаар оруулна уу");
         return false;
       } else if (
         data.Amends[i].AMENDS_DESC === null ||
         data.Amends[i].AMENDS_DESC === ""
       ) {
-        alert.show("Нөхөх төлбөр олгосон үндэслэл оруулан уу");
+        alert.show("Нөхөх төлбөр олгосон үндэслэл оруулна уу");
         return false;
       } else if (i === data.Amends.length - 1) {
         return true;
@@ -2400,19 +2400,19 @@ function Tuslamj(props) {
   function requiredField() {
     for (let i = 0; i < data.Aid.length; i++) {
       if (data.Aid[i].AID_NAME === null || data.Aid[i].AID_NAME === "") {
-        alert.show("Тусламжийн нэр оруулан уу");
+        alert.show("Тусламжийн нэр оруулна уу");
         return false;
       } else if (
         data.Aid[i].DECISION_NAME === null ||
         data.Aid[i].DECISION_NAME === ""
       ) {
-        alert.show("Шийдвэрийн нэр оруулан уу");
+        alert.show("Шийдвэрийн нэр оруулна уу");
         return false;
       } else if (
         data.Aid[i].DECISION_NO === null ||
         data.Aid[i].DECISION_NO === ""
       ) {
-        alert.show("Шийдвэрийн дугаар оруулан уу");
+        alert.show("Шийдвэрийн дугаар оруулна уу");
         return false;
       } else if (
         data.Aid[i].AID_MOTIVE === null ||
@@ -2888,31 +2888,31 @@ function Surgalt(props) {
         data.Training[i].TRAINING_SOURCE === null ||
         data.Training[i].TRAINING_SOURCE === ""
       ) {
-        alert.show("Хөтөлбөрийн эх үүсвэр оруулан уу");
+        alert.show("Хөтөлбөрийн эх үүсвэр оруулна уу");
         return false;
       } else if (
         data.Training[i].TRAINING_PLACE === null ||
         data.Training[i].TRAINING_PLACE === ""
       ) {
-        alert.show("Мэргэшүүлэх сургалтанд хамрагдсан газар оруулан уу");
+        alert.show("Мэргэшүүлэх сургалтанд хамрагдсан газар оруулна уу");
         return false;
       } else if (
         data.Training[i].TRAINING_ORG === null ||
         data.Training[i].TRAINING_ORG === ""
       ) {
-        alert.show("Хаана, дотоод гадаадын ямар байгууллагад оруулан уу");
+        alert.show("Хаана, дотоод гадаадын ямар байгууллагад оруулна уу");
         return false;
       } else if (
         data.Training[i].TRAINING_NAME === null ||
         data.Training[i].TRAINING_NAME === ""
       ) {
-        alert.show("Мэргэшүүлэх сургалтын нэр оруулан уу");
+        alert.show("Мэргэшүүлэх сургалтын нэр оруулна уу");
         return false;
       } else if (
         data.Training[i].TRAINING_DESC === null ||
         data.Training[i].TRAINING_DESC === ""
       ) {
-        alert.show("Ямар чиглэлээр оруулан уу");
+        alert.show("Ямар чиглэлээр оруулна уу");
         return false;
       } else if (i === data.Training.length - 1) {
         return true;
@@ -3375,25 +3375,25 @@ function Shiitgel(props) {
         data.Punishment[i].PUNISHMENT_HOLDER === null ||
         data.Punishment[i].PUNISHMENT_HOLDER === ""
       ) {
-        alert.show("Шийтгэл ногдуулсан албан тушаалтан оруулан уу");
+        alert.show("Шийтгэл ногдуулсан албан тушаалтан оруулна уу");
         return false;
       } else if (
         data.Punishment[i].DECISION_NAME === null ||
         data.Punishment[i].DECISION_NAME === ""
       ) {
-        alert.show("Шийдвэрийн нэр оруулан уу");
+        alert.show("Шийдвэрийн нэр оруулна уу");
         return false;
       } else if (
         data.Punishment[i].DECISION_NO === null ||
         data.Punishment[i].DECISION_NO === ""
       ) {
-        alert.show("Шийдвэрийн дугаар оруулан уу");
+        alert.show("Шийдвэрийн дугаар оруулна уу");
         return false;
       } else if (
         data.Punishment[i].PUNISHMENT_DESC === null ||
         data.Punishment[i].PUNISHMENT_DESC === ""
       ) {
-        alert.show("Юуны учир, ямар шийтгэл ногдуулсан оруулан уу");
+        alert.show("Юуны учир, ямар шийтгэл ногдуулсан оруулна уу");
         return false;
       } else if (i === data.Punishment.length - 1) {
         return true;
@@ -3844,19 +3844,19 @@ function HuwiinHereg(props) {
         data.Document[i].DOCUMENT_NAME === null ||
         data.Document[i].DOCUMENT_NAME === ""
       ) {
-        alert.show("Баримт бичгийн нэр оруулан уу");
+        alert.show("Баримт бичгийн нэр оруулна уу");
         return false;
       } else if (
         data.Document[i].COMPLETION_POSISION === null ||
         data.Document[i].COMPLETION_POSISION === ""
       ) {
-        alert.show("Бүрдүүлэлт хийсэн албан тушаалтан оруулан уу");
+        alert.show("Бүрдүүлэлт хийсэн албан тушаалтан оруулна уу");
         return false;
       } else if (
         data.Document[i].COMPLETION_ENTRY_NAME === null ||
         data.Document[i].COMPLETION_ENTRY_NAME === ""
       ) {
-        alert.show("Бүрдүүлэлт хийсэн албан хаагчийн нэр оруулан уу");
+        alert.show("Бүрдүүлэлт хийсэн албан хаагчийн нэр оруулна уу");
         return false;
       } else if (i === data.Document.length - 1) {
         return true;

@@ -861,7 +861,7 @@ function GuitsetgeliinTuluvluguu(props) {
       data.REQUIREMENT_EDUCATION === null ||
       data.REQUIREMENT_EDUCATION === ""
     ) {
-      alert.show("Боловсрол оруулан уу");
+      alert.show("Боловсрол оруулна уу");
       return false;
     } else {
       return true;

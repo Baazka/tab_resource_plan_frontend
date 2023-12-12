@@ -55,7 +55,7 @@ function TsergiinAlba(props) {
       data?.Force[0].FORCE_LOCATION === null ||
       data?.Force[0].FORCE_LOCATION === ""
     ) {
-      alert.show("Хаана талбарыг оруулан уу");
+      alert.show("Хаана талбарыг оруулна уу");
     } else {
       returnValue = true;
     }
