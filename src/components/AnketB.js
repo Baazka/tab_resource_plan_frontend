@@ -488,7 +488,7 @@ function AlbanTushaal(props) {
           </div>
           <div className="columns">
             <div className="column is-3  has-text-right">
-              Алба, хэлтэсийн нэр{" "}
+              Алба, хэлтсийн нэр{" "}
             </div>
             <div className="column is-2">
               <input
@@ -610,7 +610,7 @@ function AlbanTushaal(props) {
                     <td>№</td>
                     <td>Байгууллага нэр</td>
                     <td>Газар, нэгжийн нэр</td>
-                    <td>Алба, хэлтэсийн нэр</td>
+                    <td>Алба, хэлтсийн нэр</td>
                     <td>Албан тушаалын түвшин</td>
                     <td>Албан тушаал</td>
                     <td>Тушаалын дугаар</td>
@@ -804,7 +804,7 @@ function AlbanTushaal(props) {
           </div>
           <div className="columns">
             <div className="column is-3  has-text-right">
-              Алба, хэлтэсийн нэр{" "}
+              Алба, хэлтсийн нэр{" "}
             </div>
             <div className="column is-2">
               <input
@@ -913,7 +913,7 @@ function AlbanTushaal(props) {
                     <td>№</td>
                     <td>Байгууллага нэр</td>
                     <td>Газар, нэгжийн нэр</td>
-                    <td>Алба, хэлтэсийн нэр</td>
+                    <td>Алба, хэлтсийн нэр</td>
                     <td>Албан тушаалын түвшин</td>
                     <td>Албан тушаал</td>
                     <td>Тушаалын дугаар</td>
@@ -2894,7 +2894,7 @@ function Surgalt(props) {
         data.Training[i].TRAINING_PLACE === null ||
         data.Training[i].TRAINING_PLACE === ""
       ) {
-        alert.show("Мэргэшүүлэх сургалтанд хамрагдсан газар оруулна уу");
+        alert.show("Мэргэшүүлэх сургалтад хамрагдсан газар оруулна уу");
         return false;
       } else if (
         data.Training[i].TRAINING_ORG === null ||
@@ -2935,7 +2935,7 @@ function Surgalt(props) {
           <div className="column is-11">
             <span style={{ color: "#418ee6", fontWeight: "bold" }}>Долоо.</span>
             <span style={{ fontWeight: "bold" }}>
-              Сургалтанд хамрагдсан талаарх мэдээлэл
+              Сургалтад хамрагдсан талаарх мэдээлэл
             </span>
           </div>
           <div className="column is-1">
@@ -2968,7 +2968,7 @@ function Surgalt(props) {
                 <span>№</span>
               </th>
               <th>Хөтөлбөрийн эх үүсвэр</th>
-              <th>Мэргэшүүлэх сургалтанд хамрагдсан газар</th>
+              <th>Мэргэшүүлэх сургалтад хамрагдсан газар</th>
               <th>Хаана, дотоод, гадаадын ямар байгууллагад</th>
               <th>Мэргэшүүлэх сургалтын нэр</th>
               <th>Эхэлсэн он,сар,өдөр </th>

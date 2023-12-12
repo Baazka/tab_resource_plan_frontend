@@ -105,7 +105,7 @@ function Mergeshliin(props) {
         data.Profession[i].PROFESSION_ORG === null ||
         data.Profession[i].PROFESSION_ORG === ""
       ) {
-        alert.show("Мэргэшүүлэх сургалтанд хамрагдсан газар оруулна уу");
+        alert.show("Мэргэшүүлэх сургалтад хамрагдсан газар оруулна уу");
         return false;
       } else if (
         data.Profession[i].PROFESSION_COUNTRY === null ||
@@ -272,7 +272,7 @@ function Mergeshliin(props) {
                       </td>
                       <td>
                         <span className="textSaaral">
-                          Мэргэшүүлэх сургалтанд хамрагдсан газар
+                          Мэргэшүүлэх сургалтад хамрагдсан газар
                         </span>
                       </td>
                       <td>

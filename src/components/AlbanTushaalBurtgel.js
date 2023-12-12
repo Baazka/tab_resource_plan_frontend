@@ -456,7 +456,7 @@ function YurunkhiiMedeelel(props) {
 
           <div className="columns">
             <div className="column is-3  has-text-right">
-              <span style={{ color: "red" }}>*</span>Албан хэлтэсийн нэр
+              <span style={{ color: "red" }}>*</span>Албан хэлтсийн нэр
             </div>
             <div className="column is-2">
               <Compartment
