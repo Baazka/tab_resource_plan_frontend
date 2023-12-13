@@ -66,6 +66,7 @@ const AHE = (props) => {
   const [data, loadData] = useState([]);
   const [showDialog, setShowDialog] = useState({ display: false });
   const alert = useAlert();
+  const [loading, setLoading] = useState(true);
   const [dataOne, setDataOne] = useState({
     COMP_ID:null,
     COMP_REGNO:"",
@@ -231,29 +232,6 @@ const AHE = (props) => {
     }
   }
 
-  useEffect(() => {
-    fetchData();
-  }, [props]);
-
-  function saveToDB(value) {
-    DataRequest({
-      url: hrUrl + "/compIU",
-      method: "POST",
-      data: value,
-    })
-      .then(function (response) {
-        if (response?.data?.message === "success") {
-          alert.show("амжилттай хадгаллаа");
-        } else {
-          alert.show("Системийн алдаа");
-        }
-      })
-      .catch(function (error) {
-        console.log(error.response);
-        alert.show("Системийн алдаа");
-      });
-  }
-
   function makeSearch(value) {
     setSearch(value);
     let found = jagsaalt?.filter((obj) => equalStr(obj[searchType], value));
@@ -281,6 +259,83 @@ const AHE = (props) => {
       } else if (value1.includes(value2)) return true;
     return false;
   }
+
+  function requiredField() {
+    console.log("dataOne", dataOne);
+    let returnValue = false;
+    if (
+      dataOne.COMP_REGNO === undefined ||
+      dataOne.COMP_REGNO === "" ||
+      dataOne.COMP_REGNO === null
+    ) {
+      alert.show("АХЭ регистр оруулна уу");
+      return false;
+    } else if (
+      dataOne.COMP_NAME === undefined ||
+      dataOne.COMP_NAME === "" || dataOne.COMP_NAME === null
+    ) {
+      alert.show("АХЭ нэр оруулна уу");
+      return false;
+    }else if (
+      dataOne.COMP_PHONE === undefined ||
+      dataOne.COMP_PHONE === "" || dataOne.COMP_PHONE === null
+    ) {
+      alert.show("Утас оруулна уу");
+      return false;
+    }else if (
+      dataOne.COMP_EMAIL === undefined ||
+      dataOne.COMP_EMAIL === "" || dataOne.COMP_EMAIL === null
+    ) {
+      alert.show("И-Мэйл оруулна уу");
+      return false;
+    } 
+    else if(validateEmail(dataOne.COMP_EMAIL) === false){
+      alert.show("И-Мэйл формат буруу байна");
+      return false;
+    }
+    else {
+      returnValue = true;
+    }
+    return returnValue;
+  }
+
+  function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [props]);
+
+  function saveToDB() {
+    if (requiredField()) {
+      setLoading(true);
+      
+    DataRequest({
+      url: hrUrl + "/compIU",
+      method: "POST",
+      data: dataOne,
+    })
+      .then(function (response) {
+        if (response?.data?.message === "success") {
+          alert.show("Амжилттай хадгаллаа");
+          fetchData();
+          setLoading(false);
+          setShowDialog({display: false})
+        } else {
+          alert.show("Системийн алдаа");
+          setLoading(false);
+        }
+      })
+      .catch(function (error) {
+        // alert(error.response.data.error.message);
+        console.log(error.response);
+        alert.show("Системийн алдаа");
+        setLoading(false);
+      });
+  }
+}
   
   return (
     <div
@@ -352,7 +407,7 @@ const AHE = (props) => {
             </div>
 
         {showDialog.display ? (
-          <Dialog  dataOneP ={dataOne} saveToDB={saveToDB} closeDialog ={closeDialog} setDataOneP = {setDataOne}/>
+          <Dialog  dataOne ={dataOne} saveToDB={saveToDB} closeDialog ={closeDialog} setDataOne = {setDataOne}/>
         ) : null}
 
           <DataTable
@@ -386,9 +441,7 @@ const AHE = (props) => {
   );
 };
 
-function Dialog({dataOneP,closeDialog,saveToDB}) {
-
-  const [dataOne,setDataOne] = useState(dataOneP)
+function Dialog({dataOne,closeDialog,saveToDB, setDataOne}) {
     
   return (
     <div
@@ -444,6 +497,7 @@ function Dialog({dataOneP,closeDialog,saveToDB}) {
               <input
                 class="input  is-size-7"
                 value={dataOne.COMP_REGNO}
+                maxlength="7"
                 onChange={(e) => {
                   setDataOne({
                     ...dataOne,
@@ -468,6 +522,7 @@ function Dialog({dataOneP,closeDialog,saveToDB}) {
                   }}
                 style={{ width: "-webkit-fill-available" }}
               >
+                <option>Сонгоно уу</option>
                 <option value={"Улаанбаатар"}>Улаанбаатар</option>
                 <option value={"Орон нутаг"}>Орон нутаг</option>
               </select>  
@@ -499,6 +554,7 @@ function Dialog({dataOneP,closeDialog,saveToDB}) {
               <input
                 class="input  is-size-7"
                 value={dataOne.COMP_PHONE}
+                maxlength="8"
                 onChange={(e) => {
                   setDataOne({
                     ...dataOne,
@@ -567,7 +623,7 @@ function Dialog({dataOneP,closeDialog,saveToDB}) {
             <button
                 className="buttonTsenkher ml-1"
                 onClick={() => {
-                  saveToDB(dataOne);
+                  saveToDB();
                 }}
               >
                 Хадгалах
