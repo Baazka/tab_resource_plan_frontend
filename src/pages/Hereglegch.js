@@ -576,29 +576,18 @@ function Nemeh({setDataNemeh, dataNemeh, closeNemeh,saveToDB}) {
             <h1>
                 <span style={{ color: "red" }}>*</span>Хэрэглэгчийн регистр
               </h1>
-              {/* <input
+              <input
+                placeholder="Утгаа оруулна уу"
                 class="input  is-size-7"
+                maxLength="10"
                 value={dataNemeh.PERSON_REGNO}
-                onChange={(e) => {
+                onChange={ (e) => {
                   setDataNemeh({
                     ...dataNemeh,
-                    PERSON_REGNO: e.target.value,
+                    ...{ PERSON_REGNO: e.target.value },
                   });
                 }}
-              /> */}
-          <input
-            placeholder="Утгаа оруулна уу"
-            class="input  is-size-7"
-            maxLength="10"
-            pattern="[а-я|А-Я|ө|Ө|ү|Ү]{2}[0-9]{8}"
-            value={dataNemeh.PERSON_REGNO}
-            onChange={ (e) => {
-              setDataNemeh({
-                ...dataNemeh,
-                ...{ PERSON_REGNO: e.target.value },
-              });
-            }}
-          />
+              />
             </div>
             <div className="column is-6">
             <h1>
