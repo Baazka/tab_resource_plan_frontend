@@ -372,6 +372,7 @@ const AHE = (props) => {
                   value={searchType}
                   onChange={(text) => setSearchType(text.target.value)}
                 >
+                  <option>Сонгоно уу</option>
                   <option value={"COMP_NAME"}>АХЭ нэр</option>
                   <option value={"COMP_REGNO"}>АХЭ регистр</option>                  
                 </select>

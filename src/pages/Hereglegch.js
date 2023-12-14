@@ -9,7 +9,6 @@ import hrUrl from "../hrUrl";
 import { AHEname } from "../components/library";
 
 const userDetails = JSON.parse(localStorage.getItem("userDetails"));
-const axios = require("axios");
 
 createTheme("solarized", {
   text: {
@@ -59,16 +58,6 @@ const customStyles = {
   },
 };
 
-const validRegister = new RegExp("^([А-Я|Ө|Ү|а-я|ө|ү]{2})([0-9]{8})$");
-
-function ValidateEmail(mail) {
-  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
-    return true;
-  }
-  alert("Имэйл хаяг формат буруу байна");
-  return false;
-}
-
 const Hereglegch = (props) => {
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [jagsaalt, setJagsaalt] = useState([]);
@@ -80,7 +69,6 @@ const Hereglegch = (props) => {
   const [showZasah, setShowZasah] = useState({ display: false });
   const alert = useAlert();
   const [loading, setLoading] = useState(true);
-  const [edit, setEdit] = useState(true);
   const [dataNemeh, setDataNemeh] = useState({
     COMP_REGNO:null,
     PERSON_REGNO:null,
@@ -90,14 +78,14 @@ const Hereglegch = (props) => {
     PERSON_ADDRESS:"",
     CREATED_BY:userDetails?.USER_ID
   });
-  const [dataZasah, setDataZasah] = useState({
-    PERSON_ID:"",
-    PERSON_NAME:"",
-    PERSON_PHONE:"",
-    PERSON_EMAIL:"",
-    PERSON_ADDRESS:"",
-    CREATED_BY:userDetails?.USER_ID
-  });
+  const [passVisibility, setPassVisibility] = useState({});
+
+  const togglePassVisibility = (row) => {
+    setPassVisibility((prevVisibility) => ({
+      ...prevVisibility,
+      [row.USER_CODE]: !prevVisibility[row.USER_CODE],
+    }));
+  };
 
   function closeNemeh(){
     setShowNemeh({display: false})
@@ -125,17 +113,8 @@ const Hereglegch = (props) => {
   }
 
   function openZasah(data){
-    if(data!==undefined){
-      setDataZasah(data);
-    }else{
-      setDataZasah({
-        PERSON_ID:"",
-        PERSON_NAME:"",
-        PERSON_PHONE:"",
-        PERSON_EMAIL:"",
-        PERSON_ADDRESS:"",
-        CREATED_BY:userDetails?.USER_ID
-      });
+    if(data!==null){
+      setDataNemeh(data);
     }
     setShowZasah({display: true})
   }
@@ -186,13 +165,13 @@ const Hereglegch = (props) => {
     },
     {
       name: "Хэрэглэгчийн нэр",
-      selector: "USER_NAME",
+      selector: "PERSON_NAME",
       sortable: true,
       expandableRows: true,
     },
     {
       name: "Хэрэглэгчийн регистр",
-      selector: "PERSON_REGISTER_NO",
+      selector: "PERSON_REGNO",
       sortable: true,
       expandableRows: true,
     },
@@ -209,11 +188,23 @@ const Hereglegch = (props) => {
       expandableRows: true,
     },
     {
-      name: "Пасс",
-      selector: "USER_PASSWORD",
+      name: "Нууц үг",
       sortable: true,
       expandableRows: true,
-      width: "60px",
+      cell: (row) => (
+        <div>
+          <button
+            onClick={() => togglePassVisibility(row)}
+            style={{
+              backgroundColor: "transparent",
+              border: "none",
+              cursor: "pointer",
+            }}
+          >
+            {passVisibility[row.USER_CODE] ? row.USER_PASSWORD : "харах"}
+          </button>
+        </div>
+      ),
     },
       {
         name: "Утас",
@@ -317,75 +308,85 @@ const Hereglegch = (props) => {
     return false;
   }
 
-  function requiredField(param) {
+  function requiredField() {
     let returnValue = false;
     if (
-      param?.PERSON_NAME === undefined ||
-      (param?.PERSON_NAME === "" && param?.PERSON_NAME === null)
+      dataNemeh.PERSON_REGNO === undefined ||
+      dataNemeh.PERSON_REGNO === "" ||
+      dataNemeh.PERSON_REGNO === null
     ) {
-      alert.show("овог нэрээ оруулна уу");
-    } else if (
-      param?.PERSON_REGNO === undefined ||
-      param?.PERSON_REGNO === "" ||
-      param?.PERSON_REGNO === null
-    ) {
-      alert.show("регистрийн дугаар оруулна уу");
+      alert.show("Регистрийн дугаар оруулна уу"); 
       return false;
-    } else {
+    } else if (
+      dataNemeh.PERSON_NAME === undefined ||
+      dataNemeh.PERSON_NAME === "" || dataNemeh.PERSON_NAME === null
+    ) {
+      alert.show("Овог нэрээ оруулна уу");
+      return false;
+    }else if (
+      dataNemeh.PERSON_PHONE === undefined ||
+      dataNemeh.PERSON_PHONE === "" || dataNemeh.PERSON_PHONE === null
+    ) {
+      alert.show("Утас оруулна уу");
+      return false;
+    }else if (
+      dataNemeh.PERSON_EMAIL === undefined ||
+      dataNemeh.PERSON_EMAIL === "" || dataNemeh.PERSON_EMAIL === null
+    ) {
+      alert.show("И-Мэйл оруулна уу");
+      return false;
+    } 
+    else if(validateEmail(dataNemeh.PERSON_EMAIL) === false){
+      alert.show("И-Мэйл формат буруу байна");
+      return false;
+    }
+    else {
       returnValue = true;
     }
     return returnValue;
   }
 
+  // function validateRegister(code) {
+  //   var validRegister = new RegExp("^([А-Я|Ө|Ү|а-я|ө|ү]{2})([0-9]{8})$")
+  //   return validRegister.test(code);
+  // }
+
+  function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
+ 
   useEffect(() => {
     fetchData();
   }, [props]);
 
-  function saveToDB(value) {
-    if (requiredField(data) === true) {
+  function saveToDB() {
+    if (requiredField()) {
       setLoading(true);
-      if (localStorage.getItem("personDetail")?.includes("person_id")) {
-        if (
-          JSON.parse(localStorage.getItem("personDetail")).person_id === "0"
-        ) {
+      
     DataRequest({
-      url: hrUrl + "/compIU",
+      url: hrUrl + "/compPersonInsert",
       method: "POST",
-      data: value,
+      data: dataNemeh,
     })
       .then(function (response) {
         if (response?.data?.message === "success") {
-          alert.show("амжилттай хадгаллаа");
+          alert.show("Амжилттай хадгаллаа");
+          fetchData();
+          setLoading(false);
+          setShowNemeh({display: false})
         } else {
           alert.show("Системийн алдаа");
+          setLoading(false);
         }
       })
       .catch(function (error) {
         // alert(error.response.data.error.message);
         console.log(error.response);
         alert.show("Системийн алдаа");
+        setLoading(false);
       });
-    } else {
-      DataRequest({
-        url: hrUrl + "/compIU",
-        method: "POST",
-        data: value,
-      })
-        .then(function (response) {
-          console.log("UpdateResponse", response);
-          if (response?.data?.message === "success") {
-            alert.show("амжилттай хадгаллаа");
-            setEdit(!edit);
-            setLoading(false);
-          }
-        })
-        .catch(function (error) {
-          //alert(error.response.data.error.message);
-          console.log(error.response);
-        });
-    }
   }
-}
 }
 
   return (
@@ -429,15 +430,16 @@ const Hereglegch = (props) => {
                   value={searchType}
                   onChange={(text) => setSearchType(text.target.value)}
                 >
+                  <option>Сонгоно уу</option>
                   <option value={"COMP_NAME"}>АХЭ нэр</option>
-                  <option value={"PERSON_REGISTER_NO"}>Хэрэглэгчийн регистр</option>
+                  <option value={"PERSON_REGNO"}>Хэрэглэгчийн регистр</option>
                 </select>
               </div>
               <div class="control has-icons-left has-icons-right">
                 <input
                   class="input is-small is-gray"
                   type="email"
-                  placeholder="хайлт хийх утгаа оруулна уу"
+                  placeholder="Хайлт хийх утгаа оруулна уу"
                   value={search}
                   onChange={(e) => makeSearch(e.target.value)}
                   style={{
@@ -465,11 +467,11 @@ const Hereglegch = (props) => {
         </div>
 
         {showNemeh.display ? (
-          <Nemeh  dataNemehP ={dataNemeh} saveToDB={saveToDB} closeNemeh ={closeNemeh} setDataNemehP = {setDataNemeh}/>
+          <Nemeh setDataNemeh = {setDataNemeh} dataNemeh={dataNemeh}  closeNemeh ={closeNemeh} saveToDB={saveToDB} />
         ) : null}
 
         {showZasah.display ? (
-          <Zasah  dataZasahP ={dataZasah} saveToDB={saveToDB} closeZasah ={closeZasah} setDataZasahP = {setDataZasah}/>
+          <Zasah setDataZasah = {setDataNemeh}  dataZasah ={dataNemeh}  closeZasah ={closeZasah} saveToDB={saveToDB} />
         ) : null}
 
           <DataTable
@@ -503,26 +505,7 @@ const Hereglegch = (props) => {
   );
 };
 
-function Nemeh({dataNemehP,closeNemeh,saveToDB}) {
-
-  const [dataNemeh,setDataNemeh] = useState(dataNemehP)
-  const [register, setRegister] = useState(0);
-  const cyrillicPattern = /^[\u0400-\u04FF]+$/;
-
-  async function personNoCheck(registerT) {
-    console.log(registerT, "registerTT");
-    let listItems = await axios({
-      method: "POST",
-      url: hrUrl + "/personNoCheck",
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-      data: { PERSON_REGNO: registerT },
-    });
-    console.log(listItems?.data?.CNT, "register");
-    setRegister(listItems?.data?.CNT);
-  }
+function Nemeh({setDataNemeh, dataNemeh, closeNemeh,saveToDB}) {
   
   return (
     <div
@@ -572,8 +555,10 @@ function Nemeh({dataNemehP,closeNemeh,saveToDB}) {
         <div style={{padding: "15px"}} >
           <div className="columns  ">
           <div className="column is-6">
-                <h1>АХЭ нэр</h1>
-                <AHEname personChild={dataNemeh} setPersonChild={setDataNemeh} />
+                <h1><span style={{ color: "red" }}>*</span>АХЭ нэр</h1>
+                <div  class="input is-size-7" >
+                  <AHEname  personChild={dataNemeh} setPersonChild={setDataNemeh} />
+                </div>
               </div>
             <div className="column is-6">
             <h1>
@@ -601,27 +586,17 @@ function Nemeh({dataNemehP,closeNemeh,saveToDB}) {
                   });
                 }}
               /> */}
-              <input
+          <input
             placeholder="Утгаа оруулна уу"
             class="input  is-size-7"
+            maxLength="10"
             pattern="[а-я|А-Я|ө|Ө|ү|Ү]{2}[0-9]{8}"
             value={dataNemeh.PERSON_REGNO}
-            onChange={async (e) => {
+            onChange={ (e) => {
               setDataNemeh({
                 ...dataNemeh,
                 ...{ PERSON_REGNO: e.target.value },
               });
-              if (e.target.value.length === 10) {
-                if (
-                  cyrillicPattern.test(e.target.value.slice(0, 2)) &&
-                  /\d/.test(e.target.value.slice(2, 10))
-                ) {
-                  await personNoCheck(e.target.value);
-                  console.log(e.target.value, "registerT");
-                } else setRegister(false);
-              } else {
-                setRegister(false);
-              }
             }}
           />
             </div>
@@ -630,6 +605,7 @@ function Nemeh({dataNemehP,closeNemeh,saveToDB}) {
                 <span style={{ color: "red" }}>*</span>Овог нэр
               </h1>
               <input
+                placeholder="Жишээ: А.Бат"
                 class="input  is-size-7"
                 value={dataNemeh.PERSON_NAME}
                 onChange={(e) => {
@@ -648,6 +624,8 @@ function Nemeh({dataNemehP,closeNemeh,saveToDB}) {
               </h1>
               <input
                 class="input  is-size-7"
+                // type="number"
+                maxlength="8"
                 value={dataNemeh.PERSON_PHONE}
                 onChange={(e) => {
                   setDataNemeh({
@@ -663,19 +641,13 @@ function Nemeh({dataNemehP,closeNemeh,saveToDB}) {
               </h1>
               <input
                 class="input is-size-7"
+                type="text"
                 value={dataNemeh.PERSON_EMAIL}
                 onChange={(e) => {
-                const email = e.target.value;
-                  if (ValidateEmail(email)) {
                     setDataNemeh({
                     ...dataNemeh,
-                    PERSON_EMAIL: email,
+                    PERSON_EMAIL: e.target.value,
                    });
-                  } else {
-                  // Alert or handle incorrect email format here
-                  alert("Имэйл хаяг формат буруу байна");
-                  // You might want to clear the input field or handle it differently
-                  }
                 }}
               />
             </div>
@@ -701,7 +673,7 @@ function Nemeh({dataNemehP,closeNemeh,saveToDB}) {
               <button 
                   className="buttonTsenkher" 
                   onClick={() => {
-                    saveToDB(dataNemeh);
+                    saveToDB();
                   }}
                   >
                 Хадгалах
@@ -714,10 +686,7 @@ function Nemeh({dataNemehP,closeNemeh,saveToDB}) {
   );
 }
 
-function Zasah({dataZasahP,closeZasah,saveToDB}) {
-
-  const [dataZasah,setDataZasah] = useState(dataZasahP)
-
+function Zasah({setDataZasah, dataZasah,closeZasah,saveToDB}) {
   return (
     <div
         style={{
@@ -832,7 +801,7 @@ function Zasah({dataZasahP,closeZasah,saveToDB}) {
               <button 
                 className="buttonTsenkher"
                 onClick={() => {
-                  saveToDB(dataZasah);
+                  saveToDB();
               }}>
                 Хадгалах
               </button>
