@@ -85,7 +85,17 @@ const AHE = (props) => {
 
   function openDialog(data){
     if(data!==undefined){
-      setDataOne(data);
+      setDataOne({
+        COMP_ID:data.COMP_ID,
+        COMP_REGNO:data.COMP_REGNO,
+        COMP_REGION:data.COMP_REGION,
+        COMP_NAME:data.COMP_NAME,
+        COMP_PHONE:data.COMP_PHONE,
+        COMP_EMAIL:data.COMP_EMAIL,
+        COMP_WEB:data.COMP_WEB,
+        COMP_ADDRESS:data.COMP_ADDRESS,
+        CREATED_BY:userDetails?.USER_ID
+      });
     }else{
       setDataOne({
         COMP_ID:null,
