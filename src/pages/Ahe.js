@@ -261,7 +261,6 @@ const AHE = (props) => {
   }
 
   function requiredField() {
-    console.log("dataOne", dataOne);
     let returnValue = false;
     if (
       dataOne.COMP_REGNO === undefined ||

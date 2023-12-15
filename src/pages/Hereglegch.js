@@ -100,6 +100,7 @@ const Hereglegch = (props) => {
       setDataNemeh(data);
     }else{
       setDataNemeh({
+        PERSON_ID:null,
         COMP_REGNO:null,
         PERSON_REGNO:null,
         PERSON_NAME:"",
@@ -360,7 +361,7 @@ const Hereglegch = (props) => {
     fetchData();
   }, [props]);
 
-  function saveToDB() {
+  function saveToDBNemeh() {
     if (requiredField()) {
       setLoading(true);
       
@@ -387,6 +388,41 @@ const Hereglegch = (props) => {
         setLoading(false);
       });
   }
+}
+function saveToDBZasah() {
+  if (requiredField()) {
+    setLoading(true);
+    
+  DataRequest({
+    url: hrUrl + "/compPersonUpdate",
+    method: "POST",
+    data: {
+      PERSON_ID:dataNemeh.PERSON_ID,
+      PERSON_NAME:dataNemeh.PERSON_NAME,
+      PERSON_PHONE:dataNemeh.PERSON_PHONE,
+      PERSON_EMAIL:dataNemeh.PERSON_EMAIL,
+      PERSON_ADDRESS:dataNemeh.PERSON_ADDRESS,
+      CREATED_BY:userDetails.USER_ID,
+    },
+  })
+    .then(function (response) {
+      if (response?.data?.message === "success") {
+        alert.show("Амжилттай хадгаллаа");
+        fetchData();
+        setLoading(false);
+        setShowNemeh({display: false})
+      } else {
+        alert.show("Системийн алдаа");
+        setLoading(false);
+      }
+    })
+    .catch(function (error) {
+      // alert(error.response.data.error.message);
+      console.log(error.response);
+      alert.show("Системийн алдаа");
+      setLoading(false);
+    });
+}
 }
 
   return (
@@ -467,11 +503,11 @@ const Hereglegch = (props) => {
         </div>
 
         {showNemeh.display ? (
-          <Nemeh setDataNemeh = {setDataNemeh} dataNemeh={dataNemeh}  closeNemeh ={closeNemeh} saveToDB={saveToDB} />
+          <Nemeh setDataNemeh = {setDataNemeh} dataNemeh={dataNemeh}  closeNemeh ={closeNemeh} saveToDBNemeh={saveToDBNemeh} />
         ) : null}
 
         {showZasah.display ? (
-          <Zasah setDataZasah = {setDataNemeh}  dataZasah ={dataNemeh}  closeZasah ={closeZasah} saveToDB={saveToDB} />
+          <Zasah setDataZasah = {setDataNemeh}  dataZasah ={dataNemeh}  closeZasah ={closeZasah} saveToDBZasah={saveToDBZasah} />
         ) : null}
 
           <DataTable
@@ -505,7 +541,7 @@ const Hereglegch = (props) => {
   );
 };
 
-function Nemeh({setDataNemeh, dataNemeh, closeNemeh,saveToDB}) {
+function Nemeh({setDataNemeh, dataNemeh, closeNemeh,saveToDBNemeh}) {
   
   return (
     <div
@@ -662,7 +698,7 @@ function Nemeh({setDataNemeh, dataNemeh, closeNemeh,saveToDB}) {
               <button 
                   className="buttonTsenkher" 
                   onClick={() => {
-                    saveToDB();
+                    saveToDBNemeh();
                   }}
                   >
                 Хадгалах
@@ -675,7 +711,7 @@ function Nemeh({setDataNemeh, dataNemeh, closeNemeh,saveToDB}) {
   );
 }
 
-function Zasah({setDataZasah, dataZasah,closeZasah,saveToDB}) {
+function Zasah({setDataZasah, dataZasah,closeZasah,saveToDBZasah}) {
   return (
     <div
         style={{
@@ -744,6 +780,7 @@ function Zasah({setDataZasah, dataZasah,closeZasah,saveToDB}) {
               </h1>
               <input
                 class="input  is-size-7"
+                type="number"
                 value={dataZasah.PERSON_PHONE}
                 onChange={(e) => {
                   setDataZasah({
@@ -790,7 +827,7 @@ function Zasah({setDataZasah, dataZasah,closeZasah,saveToDB}) {
               <button 
                 className="buttonTsenkher"
                 onClick={() => {
-                  saveToDB();
+                  saveToDBZasah();
               }}>
                 Хадгалах
               </button>
