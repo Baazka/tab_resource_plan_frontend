@@ -324,6 +324,9 @@ const Hereglegch = (props) => {
     ) {
       alert.show("Овог нэрээ оруулна уу");
       return false;
+    }else if (!isValidOneLetterDotName(dataNemeh.PERSON_NAME)) {
+      alert.show("Овог нэр формат буруу");
+      return false;
     }else if (
       dataNemeh.PERSON_PHONE === undefined ||
       dataNemeh.PERSON_PHONE === "" || dataNemeh.PERSON_PHONE === null
@@ -351,6 +354,11 @@ const Hereglegch = (props) => {
   //   var validRegister = new RegExp("^([А-Я|Ө|Ү|а-я|ө|ү]{2})([0-9]{8})$")
   //   return validRegister.test(code);
   // }
+
+  function isValidOneLetterDotName(name) {
+    const nameParts = name.split('.');
+    return nameParts.length === 2 && nameParts[0].length === 1;
+  }
 
   function validateEmail(email) {
     var re = /\S+@\S+\.\S+/;
