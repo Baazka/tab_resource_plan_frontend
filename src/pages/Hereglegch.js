@@ -339,7 +339,7 @@ const Hereglegch = (props) => {
     }else if (
       dataNemeh.PERSON_PHONE.length!==8
     ) {
-      alert.show("Утас дугаар формат буруу байна");
+      alert.show("Утасны дугаар формат буруу байна");
       return false;
     }else if (
       dataNemeh.PERSON_EMAIL === undefined ||
