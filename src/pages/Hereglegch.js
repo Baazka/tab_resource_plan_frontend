@@ -325,7 +325,7 @@ const Hereglegch = (props) => {
       alert.show("Овог нэрээ оруулна уу");
       return false;
     }else if (!isValidOneLetterDotName(dataNemeh.PERSON_NAME)) {
-      alert.show("Овог нэр формат буруу");
+      alert.show("Овог нэр формат буруу байна");
       return false;
     }else if (
       dataNemeh.PERSON_PHONE === undefined ||
