@@ -318,6 +318,9 @@ const Hereglegch = (props) => {
     ) {
       alert.show("Регистрийн дугаар оруулна уу"); 
       return false;
+    } else if (!/^([А-Я|Ө|Ү|а-я|ө|ү]{2})([0-9]{8})$/.test(dataNemeh.PERSON_REGNO)) {
+      alert.show("Регистрийн дугаарын формат буруу байна");
+      return false;
     } else if (
       dataNemeh.PERSON_NAME === undefined ||
       dataNemeh.PERSON_NAME === "" || dataNemeh.PERSON_NAME === null
