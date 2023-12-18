@@ -316,10 +316,10 @@ const Hereglegch = (props) => {
       dataNemeh.PERSON_REGNO === "" ||
       dataNemeh.PERSON_REGNO === null
     ) {
-      alert.show("Регистрийн дугаар оруулна уу"); 
+      alert.show("Хэрэглэгчийн регистр оруулна уу"); 
       return false;
     } else if (!/^([А-Я|Ө|Ү|а-я|ө|ү]{2})([0-9]{8})$/.test(dataNemeh.PERSON_REGNO)) {
-      alert.show("Регистрийн дугаарын формат буруу байна");
+      alert.show("Хэрэглэгчийн регистр формат буруу байна");
       return false;
     } else if (
       dataNemeh.PERSON_NAME === undefined ||
