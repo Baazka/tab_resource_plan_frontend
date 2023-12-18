@@ -337,6 +337,11 @@ const Hereglegch = (props) => {
       alert.show("Утас оруулна уу");
       return false;
     }else if (
+      dataNemeh.PERSON_PHONE.length!==8
+    ) {
+      alert.show("Утас дугаар формат буруу байна");
+      return false;
+    }else if (
       dataNemeh.PERSON_EMAIL === undefined ||
       dataNemeh.PERSON_EMAIL === "" || dataNemeh.PERSON_EMAIL === null
     ) {
@@ -352,11 +357,6 @@ const Hereglegch = (props) => {
     }
     return returnValue;
   }
-
-  // function validateRegister(code) {
-  //   var validRegister = new RegExp("^([А-Я|Ө|Ү|а-я|ө|ү]{2})([0-9]{8})$")
-  //   return validRegister.test(code);
-  // }
 
   function isValidOneLetterDotName(name) {
     const nameParts = name.split('.');
