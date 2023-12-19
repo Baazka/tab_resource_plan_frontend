@@ -70,13 +70,13 @@ const Hereglegch = (props) => {
   const alert = useAlert();
   const [loading, setLoading] = useState(true);
   const [dataNemeh, setDataNemeh] = useState({
-    COMP_REGNO:null,
-    PERSON_REGNO:null,
-    PERSON_NAME:"",
-    PERSON_PHONE:"",
-    PERSON_EMAIL:"",
-    PERSON_ADDRESS:"",
-    CREATED_BY:userDetails?.USER_ID
+    COMP_REGNO: null,
+    PERSON_REGNO: null,
+    PERSON_NAME: "",
+    PERSON_PHONE: "",
+    PERSON_EMAIL: "",
+    PERSON_ADDRESS: "",
+    CREATED_BY: userDetails?.USER_ID,
   });
   const [passVisibility, setPassVisibility] = useState({});
 
@@ -87,49 +87,49 @@ const Hereglegch = (props) => {
     }));
   };
 
-  function closeNemeh(){
-    setShowNemeh({display: false})
+  function closeNemeh() {
+    setShowNemeh({ display: false });
   }
 
-  function closeZasah(){
-    setShowZasah({display: false})
+  function closeZasah() {
+    setShowZasah({ display: false });
   }
 
-  function openNemeh(data){
-    if(data!==undefined){
+  function openNemeh(data) {
+    if (data !== undefined) {
       setDataNemeh(data);
-    }else{
+    } else {
       setDataNemeh({
-        PERSON_ID:null,
-        COMP_REGNO:null,
-        PERSON_REGNO:null,
-        PERSON_NAME:"",
-        PERSON_PHONE:"",
-        PERSON_EMAIL:"",
-        PERSON_ADDRESS:"",
-        CREATED_BY:userDetails?.USER_ID
+        PERSON_ID: null,
+        COMP_REGNO: null,
+        PERSON_REGNO: null,
+        PERSON_NAME: "",
+        PERSON_PHONE: "",
+        PERSON_EMAIL: "",
+        PERSON_ADDRESS: "",
+        CREATED_BY: userDetails?.USER_ID,
       });
     }
-    setShowNemeh({display: true})
+    setShowNemeh({ display: true });
   }
 
-  function openZasah(data){
-    if(data!==null){
+  function openZasah(data) {
+    if (data !== null) {
       setDataNemeh(data);
     }
-    setShowZasah({display: true})
+    setShowZasah({ display: true });
   }
 
   async function fetchData() {
-    let listItems  = await DataRequest({
+    let listItems = await DataRequest({
       url: hrUrl + "/compPersonList",
       method: "POST",
       data: data,
     });
     if (listItems.data !== undefined && listItems.data.length > 0) {
-          setJagsaalt([...listItems.data]);
-          setSearch("");
-        }
+      setJagsaalt([...listItems.data]);
+      setSearch("");
+    }
   }
 
   useEffect(() => {
@@ -180,7 +180,7 @@ const Hereglegch = (props) => {
       name: "Хэрэглэгчийн ID",
       selector: "PERSON_ID",
       sortable: true,
-      expandableRows: true
+      expandableRows: true,
     },
     {
       name: "Код",
@@ -207,28 +207,28 @@ const Hereglegch = (props) => {
         </div>
       ),
     },
-      {
-        name: "Утас",
-        selector: "PERSON_PHONE",
-        sortable: true,
-        expandableRows: true
-      },
-      {
-        name: "И-Мэйл",
-        selector: "PERSON_EMAIL",
-        sortable: true,
-        expandableRows: true,
-      },
-      // {
-      //   name: "Хаяг",
-      //   selector: "PERSON_ADDRESS",
-      //   sortable: true,
-      //   expandableRows: true,
-      // },
-      {
+    {
+      name: "Утас",
+      selector: "PERSON_PHONE",
+      sortable: true,
+      expandableRows: true,
+    },
+    {
+      name: "И-Мэйл",
+      selector: "PERSON_EMAIL",
+      sortable: true,
+      expandableRows: true,
+    },
+    // {
+    //   name: "Хаяг",
+    //   selector: "PERSON_ADDRESS",
+    //   sortable: true,
+    //   expandableRows: true,
+    // },
+    {
       name: "",
       right: true,
-       width: "80px",
+      width: "80px",
       cell: (row) => (
         <div>
           <img
@@ -241,7 +241,7 @@ const Hereglegch = (props) => {
               cursor: "pointer",
               marginBottom: "5px",
             }}
-              onClick={() => openZasah(row)}
+            onClick={() => openZasah(row)}
           />
           <img
             alt=""
@@ -258,7 +258,7 @@ const Hereglegch = (props) => {
       ),
     },
   ];
-  
+
   function removeRow(value) {
     if (window.confirm("Мэдээллийг устгахдаа итгэлтэй байна уу?")) {
       DataRequest({
@@ -316,50 +316,51 @@ const Hereglegch = (props) => {
       dataNemeh.PERSON_REGNO === "" ||
       dataNemeh.PERSON_REGNO === null
     ) {
-      alert.show("Хэрэглэгчийн регистр оруулна уу"); 
+      alert.show("Хэрэглэгчийн регистр оруулна уу");
       return false;
-    } else if (!/^([А-Я|Ө|Ү|а-я|ө|ү]{2})([0-9]{8})$/.test(dataNemeh.PERSON_REGNO)) {
+    } else if (
+      !/^([А-Я|Ө|Ү|а-я|ө|ү]{2})([0-9]{8})$/.test(dataNemeh.PERSON_REGNO)
+    ) {
       alert.show("Хэрэглэгчийн регистр формат буруу байна");
       return false;
     } else if (
       dataNemeh.PERSON_NAME === undefined ||
-      dataNemeh.PERSON_NAME === "" || dataNemeh.PERSON_NAME === null
+      dataNemeh.PERSON_NAME === "" ||
+      dataNemeh.PERSON_NAME === null
     ) {
       alert.show("Овог нэрээ оруулна уу");
       return false;
-    }else if (!isValidOneLetterDotName(dataNemeh.PERSON_NAME)) {
+    } else if (!isValidOneLetterDotName(dataNemeh.PERSON_NAME)) {
       alert.show("Овог нэр формат буруу байна");
       return false;
-    }else if (
+    } else if (
       dataNemeh.PERSON_PHONE === undefined ||
-      dataNemeh.PERSON_PHONE === "" || dataNemeh.PERSON_PHONE === null
+      dataNemeh.PERSON_PHONE === "" ||
+      dataNemeh.PERSON_PHONE === null
     ) {
       alert.show("Утас оруулна уу");
       return false;
-    }else if (
-      dataNemeh.PERSON_PHONE.length!==8
-    ) {
+    } else if (dataNemeh.PERSON_PHONE.length !== 8) {
       alert.show("Утасны дугаар формат буруу байна");
       return false;
-    }else if (
+    } else if (
       dataNemeh.PERSON_EMAIL === undefined ||
-      dataNemeh.PERSON_EMAIL === "" || dataNemeh.PERSON_EMAIL === null
+      dataNemeh.PERSON_EMAIL === "" ||
+      dataNemeh.PERSON_EMAIL === null
     ) {
       alert.show("И-Мэйл оруулна уу");
       return false;
-    } 
-    else if(validateEmail(dataNemeh.PERSON_EMAIL) === false){
+    } else if (validateEmail(dataNemeh.PERSON_EMAIL) === false) {
       alert.show("И-Мэйл формат буруу байна");
       return false;
-    }
-    else {
+    } else {
       returnValue = true;
     }
     return returnValue;
   }
 
   function isValidOneLetterDotName(name) {
-    const nameParts = name.split('.');
+    const nameParts = name.split(".");
     return nameParts.length === 2 && nameParts[0].length === 1;
   }
 
@@ -367,7 +368,7 @@ const Hereglegch = (props) => {
     var re = /\S+@\S+\.\S+/;
     return re.test(email);
   }
- 
+
   useEffect(() => {
     fetchData();
   }, [props]);
@@ -375,66 +376,66 @@ const Hereglegch = (props) => {
   function saveToDBNemeh() {
     if (requiredField()) {
       setLoading(true);
-      
-    DataRequest({
-      url: hrUrl + "/compPersonInsert",
-      method: "POST",
-      data: dataNemeh,
-    })
-      .then(function (response) {
-        if (response?.data?.message === "success") {
-          alert.show("Амжилттай хадгаллаа");
-          fetchData();
-          setLoading(false);
-          setShowNemeh({display: false})
-        } else {
+
+      DataRequest({
+        url: hrUrl + "/compPersonInsert",
+        method: "POST",
+        data: dataNemeh,
+      })
+        .then(function (response) {
+          if (response?.data?.message === "success") {
+            alert.show("Амжилттай хадгаллаа");
+            fetchData();
+            setLoading(false);
+            setShowNemeh({ display: false });
+          } else {
+            alert.show("Системийн алдаа");
+            setLoading(false);
+          }
+        })
+        .catch(function (error) {
+          // alert(error.response.data.error.message);
+          console.log(error.response);
           alert.show("Системийн алдаа");
           setLoading(false);
-        }
-      })
-      .catch(function (error) {
-        // alert(error.response.data.error.message);
-        console.log(error.response);
-        alert.show("Системийн алдаа");
-        setLoading(false);
-      });
+        });
+    }
   }
-}
-function saveToDBZasah() {
-  if (requiredField()) {
-    setLoading(true);
-    
-  DataRequest({
-    url: hrUrl + "/compPersonUpdate",
-    method: "POST",
-    data: {
-      PERSON_ID:dataNemeh.PERSON_ID,
-      PERSON_NAME:dataNemeh.PERSON_NAME,
-      PERSON_PHONE:dataNemeh.PERSON_PHONE,
-      PERSON_EMAIL:dataNemeh.PERSON_EMAIL,
-      PERSON_ADDRESS:dataNemeh.PERSON_ADDRESS,
-      CREATED_BY:userDetails.USER_ID,
-    },
-  })
-    .then(function (response) {
-      if (response?.data?.message === "success") {
-        alert.show("Амжилттай хадгаллаа");
-        fetchData();
-        setLoading(false);
-        setShowNemeh({display: false})
-      } else {
-        alert.show("Системийн алдаа");
-        setLoading(false);
-      }
-    })
-    .catch(function (error) {
-      // alert(error.response.data.error.message);
-      console.log(error.response);
-      alert.show("Системийн алдаа");
-      setLoading(false);
-    });
-}
-}
+  function saveToDBZasah() {
+    if (requiredField()) {
+      setLoading(true);
+
+      DataRequest({
+        url: hrUrl + "/compPersonUpdate",
+        method: "POST",
+        data: {
+          PERSON_ID: dataNemeh.PERSON_ID,
+          PERSON_NAME: dataNemeh.PERSON_NAME,
+          PERSON_PHONE: dataNemeh.PERSON_PHONE,
+          PERSON_EMAIL: dataNemeh.PERSON_EMAIL,
+          PERSON_ADDRESS: dataNemeh.PERSON_ADDRESS,
+          CREATED_BY: userDetails.USER_ID,
+        },
+      })
+        .then(function (response) {
+          if (response?.data?.message === "success") {
+            alert.show("Амжилттай хадгаллаа");
+            fetchData();
+            setLoading(false);
+            setShowNemeh({ display: false });
+          } else {
+            alert.show("Системийн алдаа");
+            setLoading(false);
+          }
+        })
+        .catch(function (error) {
+          // alert(error.response.data.error.message);
+          console.log(error.response);
+          alert.show("Системийн алдаа");
+          setLoading(false);
+        });
+    }
+  }
 
   return (
     <div
@@ -450,7 +451,7 @@ function saveToDBZasah() {
         style={{
           backgroundColor: "white",
           width: "100%",
-          marginTop: "80px",
+          //marginTop: "80px",
           marginLeft: "7.5rem",
           overflow: " auto",
           marginBottom: "3%",
@@ -465,12 +466,12 @@ function saveToDBZasah() {
             overflow: "hidden",
           }}
         >
-        <div
-          style={{
-            width: "20rem",
-            marginTop: "1rem",
-          }}
-        > 
+          <div
+            style={{
+              width: "20rem",
+              marginTop: "1rem",
+            }}
+          >
             <div style={{ display: "flex" }}>
               <div className="select is-small" style={{ marginRight: "10px" }}>
                 <select
@@ -499,27 +500,37 @@ function saveToDBZasah() {
                 </span>
               </div>
               <button
-              class="button  ml-3"
-              style={{
-                borderRadius: "6px",
-                backgroundColor: "#418ee6",
-                color: "white",
-                height: "2rem",
-              }}
-              onClick={() => openNemeh()}
-            >
-              Нэмэх
-            </button>
+                class="button  ml-3"
+                style={{
+                  borderRadius: "6px",
+                  backgroundColor: "#418ee6",
+                  color: "white",
+                  height: "2rem",
+                }}
+                onClick={() => openNemeh()}
+              >
+                Нэмэх
+              </button>
             </div>
-        </div>
+          </div>
 
-        {showNemeh.display ? (
-          <Nemeh setDataNemeh = {setDataNemeh} dataNemeh={dataNemeh}  closeNemeh ={closeNemeh} saveToDBNemeh={saveToDBNemeh} />
-        ) : null}
+          {showNemeh.display ? (
+            <Nemeh
+              setDataNemeh={setDataNemeh}
+              dataNemeh={dataNemeh}
+              closeNemeh={closeNemeh}
+              saveToDBNemeh={saveToDBNemeh}
+            />
+          ) : null}
 
-        {showZasah.display ? (
-          <Zasah setDataZasah = {setDataNemeh}  dataZasah ={dataNemeh}  closeZasah ={closeZasah} saveToDBZasah={saveToDBZasah} />
-        ) : null}
+          {showZasah.display ? (
+            <Zasah
+              setDataZasah={setDataNemeh}
+              dataZasah={dataNemeh}
+              closeZasah={closeZasah}
+              saveToDBZasah={saveToDBZasah}
+            />
+          ) : null}
 
           <DataTable
             columns={columns}
@@ -552,63 +563,67 @@ function saveToDBZasah() {
   );
 };
 
-function Nemeh({setDataNemeh, dataNemeh, closeNemeh,saveToDBNemeh}) {
-  
+function Nemeh({ setDataNemeh, dataNemeh, closeNemeh, saveToDBNemeh }) {
   return (
     <div
+      style={{
+        position: "absolute",
+        width: "60%",
+        height: "auto",
+        left: "25%",
+        top: "10%",
+        borderRadius: "6px",
+        backgroundColor: "white",
+        boxShadow:
+          "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+        zIndex: "1",
+      }}
+    >
+      <div
         style={{
-          position: "absolute",
-          width: "60%",
           height: "auto",
-          left: "25%",
-          top: "10%",
-          borderRadius: "6px",
-          backgroundColor: "white",
-          boxShadow:
-            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-          zIndex: "1",
+          backgroundColor: "#418ee6",
+          padding: "18px 10px 18px 10px",
+          color: "white",
+          marginBottom: "10px",
+          borderTopLeftRadius: "6px",
+          borderTopRightRadius: "6px",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
         }}
       >
-        <div
-          style={{
-            height: "auto",
-            backgroundColor: "#418ee6",
-            padding: "18px 10px 18px 10px",
-            color: "white",
-            marginBottom: "10px",
-            borderTopLeftRadius: "6px",
-            borderTopRightRadius: "6px",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <div>
-            <span>НЭМЭХ</span>
-          </div>
-          <div>
-            <span
-              style={{
-                fontWeight: "bold",
-                cursor: "grab",
-              }}
-              onClick={()=>closeNemeh()}
-            >
-              X
-            </span>
-          </div>
+        <div>
+          <span>НЭМЭХ</span>
         </div>
         <div>
-        <div style={{padding: "15px"}} >
+          <span
+            style={{
+              fontWeight: "bold",
+              cursor: "grab",
+            }}
+            onClick={() => closeNemeh()}
+          >
+            X
+          </span>
+        </div>
+      </div>
+      <div>
+        <div style={{ padding: "15px" }}>
           <div className="columns  ">
-          <div className="column is-6">
-                <h1><span style={{ color: "red" }}>*</span>АХЭ нэр</h1>
-                <div  class="input is-size-7" >
-                  <AHEname  personChild={dataNemeh} setPersonChild={setDataNemeh} />
-                </div>
-              </div>
             <div className="column is-6">
-            <h1>
+              <h1>
+                <span style={{ color: "red" }}>*</span>АХЭ нэр
+              </h1>
+              <div class="input is-size-7">
+                <AHEname
+                  personChild={dataNemeh}
+                  setPersonChild={setDataNemeh}
+                />
+              </div>
+            </div>
+            <div className="column is-6">
+              <h1>
                 <span style={{ color: "red" }}>*</span>АХЭ регистр
               </h1>
               <input
@@ -620,7 +635,7 @@ function Nemeh({setDataNemeh, dataNemeh, closeNemeh,saveToDBNemeh}) {
           </div>
           <div className="columns  ">
             <div className="column is-6">
-            <h1>
+              <h1>
                 <span style={{ color: "red" }}>*</span>Хэрэглэгчийн регистр
               </h1>
               <input
@@ -628,7 +643,7 @@ function Nemeh({setDataNemeh, dataNemeh, closeNemeh,saveToDBNemeh}) {
                 class="input  is-size-7"
                 maxLength="10"
                 value={dataNemeh.PERSON_REGNO}
-                onChange={ (e) => {
+                onChange={(e) => {
                   setDataNemeh({
                     ...dataNemeh,
                     ...{ PERSON_REGNO: e.target.value },
@@ -637,7 +652,7 @@ function Nemeh({setDataNemeh, dataNemeh, closeNemeh,saveToDBNemeh}) {
               />
             </div>
             <div className="column is-6">
-            <h1>
+              <h1>
                 <span style={{ color: "red" }}>*</span>Овог нэр
               </h1>
               <input
@@ -655,7 +670,7 @@ function Nemeh({setDataNemeh, dataNemeh, closeNemeh,saveToDBNemeh}) {
           </div>
           <div className="columns  ">
             <div className="column is-6">
-            <h1>
+              <h1>
                 <span style={{ color: "red" }}>*</span>Утас
               </h1>
               <input
@@ -672,7 +687,7 @@ function Nemeh({setDataNemeh, dataNemeh, closeNemeh,saveToDBNemeh}) {
               />
             </div>
             <div className="column is-6">
-            <h1>
+              <h1>
                 <span style={{ color: "red" }}>*</span>И-Мэйл
               </h1>
               <input
@@ -680,10 +695,10 @@ function Nemeh({setDataNemeh, dataNemeh, closeNemeh,saveToDBNemeh}) {
                 type="text"
                 value={dataNemeh.PERSON_EMAIL}
                 onChange={(e) => {
-                    setDataNemeh({
+                  setDataNemeh({
                     ...dataNemeh,
                     PERSON_EMAIL: e.target.value,
-                   });
+                  });
                 }}
               />
             </div>
@@ -704,74 +719,74 @@ function Nemeh({setDataNemeh, dataNemeh, closeNemeh,saveToDBNemeh}) {
             </div>
           </div>
           <div className="columns">
-          <div className="column is-11"></div>
+            <div className="column is-11"></div>
             <div className="column is-1 ">
-              <button 
-                  className="buttonTsenkher" 
-                  onClick={() => {
-                    saveToDBNemeh();
-                  }}
-                  >
+              <button
+                className="buttonTsenkher"
+                onClick={() => {
+                  saveToDBNemeh();
+                }}
+              >
                 Хадгалах
               </button>
             </div>
           </div>
-        </div>   
+        </div>
       </div>
     </div>
   );
 }
 
-function Zasah({setDataZasah, dataZasah,closeZasah,saveToDBZasah}) {
+function Zasah({ setDataZasah, dataZasah, closeZasah, saveToDBZasah }) {
   return (
     <div
+      style={{
+        position: "absolute",
+        width: "60%",
+        height: "auto",
+        left: "25%",
+        top: "10%",
+        borderRadius: "6px",
+        backgroundColor: "white",
+        boxShadow:
+          "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+        zIndex: "1",
+      }}
+    >
+      <div
         style={{
-          position: "absolute",
-          width: "60%",
           height: "auto",
-          left: "25%",
-          top: "10%",
-          borderRadius: "6px",
-          backgroundColor: "white",
-          boxShadow:
-            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-          zIndex: "1",
+          backgroundColor: "#418ee6",
+          padding: "18px 10px 18px 10px",
+          color: "white",
+          marginBottom: "10px",
+          borderTopLeftRadius: "6px",
+          borderTopRightRadius: "6px",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
         }}
       >
-        <div
-          style={{
-            height: "auto",
-            backgroundColor: "#418ee6",
-            padding: "18px 10px 18px 10px",
-            color: "white",
-            marginBottom: "10px",
-            borderTopLeftRadius: "6px",
-            borderTopRightRadius: "6px",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <div>
-            <span>ЗАСАХ</span>
-          </div>
-          <div>
-            <span
-              style={{
-                fontWeight: "bold",
-                cursor: "grab",
-              }}
-              onClick={()=>closeZasah()}
-            >
-              X
-            </span>
-          </div>
+        <div>
+          <span>ЗАСАХ</span>
         </div>
         <div>
-        <div style={{padding: "15px"}} >
+          <span
+            style={{
+              fontWeight: "bold",
+              cursor: "grab",
+            }}
+            onClick={() => closeZasah()}
+          >
+            X
+          </span>
+        </div>
+      </div>
+      <div>
+        <div style={{ padding: "15px" }}>
           <div className="columns  ">
             <div className="column is-6">
-            <h1>
+              <h1>
                 <span style={{ color: "red" }}>*</span>Овог нэр
               </h1>
               <input
@@ -786,7 +801,7 @@ function Zasah({setDataZasah, dataZasah,closeZasah,saveToDBZasah}) {
               />
             </div>
             <div className="column is-6">
-            <h1>
+              <h1>
                 <span style={{ color: "red" }}>*</span>Утас
               </h1>
               <input
@@ -804,7 +819,7 @@ function Zasah({setDataZasah, dataZasah,closeZasah,saveToDBZasah}) {
           </div>
           <div className="columns  ">
             <div className="column is-6">
-            <h1>
+              <h1>
                 <span style={{ color: "red" }}>*</span>И-Мэйл
               </h1>
               <input
@@ -833,18 +848,19 @@ function Zasah({setDataZasah, dataZasah,closeZasah,saveToDBZasah}) {
             </div>
           </div>
           <div className="columns">
-          <div className="column is-11"></div>
+            <div className="column is-11"></div>
             <div className="column is-1 ">
-              <button 
+              <button
                 className="buttonTsenkher"
                 onClick={() => {
                   saveToDBZasah();
-              }}>
+                }}
+              >
                 Хадгалах
               </button>
             </div>
           </div>
-        </div>   
+        </div>
       </div>
     </div>
   );

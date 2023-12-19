@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import DataTable, { createTheme } from "react-data-table-component";
-import {Eye, Delete, Search } from "../assets/images/zurag";
+import { Eye, Delete, Search } from "../assets/images/zurag";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 import hrUrl from "../hrUrl";
@@ -68,60 +68,60 @@ const AHE = (props) => {
   const alert = useAlert();
   const [loading, setLoading] = useState(true);
   const [dataOne, setDataOne] = useState({
-    COMP_ID:null,
-    COMP_REGNO:"",
-    COMP_REGION:"",
-    COMP_NAME:"",
-    COMP_PHONE:"",
-    COMP_EMAIL:"",
-    COMP_WEB:"",
-    COMP_ADDRESS:"",
-    CREATED_BY:userDetails?.USER_ID
+    COMP_ID: null,
+    COMP_REGNO: "",
+    COMP_REGION: "",
+    COMP_NAME: "",
+    COMP_PHONE: "",
+    COMP_EMAIL: "",
+    COMP_WEB: "",
+    COMP_ADDRESS: "",
+    CREATED_BY: userDetails?.USER_ID,
   });
 
-  function closeDialog(){
-    setShowDialog({display: false})
+  function closeDialog() {
+    setShowDialog({ display: false });
   }
 
-  function openDialog(data){
-    if(data!==undefined){
+  function openDialog(data) {
+    if (data !== undefined) {
       setDataOne({
-        COMP_ID:data.COMP_ID,
-        COMP_REGNO:data.COMP_REGNO,
-        COMP_REGION:data.COMP_REGION,
-        COMP_NAME:data.COMP_NAME,
-        COMP_PHONE:data.COMP_PHONE,
-        COMP_EMAIL:data.COMP_EMAIL,
-        COMP_WEB:data.COMP_WEB,
-        COMP_ADDRESS:data.COMP_ADDRESS,
-        CREATED_BY:userDetails?.USER_ID
+        COMP_ID: data.COMP_ID,
+        COMP_REGNO: data.COMP_REGNO,
+        COMP_REGION: data.COMP_REGION,
+        COMP_NAME: data.COMP_NAME,
+        COMP_PHONE: data.COMP_PHONE,
+        COMP_EMAIL: data.COMP_EMAIL,
+        COMP_WEB: data.COMP_WEB,
+        COMP_ADDRESS: data.COMP_ADDRESS,
+        CREATED_BY: userDetails?.USER_ID,
       });
-    }else{
+    } else {
       setDataOne({
-        COMP_ID:null,
-        COMP_REGNO:"",
-        COMP_REGION:"",
-        COMP_NAME:"",
-        COMP_PHONE:"",
-        COMP_EMAIL:"",
-        COMP_WEB:"",
-        COMP_ADDRESS:"",
-        CREATED_BY:userDetails?.USER_ID
+        COMP_ID: null,
+        COMP_REGNO: "",
+        COMP_REGION: "",
+        COMP_NAME: "",
+        COMP_PHONE: "",
+        COMP_EMAIL: "",
+        COMP_WEB: "",
+        COMP_ADDRESS: "",
+        CREATED_BY: userDetails?.USER_ID,
       });
     }
-    setShowDialog({display: true})
+    setShowDialog({ display: true });
   }
 
   async function fetchData() {
-    let listItems  = await DataRequest({
+    let listItems = await DataRequest({
       url: hrUrl + "/compList",
       method: "POST",
       data: data,
     });
     if (listItems.data !== undefined && listItems.data.length > 0) {
-          setJagsaalt([...listItems.data]);
-          setSearch("");
-        }
+      setJagsaalt([...listItems.data]);
+      setSearch("");
+    }
   }
 
   useEffect(() => {
@@ -175,16 +175,16 @@ const AHE = (props) => {
       expandableRows: true,
     },
     {
-        name: "Веб",
-        selector: "COMP_WEB",
-        sortable: true,
-        expandableRows: true,
+      name: "Веб",
+      selector: "COMP_WEB",
+      sortable: true,
+      expandableRows: true,
     },
     {
-        name: "Хаяг",
-        selector: "COMP_ADDRESS",
-        sortable: true,
-        expandableRows: true,
+      name: "Хаяг",
+      selector: "COMP_ADDRESS",
+      sortable: true,
+      expandableRows: true,
     },
     {
       name: "",
@@ -219,7 +219,7 @@ const AHE = (props) => {
       ),
     },
   ];
-  
+
   function removeRow(value) {
     if (window.confirm("Мэдээллийг устгахдаа итгэлтэй байна уу?")) {
       DataRequest({
@@ -281,28 +281,29 @@ const AHE = (props) => {
       return false;
     } else if (
       dataOne.COMP_NAME === undefined ||
-      dataOne.COMP_NAME === "" || dataOne.COMP_NAME === null
+      dataOne.COMP_NAME === "" ||
+      dataOne.COMP_NAME === null
     ) {
       alert.show("АХЭ нэр оруулна уу");
       return false;
-    }else if (
+    } else if (
       dataOne.COMP_PHONE === undefined ||
-      dataOne.COMP_PHONE === "" || dataOne.COMP_PHONE === null
+      dataOne.COMP_PHONE === "" ||
+      dataOne.COMP_PHONE === null
     ) {
       alert.show("Утас оруулна уу");
       return false;
-    }else if (
+    } else if (
       dataOne.COMP_EMAIL === undefined ||
-      dataOne.COMP_EMAIL === "" || dataOne.COMP_EMAIL === null
+      dataOne.COMP_EMAIL === "" ||
+      dataOne.COMP_EMAIL === null
     ) {
       alert.show("И-Мэйл оруулна уу");
       return false;
-    } 
-    else if(validateEmail(dataOne.COMP_EMAIL) === false){
+    } else if (validateEmail(dataOne.COMP_EMAIL) === false) {
       alert.show("И-Мэйл формат буруу байна");
       return false;
-    }
-    else {
+    } else {
       returnValue = true;
     }
     return returnValue;
@@ -320,32 +321,32 @@ const AHE = (props) => {
   function saveToDB() {
     if (requiredField()) {
       setLoading(true);
-      
-    DataRequest({
-      url: hrUrl + "/compIU",
-      method: "POST",
-      data: dataOne,
-    })
-      .then(function (response) {
-        if (response?.data?.message === "success") {
-          alert.show("Амжилттай хадгаллаа");
-          fetchData();
-          setLoading(false);
-          setShowDialog({display: false})
-        } else {
+
+      DataRequest({
+        url: hrUrl + "/compIU",
+        method: "POST",
+        data: dataOne,
+      })
+        .then(function (response) {
+          if (response?.data?.message === "success") {
+            alert.show("Амжилттай хадгаллаа");
+            fetchData();
+            setLoading(false);
+            setShowDialog({ display: false });
+          } else {
+            alert.show("Системийн алдаа");
+            setLoading(false);
+          }
+        })
+        .catch(function (error) {
+          // alert(error.response.data.error.message);
+          console.log(error.response);
           alert.show("Системийн алдаа");
           setLoading(false);
-        }
-      })
-      .catch(function (error) {
-        // alert(error.response.data.error.message);
-        console.log(error.response);
-        alert.show("Системийн алдаа");
-        setLoading(false);
-      });
+        });
+    }
   }
-}
-  
+
   return (
     <div
       style={{
@@ -360,7 +361,7 @@ const AHE = (props) => {
         style={{
           backgroundColor: "white",
           width: "100%",
-          marginTop: "80px",
+          //marginTop: "80px",
           marginLeft: "7.5rem",
           overflow: " auto",
           marginBottom: "3%",
@@ -375,34 +376,34 @@ const AHE = (props) => {
             overflow: "hidden",
           }}
         >
-           <div style={{ display: "flex" }}> 
-              <div className="select is-small" style={{ marginRight: "10px" }}>
-                <select
-                  value={searchType}
-                  onChange={(text) => setSearchType(text.target.value)}
-                >
-                  <option>Сонгоно уу</option>
-                  <option value={"COMP_NAME"}>АХЭ нэр</option>
-                  <option value={"COMP_REGNO"}>АХЭ регистр</option>                  
-                </select>
-              </div>
-              <div class="control has-icons-left has-icons-right">
-                <input
-                  class="input is-small is-gray"
-                  type="email"
-                  placeholder="хайлт хийх утгаа оруулна уу"
-                  value={search}
-                  onChange={(e) => makeSearch(e.target.value)}
-                  style={{
-                    borderRadius: "5px",
-                    width: "18rem",
-                  }}
-                />
-                <span class="icon is-small is-right" style={{ zIndex: 0 }}>
-                  <img alt="" src={Search} />
-                </span>
-              </div>                      
-              <button
+          <div style={{ display: "flex" }}>
+            <div className="select is-small" style={{ marginRight: "10px" }}>
+              <select
+                value={searchType}
+                onChange={(text) => setSearchType(text.target.value)}
+              >
+                <option>Сонгоно уу</option>
+                <option value={"COMP_NAME"}>АХЭ нэр</option>
+                <option value={"COMP_REGNO"}>АХЭ регистр</option>
+              </select>
+            </div>
+            <div class="control has-icons-left has-icons-right">
+              <input
+                class="input is-small is-gray"
+                type="email"
+                placeholder="хайлт хийх утгаа оруулна уу"
+                value={search}
+                onChange={(e) => makeSearch(e.target.value)}
+                style={{
+                  borderRadius: "5px",
+                  width: "18rem",
+                }}
+              />
+              <span class="icon is-small is-right" style={{ zIndex: 0 }}>
+                <img alt="" src={Search} />
+              </span>
+            </div>
+            <button
               class="button  ml-3"
               style={{
                 borderRadius: "6px",
@@ -414,11 +415,16 @@ const AHE = (props) => {
             >
               Нэмэх
             </button>
-            </div>
+          </div>
 
-        {showDialog.display ? (
-          <Dialog  dataOne ={dataOne} saveToDB={saveToDB} closeDialog ={closeDialog} setDataOne = {setDataOne}/>
-        ) : null}
+          {showDialog.display ? (
+            <Dialog
+              dataOne={dataOne}
+              saveToDB={saveToDB}
+              closeDialog={closeDialog}
+              setDataOne={setDataOne}
+            />
+          ) : null}
 
           <DataTable
             columns={columns}
@@ -451,57 +457,56 @@ const AHE = (props) => {
   );
 };
 
-function Dialog({dataOne,closeDialog,saveToDB, setDataOne}) {
-    
+function Dialog({ dataOne, closeDialog, saveToDB, setDataOne }) {
   return (
     <div
+      style={{
+        position: "absolute",
+        width: "60%",
+        height: "auto",
+        left: "25%",
+        top: "10%",
+        borderRadius: "6px",
+        backgroundColor: "white",
+        boxShadow:
+          "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+        zIndex: "1",
+      }}
+    >
+      <div
         style={{
-          position: "absolute",
-          width: "60%",
           height: "auto",
-          left: "25%",
-          top: "10%",
-          borderRadius: "6px",
-          backgroundColor: "white",
-          boxShadow:
-            "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-          zIndex: "1",
+          backgroundColor: "#418ee6",
+          padding: "18px 10px 18px 10px",
+          color: "white",
+          marginBottom: "10px",
+          borderTopLeftRadius: "6px",
+          borderTopRightRadius: "6px",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
         }}
       >
-        <div
-          style={{
-            height: "auto",
-            backgroundColor: "#418ee6",
-            padding: "18px 10px 18px 10px",
-            color: "white",
-            marginBottom: "10px",
-            borderTopLeftRadius: "6px",
-            borderTopRightRadius: "6px",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <div>
-            <span>АХЭ бүртгэл</span>
-          </div>
-          <div>
-            <span
-              style={{
-                fontWeight: "bold",
-                cursor: "grab",
-              }}
-              onClick={()=>closeDialog()}
-            >
-              X
-            </span>
-          </div>
+        <div>
+          <span>АХЭ бүртгэл</span>
         </div>
         <div>
-        <div style={{padding: "15px"}} >
+          <span
+            style={{
+              fontWeight: "bold",
+              cursor: "grab",
+            }}
+            onClick={() => closeDialog()}
+          >
+            X
+          </span>
+        </div>
+      </div>
+      <div>
+        <div style={{ padding: "15px" }}>
           <div className="columns  ">
             <div className="column is-6">
-            <h1>
+              <h1>
                 <span style={{ color: "red" }}>*</span>АХЭ регистр
               </h1>
               <input
@@ -512,36 +517,35 @@ function Dialog({dataOne,closeDialog,saveToDB, setDataOne}) {
                   setDataOne({
                     ...dataOne,
                     COMP_REGNO: e.target.value,
-                    
                   });
                 }}
               />
             </div>
             <div className="column is-6">
-            <h1>Харьяалал</h1>   
+              <h1>Харьяалал</h1>
               <div className="select is-size-7 " style={{ width: "100%" }}>
-              <select
-                value={dataOne.COMP_REGION}
-                onChange={(e) => {
-                  setDataOne({
-                  ...dataOne,
-                  ...{
-                    COMP_REGION: e.target.value,
-                     },
+                <select
+                  value={dataOne.COMP_REGION}
+                  onChange={(e) => {
+                    setDataOne({
+                      ...dataOne,
+                      ...{
+                        COMP_REGION: e.target.value,
+                      },
                     });
                   }}
-                style={{ width: "-webkit-fill-available" }}
-              >
-                <option>Сонгоно уу</option>
-                <option value={"Улаанбаатар"}>Улаанбаатар</option>
-                <option value={"Орон нутаг"}>Орон нутаг</option>
-              </select>  
-              </div>     
+                  style={{ width: "-webkit-fill-available" }}
+                >
+                  <option>Сонгоно уу</option>
+                  <option value={"Улаанбаатар"}>Улаанбаатар</option>
+                  <option value={"Орон нутаг"}>Орон нутаг</option>
+                </select>
+              </div>
             </div>
           </div>
           <div className="columns  ">
             <div className="column is-6">
-            <h1>
+              <h1>
                 <span style={{ color: "red" }}>*</span>АХЭ нэр
               </h1>
               <input
@@ -558,7 +562,7 @@ function Dialog({dataOne,closeDialog,saveToDB, setDataOne}) {
               />
             </div>
             <div className="column is-6">
-            <h1>
+              <h1>
                 <span style={{ color: "red" }}>*</span>Утас
               </h1>
               <input
@@ -578,7 +582,7 @@ function Dialog({dataOne,closeDialog,saveToDB, setDataOne}) {
           </div>
           <div className="columns  ">
             <div className="column is-6">
-            <h1>
+              <h1>
                 <span style={{ color: "red" }}>*</span>И-Мэйл
               </h1>
               <input
@@ -595,7 +599,7 @@ function Dialog({dataOne,closeDialog,saveToDB, setDataOne}) {
               />
             </div>
             <div className="column is-6">
-            <h1>Веб</h1>
+              <h1>Веб</h1>
               <input
                 class="input  is-size-7"
                 value={dataOne.COMP_WEB}
@@ -628,9 +632,9 @@ function Dialog({dataOne,closeDialog,saveToDB, setDataOne}) {
             </div>
           </div>
           <div className="columns">
-          <div className="column is-11"></div>
+            <div className="column is-11"></div>
             <div className="column is-1 ">
-            <button
+              <button
                 className="buttonTsenkher ml-1"
                 onClick={() => {
                   saveToDB();
@@ -640,7 +644,7 @@ function Dialog({dataOne,closeDialog,saveToDB, setDataOne}) {
               </button>
             </div>
           </div>
-        </div>   
+        </div>
       </div>
     </div>
   );
