@@ -157,13 +157,13 @@ const Hereglegch = (props) => {
       sortable: true,
       expandableRows: true,
     },
-    {
-      name: "АХЭ ID",
-      selector: "COMP_ID",
-      sortable: true,
-      expandableRows: true,
-      width: "70px",
-    },
+    // {
+    //   name: "АХЭ ID",
+    //   selector: "COMP_ID",
+    //   sortable: true,
+    //   expandableRows: true,
+    //   width: "70px",
+    // },
     {
       name: "Хэрэглэгчийн нэр",
       selector: "PERSON_NAME",
@@ -176,12 +176,12 @@ const Hereglegch = (props) => {
       sortable: true,
       expandableRows: true,
     },
-    {
-      name: "Хэрэглэгчийн ID",
-      selector: "PERSON_ID",
-      sortable: true,
-      expandableRows: true,
-    },
+    // {
+    //   name: "Хэрэглэгчийн ID",
+    //   selector: "PERSON_ID",
+    //   sortable: true,
+    //   expandableRows: true,
+    // },
     {
       name: "Код",
       selector: "USER_CODE",
@@ -675,15 +675,17 @@ function Nemeh({ setDataNemeh, dataNemeh, closeNemeh, saveToDBNemeh }) {
               </h1>
               <input
                 class="input  is-size-7"
-                // type="number"
                 maxlength="8"
                 value={dataNemeh.PERSON_PHONE}
                 onChange={(e) => {
-                  setDataNemeh({
-                    ...dataNemeh,
-                    PERSON_PHONE: e.target.value,
-                  });
-                }}
+                  const re = /^[0-9\b]+$/;
+                    if (e.target.value === '' || re.test(e.target.value)) {
+                      setDataNemeh({
+                      ...dataNemeh,
+                      PERSON_PHONE: e.target.value,
+                      });
+                    }
+                  }}
               />
             </div>
             <div className="column is-6">
@@ -806,14 +808,17 @@ function Zasah({ setDataZasah, dataZasah, closeZasah, saveToDBZasah }) {
               </h1>
               <input
                 class="input  is-size-7"
-                type="number"
+                maxlength="8"
                 value={dataZasah.PERSON_PHONE}
                 onChange={(e) => {
-                  setDataZasah({
-                    ...dataZasah,
-                    PERSON_PHONE: e.target.value,
-                  });
-                }}
+                  const re = /^[0-9\b]+$/;
+                    if (e.target.value === '' || re.test(e.target.value)) {
+                      setDataZasah({
+                      ...dataZasah,
+                      PERSON_PHONE: e.target.value,
+                      });
+                    }
+                  }}
               />
             </div>
           </div>
