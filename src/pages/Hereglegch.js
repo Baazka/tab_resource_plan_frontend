@@ -377,7 +377,6 @@ const Hereglegch = (props) => {
     if (requiredField()) {
       setLoading(true);
 
-      console.log(dataNemeh, "dataNemeh");
       DataRequest({
         url: hrUrl + "/compPersonInsert",
         method: "POST",
@@ -611,7 +610,6 @@ function Nemeh({ setDataNemeh, dataNemeh, closeNemeh, saveToDBNemeh }) {
       </div>
       <div>
         <div style={{ padding: "15px" }}>
-          {JSON.stringify(dataNemeh)}
           <div className="columns  ">
             <div className="column is-6">
               <h1>
