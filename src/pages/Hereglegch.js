@@ -377,6 +377,7 @@ const Hereglegch = (props) => {
     if (requiredField()) {
       setLoading(true);
 
+      console.log(dataNemeh, "dataNemeh");
       DataRequest({
         url: hrUrl + "/compPersonInsert",
         method: "POST",
@@ -610,6 +611,7 @@ function Nemeh({ setDataNemeh, dataNemeh, closeNemeh, saveToDBNemeh }) {
       </div>
       <div>
         <div style={{ padding: "15px" }}>
+          {JSON.stringify(dataNemeh)}
           <div className="columns  ">
             <div className="column is-6">
               <h1>
@@ -679,13 +681,13 @@ function Nemeh({ setDataNemeh, dataNemeh, closeNemeh, saveToDBNemeh }) {
                 value={dataNemeh.PERSON_PHONE}
                 onChange={(e) => {
                   const re = /^[0-9\b]+$/;
-                    if (e.target.value === '' || re.test(e.target.value)) {
-                      setDataNemeh({
+                  if (e.target.value === "" || re.test(e.target.value)) {
+                    setDataNemeh({
                       ...dataNemeh,
                       PERSON_PHONE: e.target.value,
-                      });
-                    }
-                  }}
+                    });
+                  }
+                }}
               />
             </div>
             <div className="column is-6">
@@ -812,13 +814,13 @@ function Zasah({ setDataZasah, dataZasah, closeZasah, saveToDBZasah }) {
                 value={dataZasah.PERSON_PHONE}
                 onChange={(e) => {
                   const re = /^[0-9\b]+$/;
-                    if (e.target.value === '' || re.test(e.target.value)) {
-                      setDataZasah({
+                  if (e.target.value === "" || re.test(e.target.value)) {
+                    setDataZasah({
                       ...dataZasah,
                       PERSON_PHONE: e.target.value,
-                      });
-                    }
-                  }}
+                    });
+                  }
+                }}
               />
             </div>
           </div>
