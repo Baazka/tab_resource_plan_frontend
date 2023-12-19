@@ -279,6 +279,9 @@ const AHE = (props) => {
     ) {
       alert.show("АХЭ регистр оруулна уу");
       return false;
+    }else if (dataOne.COMP_REGNO.length!==7) {
+      alert.show("АХЭ регистр формат буруу байна");
+      return false;
     } else if (
       dataOne.COMP_NAME === undefined ||
       dataOne.COMP_NAME === "" ||
@@ -510,14 +513,18 @@ function Dialog({ dataOne, closeDialog, saveToDB, setDataOne }) {
                 <span style={{ color: "red" }}>*</span>АХЭ регистр
               </h1>
               <input
-                class="input  is-size-7"
+                class="input is-size-7"
                 value={dataOne.COMP_REGNO}
+                disabled={dataOne.COMP_REGNO.length ===7 ? true : false}
                 maxlength="7"
                 onChange={(e) => {
-                  setDataOne({
+                const re = /^[0-9\b]+$/;
+                  if (e.target.value === '' || re.test(e.target.value)) {
+                    setDataOne({
                     ...dataOne,
                     COMP_REGNO: e.target.value,
-                  });
+                    });
+                  }
                 }}
               />
             </div>
