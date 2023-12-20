@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Search, Eye, Delete } from "../assets/images/zurag";
+import { Search, Eye, Delete, UserB } from "../assets/images/zurag";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 import hrUrl from "../hrUrl";
@@ -120,6 +120,41 @@ const Hereglegch = (props) => {
     setShowZasah({ display: true });
   }
 
+  function openSend(value) {
+    if (
+      value.PERSON_NAME &&
+      value.PERSON_EMAIL &&
+      value.USER_CODE &&
+      value.USER_PASSWORD
+    ) {
+    if (window.confirm("И-Мэйл илгээхдээ итгэлтэй байна уу?")) {
+      DataRequest({
+        url: hrUrl + "/mail",
+        method: "POST",
+        data: {
+          PERSON_NAME: value.PERSON_NAME,
+          PERSON_EMAIL: value.PERSON_EMAIL,
+          USER_CODE: value.USER_CODE,
+          USER_PASSWORD: value.USER_PASSWORD,
+        },
+      })
+        .then(function (response) {
+          console.log("res", response);
+          if (response?.data?.message === "success") {
+            alert.show("И-Мэйл амжилттай илгээлээ");
+            fetchData();
+          }
+        })
+        .catch(function (error) {
+          console.log(error.response);
+          alert.show("Системийн алдаа");
+        });
+      }
+    }else {
+      alert.show("Шаардлагатай утга хоосон байна.");
+    }
+  }
+
   async function fetchData() {
     let listItems = await DataRequest({
       url: hrUrl + "/compPersonList",
@@ -228,9 +263,20 @@ const Hereglegch = (props) => {
     {
       name: "",
       right: true,
-      width: "80px",
       cell: (row) => (
         <div>
+          <img
+            alt=""
+            src={UserB}
+            width="20px"
+            height="20px"
+            style={{
+              marginLeft: "10px",
+              cursor: "pointer",
+              marginBottom: "5px",
+            }}
+            onClick={() => openSend(row)}
+          />
           <img
             alt=""
             src={Eye}
