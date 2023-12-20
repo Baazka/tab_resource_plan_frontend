@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Search, Eye, Delete, UserB } from "../assets/images/zurag";
+import { Search, Eye, Delete, Email } from "../assets/images/zurag";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 import hrUrl from "../hrUrl";
@@ -267,7 +267,7 @@ const Hereglegch = (props) => {
         <div>
           <img
             alt=""
-            src={UserB}
+            src={Email}
             width="20px"
             height="20px"
             style={{

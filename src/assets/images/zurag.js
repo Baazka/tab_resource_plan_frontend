@@ -72,6 +72,7 @@ import fourbox from "../images/icons/fourbox.svg";
 import list from "../images/icons/list.svg";
 import male from "../images/icons/male.png";
 import female from "../images/icons/female.png";
+import Email from "../images/icons/email.png";
 
 export {
   LeftArrow,
@@ -144,4 +145,5 @@ export {
   list,
   male,
   female,
+  Email
 };
