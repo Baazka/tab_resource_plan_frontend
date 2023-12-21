@@ -113,6 +113,7 @@ const AHE = (props) => {
   }
 
   async function fetchData() {
+    setLoading(true);
     let listItems = await DataRequest({
       url: hrUrl + "/compList",
       method: "POST",
@@ -122,6 +123,7 @@ const AHE = (props) => {
       setJagsaalt([...listItems.data]);
       setSearch("");
     }
+    setLoading(false);
   }
 
   useEffect(() => {
