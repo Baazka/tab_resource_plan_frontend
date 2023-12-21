@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
+import ScaleLoader from "react-spinners/ScaleLoader";
+import { css } from "@emotion/react";
 import DataTable, { createTheme } from "react-data-table-component";
 import { Search, Eye, Delete, Email } from "../assets/images/zurag";
 import { DataRequest } from "../functions/DataApi";
@@ -80,6 +82,15 @@ const Hereglegch = (props) => {
   });
   const [passVisibility, setPassVisibility] = useState({});
 
+  const override = css`
+    display: block;
+    margin: 0 auto;
+    border-color: #2980b9;
+    position: absolute;
+    top: 35%;
+    left: 50%;
+  `;
+
   const togglePassVisibility = (row) => {
     setPassVisibility((prevVisibility) => ({
       ...prevVisibility,
@@ -156,6 +167,7 @@ const Hereglegch = (props) => {
   }
 
   async function fetchData() {
+    setLoading(true);
     let listItems = await DataRequest({
       url: hrUrl + "/compPersonList",
       method: "POST",
@@ -165,6 +177,7 @@ const Hereglegch = (props) => {
       setJagsaalt([...listItems.data]);
       setSearch("");
     }
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -603,6 +616,14 @@ const Hereglegch = (props) => {
             overflowYOffset={"390px"}
           />
         </div>
+      </div>
+      <div className="sweet-loading">
+        <ScaleLoader
+          loading={loading}
+          size={30}
+          css={override}
+          color={"#2980b9"}
+        />
       </div>
       <Footer />
     </div>
