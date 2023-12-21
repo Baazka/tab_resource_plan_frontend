@@ -298,7 +298,10 @@ const AHE = (props) => {
     ) {
       alert.show("Утас оруулна уу");
       return false;
-    } else if (
+    }else if (dataOne.COMP_PHONE.length !== 8) {
+      alert.show("Утасны дугаар формат буруу байна");
+      return false;
+    }  else if (
       dataOne.COMP_EMAIL === undefined ||
       dataOne.COMP_EMAIL === "" ||
       dataOne.COMP_EMAIL === null
@@ -579,12 +582,13 @@ function Dialog({ dataOne, closeDialog, saveToDB, setDataOne }) {
                 value={dataOne.COMP_PHONE}
                 maxlength="8"
                 onChange={(e) => {
-                  setDataOne({
-                    ...dataOne,
-                    ...{
+                  const re = /^[0-9\b]+$/;
+                  if (e.target.value === "" || re.test(e.target.value)) {
+                    setDataOne({
+                      ...dataOne,
                       COMP_PHONE: e.target.value,
-                    },
-                  });
+                    });
+                  }
                 }}
               />
             </div>
