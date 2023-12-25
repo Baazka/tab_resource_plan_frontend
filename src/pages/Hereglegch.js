@@ -510,7 +510,7 @@ const Hereglegch = (props) => {
         style={{
           backgroundColor: "white",
           width: "100%",
-          //marginTop: "80px",
+          marginTop: "80px",
           marginLeft: "7.5rem",
           overflow: " auto",
           marginBottom: "3%",
