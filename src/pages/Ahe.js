@@ -384,6 +384,12 @@ const AHE = (props) => {
             overflow: "hidden",
           }}
         >
+          <div
+            style={{
+              width: "20rem",
+              marginTop: "1rem",
+            }}
+          >
           <div style={{ display: "flex" }}>
             <div className="select is-small" style={{ marginRight: "10px" }}>
               <select
@@ -423,6 +429,7 @@ const AHE = (props) => {
             >
               Нэмэх
             </button>
+          </div>
           </div>
 
           {showDialog.display ? (
