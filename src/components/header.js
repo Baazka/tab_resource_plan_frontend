@@ -51,7 +51,7 @@ const Header = (props) => {
       </div>
 
       <div class="navbar-menu" id="nav-links" style={{ marginTop: "15px" }}>
-        <div class="navbar-end">
+        <div class="navbar-end mr-4">
           <div>
             <img src={UserB} width="45" height="45" alt="" />
           </div>
