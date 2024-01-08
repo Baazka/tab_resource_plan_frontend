@@ -209,8 +209,8 @@ const AHE = (props) => {
           <img
             alt=""
             src={Ustgah}
-            width="30px"
-            height="30px"
+            width="20px"
+            height="20px"
             style={{
               marginLeft: "10px",
               cursor: "pointer",
