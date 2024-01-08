@@ -4,7 +4,7 @@ import Footer from "../components/footer";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import { css } from "@emotion/react";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Search, Eye, Delete, Email } from "../assets/images/zurag";
+import { Search, Harah, Ustgah, Zahidal } from "../assets/images/zurag";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 import hrUrl from "../hrUrl";
@@ -280,7 +280,7 @@ const Hereglegch = (props) => {
         <div>
           <img
             alt=""
-            src={Email}
+            src={Zahidal}
             width="20px"
             height="20px"
             style={{
@@ -292,7 +292,7 @@ const Hereglegch = (props) => {
           />
           <img
             alt=""
-            src={Eye}
+            src={Harah}
             width="20px"
             height="20px"
             style={{
@@ -304,7 +304,7 @@ const Hereglegch = (props) => {
           />
           <img
             alt=""
-            src={Delete}
+            src={Ustgah}
             width="30px"
             height="30px"
             style={{

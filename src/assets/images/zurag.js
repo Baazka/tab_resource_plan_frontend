@@ -77,6 +77,10 @@ import BBaiguullaga from "../images/icons/BBaiguullaga.svg";
 import Baiguullaga from "../images/icons/Baiguullaga.svg";
 import BHereglegch from "../images/icons/BHereglegch.svg";
 import Hereglegch from "../images/icons/Hereglegch.svg";
+import Zasvarlah from "../images/icons/ZASVARLAH.svg";
+import Zahidal from "../images/icons/ZAHIDAL.svg";
+import Harah from "../images/icons/HARAH.svg";
+import Ustgah from "../images/icons/USTGAH.svg";
 
 export {
   LeftArrow,
@@ -154,4 +158,8 @@ export {
   Baiguullaga,
   BHereglegch,
   Hereglegch,
+  Zasvarlah,
+  Zahidal,
+  Harah,
+  Ustgah,
 };

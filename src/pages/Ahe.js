@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Eye, Delete, Search } from "../assets/images/zurag";
+import { Harah, Ustgah, Search } from "../assets/images/zurag";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 import hrUrl from "../hrUrl";
@@ -196,7 +196,7 @@ const AHE = (props) => {
         <div>
           <img
             alt=""
-            src={Eye}
+            src={Harah}
             width="20px"
             height="20px"
             style={{
@@ -208,7 +208,7 @@ const AHE = (props) => {
           />
           <img
             alt=""
-            src={Delete}
+            src={Ustgah}
             width="30px"
             height="30px"
             style={{
