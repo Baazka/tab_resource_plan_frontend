@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Search, Eye, DocumentsB } from "../assets/images/zurag";
+import { Search, Harah, DocumentsB } from "../assets/images/zurag";
 import { DataRequest } from "../functions/DataApi";
 import hrUrl from "../hrUrl";
 
@@ -114,7 +114,7 @@ const Elders = (props) => {
         <div>
           <img
             alt=""
-            src={Eye}
+            src={Harah}
             width="20px"
             height="20px"
             style={{
@@ -132,7 +132,7 @@ const Elders = (props) => {
             style={{
               marginLeft: "10px",
               cursor: "pointer",
-              marginBottom: "5px",
+              // marginBottom: "5px",
             }}
             onClick={() => hideElder(row)}
           />

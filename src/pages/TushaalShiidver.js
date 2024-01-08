@@ -3,7 +3,7 @@ import Footer from "../components/footer";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
 import { useAlert } from "react-alert";
-import { Search, Add, Delete, Eye } from "../assets/images/zurag";
+import { Search, Add, Harah, Ustgah } from "../assets/images/zurag";
 import CurrencyInput from "react-currency-input-field";
 import {
   DepartmentID,
@@ -144,24 +144,25 @@ const ButtonsColumn = ({
   }
   return (
     <div>
-      {buttonValue === 1 ? (
-        <img
-          alt=""
-          src={Delete}
-          width="30px"
-          height="30px"
-          onClick={() => tushaalUstgakh()}
-          style={{ cursor: "pointer" }}
-        />
-      ) : null}
       <img
         alt=""
-        src={Eye}
+        src={Harah}
         width="20px"
         height="20px"
         style={{ marginLeft: "10px", cursor: "pointer", marginBottom: "5px" }}
         onClick={() => tushaalKharuulakh()}
       />
+      {buttonValue === 1 ? (
+        <img
+          alt=""
+          src={Ustgah}
+          width="20px"
+          height="20px"
+          onClick={() => tushaalUstgakh()}
+          style={{ marginLeft: "10px", cursor: "pointer"}}
+        />
+      ) : null}
+      
     </div>
   );
 };
@@ -1798,9 +1799,9 @@ function Salary(props) {
                         >
                           <img
                             alt=""
-                            src={Delete}
-                            width="30px"
-                            height="30px"
+                            src={Ustgah}
+                            width="20px"
+                            height="20px"
                             onClick={() => removeRow(index, value)}
                           />
                           <input
@@ -2626,9 +2627,9 @@ function SalaryKaruulakh(props) {
                       >
                         <img
                           alt=""
-                          src={Delete}
-                          width="30px"
-                          height="30px"
+                          src={Ustgah}
+                          width="20px"
+                          height="20px"
                           onClick={() => removeRow(index, value)}
                         />
                         <input
