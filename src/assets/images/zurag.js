@@ -73,6 +73,10 @@ import list from "../images/icons/list.svg";
 import male from "../images/icons/male.png";
 import female from "../images/icons/female.png";
 import Email from "../images/icons/email.png";
+import BBaiguullaga from "../images/icons/BBaiguullaga.svg";
+import Baiguullaga from "../images/icons/Baiguullaga.svg";
+import BHereglegch from "../images/icons/BHereglegch.svg";
+import Hereglegch from "../images/icons/Hereglegch.svg";
 
 export {
   LeftArrow,
@@ -145,5 +149,9 @@ export {
   list,
   male,
   female,
-  Email
+  Email,
+  BBaiguullaga,
+  Baiguullaga,
+  BHereglegch,
+  Hereglegch,
 };

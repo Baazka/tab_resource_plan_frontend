@@ -26,6 +26,10 @@ import {
   Dashboard,
   Tailan,
   TailanB,
+  Baiguullaga,
+  BBaiguullaga,
+  Hereglegch,
+  BHereglegch
 } from "../assets/images/zurag";
 
 const SideBar = (props) => {
@@ -338,7 +342,7 @@ const SideBar = (props) => {
                         }
                       >
                         <img
-                          src={menuClick.menu11 ? Dashboard : DashboardW}
+                          src={menuClick.menu11 ? BBaiguullaga : Baiguullaga}
                           width="40"
                           height="30"
                           alt=""
@@ -361,7 +365,7 @@ const SideBar = (props) => {
                         }
                       >
                         <img
-                          src={menuClick.menu12 ? Dashboard : DashboardW}
+                          src={menuClick.menu12 ? BHereglegch : Hereglegch}
                           width="40"
                           height="30"
                           alt=""
