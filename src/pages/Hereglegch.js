@@ -4,7 +4,7 @@ import Footer from "../components/footer";
 import ScaleLoader from "react-spinners/ScaleLoader";
 import { css } from "@emotion/react";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Search, Harah, Ustgah, Zahidal } from "../assets/images/zurag";
+import { Search, Harah, Zahidal, Zasvarlah, Ustgah, } from "../assets/images/zurag";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 import hrUrl from "../hrUrl";
@@ -250,7 +250,16 @@ const Hereglegch = (props) => {
               cursor: "pointer",
             }}
           >
-            {passVisibility[row.USER_CODE] ? row.USER_PASSWORD : "харах"}
+            {passVisibility[row.USER_CODE] ? row.USER_PASSWORD : 
+            <img
+              alt=""
+              src={Harah}
+              width="20px"
+              height="20px"
+              style={{
+                cursor: "pointer",
+              }}
+          />}
           </button>
         </div>
       ),
@@ -292,13 +301,12 @@ const Hereglegch = (props) => {
           />
           <img
             alt=""
-            src={Harah}
+            src={Zasvarlah}
             width="20px"
             height="20px"
             style={{
-              marginLeft: "10px",
+              marginLeft: "15px",
               cursor: "pointer",
-              marginBottom: "5px",
             }}
             onClick={() => openZasah(row)}
           />

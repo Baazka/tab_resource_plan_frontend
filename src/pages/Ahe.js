@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import DataTable, { createTheme } from "react-data-table-component";
-import { Harah, Ustgah, Search } from "../assets/images/zurag";
+import { Search, Zasvarlah, Ustgah } from "../assets/images/zurag";
 import { DataRequest } from "../functions/DataApi";
 import { useAlert } from "react-alert";
 import hrUrl from "../hrUrl";
@@ -196,13 +196,12 @@ const AHE = (props) => {
         <div>
           <img
             alt=""
-            src={Harah}
+            src={Zasvarlah}
             width="20px"
             height="20px"
             style={{
               marginLeft: "10px",
               cursor: "pointer",
-              marginBottom: "5px",
             }}
             onClick={() => openDialog(row)}
           />

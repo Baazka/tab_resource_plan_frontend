@@ -3,7 +3,7 @@ import Footer from "../components/footer";
 import { DataRequest } from "../functions/DataApi";
 import DataTable, { createTheme } from "react-data-table-component";
 import { useAlert } from "react-alert";
-import { Search, Add, Harah, Ustgah } from "../assets/images/zurag";
+import { Search, Add, Zasvarlah, Ustgah } from "../assets/images/zurag";
 import CurrencyInput from "react-currency-input-field";
 import {
   DepartmentID,
@@ -146,10 +146,10 @@ const ButtonsColumn = ({
     <div>
       <img
         alt=""
-        src={Harah}
+        src={Zasvarlah}
         width="20px"
         height="20px"
-        style={{ marginLeft: "10px", cursor: "pointer", marginBottom: "5px" }}
+        style={{ marginLeft: "10px", cursor: "pointer", }}
         onClick={() => tushaalKharuulakh()}
       />
       {buttonValue === 1 ? (
