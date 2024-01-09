@@ -63,7 +63,7 @@ const customStyles = {
 const Hereglegch = (props) => {
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [jagsaalt, setJagsaalt] = useState([]);
-  const [searchType, setSearchType] = useState("PERSON_FIRSTNAME");
+  const [searchType, setSearchType] = useState("COMP_NAME");
   const [found, setFound] = useState();
   const [search, setSearch] = useState("");
   const [data, loadData] = useState([]);
@@ -545,7 +545,6 @@ const Hereglegch = (props) => {
                   value={searchType}
                   onChange={(text) => setSearchType(text.target.value)}
                 >
-                  <option>Сонгоно уу</option>
                   <option value={"COMP_NAME"}>АХЭ нэр</option>
                   <option value={"PERSON_REGNO"}>Хэрэглэгчийн регистр</option>
                 </select>

@@ -61,7 +61,7 @@ const AHE = (props) => {
   const userDetils = JSON.parse(localStorage.getItem("userDetails"));
   const [jagsaalt, setJagsaalt] = useState([]);
   const [found, setFound] = useState();
-  const [searchType, setSearchType] = useState("PERSON_FIRSTNAME");
+  const [searchType, setSearchType] = useState("COMP_NAME");
   const [search, setSearch] = useState("");
   const [data, loadData] = useState([]);
   const [showDialog, setShowDialog] = useState({ display: false });
@@ -395,7 +395,6 @@ const AHE = (props) => {
                 value={searchType}
                 onChange={(text) => setSearchType(text.target.value)}
               >
-                <option>Сонгоно уу</option>
                 <option value={"COMP_NAME"}>АХЭ нэр</option>
                 <option value={"COMP_REGNO"}>АХЭ регистр</option>
               </select>
