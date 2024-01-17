@@ -77,6 +77,15 @@ const customStyles = {
   },
 };
 
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: #2980b9;
+  position: absolute;
+  top: 35%;
+  left: 50%;
+`;
+
 function Home(props) {
   const history = useHistory();
   const [jagsaalt, setJagsaalt] = useState([]);
@@ -107,14 +116,11 @@ function Home(props) {
   const [subdepartment, setSubdepartment] = useState({
     SUB_DEPARTMENT_ID: "null",
   });
-  const override = css`
-    display: block;
-    margin: 0 auto;
-    border-color: #2980b9;
-    position: absolute;
-    top: 35%;
-    left: 50%;
-  `;
+
+  const [ableWindow, setAbleWindow] = useState(false);
+  function ableWindowShow() {
+    setAbleWindow(true);
+  }
 
   async function unActive() {
     setLoading(true);
@@ -386,22 +392,6 @@ function Home(props) {
           buttonValue: buttonValue,
         })
     );
-  }
-
-  async function ableGetData() {
-    setLoading(true);
-    let resultAble = await DataRequest({
-      url: hrUrl + "/abledata",
-      method: "GET",
-    });
-
-    if (resultAble.data.messege === "success") {
-      alert.show("Амжилттай");
-      setLoading(false);
-    } else {
-      alert.show("Алдаа гарлаа.");
-      setLoading(false);
-    }
   }
 
   function makeSearch(value, list, stype) {
@@ -983,7 +973,6 @@ function Home(props) {
                     anketANew();
                   }}
                 >
-                  {" "}
                   <span style={{ display: "flex", paddingRight: "22px" }}>
                     <img src={AddBlue} width="20px" height="20px " alt="" />
                     Нэмэх
@@ -998,7 +987,8 @@ function Home(props) {
                     color: "#fff",
                     border: "0px",
                   }}
-                  onClick={() => ableGetData()}
+                  //onClick={() => ableGetData()}
+                  onClick={() => ableWindowShow()}
                 >
                   <span style={{ display: "flex", width: 70 }}>Абле татах</span>
                 </button>
@@ -1174,50 +1164,13 @@ function Home(props) {
             ))}
           </div>
         )}
-        {/* <table {...getTableProps()} style={{ border: "solid 1px blue" }}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th
-                    {...column.getHeaderProps()}
-                    style={{
-                      borderBottom: "solid 3px red",
-                      background: "aliceblue",
-                      color: "black",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td
-                        {...cell.getCellProps()}
-                        style={{
-                          padding: "10px",
-                          border: "solid 1px gray",
-                          background: "papayawhip",
-                        }}
-                      >
-                        {cell.render("Cell")}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table> */}
+        {ableWindow ? (
+          <AbleWindow
+            ableWindow={ableWindow}
+            fetchData={fetchData}
+            setAbleWindow={setAbleWindow}
+          />
+        ) : null}
       </div>
       <div className="sweet-loading">
         <ScaleLoader
@@ -1284,6 +1237,140 @@ function EmployExcel({ data }) {
   } else {
     listItems = <p>ачаалж байна...</p>;
   }
+  return listItems;
+}
+function AbleWindow(props) {
+  const alert = useAlert();
+  const [loading, setLoading] = useState(false);
+
+  const [dataRegNo, setDataRegNo] = useState({
+    PERSON_REGISTER_NO: null,
+  });
+  function requiredField() {
+    let returnValue = false;
+    if (
+      dataRegNo.PERSON_REGISTER_NO === undefined ||
+      dataRegNo.PERSON_REGISTER_NO === "" ||
+      dataRegNo.PERSON_REGISTER_NO === null
+    ) {
+      alert.show("Регистр оруулна уу");
+      return false;
+    } else if (
+      !/^([А-Я|Ө|Ү|а-я|ө|ү]{2})([0-9]{8})$/.test(dataRegNo.PERSON_REGISTER_NO)
+    ) {
+      alert.show("Регистр формат буруу байна");
+      return false;
+    } else {
+      returnValue = true;
+    }
+    return returnValue;
+  }
+
+  function getAbleData() {
+    if (requiredField()) {
+      setLoading(true);
+      DataRequest({
+        url: hrUrl + "/abledata/",
+        method: "POST",
+        data: {
+          PERSON_REGISTER_NO: dataRegNo.PERSON_REGISTER_NO,
+        },
+      })
+        .then(function (response) {
+          if (response?.data?.message === "success") {
+            alert.show("амжилттай татлаа");
+            setLoading(false);
+            props.setAbleWindow(false);
+          }
+        })
+        .catch(function (error) {
+          //alert(error.response.data.error.message);
+          console.log(error.response);
+          alert.show("aldaa");
+          setLoading(false);
+        });
+    }
+  }
+  let listItems;
+
+  listItems = (
+    <div
+      style={{
+        position: "absolute",
+        width: "20%",
+        height: "auto",
+        left: "40%",
+        top: "30%",
+        borderRadius: "6px",
+        backgroundColor: "white",
+        boxShadow:
+          "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+        zIndex: "1",
+        padding: "15px 15px 35px 15px",
+      }}
+    >
+      <div className="columns">
+        <div className="column is-10">Албан хаагчийн мэдээлэл татах уу?</div>
+        <div className="column is-2 has-text-right">
+          <span
+            style={{
+              fontWeight: "bold",
+              cursor: "grab",
+            }}
+            onClick={() => props.setAbleWindow(false)}
+          >
+            X
+          </span>
+        </div>
+      </div>
+
+      <div>
+        <div className="sweet-loading">
+          <ScaleLoader
+            loading={loading}
+            size={30}
+            css={override}
+            color={"#2980b9"}
+          />
+        </div>
+
+        <div className="columns">
+          <div className="column is-2"></div>
+          <div className="column is-8">
+            <h1> Регистр</h1>
+            <div class="control">
+              <input
+                class="input is-small"
+                placeholder="АА12345678"
+                value={dataRegNo?.PERSON_REGISTER_NO}
+                onChange={(e) => {
+                  setDataRegNo({
+                    ...dataRegNo,
+                    ...{
+                      PERSON_REGISTER_NO: e.target.value,
+                    },
+                  });
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="text-center" style={{ textAlign: "center" }}>
+          <button className="buttonTsenkher mr-2" onClick={() => getAbleData()}>
+            Татах
+          </button>
+
+          <button
+            className="buttonTsenkher"
+            onClick={() => props.setAbleWindow(false)}
+          >
+            Үгүй
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
   return listItems;
 }
 
